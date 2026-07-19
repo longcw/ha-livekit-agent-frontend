@@ -101,10 +101,16 @@ export function useConversation(
     }
 
     const messages: ConvItem[] = [...[...bySegment.values()].map((v) => v.msg), ...typed];
-    // Only surface control actions inline; reads (get_devices/areas) just drive the tiles.
-    const actions: ConvItem[] = toolCalls
-      .filter((t) => isActionTool(t.name))
-      .map((t) => ({ kind: 'action', id: t.callId, ts: t.startedAt, name: t.name, args: t.args, status: t.status }));
+    // Surface every tool call inline (reads and control actions alike); ActionRow styles
+    // reads vs. actions differently. Each shows its live status via the status dot.
+    const actions: ConvItem[] = toolCalls.map((t) => ({
+      kind: 'action',
+      id: t.callId,
+      ts: t.startedAt,
+      name: t.name,
+      args: t.args,
+      status: t.status,
+    }));
 
     return [...messages, ...actions].sort((a, b) => a.ts - b.ts);
   }, [transcriptions, typed, toolCalls, localIdentity]);

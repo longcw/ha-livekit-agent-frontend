@@ -77,10 +77,12 @@ const toolCalls = [
 
 const items: ConvItem[] = [
   { kind: 'message', id: 'm1', role: 'user', text: '书房有什么设备？', ts: 1 },
+  { kind: 'action', id: 'a1', ts: 2, name: 'get_devices', args: { area: '书房' }, status: 'done' },
   { kind: 'message', id: 'm2', role: 'agent', text: '书房有射灯、灯带、空调、循环扇，还有温湿度传感器。', ts: 3 },
   { kind: 'message', id: 'm3', role: 'user', text: '打开射灯', ts: 4 },
   { kind: 'action', id: 'a2', ts: 5, name: 'HassTurnOn', args: { name: '书房 射灯' }, status: 'done' },
   { kind: 'message', id: 'm4', role: 'agent', text: '好的，书房射灯已经为您打开了。', ts: 6 },
+  { kind: 'action', id: 'a3', ts: 7, name: 'GetLiveContext', args: {}, status: 'running' },
 ];
 
 const OFF = location.search.includes('off');
