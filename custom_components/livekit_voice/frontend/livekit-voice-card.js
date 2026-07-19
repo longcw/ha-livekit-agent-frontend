@@ -35797,7 +35797,7 @@ function CP() {
   }, []), a;
 }
 function EP(a) {
-  const { connected: e, mode: t, micOn: i, onStart: s, onSend: c, onMicToggle: u, onPttStart: d, onPttEnd: h, startLabel: f } = a, p = CP(), [v, y] = U.useState(""), [S, R] = U.useState(!1), k = !S && v.trim().length > 0, P = async () => {
+  const { connected: e, mode: t, micOn: i, onStart: s, onSend: c, onMicToggle: u, onPttStart: d, onPttEnd: h, startLabel: f } = a, p = CP(), [v, y] = U.useState(a.initialText ?? ""), [S, R] = U.useState(!1), k = !S && v.trim().length > 0, P = async () => {
     const A = v.trim();
     if (!(!A || S)) {
       R(!0), y("");
@@ -35812,15 +35812,15 @@ function EP(a) {
     t === "ptt" && /* @__PURE__ */ be.jsx(RP, { onStart: d, onEnd: h }),
     /* @__PURE__ */ be.jsxs("div", { className: "lk-bar", children: [
       /* @__PURE__ */ be.jsx(
-        "textarea",
+        "input",
         {
           className: "lk-input",
-          rows: 1,
+          type: "text",
           value: v,
           placeholder: t === "ptt" ? "Type a message…" : "Message…",
           onChange: (A) => y(A.target.value),
           onKeyDown: (A) => {
-            A.key === "Enter" && !A.shiftKey && (A.preventDefault(), P());
+            A.key === "Enter" && (A.preventDefault(), P());
           }
         }
       ),
@@ -36089,7 +36089,7 @@ const IP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
     --lk-ok: var(--success-color, #21b573);
     --lk-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --lk-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    --lk-h: 560px;
+    --lk-h: 720px;
     display: block;
   }
   * { box-sizing: border-box; }
@@ -36097,7 +36097,8 @@ const IP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
 
   ha-card {
     position: relative;
-    height: var(--lk-h);
+    /* Tall by default, but never taller than the screen (minus HA header/tabs). */
+    height: min(var(--lk-h), calc(100dvh - 148px));
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -36159,7 +36160,8 @@ const IP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
     background: color-mix(in srgb, var(--lk-accent) 14%, var(--lk-surface));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 40%, transparent); }
   .lk-tile[data-touched="1"] { border-color: transparent;
-    box-shadow: 0 0 0 2px var(--lk-accent), 0 12px 26px -16px color-mix(in srgb, var(--lk-accent) 90%, transparent); }
+    background: color-mix(in srgb, var(--lk-accent) 14%, var(--lk-surface));
+    box-shadow: inset 0 0 0 2px var(--lk-accent); }
   .lk-tile-icon { --mdc-icon-size: 19px; width: 33px; height: 33px; border-radius: 10px;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--lk-elevated); color: var(--lk-muted); transition: background-color .18s, color .18s; }
@@ -36214,12 +36216,12 @@ const IP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
     box-shadow: 0 0 0 11px color-mix(in srgb, var(--lk-accent) 20%, transparent), 0 16px 34px -14px var(--lk-accent); }
   .lk-ptt-hint { font-size: 0.72rem; font-weight: 600; color: var(--lk-muted); }
 
-  .lk-bar { width: 100%; min-height: 50px; display: flex; align-items: center; gap: 7px; padding: 5px 5px 5px 15px;
-    border-radius: 23px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+  .lk-bar { width: 100%; height: 52px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 16px;
+    border-radius: 26px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
-  .lk-input { flex: 1; border: none; background: transparent; color: var(--lk-fg); resize: none; font: inherit;
-    font-size: 1rem; line-height: 1.4; max-height: 90px; padding: 6px 0; }
+  .lk-input { flex: 1; min-width: 0; height: 100%; border: none; background: transparent; color: var(--lk-fg);
+    font: inherit; font-size: 1rem; padding: 0; }
   .lk-input:focus { outline: none; }
   .lk-input::placeholder { color: var(--lk-muted); }
   .lk-send { flex: none; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; --mdc-icon-size: 20px;

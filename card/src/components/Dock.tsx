@@ -30,12 +30,14 @@ export interface DockProps {
   onPttStart: () => void;
   onPttEnd: () => void;
   startLabel: string;
+  /** Preview only: pre-fill the input to inspect the send-button state. */
+  initialText?: string;
 }
 
 export function Dock(props: DockProps) {
   const { connected, mode, micOn, onStart, onSend, onMicToggle, onPttStart, onPttEnd, startLabel } = props;
   const dockRef = useDockHeight();
-  const [text, setText] = useState('');
+  const [text, setText] = useState(props.initialText ?? '');
   const [sending, setSending] = useState(false);
   const canSend = !sending && text.trim().length > 0;
 
@@ -66,14 +68,14 @@ export function Dock(props: DockProps) {
     <div className="lk-dock" ref={dockRef}>
       {mode === 'ptt' && <PttButton onStart={onPttStart} onEnd={onPttEnd} />}
       <div className="lk-bar">
-        <textarea
+        <input
           className="lk-input"
-          rows={1}
+          type="text"
           value={text}
           placeholder={mode === 'ptt' ? 'Type a message…' : 'Message…'}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter') {
               e.preventDefault();
               submit();
             }

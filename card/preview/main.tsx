@@ -91,6 +91,7 @@ function Preview() {
           connected={!OFF}
           mode="ptt"
           micOn={false}
+          initialText={OFF ? '' : '打开书房的射灯'}
           startLabel=""
           onStart={() => {}}
           onSend={async () => {}}
@@ -110,10 +111,17 @@ const THEME = LIGHT
 
 document.body.style.background = LIGHT ? '#f2f3f5' : '#0b0c0f';
 
+// Simulate Home Assistant's real ha-card chrome (background + border/shadow) so the
+// preview shows any overlap between our content and the card border.
+const HA_CARD = LIGHT
+  ? 'background:var(--card-background-color);border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 10px rgba(0,0,0,0.10);'
+  : 'background:var(--card-background-color);border:1px solid rgba(255,255,255,0.06);box-shadow:0 2px 12px rgba(0,0,0,0.5);';
+
 const host = document.getElementById('frame')!;
 const shadow = host.attachShadow({ mode: 'open' });
 const style = document.createElement('style');
-style.textContent = CARD_STYLES + `\n:host{${THEME}} :host,.lk-root{height:100%} ha-card{--lk-h:560px}`;
+style.textContent =
+  CARD_STYLES + `\n:host{${THEME}} :host,.lk-root{height:100%} ha-card{height:100% !important;${HA_CARD}}`;
 const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
