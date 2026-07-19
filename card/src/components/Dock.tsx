@@ -1,4 +1,19 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+/** Publishes the dock's height as `--lk-dock-h` on the card so the chat can pad past it. */
+function useDockHeight() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const apply = () => el.parentElement?.style.setProperty('--lk-dock-h', `${el.offsetHeight}px`);
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return ref;
+}
 
 /**
  * The bottom dock, floating over the conversation. When connected it shows a large,
@@ -19,6 +34,7 @@ export interface DockProps {
 
 export function Dock(props: DockProps) {
   const { connected, mode, micOn, onStart, onSend, onMicToggle, onPttStart, onPttEnd, startLabel } = props;
+  const dockRef = useDockHeight();
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const canSend = !sending && text.trim().length > 0;
@@ -37,7 +53,7 @@ export function Dock(props: DockProps) {
 
   if (!connected) {
     return (
-      <div className="lk-dock">
+      <div className="lk-dock" ref={dockRef}>
         <button className="lk-start" onClick={onStart}>
           <ha-icon icon="mdi:microphone" />
           {startLabel}
@@ -47,7 +63,7 @@ export function Dock(props: DockProps) {
   }
 
   return (
-    <div className="lk-dock">
+    <div className="lk-dock" ref={dockRef}>
       {mode === 'ptt' && <PttButton onStart={onPttStart} onEnd={onPttEnd} />}
       <div className="lk-bar">
         <textarea

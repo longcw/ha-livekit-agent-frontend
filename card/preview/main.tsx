@@ -106,7 +106,7 @@ function Preview() {
 const host = document.getElementById('frame')!;
 const shadow = host.attachShadow({ mode: 'open' });
 const style = document.createElement('style');
-style.textContent = CARD_STYLES + '\n:host,.lk-root{height:100%} ha-card{--lk-h:640px}';
+style.textContent = CARD_STYLES + '\n:host,.lk-root{height:100%} ha-card{--lk-h:480px}';
 const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);

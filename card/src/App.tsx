@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ParticipantKind, Track } from 'livekit-client';
 import {
   RoomAudioRenderer,
@@ -87,9 +87,50 @@ function CardShell() {
     }
   };
 
+  // --- auto-connect while the dashboard tab is open ---
+  const autoConnect = config.auto_connect !== false;
+  const [connecting, setConnecting] = useState(false);
+  const sessionRef = useRef(session);
+  sessionRef.current = session;
+  const hassRef = useRef(hass);
+  hassRef.current = hass;
+
+  const startSession = useCallback(() => {
+    setConnecting(true);
+    setEpoch((e) => e + 1);
+    sessionRef.current.start?.();
+  }, []);
+
+  useEffect(() => {
+    if (connected) setConnecting(false);
+  }, [connected]);
+
+  const [autoTried, setAutoTried] = useState(false);
+  useEffect(() => {
+    if (!autoConnect || autoTried || !hass || connected || document.hidden) return;
+    setAutoTried(true);
+    startSession();
+  }, [autoConnect, autoTried, hass, connected, startSession]);
+
+  useEffect(() => {
+    if (!autoConnect) return;
+    const onVisibility = () => {
+      if (document.hidden) sessionRef.current.end?.();
+      else if (!sessionRef.current.isConnected && hassRef.current) startSession();
+    };
+    const onPageHide = () => sessionRef.current.end?.();
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', onPageHide);
+      sessionRef.current.end?.(); // card removed (tab left)
+    };
+  }, [autoConnect, startSession]);
+
   const query = lastUserText(items);
-  const orbState = !connected ? 'idle' : agentState || 'listening';
-  const stateLabel = connected ? agentState || 'ready' : 'offline';
+  const orbState = connected ? agentState || 'listening' : connecting ? 'connecting' : 'idle';
+  const stateLabel = connected ? agentState || 'ready' : connecting ? 'connecting' : 'offline';
 
   const dock = connected ? (auto ? 'auto' : 'ptt') : 'off';
 
@@ -108,11 +149,8 @@ function CardShell() {
         connected={connected}
         mode={auto ? 'auto' : 'ptt'}
         micOn={mic.enabled}
-        startLabel={items.length ? 'New conversation' : 'Start talking'}
-        onStart={() => {
-          setEpoch((e) => e + 1);
-          session.start?.();
-        }}
+        startLabel={connecting ? 'Connecting…' : items.length ? 'New conversation' : 'Start talking'}
+        onStart={startSession}
         onSend={async (text) => {
           addTyped(text);
           try {

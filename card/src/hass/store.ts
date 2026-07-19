@@ -36,8 +36,10 @@ export interface CardConfig {
   follow_agent?: boolean;
   /** How many tiles to show before "Show more". Default 8. */
   max_tiles?: number;
-  /** Fixed card height in px. Default 600. */
+  /** Fixed card height in px. Default 480. */
   height?: number;
+  /** Connect automatically when the dashboard tab is open; disconnect on leave. Default true. */
+  auto_connect?: boolean;
 }
 
 export interface Snapshot {

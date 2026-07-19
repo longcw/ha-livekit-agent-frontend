@@ -36,15 +36,29 @@ class LivekitVoiceCard extends HTMLElement {
     this._render();
   }
 
+  disconnectedCallback(): void {
+    // Leaving the dashboard tab removes the card. Tear down React (its effects end the
+    // LiveKit session) once we're sure this isn't a transient DOM move. A fresh element
+    // is created when the tab is reopened, which reconnects.
+    setTimeout(() => {
+      if (this.isConnected) return;
+      this._root?.unmount();
+      this._root = null;
+      this._mount = null;
+    }, 80);
+  }
+
   private _render(): void {
+    const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
     if (!this._mount) {
-      const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
+      shadow.innerHTML = '';
       const style = document.createElement('style');
       style.textContent = CARD_STYLES;
       const mount = document.createElement('div');
       shadow.append(style, mount);
       this._store.setHost(this);
       this._mount = mount;
+      this._root = null;
     }
     if (!this._root) this._root = createRoot(this._mount);
     this._root.render(<Root store={this._store} />);

@@ -16,7 +16,7 @@ export const CARD_STYLES = `
     --lk-ok: var(--success-color, #21b573);
     --lk-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --lk-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    --lk-h: 600px;
+    --lk-h: 480px;
     display: block;
   }
   * { box-sizing: border-box; }
@@ -73,9 +73,9 @@ export const CARD_STYLES = `
     scroll-snap-type: x proximity; scrollbar-width: none; }
   .lk-tiles::-webkit-scrollbar { display: none; }
   .lk-tile {
-    flex: 0 0 138px; scroll-snap-align: start;
-    text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 10px;
-    padding: 13px 12px; border-radius: 18px; overflow: hidden;
+    flex: 0 0 124px; scroll-snap-align: start;
+    text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px;
+    padding: 11px; border-radius: 16px; overflow: hidden;
     border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-fg);
     transition: border-color .18s, background-color .18s, box-shadow .18s, transform .06s;
   }
@@ -86,21 +86,21 @@ export const CARD_STYLES = `
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 40%, transparent); }
   .lk-tile[data-touched="1"] { border-color: transparent;
     box-shadow: 0 0 0 2px var(--lk-accent), 0 12px 26px -16px color-mix(in srgb, var(--lk-accent) 90%, transparent); }
-  .lk-tile-icon { --mdc-icon-size: 21px; width: 38px; height: 38px; border-radius: 12px;
+  .lk-tile-icon { --mdc-icon-size: 19px; width: 33px; height: 33px; border-radius: 10px;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--lk-elevated); color: var(--lk-muted); transition: background-color .18s, color .18s; }
   .lk-tile[data-active="1"] .lk-tile-icon { background: var(--lk-accent); color: var(--lk-on-accent); }
-  .lk-tile-state { font-family: var(--lk-mono); font-size: 1.1rem; font-weight: 600; line-height: 1.05;
+  .lk-tile-state { font-family: var(--lk-mono); font-size: 1.02rem; font-weight: 600; line-height: 1.05;
     letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lk-tile-name { font-size: 0.82rem; line-height: 1.25; color: var(--lk-muted);
+  .lk-tile-name { font-size: 0.78rem; line-height: 1.2; color: var(--lk-muted);
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .lk-more { align-self: center; cursor: pointer; --mdc-icon-size: 16px; display: inline-flex; align-items: center; gap: 3px;
     background: transparent; border: none; padding: 3px 10px; border-radius: 999px; color: var(--lk-muted); font-size: 0.8rem; font-weight: 600; }
   .lk-more:hover { color: var(--lk-fg); background: var(--lk-elevated); }
 
   /* ---- conversation (scrolls; dock floats over its bottom) ---- */
-  .lk-convo { flex: 1; overflow-y: auto; padding: 8px 16px 96px; display: flex; flex-direction: column; gap: 11px; scrollbar-width: thin; }
-  ha-card[data-dock="ptt"] .lk-convo { padding-bottom: 184px; }
+  .lk-convo { flex: 1; overflow-y: auto; padding: 8px 16px calc(var(--lk-dock-h, 132px) + 12px);
+    display: flex; flex-direction: column; gap: 11px; scrollbar-width: thin; }
   .lk-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
     color: var(--lk-muted); font-size: 0.95rem; max-width: 240px; --mdc-icon-size: 26px; }
   .lk-msg { display: flex; animation: lk-rise .22s ease both; }
@@ -126,22 +126,22 @@ export const CARD_STYLES = `
   @keyframes lk-blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 
   /* ---- floating dock ---- */
-  .lk-dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 16px 16px;
-    display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none;
-    background: linear-gradient(to top, var(--lk-surface) 42%, color-mix(in srgb, var(--lk-surface) 80%, transparent) 72%, transparent); }
+  .lk-dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 14px 13px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none;
+    background: linear-gradient(to top, var(--lk-surface) 46%, color-mix(in srgb, var(--lk-surface) 82%, transparent) 74%, transparent); }
   .lk-dock > * { pointer-events: auto; }
 
-  .lk-ptt-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-bottom: 2px; }
-  .lk-ptt { width: 76px; height: 76px; border-radius: 50%; border: none; cursor: pointer; --mdc-icon-size: 30px;
+  .lk-ptt-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .lk-ptt { width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer; --mdc-icon-size: 25px;
     display: grid; place-items: center; background: var(--lk-accent); color: var(--lk-on-accent);
-    box-shadow: 0 0 0 7px color-mix(in srgb, var(--lk-accent) 14%, transparent), 0 16px 36px -16px color-mix(in srgb, var(--lk-accent) 90%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--lk-accent) 14%, transparent), 0 14px 30px -16px color-mix(in srgb, var(--lk-accent) 90%, transparent);
     transition: transform .08s, box-shadow .15s; touch-action: none; -webkit-user-select: none; user-select: none; }
-  .lk-ptt:active, .lk-ptt[data-holding="1"] { transform: scale(1.06);
-    box-shadow: 0 0 0 12px color-mix(in srgb, var(--lk-accent) 20%, transparent), 0 18px 40px -14px var(--lk-accent); }
-  .lk-ptt-hint { font-size: 0.76rem; font-weight: 600; color: var(--lk-muted); }
+  .lk-ptt:active, .lk-ptt[data-holding="1"] { transform: scale(1.07);
+    box-shadow: 0 0 0 11px color-mix(in srgb, var(--lk-accent) 20%, transparent), 0 16px 34px -14px var(--lk-accent); }
+  .lk-ptt-hint { font-size: 0.72rem; font-weight: 600; color: var(--lk-muted); }
 
-  .lk-bar { width: 100%; display: flex; align-items: center; gap: 7px; padding: 6px 6px 6px 16px;
-    border-radius: 25px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+  .lk-bar { width: 100%; display: flex; align-items: center; gap: 7px; padding: 5px 5px 5px 15px;
+    border-radius: 23px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
   .lk-input { flex: 1; border: none; background: transparent; color: var(--lk-fg); resize: none; font: inherit;
