@@ -22,14 +22,13 @@ export function Header({
       <span className="lk-orb" data-state={orbState} aria-hidden="true">
         <span className="lk-orb-core" />
       </span>
-      <span className="lk-title">{title}</span>
-      {connected ? (
-        <ModeSwitch mode={mode} onChange={onModeChange} />
-      ) : (
-        <span className="lk-status" data-live="0">
+      <div className="lk-titlewrap">
+        <span className="lk-title">{title}</span>
+        <span className="lk-state" data-state={orbState}>
           {stateLabel}
         </span>
-      )}
+      </div>
+      {connected && <ModeSwitch mode={mode} onChange={onModeChange} />}
       {connected && (
         <button className="lk-iconbtn" title="End conversation" onClick={onEnd}>
           <ha-icon icon="mdi:close" />

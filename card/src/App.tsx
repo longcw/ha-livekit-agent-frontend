@@ -55,6 +55,26 @@ function agentIdentity(room: any): string | null {
   return null;
 }
 
+/** Session + agent state → the header's orb animation and status label. */
+const AGENT_PHASES: Record<string, { orb: string; label: string }> = {
+  listening: { orb: 'listening', label: 'Listening' },
+  thinking: { orb: 'thinking', label: 'Thinking' },
+  speaking: { orb: 'speaking', label: 'Speaking' },
+  idle: { orb: 'listening', label: 'Connected' },
+  initializing: { orb: 'connecting', label: 'Connecting' },
+  'pre-connect-buffering': { orb: 'connecting', label: 'Connecting' },
+  connecting: { orb: 'connecting', label: 'Connecting' },
+  disconnected: { orb: 'connecting', label: 'Connecting' },
+  failed: { orb: 'idle', label: 'Offline' },
+};
+
+function agentPhase(connected: boolean, connecting: boolean, agentState: string | undefined) {
+  if (!connected) {
+    return connecting ? { orb: 'connecting', label: 'Connecting' } : { orb: 'idle', label: 'Offline' };
+  }
+  return AGENT_PHASES[agentState ?? ''] ?? { orb: 'listening', label: 'Connected' };
+}
+
 function CardShell() {
   const hass = useHass();
   const config = useCardConfig();
@@ -208,8 +228,7 @@ function CardShell() {
   }, [autoConnect, startSession]);
 
   const query = lastUserText(items);
-  const orbState = connected ? agentState || 'listening' : connecting ? 'connecting' : 'idle';
-  const stateLabel = connected ? agentState || 'ready' : connecting ? 'connecting' : 'offline';
+  const { orb: orbState, label: stateLabel } = agentPhase(connected, connecting, agentState);
 
   return (
     <ha-card data-dock={connected ? mode : 'off'}>

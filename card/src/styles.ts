@@ -38,14 +38,15 @@ export const CARD_STYLES =
   }
 
   /* ---- header ---- */
-  .lk-top { display: flex; align-items: center; gap: 11px; padding: 16px 16px 10px; flex: none; }
-  .lk-title { flex: 1 1 auto; min-width: 0; font-size: 1.16rem; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lk-status {
-    margin-left: auto; font-family: var(--lk-mono); font-size: 0.64rem; font-weight: 600;
-    letter-spacing: 0.09em; text-transform: uppercase; color: var(--lk-muted);
-    padding: 4px 9px; border-radius: 999px; border: 1px solid var(--lk-line);
-  }
-  .lk-status[data-live="1"] { color: var(--lk-accent); border-color: color-mix(in srgb, var(--lk-accent) 38%, transparent); }
+  .lk-top { display: flex; align-items: center; gap: 11px; padding: 15px 16px 9px; flex: none; }
+  .lk-titlewrap { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .lk-title { min-width: 0; font-size: 1.16rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* live agent phase under the title: connecting / connected / listening / thinking / speaking */
+  .lk-state { font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--lk-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color .2s; }
+  .lk-state[data-state="listening"], .lk-state[data-state="speaking"], .lk-state[data-state="thinking"] { color: var(--lk-accent); }
 
   /* Auto | Manual segmented toggle (shown when connected, in place of the status pill) */
   .lk-modeswitch { flex: none; display: inline-flex; gap: 2px; padding: 2px;

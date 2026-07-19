@@ -94,16 +94,20 @@ function Preview() {
   );
   const [turnActive, setTurnActive] = useState(P.includes('active'));
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
+  const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
+  const STATE_LABELS: Record<string, string> = {
+    idle: 'Offline', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
+  };
   return (
     <HassStoreProvider value={store}>
       <ha-card data-dock={OFF ? 'off' : mode}>
         <Header
-          orbState={OFF ? 'idle' : 'listening'}
+          orbState={orbState}
           title="Home Voice"
           connected={!OFF}
           mode={mode}
           onModeChange={setMode}
-          stateLabel={OFF ? 'offline' : 'listening'}
+          stateLabel={STATE_LABELS[orbState] ?? 'Connected'}
           onEnd={() => {}}
         />
         <DeviceTiles agentAreas={['书房']} toolCalls={toolCalls as any} query="打开射灯" />
