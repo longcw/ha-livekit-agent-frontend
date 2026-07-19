@@ -1,16 +1,14 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { openMoreInfo, useCardConfig, useHass, useStore } from '../hass/context';
 import type { Hass } from '../hass/store';
 import { buildTiles, formatState, friendlyName, iconFor, isActive, tapService } from '../lib/entities';
 import { useExposedEntities } from '../lib/exposed';
 import type { ToolCall } from '../lib/tool-feed';
 
-const DEFAULT_VISIBLE = 8;
-
 /**
- * Native, live device tiles from `hass.states`, filtered to voice-exposed entities and
- * ranked by relevance to the request (acted-on devices pinned first). Tap toggles a
- * controllable device; long-press / right-click opens HA's more-info dialog.
+ * A horizontal rail of live, controllable device tiles from `hass.states`, filtered to
+ * voice-exposed entities and ranked by relevance (acted-on devices pinned first). Tap
+ * toggles a controllable device; long-press / right-click opens HA's more-info dialog.
  */
 export function DeviceTiles({
   agentAreas,
@@ -25,7 +23,6 @@ export function DeviceTiles({
   const config = useCardConfig();
   const host = useStore().host;
   const exposed = useExposedEntities(hass);
-  const [expanded, setExpanded] = useState(false);
 
   const tiles = useMemo(
     () => (hass ? buildTiles(hass, config, { agentAreas, toolCalls, exposed, query }) : []),
@@ -34,24 +31,11 @@ export function DeviceTiles({
 
   if (!hass || tiles.length === 0) return null;
 
-  const limit = config.max_tiles ?? DEFAULT_VISIBLE;
-  const collapsible = tiles.length > limit;
-  const visible = expanded || !collapsible ? tiles : tiles.slice(0, limit);
-  const hiddenCount = tiles.length - limit;
-
   return (
-    <div className="lk-devices">
-      <div className="lk-tiles">
-        {visible.map((t) => (
-          <Tile key={t.entityId} entityId={t.entityId} touched={t.touched} hass={hass} host={host} />
-        ))}
-      </div>
-      {collapsible && (
-        <button className="lk-more" onClick={() => setExpanded((v) => !v)}>
-          {expanded ? 'Show less' : `Show ${hiddenCount} more`}
-          <ha-icon icon={expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
-        </button>
-      )}
+    <div className="lk-tiles">
+      {tiles.map((t) => (
+        <Tile key={t.entityId} entityId={t.entityId} touched={t.touched} hass={hass} host={host} />
+      ))}
     </div>
   );
 }

@@ -1,6 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { actionTarget, humanizeTool, isActionTool } from '../lib/conversation';
-import type { ConvAction, ConvItem, ConvMessage } from '../lib/session-store';
+import {
+  actionTarget,
+  type ConvAction,
+  type ConvItem,
+  type ConvMessage,
+  humanizeTool,
+  isActionTool,
+} from '../lib/conversation';
 
 /**
  * The conversation timeline: speech + typed messages and the agent's tool actions,

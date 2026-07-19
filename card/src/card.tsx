@@ -15,7 +15,12 @@ class LivekitVoiceCard extends HTMLElement {
 
   setConfig(config: any): void {
     this._store.setConfig(config);
+    if (config?.height) this.style.setProperty('--lk-h', `${config.height}px`);
     this._render();
+  }
+
+  getGridOptions(): Record<string, unknown> {
+    return { rows: 'auto', columns: 'full' };
   }
 
   set hass(hass: any) {

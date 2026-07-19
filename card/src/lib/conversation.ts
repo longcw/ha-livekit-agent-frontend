@@ -1,7 +1,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranscriptions } from '@livekit/components-react';
-import type { ConvItem, ConvMessage, Role } from './session-store';
 import type { ToolCall } from './tool-feed';
+
+// ---- conversation model ----------------------------------------------------
+
+export type Role = 'user' | 'agent';
+
+export interface ConvMessage {
+  kind: 'message';
+  id: string;
+  role: Role;
+  text: string;
+  ts: number;
+}
+
+export interface ConvAction {
+  kind: 'action';
+  id: string;
+  ts: number;
+  name: string;
+  args: Record<string, unknown> | string | null;
+  status: 'running' | 'done' | 'error' | 'cancelled';
+}
+
+export type ConvItem = ConvMessage | ConvAction;
 
 // ---- display helpers -------------------------------------------------------
 
@@ -39,8 +61,8 @@ const SEGMENT_ATTR = 'lk.segment_id';
  * Builds the chronological conversation from three live sources:
  *  - transcription segments (deduped by segment id; interim replaced by final),
  *  - typed messages the user sends, and
- *  - the agent's tool calls (as inline action items).
- * Resets when `epoch` changes (a new session).
+ *  - the agent's tool calls (inline action items).
+ * Resets when `epoch` changes (a new conversation). Nothing is persisted.
  */
 export function useConversation(
   localIdentity: string | undefined,
@@ -57,12 +79,11 @@ export function useConversation(
   const addTyped = useCallback((text: string) => {
     setTyped((prev) => [
       ...prev,
-      { kind: 'message', id: `typed-${prev.length}-${text.length}-${text.slice(0, 8)}`, role: 'user', text, ts: Date.now() },
+      { kind: 'message', id: `typed-${prev.length}-${text.slice(0, 12)}`, role: 'user', text, ts: Date.now() },
     ]);
   }, []);
 
   const items = useMemo<ConvItem[]>(() => {
-    // Dedupe transcription segments: prefer the final stream over interim.
     const bySegment = new Map<string, { msg: ConvMessage; final: boolean }>();
     for (const td of transcriptions) {
       const attrs = (td.streamInfo?.attributes ?? {}) as Record<string, string>;
@@ -70,8 +91,9 @@ export function useConversation(
       if (!segId || !td.text) continue;
       const final = attrs[FINAL_ATTR] === 'true';
       const prev = bySegment.get(segId);
-      if (prev && prev.final && !final) continue; // don't let interim clobber a final
-      const role: Role = td.participantInfo?.identity && td.participantInfo.identity === localIdentity ? 'user' : 'agent';
+      if (prev && prev.final && !final) continue; // never let interim clobber a final
+      const role: Role =
+        td.participantInfo?.identity && td.participantInfo.identity === localIdentity ? 'user' : 'agent';
       bySegment.set(segId, {
         final,
         msg: { kind: 'message', id: segId, role, text: td.text, ts: td.streamInfo?.timestamp ?? Date.now() },
@@ -79,14 +101,10 @@ export function useConversation(
     }
 
     const messages: ConvItem[] = [...[...bySegment.values()].map((v) => v.msg), ...typed];
-    const actions: ConvItem[] = toolCalls.map((t) => ({
-      kind: 'action',
-      id: t.callId,
-      ts: t.startedAt,
-      name: t.name,
-      args: t.args,
-      status: t.status,
-    }));
+    // Only surface control actions inline; reads (get_devices/areas) just drive the tiles.
+    const actions: ConvItem[] = toolCalls
+      .filter((t) => isActionTool(t.name))
+      .map((t) => ({ kind: 'action', id: t.callId, ts: t.startedAt, name: t.name, args: t.args, status: t.status }));
 
     return [...messages, ...actions].sort((a, b) => a.ts - b.ts);
   }, [transcriptions, typed, toolCalls, localIdentity]);

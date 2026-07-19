@@ -1,21 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { ParticipantKind, Track } from 'livekit-client';
 import {
   RoomAudioRenderer,
   SessionProvider,
   useAgent,
+  useChat,
   useSession,
   useSessionContext,
+  useTrackToggle,
 } from '@livekit/components-react';
-import { Composer } from './components/Composer';
 import { Conversation } from './components/Conversation';
 import { DeviceTiles } from './components/DeviceTiles';
-import { SessionHistory } from './components/SessionHistory';
+import { Dock } from './components/Dock';
+import { Header } from './components/Header';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
-import { useConversation } from './lib/conversation';
-import type { ConvItem } from './lib/session-store';
-import { finalizeCurrent, loadHistory, saveCurrent } from './lib/session-store';
+import { type ConvItem, useConversation } from './lib/conversation';
 import { useToolFeed } from './lib/tool-feed';
 
 export function Root({ store }: { store: HassStore }) {
@@ -46,12 +47,12 @@ function lastUserText(items: ConvItem[]): string {
   return '';
 }
 
-function VoiceOrb({ state }: { state: string }) {
-  return (
-    <span className="lk-orb" data-state={state} aria-hidden="true">
-      <span className="lk-orb-core" />
-    </span>
-  );
+function agentIdentity(room: any): string | null {
+  if (!room) return null;
+  for (const p of room.remoteParticipants.values()) {
+    if (p.kind === ParticipantKind.AGENT || p.isAgent) return p.identity;
+  }
+  return null;
 }
 
 function CardShell() {
@@ -61,56 +62,13 @@ function CardShell() {
   const { state: agentState } = useAgent();
   const { toolCalls, agentAreas } = useToolFeed();
   const [epoch, setEpoch] = useState(0);
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const [history, setHistory] = useState(() => loadHistory());
 
   const connected = session.isConnected;
   const localIdentity = session.room?.localParticipant?.identity;
   const { items, addTyped } = useConversation(localIdentity, toolCalls, epoch);
+  const { send } = useChat();
+  const mic = useTrackToggle({ source: Track.Source.Microphone });
 
-  const startedAt = useRef(Date.now());
-  const itemsRef = useRef<ConvItem[]>(items);
-  itemsRef.current = items;
-  const wasConnected = useRef(false);
-
-  // New session boundary → fresh timestamp.
-  useEffect(() => {
-    startedAt.current = Date.now();
-  }, [epoch]);
-
-  // On mount, finalize any session interrupted by a refresh, and load history.
-  useEffect(() => {
-    finalizeCurrent();
-    setHistory(loadHistory());
-  }, []);
-
-  // Persist the live session continuously so a refresh never loses it.
-  useEffect(() => {
-    if (!connected || !items.length) return;
-    const t = window.setTimeout(() => {
-      saveCurrent({ id: `s-${startedAt.current}`, startedAt: startedAt.current, endedAt: Date.now(), items });
-    }, 400);
-    return () => window.clearTimeout(t);
-  }, [items, connected]);
-
-  // On disconnect, flush + roll the session into history.
-  useEffect(() => {
-    if (wasConnected.current && !connected) {
-      if (itemsRef.current.length) {
-        saveCurrent({
-          id: `s-${startedAt.current}`,
-          startedAt: startedAt.current,
-          endedAt: Date.now(),
-          items: itemsRef.current,
-        });
-      }
-      finalizeCurrent();
-      setHistory(loadHistory());
-    }
-    wasConnected.current = connected;
-  }, [connected]);
-
-  // Mic policy on connect: live in auto; muted in push-to-talk (PTT button owns it).
   const auto = config.input_mode !== 'push_to_talk';
   const localParticipant = session.room?.localParticipant;
   useEffect(() => {
@@ -118,50 +76,61 @@ function CardShell() {
     localParticipant.setMicrophoneEnabled(auto);
   }, [auto, connected, localParticipant]);
 
-  const handleStart = () => {
-    setEpoch((e) => e + 1);
-    session.start?.();
+  const rpc = async (method: string) => {
+    const room = session.room;
+    const id = agentIdentity(room);
+    if (!room || !id) return;
+    try {
+      await room.localParticipant.performRpc({ destinationIdentity: id, method, payload: '' });
+    } catch (e) {
+      console.error(`${method} failed`, e);
+    }
   };
 
-  if (historyOpen) {
-    return (
-      <ha-card>
-        <SessionHistory onClose={() => setHistoryOpen(false)} />
-      </ha-card>
-    );
-  }
-
-  // Show the live session; when offline show the most recent past session (restored on refresh).
-  const displayItems = connected || items.length ? items : history[0]?.items ?? [];
-  const query = lastUserText(displayItems);
+  const query = lastUserText(items);
   const orbState = !connected ? 'idle' : agentState || 'listening';
-  const stateLabel = connected ? agentState || 'ready' : displayItems.length ? 'ended' : 'offline';
+  const stateLabel = connected ? agentState || 'ready' : 'offline';
+
+  const dock = connected ? (auto ? 'auto' : 'ptt') : 'off';
 
   return (
-    <ha-card>
-      <header className="lk-top">
-        <VoiceOrb state={orbState} />
-        <span className="lk-title">{config.title || 'Home Voice'}</span>
-        <span className="lk-status" data-live={connected ? '1' : '0'}>
-          {stateLabel}
-        </span>
-        <button className="lk-round lk-round--ghost" title="Session history" onClick={() => setHistoryOpen(true)}>
-          <ha-icon icon="mdi:history" />
-        </button>
-      </header>
-
+    <ha-card data-dock={dock}>
+      <Header
+        orbState={orbState}
+        title={config.title || 'Home Voice'}
+        connected={connected}
+        stateLabel={stateLabel}
+        onEnd={() => session.end?.()}
+      />
       <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
-
-      <Conversation items={displayItems} />
-
-      {connected ? (
-        <Composer onTyped={addTyped} />
-      ) : (
-        <button className="lk-start" onClick={handleStart} disabled={!hass}>
-          <ha-icon icon="mdi:microphone" />
-          {displayItems.length ? 'New conversation' : 'Start talking'}
-        </button>
-      )}
+      <Conversation items={items} />
+      <Dock
+        connected={connected}
+        mode={auto ? 'auto' : 'ptt'}
+        micOn={mic.enabled}
+        startLabel={items.length ? 'New conversation' : 'Start talking'}
+        onStart={() => {
+          setEpoch((e) => e + 1);
+          session.start?.();
+        }}
+        onSend={async (text) => {
+          addTyped(text);
+          try {
+            await send(text);
+          } catch (e) {
+            console.error('send failed', e);
+          }
+        }}
+        onMicToggle={() => mic.toggle()}
+        onPttStart={async () => {
+          await localParticipant?.setMicrophoneEnabled(true);
+          rpc('start_turn');
+        }}
+        onPttEnd={async () => {
+          await rpc('end_turn');
+          await localParticipant?.setMicrophoneEnabled(false);
+        }}
+      />
     </ha-card>
   );
 }

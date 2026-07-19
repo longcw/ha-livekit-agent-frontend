@@ -36,6 +36,8 @@ export interface CardConfig {
   follow_agent?: boolean;
   /** How many tiles to show before "Show more". Default 8. */
   max_tiles?: number;
+  /** Fixed card height in px. Default 600. */
+  height?: number;
 }
 
 export interface Snapshot {
