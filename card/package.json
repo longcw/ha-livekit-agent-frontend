@@ -1,17 +1,23 @@
 {
   "name": "livekit-voice-card",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Home Assistant Lovelace card for the LiveKit voice agent",
+  "description": "Home Assistant Lovelace card for the LiveKit voice agent (React + @livekit/components-react)",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --format=esm --minify --target=es2020 --outfile=../custom_components/livekit_voice/frontend/livekit-voice-card.js",
-    "watch": "esbuild src/index.js --bundle --format=esm --target=es2020 --sourcemap --outfile=../custom_components/livekit_voice/frontend/livekit-voice-card.js --watch"
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "dev": "vite"
   },
   "dependencies": {
-    "livekit-client": "^2.17.2"
+    "@livekit/components-react": "^2.9.20",
+    "livekit-client": "^2.17.2",
+    "motion": "^12.16.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0"
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
   }
 }

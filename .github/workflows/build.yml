@@ -1,0 +1,46 @@
+name: build card
+
+# Builds the Lovelace card bundle. On main, commits the freshly built bundle back so the
+# file the HA integration serves always matches the card source (the HA host has no Node).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'card/**'
+      - '.github/workflows/build.yml'
+  pull_request:
+    paths:
+      - 'card/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: card/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: card
+      - run: pnpm build
+        working-directory: card
+      - name: Commit rebuilt bundle
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add custom_components/livekit_voice/frontend/livekit-voice-card.js
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: rebuild card bundle [skip ci]"
+            git push
+          else
+            echo "bundle already up to date"
+          fi

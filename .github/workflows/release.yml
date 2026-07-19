@@ -1,0 +1,38 @@
+name: release
+
+# On a version tag, build the card fresh and cut a GitHub release. HACS installs the repo
+# source at the tag (which includes the committed, freshly built bundle), then offers the
+# update to users.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: card/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: card
+      - run: pnpm build
+        working-directory: card
+      - name: Verify committed bundle matches the build
+        run: |
+          if ! git diff --quiet custom_components/livekit_voice/frontend/livekit-voice-card.js; then
+            echo "::warning::committed bundle differs from a fresh build for this tag"
+          fi
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
