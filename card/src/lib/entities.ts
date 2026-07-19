@@ -166,17 +166,27 @@ function actionNames(args: ToolCall['args']): string[] {
   return [];
 }
 
+export interface ActionTargets {
+  /** Acted-on entity_ids, most-recent action first (deduped) — pinned to the front. */
+  ordered: string[];
+  /** Entity_ids from the single most-recent resolving action — the highlight. */
+  latest: Set<string>;
+}
+
 /**
- * Entity_ids targeted by the *most recent* agent action, matched by name. Walks newest →
- * oldest and returns the first action that resolves to at least one visible device, so the
- * highlight always points at the latest thing the agent touched (and nothing older).
+ * Entity_ids targeted by agent actions, matched by name. Walks newest → oldest so `ordered`
+ * lists every acted-on device most-recent-first (used to pin them to the front of the rail),
+ * and `latest` is the first (newest) resolving action's targets — the moving highlight.
  */
-export function resolveLatestActionTarget(
+export function resolveActionTargets(
   hass: Hass,
   candidateIds: string[],
   toolCalls: ToolCall[]
-): Set<string> {
+): ActionTargets {
   const index = nameIndex(hass, candidateIds);
+  const ordered: string[] = [];
+  const seen = new Set<string>();
+  let latest: Set<string> | null = null;
   for (let i = toolCalls.length - 1; i >= 0; i--) {
     const t = toolCalls[i];
     if (!isActionTool(t.name)) continue;
@@ -196,9 +206,16 @@ export function resolveLatestActionTarget(
         }
       }
     }
-    if (hits.size) return hits;
+    if (!hits.size) continue;
+    if (latest === null) latest = hits; // newest resolving action = highlight
+    for (const id of hits) {
+      if (!seen.has(id)) {
+        seen.add(id);
+        ordered.push(id);
+      }
+    }
   }
-  return new Set();
+  return { ordered, latest: latest ?? new Set() };
 }
 
 // ---- relevance to the spoken request --------------------------------------
@@ -257,10 +274,10 @@ export interface TileModel {
 }
 
 /**
- * Build the ordered tiles: by relevance to the request, then controllable-before-ambient,
- * then name. Order is deliberately independent of on/off state and of which device was
- * acted on, so tiles never jump when you toggle one or when the agent acts — only the
- * `touched` highlight (the latest acted-on device) moves. Filtered to voice-exposed
+ * Build the ordered tiles: acted-on devices are pinned to the front (most-recently-acted
+ * first) so the agent's target always jumps to the top of the rail; the rest follow by
+ * relevance to the request, then controllable-before-ambient, then name. The `touched`
+ * highlight (the latest acted-on device) sits on the lead tile. Filtered to voice-exposed
  * entities (config.entities are always allowed through).
  */
 export function buildTiles(
@@ -277,9 +294,14 @@ export function buildTiles(
   ].filter((id) => keep(hass, exposed, id));
 
   const candidates = Array.from(new Set([...explicit, ...areaPool]));
-  const touched = resolveLatestActionTarget(hass, candidates, toolCalls);
+  const { ordered: pinned, latest: touched } = resolveActionTargets(hass, candidates, toolCalls);
+  const pinRank = new Map(pinned.map((id, i) => [id, i]));
 
   const ordered = candidates.sort((a, b) => {
+    // acted-on devices first, most-recently-acted leading
+    const pa = pinRank.get(a) ?? Infinity;
+    const pb = pinRank.get(b) ?? Infinity;
+    if (pa !== pb) return pa - pb;
     const qa = queryRelevance(hass, b, query) - queryRelevance(hass, a, query);
     if (qa !== 0) return qa;
     const ra = (DOMAIN_RANK[domainOf(a)] ?? 15) - (DOMAIN_RANK[domainOf(b)] ?? 15);

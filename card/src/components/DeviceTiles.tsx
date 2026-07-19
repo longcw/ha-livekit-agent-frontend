@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { openMoreInfo, useCardConfig, useHass, useStore } from '../hass/context';
 import type { Hass } from '../hass/store';
 import { buildTiles, formatState, friendlyName, iconFor, isActive, tapService } from '../lib/entities';
@@ -29,10 +29,18 @@ export function DeviceTiles({
     [hass, config, agentAreas, toolCalls, exposed, query]
   );
 
+  // When the agent acts, the target is pinned to the front — scroll the rail back to the
+  // start so the newly-pinned lead tile is actually in view (it's a horizontal scroller).
+  const rail = useRef<HTMLDivElement>(null);
+  const lead = tiles.find((t) => t.touched)?.entityId;
+  useEffect(() => {
+    if (lead) rail.current?.scrollTo({ left: 0, behavior: 'smooth' });
+  }, [lead]);
+
   if (!hass || tiles.length === 0) return null;
 
   return (
-    <div className="lk-tiles">
+    <div className="lk-tiles" ref={rail}>
       {tiles.map((t) => (
         <Tile key={t.entityId} entityId={t.entityId} touched={t.touched} hass={hass} host={host} />
       ))}
