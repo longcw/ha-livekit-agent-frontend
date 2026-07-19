@@ -12,9 +12,20 @@ export const CARD_STYLES = `
   }
 
   .lk-header { display: flex; align-items: center; gap: 8px; }
-  .lk-title { font-size: 1rem; font-weight: 600; color: var(--primary-text-color); }
+  .lk-title {
+    font-size: 1rem; font-weight: 600; color: var(--primary-text-color);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .lk-header-right { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; }
+  .lk-history-btn {
+    font: inherit; cursor: pointer; --mdc-icon-size: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 8px; border: none;
+    background: transparent; color: var(--secondary-text-color);
+  }
+  .lk-history-btn:hover { background: var(--secondary-background-color); color: var(--primary-text-color); }
   .lk-state {
-    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex; align-items: center; gap: 6px;
     font-size: 0.8rem; color: var(--secondary-text-color); text-transform: capitalize;
   }
   .lk-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--disabled-text-color, #9e9e9e); }
@@ -123,4 +134,19 @@ export const CARD_STYLES = `
   button.lk-talk[data-holding="1"] { background: var(--error-color, #db4437); }
 
   .lk-error { color: var(--error-color, #db4437); font-size: 0.85rem; text-align: center; }
+
+  /* Session history */
+  .lk-history { display: flex; flex-direction: column; gap: 10px; }
+  .lk-history-head { display: flex; align-items: center; gap: 8px; }
+  .lk-session-list { display: flex; flex-direction: column; gap: 6px; max-height: 380px; overflow-y: auto; }
+  .lk-session {
+    font: inherit; text-align: left; cursor: pointer;
+    display: flex; flex-direction: column; gap: 2px;
+    border: 1px solid var(--divider-color); border-radius: 12px; padding: 10px 12px;
+    background: var(--card-background-color); color: var(--primary-text-color);
+  }
+  .lk-session:hover { border-color: color-mix(in srgb, var(--primary-text-color) 25%, var(--divider-color)); }
+  .lk-session-time { font-size: 0.72rem; color: var(--secondary-text-color); }
+  .lk-session-summary { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-session-meta { font-size: 0.7rem; color: var(--secondary-text-color); }
 `;
