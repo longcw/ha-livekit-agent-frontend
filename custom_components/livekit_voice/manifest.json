@@ -1,7 +1,7 @@
 {
   "domain": "livekit_voice",
   "name": "LiveKit Voice Assistant",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "documentation": "https://github.com/longcw/ha-livekit-agent-frontend",
   "issue_tracker": "https://github.com/longcw/ha-livekit-agent-frontend/issues",
   "codeowners": ["@longcw"],
