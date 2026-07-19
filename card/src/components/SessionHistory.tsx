@@ -1,39 +1,49 @@
 import { useState } from 'react';
-import { clearSessions, loadSessions, type StoredSession } from '../lib/sessions';
-import { ToolCards } from './ToolCards';
-import { Transcript } from './Transcript';
+import { clearHistory, loadHistory, type StoredSession } from '../lib/session-store';
+import { Conversation } from './Conversation';
 
 function fmtTime(ts: number): string {
   try {
-    return new Date(ts).toLocaleString();
+    return new Date(ts).toLocaleString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   } catch {
     return '';
   }
 }
 
 function summarize(s: StoredSession): string {
-  const firstUser = s.lines.find((l) => l.user);
-  if (firstUser?.text) return firstUser.text;
-  if (s.lines[0]?.text) return s.lines[0].text;
-  return `${s.toolCalls.length} action${s.toolCalls.length === 1 ? '' : 's'}`;
+  const firstUser = s.items.find((i) => i.kind === 'message' && i.role === 'user');
+  if (firstUser && firstUser.kind === 'message') return firstUser.text;
+  const firstMsg = s.items.find((i) => i.kind === 'message');
+  if (firstMsg && firstMsg.kind === 'message') return firstMsg.text;
+  return 'No transcript';
 }
 
-/** Browse past voice sessions (newest first) and open one to view its transcript + actions. */
+function counts(s: StoredSession): string {
+  const msgs = s.items.filter((i) => i.kind === 'message').length;
+  const acts = s.items.filter((i) => i.kind === 'action').length;
+  return `${msgs} message${msgs === 1 ? '' : 's'} · ${acts} action${acts === 1 ? '' : 's'}`;
+}
+
+/** Browse past voice sessions and open one to read its full conversation. */
 export function SessionHistory({ onClose }: { onClose: () => void }) {
-  const [sessions, setSessions] = useState<StoredSession[]>(() => loadSessions());
+  const [sessions, setSessions] = useState<StoredSession[]>(() => loadHistory());
   const [selected, setSelected] = useState<StoredSession | null>(null);
 
   if (selected) {
     return (
       <div className="lk-history">
         <div className="lk-history-head">
-          <button className="lk-icon-btn lk-secondary" title="Back" onClick={() => setSelected(null)}>
+          <button className="lk-round lk-round--ghost" title="Back" onClick={() => setSelected(null)}>
             <ha-icon icon="mdi:arrow-left" />
           </button>
-          <span className="lk-title">{fmtTime(selected.startedAt)}</span>
+          <span className="lk-h2">{fmtTime(selected.startedAt)}</span>
         </div>
-        <Transcript lines={selected.lines} />
-        <ToolCards toolCalls={selected.toolCalls} />
+        <Conversation items={selected.items} autoscroll={false} />
       </div>
     );
   }
@@ -41,36 +51,38 @@ export function SessionHistory({ onClose }: { onClose: () => void }) {
   return (
     <div className="lk-history">
       <div className="lk-history-head">
-        <span className="lk-title">Past sessions</span>
-        <div className="lk-header-right">
-          {sessions.length > 0 && (
-            <button
-              className="lk-history-btn"
-              title="Clear all"
-              onClick={() => {
-                clearSessions();
-                setSessions([]);
-              }}
-            >
-              <ha-icon icon="mdi:delete-outline" />
-            </button>
-          )}
-          <button className="lk-icon-btn lk-secondary" title="Close" onClick={onClose}>
-            <ha-icon icon="mdi:close" />
+        <span className="lk-h2">Past sessions</span>
+        <div className="lk-spacer" />
+        {sessions.length > 0 && (
+          <button
+            className="lk-round lk-round--ghost"
+            title="Clear all"
+            onClick={() => {
+              clearHistory();
+              setSessions([]);
+            }}
+          >
+            <ha-icon icon="mdi:delete-outline" />
           </button>
-        </div>
+        )}
+        <button className="lk-round lk-round--ghost" title="Close" onClick={onClose}>
+          <ha-icon icon="mdi:close" />
+        </button>
       </div>
 
       {sessions.length === 0 ? (
-        <div className="lk-hint">No past sessions yet.</div>
+        <div className="lk-empty">
+          <ha-icon icon="mdi:history" />
+          <span>No past sessions yet.</span>
+        </div>
       ) : (
         <div className="lk-session-list">
           {sessions.map((s) => (
             <button className="lk-session" key={s.id} onClick={() => setSelected(s)}>
-              <span className="lk-session-time">{fmtTime(s.startedAt)}</span>
               <span className="lk-session-summary">{summarize(s)}</span>
               <span className="lk-session-meta">
-                {s.lines.length} msg · {s.toolCalls.length} action{s.toolCalls.length === 1 ? '' : 's'}
+                <span>{fmtTime(s.startedAt)}</span>
+                <span>{counts(s)}</span>
               </span>
             </button>
           ))}

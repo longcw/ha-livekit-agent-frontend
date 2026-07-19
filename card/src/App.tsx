@@ -1,26 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   RoomAudioRenderer,
   SessionProvider,
   useAgent,
   useSession,
   useSessionContext,
-  useSessionMessages,
 } from '@livekit/components-react';
-import { ChatInput } from './components/ChatInput';
-import { Controls } from './components/Controls';
+import { Composer } from './components/Composer';
+import { Conversation } from './components/Conversation';
 import { DeviceTiles } from './components/DeviceTiles';
 import { SessionHistory } from './components/SessionHistory';
-import { ToolCards } from './components/ToolCards';
-import { Transcript } from './components/Transcript';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
-import { useSessionLog } from './lib/session-log';
-import { saveSession, type TranscriptLine } from './lib/sessions';
+import { useConversation } from './lib/conversation';
+import type { ConvItem } from './lib/session-store';
+import { finalizeCurrent, loadHistory, saveCurrent } from './lib/session-store';
 import { useToolFeed } from './lib/tool-feed';
-
-const PULSE_STATES = new Set(['listening', 'thinking', 'speaking']);
 
 export function Root({ store }: { store: HassStore }) {
   return (
@@ -42,11 +38,20 @@ function SessionRoot() {
   );
 }
 
-function lastUserText(lines: TranscriptLine[]): string {
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].user) return lines[i].text;
+function lastUserText(items: ConvItem[]): string {
+  for (let i = items.length - 1; i >= 0; i--) {
+    const it = items[i];
+    if (it.kind === 'message' && it.role === 'user') return it.text;
   }
   return '';
+}
+
+function VoiceOrb({ state }: { state: string }) {
+  return (
+    <span className="lk-orb" data-state={state} aria-hidden="true">
+      <span className="lk-orb-core" />
+    </span>
+  );
 }
 
 function CardShell() {
@@ -54,32 +59,66 @@ function CardShell() {
   const config = useCardConfig();
   const session = useSessionContext();
   const { state: agentState } = useAgent();
-  const { messages: liveMessages } = useSessionMessages(session);
-  const live = useToolFeed();
+  const { toolCalls, agentAreas } = useToolFeed();
   const [epoch, setEpoch] = useState(0);
-  const log = useSessionLog(liveMessages, live.toolCalls, live.agentAreas, epoch);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState(() => loadHistory());
 
+  const connected = session.isConnected;
+  const localIdentity = session.room?.localParticipant?.identity;
+  const { items, addTyped } = useConversation(localIdentity, toolCalls, epoch);
+
+  const startedAt = useRef(Date.now());
+  const itemsRef = useRef<ConvItem[]>(items);
+  itemsRef.current = items;
+  const wasConnected = useRef(false);
+
+  // New session boundary → fresh timestamp.
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, [epoch]);
+
+  // On mount, finalize any session interrupted by a refresh, and load history.
+  useEffect(() => {
+    finalizeCurrent();
+    setHistory(loadHistory());
+  }, []);
+
+  // Persist the live session continuously so a refresh never loses it.
+  useEffect(() => {
+    if (!connected || !items.length) return;
+    const t = window.setTimeout(() => {
+      saveCurrent({ id: `s-${startedAt.current}`, startedAt: startedAt.current, endedAt: Date.now(), items });
+    }, 400);
+    return () => window.clearTimeout(t);
+  }, [items, connected]);
+
+  // On disconnect, flush + roll the session into history.
+  useEffect(() => {
+    if (wasConnected.current && !connected) {
+      if (itemsRef.current.length) {
+        saveCurrent({
+          id: `s-${startedAt.current}`,
+          startedAt: startedAt.current,
+          endedAt: Date.now(),
+          items: itemsRef.current,
+        });
+      }
+      finalizeCurrent();
+      setHistory(loadHistory());
+    }
+    wasConnected.current = connected;
+  }, [connected]);
+
+  // Mic policy on connect: live in auto; muted in push-to-talk (PTT button owns it).
   const auto = config.input_mode !== 'push_to_talk';
   const localParticipant = session.room?.localParticipant;
   useEffect(() => {
-    if (!session.isConnected || !localParticipant) return;
+    if (!connected || !localParticipant) return;
     localParticipant.setMicrophoneEnabled(auto);
-  }, [auto, session.isConnected, localParticipant]);
+  }, [auto, connected, localParticipant]);
 
-  const connected = session.isConnected;
-  const query = lastUserText(log.lines);
-  const hasLog = log.lines.length > 0 || log.toolCalls.length > 0;
-
-  // Start a fresh session: archive the previous one (if any), reset the log, connect.
   const handleStart = () => {
-    saveSession({
-      id: `s-${log.startedAt}`,
-      startedAt: log.startedAt,
-      endedAt: Date.now(),
-      lines: log.lines,
-      toolCalls: log.toolCalls,
-    });
     setEpoch((e) => e + 1);
     session.start?.();
   };
@@ -92,41 +131,36 @@ function CardShell() {
     );
   }
 
-  const pulse = PULSE_STATES.has(agentState ?? '');
-  const stateLabel = connected ? agentState || 'ready' : hasLog ? 'ended' : 'offline';
+  // Show the live session; when offline show the most recent past session (restored on refresh).
+  const displayItems = connected || items.length ? items : history[0]?.items ?? [];
+  const query = lastUserText(displayItems);
+  const orbState = !connected ? 'idle' : agentState || 'listening';
+  const stateLabel = connected ? agentState || 'ready' : displayItems.length ? 'ended' : 'offline';
 
   return (
     <ha-card>
-      <div className="lk-header">
-        <span className="lk-title">{config.title || 'Voice Assistant'}</span>
-        <div className="lk-header-right">
-          <button className="lk-history-btn" title="Session history" onClick={() => setHistoryOpen(true)}>
-            <ha-icon icon="mdi:history" />
-          </button>
-          <span className="lk-state">
-            <span className="lk-dot" data-active={connected ? '1' : '0'} data-pulse={pulse ? '1' : '0'} />
-            {stateLabel}
-          </span>
-        </div>
-      </div>
+      <header className="lk-top">
+        <VoiceOrb state={orbState} />
+        <span className="lk-title">{config.title || 'Home Voice'}</span>
+        <span className="lk-status" data-live={connected ? '1' : '0'}>
+          {stateLabel}
+        </span>
+        <button className="lk-round lk-round--ghost" title="Session history" onClick={() => setHistoryOpen(true)}>
+          <ha-icon icon="mdi:history" />
+        </button>
+      </header>
 
-      {/* Live, controllable device tiles — persist across disconnect until a new session. */}
-      <DeviceTiles agentAreas={log.agentAreas} toolCalls={log.toolCalls} query={query} />
+      <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
 
-      {(connected || hasLog) && <Transcript lines={log.lines} />}
-      {(connected || hasLog) && <ToolCards toolCalls={log.toolCalls} />}
+      <Conversation items={displayItems} />
 
       {connected ? (
-        <>
-          <ChatInput />
-          <Controls />
-        </>
+        <Composer onTyped={addTyped} />
       ) : (
-        <div className="lk-controls">
-          <button className="lk-btn" style={{ flex: 1 }} onClick={handleStart} disabled={!hass}>
-            {hasLog ? 'New session' : 'Start voice'}
-          </button>
-        </div>
+        <button className="lk-start" onClick={handleStart} disabled={!hass}>
+          <ha-icon icon="mdi:microphone" />
+          {displayItems.length ? 'New conversation' : 'Start talking'}
+        </button>
       )}
     </ha-card>
   );

@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ParticipantKind, Track } from 'livekit-client';
-import { useSessionContext, useTrackToggle } from '@livekit/components-react';
+import { useChat, useSessionContext, useTrackToggle } from '@livekit/components-react';
 import { useCardConfig } from '../hass/context';
 
 function agentIdentity(room: any): string | null {
@@ -11,16 +11,59 @@ function agentIdentity(room: any): string | null {
   return null;
 }
 
-export function Controls() {
+/** Text input + voice control (mic toggle or push-to-talk) + end call. */
+export function Composer({ onTyped }: { onTyped: (text: string) => void }) {
   const config = useCardConfig();
   const session = useSessionContext();
+  const { send } = useChat();
   const pushToTalk = config.input_mode === 'push_to_talk';
+  const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
+  const canSend = !sending && text.trim().length > 0;
+
+  const submit = async () => {
+    const message = text.trim();
+    if (!message || sending) return;
+    setSending(true);
+    onTyped(message);
+    setText('');
+    try {
+      await send(message);
+    } catch (e) {
+      console.error('chat send failed', e);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
-    <div className="lk-controls">
-      {pushToTalk ? <PushToTalk /> : <MicToggle />}
-      <button className="lk-icon-btn lk-danger" title="End" onClick={() => session.end?.()}>
-        <ha-icon icon="mdi:phone-hangup" />
+    <div className="lk-composer">
+      <div className="lk-input-row">
+        <textarea
+          className="lk-input"
+          value={text}
+          rows={1}
+          placeholder={pushToTalk ? 'Message, or hold the mic…' : 'Message…'}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              submit();
+            }
+          }}
+        />
+        {canSend ? (
+          <button className="lk-round lk-round--accent" title="Send" onClick={submit}>
+            <ha-icon icon="mdi:arrow-up" />
+          </button>
+        ) : pushToTalk ? (
+          <PushToTalk />
+        ) : (
+          <MicToggle />
+        )}
+      </div>
+      <button className="lk-round lk-round--ghost lk-end" title="End" onClick={() => session.end?.()}>
+        <ha-icon icon="mdi:close" />
       </button>
     </div>
   );
@@ -30,11 +73,10 @@ function MicToggle() {
   const { enabled, toggle } = useTrackToggle({ source: Track.Source.Microphone });
   return (
     <button
-      className="lk-icon-btn"
+      className="lk-round"
       data-on={enabled ? '1' : '0'}
       title={enabled ? 'Mute microphone' : 'Unmute microphone'}
       onClick={() => toggle()}
-      style={{ flex: 1, borderRadius: 999 }}
     >
       <ha-icon icon={enabled ? 'mdi:microphone' : 'mdi:microphone-off'} />
     </button>
@@ -76,14 +118,14 @@ function PushToTalk() {
 
   return (
     <button
-      className="lk-btn lk-talk"
-      style={{ flex: 1 }}
+      className="lk-round lk-ptt"
+      title="Hold to talk"
       onPointerDown={start}
       onPointerUp={end}
       onPointerCancel={end}
       onPointerLeave={end}
     >
-      Hold to talk
+      <ha-icon icon="mdi:microphone" />
     </button>
   );
 }
