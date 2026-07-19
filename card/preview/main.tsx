@@ -99,6 +99,7 @@ function Preview() {
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
   const STATE_LABELS: Record<string, string> = {
     idle: 'Offline', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
+    dozing: 'Sleeping',
   };
   return (
     <HassStoreProvider value={store}>

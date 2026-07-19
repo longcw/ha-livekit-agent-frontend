@@ -71,6 +71,9 @@ export const CARD_STYLES =
     background: radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--lk-accent) 55%, #fff), var(--lk-accent));
     box-shadow: 0 0 12px -1px color-mix(in srgb, var(--lk-accent) 70%, transparent); }
   .lk-orb[data-state="idle"] .lk-orb-core { background: var(--lk-muted); box-shadow: none; }
+  /* dozing: connected but STT torn down to save cost — alive (slow, faint breathe) but not listening */
+  .lk-orb[data-state="dozing"] .lk-orb-core { background: var(--lk-muted); box-shadow: none; opacity: .55;
+    animation: lk-breathe 3.6s ease-in-out infinite; }
   .lk-orb[data-state="connecting"] .lk-orb-core { animation: lk-breathe 1.1s ease-in-out infinite; }
   .lk-orb[data-state="listening"] .lk-orb-core { animation: lk-breathe 2.4s ease-in-out infinite; }
   .lk-orb[data-state="listening"]::before { opacity: .7; animation: lk-halo 2.4s ease-in-out infinite; }

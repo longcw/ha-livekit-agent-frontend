@@ -16,6 +16,7 @@ import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/cont
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, useConversation } from './lib/conversation';
+import { useSpeechState } from './lib/speech-state';
 import { useToolFeed } from './lib/tool-feed';
 import { loadTurnMode, saveTurnMode, type TurnMode } from './lib/turn-mode';
 
@@ -81,6 +82,7 @@ function CardShell() {
   const session = useSessionContext();
   const agent = useAgent();
   const agentState = agent.state;
+  const sttActive = useSpeechState();
   const { toolCalls, agentAreas } = useToolFeed();
   const [epoch, setEpoch] = useState(0);
 
@@ -228,7 +230,13 @@ function CardShell() {
   }, [autoConnect, startSession]);
 
   const query = lastUserText(items);
-  const { orb: orbState, label: stateLabel } = agentPhase(connected, connecting, agentState);
+  const phase = agentPhase(connected, connecting, agentState);
+  // While connected, the agent may tear STT down after the user is away (to save cost).
+  // Surface that as a distinct "sleeping" phase so the orb/label don't falsely read
+  // "Listening" when the agent isn't actually hearing anything.
+  const dozing = connected && !sttActive;
+  const orbState = dozing ? 'dozing' : phase.orb;
+  const stateLabel = dozing ? 'Sleeping' : phase.label;
 
   return (
     <ha-card data-dock={connected ? mode : 'off'}>
