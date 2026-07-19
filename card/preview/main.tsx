@@ -96,6 +96,7 @@ function Preview() {
   );
   const [turnActive, setTurnActive] = useState(P.includes('active'));
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
+  const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
   const STATE_LABELS: Record<string, string> = {
     idle: 'Offline', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
@@ -111,6 +112,8 @@ function Preview() {
           mode={mode}
           onModeChange={setMode}
           stateLabel={STATE_LABELS[orbState] ?? 'Connected'}
+          audioOutput={audioOutput}
+          onToggleAudioOutput={() => setAudioOutput((v) => !v)}
           onEnd={() => {}}
         />
         <DeviceTiles agentAreas={['书房']} toolCalls={toolCalls as any} query="打开射灯" />

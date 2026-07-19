@@ -62,6 +62,7 @@ export const CARD_STYLES =
     background: transparent; color: var(--lk-muted); display: grid; place-items: center; --mdc-icon-size: 20px;
   }
   .lk-iconbtn:hover { background: var(--lk-elevated); color: var(--lk-fg); }
+  .lk-iconbtn[data-on="1"] { color: var(--lk-accent); }
 
   /* ---- voice orb ---- */
   .lk-orb { position: relative; width: 26px; height: 26px; flex: none; display: grid; place-items: center; }

@@ -27,7 +27,16 @@ export interface Hass {
 export interface CardConfig {
   type: string;
   title?: string;
+  /** Turn mode to boot in. Default 'push_to_talk'. */
   input_mode?: 'push_to_talk' | 'auto';
+  /** Let the agent speak replies aloud (TTS). Default false — text-only, zero TTS cost. */
+  audio_output?: boolean;
+  /**
+   * Begin listening on connect: in manual, auto-open a turn (enables the mic + STT); in
+   * auto, start unpaused. Default false, so a card on a dashboard stays dormant (no STT)
+   * until the user taps to talk — connecting costs nothing but the worker link.
+   */
+  start_on_connect?: boolean;
   /** Explicit entity_ids to always show as tiles. */
   entities?: string[];
   /** Area ids or names; all their entities become tiles. */
@@ -36,7 +45,7 @@ export interface CardConfig {
   follow_agent?: boolean;
   /** How many tiles to show before "Show more". Default 8. */
   max_tiles?: number;
-  /** Fixed card height in px. Default 480. */
+  /** Fixed card height in px. Default 720; always capped to the viewport height. */
   height?: number;
   /** Connect automatically when the dashboard tab is open; disconnect on leave. Default true. */
   auto_connect?: boolean;

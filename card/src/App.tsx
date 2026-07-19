@@ -16,7 +16,7 @@ import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/cont
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, useConversation } from './lib/conversation';
-import { useSpeechState } from './lib/speech-state';
+import { useSessionState } from './lib/session-state';
 import { useToolFeed } from './lib/tool-feed';
 import { loadTurnMode, saveTurnMode, type TurnMode } from './lib/turn-mode';
 
@@ -82,7 +82,7 @@ function CardShell() {
   const session = useSessionContext();
   const agent = useAgent();
   const agentState = agent.state;
-  const sttActive = useSpeechState();
+  const { sttEnabled, audioOutput } = useSessionState();
   const { toolCalls, agentAreas } = useToolFeed();
   const [epoch, setEpoch] = useState(0);
 
@@ -125,6 +125,17 @@ function CardShell() {
       return next;
     });
   }, []);
+
+  // Card-configured defaults (optional). Defaults keep an embedded card zero-cost: no
+  // spoken replies and dormant (STT off) until the user opens a turn.
+  const startOnConnect = config.start_on_connect === true;
+  const audioOutputConfig = config.audio_output === true;
+
+  // Spoken replies (TTS) on/off. The agent owns the truth and broadcasts it, so the
+  // toggle just reflects `audioOutput` and asks the agent to flip.
+  const toggleAudioOutput = useCallback(() => {
+    rpc('set_audio_output', audioOutput ? 'off' : 'on');
+  }, [rpc, audioOutput]);
 
   // Open the mic + turn on the agent. Shared by manual "start turn" and auto "resume".
   const openTurn = useCallback(async () => {
@@ -173,16 +184,18 @@ function CardShell() {
   }, [connected, mode, setMic]);
 
   // Once the agent is ready (its state reached listening/…, so the turn RPCs are
-  // registered): assert the mode, and in manual auto-open the first turn so the user can
-  // talk straight away on connect.
+  // registered): assert the mode and the configured audio-output default. In manual,
+  // only auto-open the first turn when start_on_connect is set — otherwise the card stays
+  // dormant (no STT) until the user taps to talk.
   const agentReady = agent.isConnected;
   useEffect(() => {
     if (!connected || !agentReady) return;
     let cancelled = false;
     (async () => {
       await rpc('set_turn_mode', mode);
+      await rpc('set_audio_output', audioOutputConfig ? 'on' : 'off');
       if (cancelled) return;
-      if (mode === 'manual' && !didAutoStart.current) {
+      if (mode === 'manual' && startOnConnect && !didAutoStart.current) {
         didAutoStart.current = true;
         await onTurnStart();
       }
@@ -190,7 +203,7 @@ function CardShell() {
     return () => {
       cancelled = true;
     };
-  }, [connected, agentReady, mode, rpc, onTurnStart]);
+  }, [connected, agentReady, mode, startOnConnect, audioOutputConfig, rpc, onTurnStart]);
 
   // --- auto-connect while the dashboard tab is open ---
   const autoConnect = config.auto_connect !== false;
@@ -231,10 +244,11 @@ function CardShell() {
 
   const query = lastUserText(items);
   const phase = agentPhase(connected, connecting, agentState);
-  // While connected, the agent may tear STT down after the user is away (to save cost).
-  // Surface that as a distinct "sleeping" phase so the orb/label don't falsely read
-  // "Listening" when the agent isn't actually hearing anything.
-  const dozing = connected && !sttActive;
+  // The agent's own "listening" phase just means idle/ready — misleading when STT is off
+  // (it isn't hearing anything). Only the idle phase is remapped to "Sleeping" when STT is
+  // off; Thinking/Speaking always show so a text reply gives feedback, and "Listening"
+  // only ever appears when STT is genuinely live.
+  const dozing = connected && !sttEnabled && phase.orb === 'listening';
   const orbState = dozing ? 'dozing' : phase.orb;
   const stateLabel = dozing ? 'Sleeping' : phase.label;
 
@@ -247,6 +261,8 @@ function CardShell() {
         mode={mode}
         onModeChange={changeMode}
         stateLabel={stateLabel}
+        audioOutput={audioOutput}
+        onToggleAudioOutput={toggleAudioOutput}
         onEnd={() => session.end?.()}
       />
       <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />

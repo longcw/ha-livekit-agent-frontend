@@ -7,6 +7,8 @@ export function Header({
   mode,
   onModeChange,
   stateLabel,
+  audioOutput,
+  onToggleAudioOutput,
   onEnd,
 }: {
   orbState: string;
@@ -15,6 +17,8 @@ export function Header({
   mode: TurnMode;
   onModeChange: (mode: TurnMode) => void;
   stateLabel: string;
+  audioOutput: boolean;
+  onToggleAudioOutput: () => void;
   onEnd: () => void;
 }) {
   return (
@@ -29,6 +33,17 @@ export function Header({
         </span>
       </div>
       {connected && <ModeSwitch mode={mode} onChange={onModeChange} />}
+      {connected && (
+        <button
+          className="lk-iconbtn"
+          data-on={audioOutput ? '1' : '0'}
+          title={audioOutput ? 'Mute agent voice' : 'Let the agent speak'}
+          aria-pressed={audioOutput}
+          onClick={onToggleAudioOutput}
+        >
+          <ha-icon icon={audioOutput ? 'mdi:volume-high' : 'mdi:volume-off'} />
+        </button>
+      )}
       {connected && (
         <button className="lk-iconbtn" title="End conversation" onClick={onEnd}>
           <ha-icon icon="mdi:close" />

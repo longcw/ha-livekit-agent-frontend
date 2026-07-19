@@ -13,8 +13,12 @@ Home Assistant users and serves the card that runs the voice session in the HA f
 
 - **Native device tiles from `hass.states`** — live status, **tap to toggle**, long-press /
   right-click opens HA's native more-info dialog. Tiles update themselves via `hass`.
-- **Voice** — push-to-talk or auto turn detection, with agent audio playback.
-- **Text chat** — type to the agent when you'd rather not talk.
+- **Voice** — push-to-talk or auto turn detection. STT starts **off** and only spins up for
+  an actual turn (then back down when you go idle), so a card idling on a dashboard costs
+  nothing beyond the worker connection.
+- **Text chat** — always available and needs no STT, so the card works as a pure text chat.
+- **Speaker toggle** — turn the agent's spoken (TTS) replies on/off from the header; **off by
+  default** (text-only).
 - **Transcript** — SDK-managed, so interim speech is replaced by the final text (no dupes).
 - **Tool-call status** — a compact line for what the agent is doing.
 
@@ -67,6 +71,10 @@ dashboard to pick up the new card.
 type: custom:livekit-voice-card
 title: Voice Assistant        # optional header title
 input_mode: push_to_talk      # push_to_talk (default) | auto
+audio_output: false           # default false: agent replies in text only (toggle in the header)
+start_on_connect: false       # default false: stay dormant (no STT) until you tap to talk
+auto_connect: true            # default true: connect while the dashboard tab is open
+height: 720                   # card height in px (default 720; capped to the viewport)
 areas:                        # optional: show all entities in these areas as tiles
   - Living Room
   - 主卧
@@ -76,9 +84,12 @@ entities:                     # optional: always show these specific entities
 follow_agent: true            # default true: also surface tiles for areas the agent looks at
 ```
 
-All fields are optional. With none set, the card shows voice + chat + transcript, and adds
-tiles for whatever area the agent queries. `areas`/`entities` pin a fixed set of tiles that
-are always visible (like any native HA card).
+All fields are optional. **By default the card is text-only and dormant**: it connects to
+the worker but keeps STT and TTS off, so it's free to leave on any dashboard. Tap the mic to
+talk — which spins STT up just for that turn and tears it back down once you're idle — or flip
+the header speaker to hear replies. Set `audio_output: true` and/or `start_on_connect: true`
+to speak and start listening the moment it connects; `input_mode: auto` makes it hands-free.
+`areas`/`entities` pin a fixed set of tiles that are always visible (like any native HA card).
 
 ## Why tiles render by `entity_id`/area, not by device name
 
