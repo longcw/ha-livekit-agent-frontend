@@ -6,3 +6,6 @@ card/pnpm-lock.yaml.bak
 # Python
 __pycache__/
 *.pyc
+
+# Local Claude Code notes/skills (not shared)
+.claude/
