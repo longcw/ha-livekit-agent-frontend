@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import {
+  type ReceivedMessage,
   RoomAudioRenderer,
   SessionProvider,
   useAgent,
   useSession,
   useSessionContext,
+  useSessionMessages,
 } from '@livekit/components-react';
 import { ChatInput } from './components/ChatInput';
 import { Controls } from './components/Controls';
@@ -38,12 +40,21 @@ function SessionRoot() {
   );
 }
 
+function lastUserText(messages: ReceivedMessage[]): string {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].from?.isLocal) return messages[i].message;
+  }
+  return '';
+}
+
 function CardShell() {
   const hass = useHass();
   const config = useCardConfig();
   const session = useSessionContext();
   const { state: agentState } = useAgent();
+  const { messages } = useSessionMessages(session);
   const { toolCalls, agentAreas } = useToolFeed();
+  const query = lastUserText(messages);
 
   const auto = config.input_mode !== 'push_to_talk';
   const localParticipant = session.room?.localParticipant;
@@ -69,11 +80,11 @@ function CardShell() {
       </div>
 
       {/* Live, controllable device tiles — visible whether or not voice is connected. */}
-      <DeviceTiles agentAreas={agentAreas} />
+      <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
 
       {connected ? (
         <>
-          <Transcript />
+          <Transcript messages={messages} />
           <ToolCards toolCalls={toolCalls} />
           <ChatInput />
           <Controls />

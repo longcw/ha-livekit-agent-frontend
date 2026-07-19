@@ -23,34 +23,50 @@ export const CARD_STYLES = `
   @keyframes lk-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
   /* Device tiles */
-  .lk-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+  .lk-devices { display: flex; flex-direction: column; gap: 8px; }
+  .lk-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
   .lk-tile {
-    font: inherit; text-align: left; cursor: pointer;
-    display: flex; flex-direction: column; gap: 8px;
-    border: 1px solid var(--divider-color); border-radius: 14px; padding: 10px;
+    position: relative; font: inherit; text-align: left; cursor: pointer;
+    display: flex; flex-direction: column; gap: 7px;
+    border: 1px solid var(--divider-color); border-radius: 16px; padding: 12px 11px;
     background: var(--card-background-color); color: var(--primary-text-color);
-    transition: border-color .15s ease, background-color .15s ease, transform .05s ease;
-    min-width: 0;
+    transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease, transform .06s ease;
+    min-width: 0; overflow: hidden;
   }
+  .lk-tile:hover { border-color: var(--primary-text-color); border-color: color-mix(in srgb, var(--primary-text-color) 25%, var(--divider-color)); }
   .lk-tile:active { transform: scale(0.97); }
   .lk-tile[data-active="1"] {
     border-color: transparent;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 45%, transparent);
-    background: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
+    background: color-mix(in srgb, var(--primary-color) 12%, var(--card-background-color));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 38%, transparent);
   }
-  .lk-tile[data-touched="1"] { outline: 2px solid color-mix(in srgb, var(--primary-color) 55%, transparent); outline-offset: 1px; }
-  .lk-tile-top { display: flex; align-items: center; justify-content: space-between; }
+  .lk-tile[data-touched="1"] {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--primary-color), 0 6px 18px -10px color-mix(in srgb, var(--primary-color) 80%, transparent);
+  }
   .lk-tile-icon {
-    --mdc-icon-size: 20px; width: 34px; height: 34px; border-radius: 10px;
+    --mdc-icon-size: 20px; width: 36px; height: 36px; border-radius: 11px;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--secondary-background-color); color: var(--secondary-text-color);
+    transition: background-color .15s ease, color .15s ease;
   }
   .lk-tile[data-active="1"] .lk-tile-icon { background: var(--primary-color); color: var(--text-primary-color, #fff); }
-  .lk-tile-state { font-size: 1.05rem; font-weight: 600; line-height: 1.1; }
-  .lk-tile-name {
-    font-size: 0.75rem; color: var(--secondary-text-color);
+  .lk-tile-state {
+    font-size: 1.05rem; font-weight: 650; line-height: 1.1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .lk-tile-name {
+    font-size: 0.74rem; color: var(--secondary-text-color); line-height: 1.25;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .lk-more {
+    font: inherit; cursor: pointer; align-self: center;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; border: none; padding: 4px 10px; border-radius: 999px;
+    color: var(--secondary-text-color); font-size: 0.8rem; font-weight: 600;
+    --mdc-icon-size: 16px;
+  }
+  .lk-more:hover { color: var(--primary-text-color); background: var(--secondary-background-color); }
 
   /* Transcript */
   .lk-transcript {

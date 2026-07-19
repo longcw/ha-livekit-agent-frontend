@@ -34,6 +34,8 @@ export interface CardConfig {
   areas?: string[];
   /** Also surface tiles for areas the agent looks at (get_devices). Default true. */
   follow_agent?: boolean;
+  /** How many tiles to show before "Show more". Default 8. */
+  max_tiles?: number;
 }
 
 export interface Snapshot {

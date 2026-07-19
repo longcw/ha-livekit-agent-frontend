@@ -1,13 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useSessionContext, useSessionMessages } from '@livekit/components-react';
+import type { ReceivedMessage } from '@livekit/components-react';
 
 /**
- * Live transcript. `useSessionMessages` returns SDK-managed messages keyed by id, so
- * interim segments are overwritten in place and only final text remains — no duplicates.
+ * Live transcript. Messages are SDK-managed (keyed by id), so interim segments are
+ * overwritten in place and only final text remains — no duplicates.
  */
-export function Transcript() {
-  const session = useSessionContext();
-  const { messages } = useSessionMessages(session);
+export function Transcript({ messages }: { messages: ReceivedMessage[] }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

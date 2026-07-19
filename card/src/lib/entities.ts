@@ -1,4 +1,5 @@
 import type { CardConfig, Hass, HassEntity } from '../hass/store';
+import type { ToolCall } from './tool-feed';
 
 export function domainOf(entityId: string): string {
   return entityId.split('.')[0];
@@ -24,7 +25,6 @@ export function isActive(entity: HassEntity | undefined): boolean {
   if (!entity) return false;
   const s = (entity.state ?? '').toString().toLowerCase();
   if (INACTIVE_STATES.has(s)) return false;
-  // numeric sensors aren't "on/off" — don't glow them
   const n = Number(s);
   if (s !== '' && !Number.isNaN(n)) return false;
   return true;
@@ -38,7 +38,6 @@ export function tapService(entityId: string): { domain: string; service: string 
   }
   if (d === 'scene') return { domain: 'scene', service: 'turn_on' };
   if (d === 'script') return { domain: 'script', service: 'turn_on' };
-  // lock / climate / media_player / vacuum / sensors → open more-info (safer / richer)
   return null;
 }
 
@@ -70,7 +69,7 @@ export function iconFor(hass: Hass, entityId: string): string {
 export function formatState(entity: HassEntity): string {
   const raw = (entity.state ?? '').toString();
   const low = raw.toLowerCase();
-  if (low === '' || low === 'unknown') return 'Unknown';
+  if (low === '' || low === 'unknown') return '—';
   if (low === 'unavailable') return 'N/A';
   if (low === 'on') return 'On';
   if (low === 'off') return 'Off';
@@ -87,7 +86,8 @@ export function formatState(entity: HassEntity): string {
   return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
-/** area id/name (case-insensitive) -> area_id */
+// ---- area resolution -------------------------------------------------------
+
 function areaIdsForNames(hass: Hass, names: string[]): Set<string> {
   const wanted = new Set(names.map((n) => n.toLowerCase().trim()));
   const ids = new Set<string>();
@@ -98,14 +98,12 @@ function areaIdsForNames(hass: Hass, names: string[]): Set<string> {
   return ids;
 }
 
-/** Resolve all entity_ids that live in the given areas (by id or name). */
 export function entitiesInAreas(hass: Hass, areaNames: string[]): string[] {
   if (!areaNames.length || !hass.entities) return [];
   const areaIds = areaIdsForNames(hass, areaNames);
   if (!areaIds.size) return [];
   const out: string[] = [];
   for (const [entityId, ent] of Object.entries(hass.entities)) {
-    if ((ent as any)?.hidden || (ent as any)?.disabled_by) continue;
     let areaId = (ent as any)?.area_id;
     if (!areaId) {
       const deviceId = (ent as any)?.device_id;
@@ -116,27 +114,119 @@ export function entitiesInAreas(hass: Hass, areaNames: string[]): string[] {
   return out;
 }
 
-/** The full ordered, de-duplicated set of tiles to show. */
-export function resolveTileEntities(
-  hass: Hass,
-  config: CardConfig,
-  agentAreas: string[]
-): string[] {
-  const ids: string[] = [];
-  const seen = new Set<string>();
-  const add = (id: string) => {
-    if (!seen.has(id) && hass.states[id]) {
-      seen.add(id);
-      ids.push(id);
-    }
-  };
-  (config.entities ?? []).forEach(add);
-  entitiesInAreas(hass, config.areas ?? []).forEach(add);
-  if (config.follow_agent !== false) entitiesInAreas(hass, agentAreas).forEach(add);
-  return ids;
+// ---- exposure / noise filtering -------------------------------------------
+
+/** Diagnostic/config/hidden entities — the fallback filter when the expose list is absent. */
+function isNoisy(hass: Hass, entityId: string): boolean {
+  const ent = hass.entities?.[entityId] as any;
+  if (!ent) return false;
+  if (ent.hidden_by || ent.disabled_by) return true;
+  if (ent.entity_category === 'diagnostic' || ent.entity_category === 'config') return true;
+  return false;
 }
 
-// Controllable domains float above ambient sensors in the tile grid.
+function keep(hass: Hass, exposed: Set<string> | null, entityId: string): boolean {
+  if (!hass.states[entityId]) return false;
+  if (exposed && exposed.size) return exposed.has(entityId);
+  return !isNoisy(hass, entityId); // fallback when expose list unavailable
+}
+
+// ---- action-target resolution (which device the agent just controlled) -----
+
+function normalizeName(name: string): string {
+  return name.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function isActionTool(name: string): boolean {
+  if (/^(get|list)/i.test(name)) return false;
+  if (/livecontext|status|context|areas|domains|devices|info/i.test(name)) return false;
+  return /(turn|set|toggle|open|close|lock|unlock|start|stop|play|pause|activate|press|select|increase|decrease|cancel|dim|brighten|boost)/i.test(
+    name
+  );
+}
+
+/** normalized friendly_name (and comma-alias parts) -> entity_id, over the tile-eligible set. */
+function nameIndex(hass: Hass, ids: string[]): Map<string, string> {
+  const index = new Map<string, string>();
+  for (const id of ids) {
+    const fn = friendlyName(hass, id);
+    for (const part of [fn, ...fn.split(',')]) {
+      const key = normalizeName(part);
+      if (key && !index.has(key)) index.set(key, id);
+    }
+  }
+  return index;
+}
+
+function actionNames(args: ToolCall['args']): string[] {
+  if (!args || typeof args === 'string') return [];
+  const name = (args as Record<string, unknown>).name;
+  if (typeof name === 'string') return [name];
+  if (Array.isArray(name)) return name.map(String);
+  return [];
+}
+
+/** Best-effort set of entity_ids the agent's action tools targeted, matched by name. */
+export function resolveActionTargets(
+  hass: Hass,
+  candidateIds: string[],
+  toolCalls: ToolCall[]
+): Set<string> {
+  const index = nameIndex(hass, candidateIds);
+  const hits = new Set<string>();
+  for (const t of toolCalls) {
+    if (!isActionTool(t.name)) continue;
+    for (const raw of actionNames(t.args)) {
+      const norm = normalizeName(raw);
+      if (!norm) continue;
+      if (index.has(norm)) {
+        hits.add(index.get(norm)!);
+        continue;
+      }
+      // loose contains match within the small candidate set
+      for (const [key, id] of index) {
+        if (key.includes(norm) || norm.includes(key)) {
+          hits.add(id);
+          break;
+        }
+      }
+    }
+  }
+  return hits;
+}
+
+// ---- relevance to the spoken request --------------------------------------
+
+const DOMAIN_KEYWORDS: Record<string, string[]> = {
+  light: ['light', 'lamp', '灯', '照明'],
+  climate: ['ac', 'air condition', 'aircon', 'climate', 'hvac', 'thermostat', '空调', '冷气', '暖气', '制冷', '制热'],
+  media_player: ['tv', 'television', 'speaker', 'music', 'media', '电视', '音响', '音乐', '播放'],
+  fan: ['fan', '风扇', '电扇', '换气'],
+  cover: ['curtain', 'blind', 'shade', 'cover', '窗帘', '百叶', '卷帘'],
+  lock: ['lock', 'door', '门锁', '锁', '门'],
+  switch: ['switch', 'plug', 'outlet', 'socket', '开关', '插座'],
+  vacuum: ['vacuum', 'robot', '扫地', '吸尘'],
+  camera: ['camera', '摄像', '监控'],
+};
+
+function nameTokens(name: string): string[] {
+  return name
+    .toLowerCase()
+    .split(/[\s,，、_\-/]+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= 2);
+}
+
+function queryRelevance(hass: Hass, entityId: string, query: string): number {
+  if (!query) return 0;
+  const q = query.toLowerCase();
+  let score = 0;
+  if (nameTokens(friendlyName(hass, entityId)).some((t) => q.includes(t))) score += 6;
+  const kws = DOMAIN_KEYWORDS[domainOf(entityId)];
+  if (kws && kws.some((k) => q.includes(k))) score += 4;
+  return score;
+}
+
 const DOMAIN_RANK: Record<string, number> = {
   light: 0,
   climate: 1,
@@ -153,13 +243,45 @@ const DOMAIN_RANK: Record<string, number> = {
   sensor: 21,
 };
 
-export function sortTiles(hass: Hass, ids: string[]): string[] {
-  return [...ids].sort((a, b) => {
-    const ra = DOMAIN_RANK[domainOf(a)] ?? 15;
-    const rb = DOMAIN_RANK[domainOf(b)] ?? 15;
-    if (ra !== rb) return ra - rb;
+// ---- public: the ordered tile set -----------------------------------------
+
+export interface TileModel {
+  entityId: string;
+  touched: boolean;
+}
+
+/**
+ * Build the ordered tiles: acted-on devices first (pinned + flagged), then by relevance to
+ * the request, then controllable-before-ambient. Filtered to voice-exposed entities
+ * (config.entities are always allowed through).
+ */
+export function buildTiles(
+  hass: Hass,
+  config: CardConfig,
+  opts: { agentAreas: string[]; toolCalls: ToolCall[]; exposed: Set<string> | null; query: string }
+): TileModel[] {
+  const { agentAreas, toolCalls, exposed, query } = opts;
+
+  const explicit = (config.entities ?? []).filter((id) => hass.states[id]);
+  const areaPool = [
+    ...entitiesInAreas(hass, config.areas ?? []),
+    ...(config.follow_agent !== false ? entitiesInAreas(hass, agentAreas) : []),
+  ].filter((id) => keep(hass, exposed, id));
+
+  const candidates = Array.from(new Set([...explicit, ...areaPool]));
+  const touched = resolveActionTargets(hass, candidates, toolCalls);
+
+  const ordered = candidates.sort((a, b) => {
+    const ta = Number(touched.has(b)) - Number(touched.has(a));
+    if (ta !== 0) return ta;
+    const qa = queryRelevance(hass, b, query) - queryRelevance(hass, a, query);
+    if (qa !== 0) return qa;
+    const ra = (DOMAIN_RANK[domainOf(a)] ?? 15) - (DOMAIN_RANK[domainOf(b)] ?? 15);
+    if (ra !== 0) return ra;
     const aa = Number(isActive(hass.states[b])) - Number(isActive(hass.states[a]));
     if (aa !== 0) return aa;
     return friendlyName(hass, a).localeCompare(friendlyName(hass, b));
   });
+
+  return ordered.map((entityId) => ({ entityId, touched: touched.has(entityId) }));
 }
