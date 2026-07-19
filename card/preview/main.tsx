@@ -103,10 +103,17 @@ function Preview() {
   );
 }
 
+const LIGHT = location.search.includes('light');
+const THEME = LIGHT
+  ? '--primary-color:#2b6fff;--text-primary-color:#fff;--primary-text-color:#1f2023;--secondary-text-color:#5f6368;--card-background-color:#ffffff;--secondary-background-color:#eef0f3;--divider-color:rgba(0,0,0,0.12);--error-color:#d93025;--success-color:#1e8e3e;'
+  : '--primary-color:#4c8dff;--text-primary-color:#fff;--primary-text-color:#e9eaee;--secondary-text-color:#9aa1ac;--card-background-color:#16181d;--secondary-background-color:rgba(255,255,255,0.055);--divider-color:rgba(255,255,255,0.09);--error-color:#f0483e;--success-color:#21b573;';
+
+document.body.style.background = LIGHT ? '#f2f3f5' : '#0b0c0f';
+
 const host = document.getElementById('frame')!;
 const shadow = host.attachShadow({ mode: 'open' });
 const style = document.createElement('style');
-style.textContent = CARD_STYLES + '\n:host,.lk-root{height:100%} ha-card{--lk-h:480px}';
+style.textContent = CARD_STYLES + `\n:host{${THEME}} :host,.lk-root{height:100%} ha-card{--lk-h:560px}`;
 const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);

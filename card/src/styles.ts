@@ -1,9 +1,11 @@
 // Visual system. Derives from Home Assistant theme variables so it belongs in any theme,
 // with a designed type pairing (Manrope + JetBrains Mono for device data) and one
 // signature: the voice orb + a floating dock with a separate push-to-talk button.
-export const CARD_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+import { FONT_CSS } from './font';
 
+export const CARD_STYLES =
+  FONT_CSS +
+  `
   :host {
     --lk-accent: var(--primary-color, #4c8dff);
     --lk-on-accent: var(--text-primary-color, #fff);
@@ -15,8 +17,8 @@ export const CARD_STYLES = `
     --lk-danger: var(--error-color, #f0483e);
     --lk-ok: var(--success-color, #21b573);
     --lk-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --lk-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    --lk-h: 480px;
+    --lk-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --lk-h: 560px;
     display: block;
   }
   * { box-sizing: border-box; }
@@ -28,6 +30,7 @@ export const CARD_STYLES = `
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    border-radius: var(--ha-card-border-radius, 12px);
     font-family: var(--lk-sans);
     color: var(--lk-fg);
     -webkit-font-smoothing: antialiased;
@@ -69,7 +72,7 @@ export const CARD_STYLES = `
 
   /* ---- device tiles (horizontal rail) ---- */
   .lk-devices { flex: none; }
-  .lk-tiles { display: flex; gap: 9px; overflow-x: auto; padding: 4px 16px 8px;
+  .lk-tiles { display: flex; gap: 9px; overflow-x: auto; padding: 6px 16px 10px;
     scroll-snap-type: x proximity; scrollbar-width: none; }
   .lk-tiles::-webkit-scrollbar { display: none; }
   .lk-tile {
@@ -140,7 +143,7 @@ export const CARD_STYLES = `
     box-shadow: 0 0 0 11px color-mix(in srgb, var(--lk-accent) 20%, transparent), 0 16px 34px -14px var(--lk-accent); }
   .lk-ptt-hint { font-size: 0.72rem; font-weight: 600; color: var(--lk-muted); }
 
-  .lk-bar { width: 100%; display: flex; align-items: center; gap: 7px; padding: 5px 5px 5px 15px;
+  .lk-bar { width: 100%; min-height: 50px; display: flex; align-items: center; gap: 7px; padding: 5px 5px 5px 15px;
     border-radius: 23px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
