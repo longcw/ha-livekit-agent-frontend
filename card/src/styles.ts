@@ -39,13 +39,23 @@ export const CARD_STYLES =
 
   /* ---- header ---- */
   .lk-top { display: flex; align-items: center; gap: 11px; padding: 16px 16px 10px; flex: none; }
-  .lk-title { font-size: 1.16rem; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-title { flex: 1 1 auto; min-width: 0; font-size: 1.16rem; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .lk-status {
     margin-left: auto; font-family: var(--lk-mono); font-size: 0.64rem; font-weight: 600;
     letter-spacing: 0.09em; text-transform: uppercase; color: var(--lk-muted);
     padding: 4px 9px; border-radius: 999px; border: 1px solid var(--lk-line);
   }
   .lk-status[data-live="1"] { color: var(--lk-accent); border-color: color-mix(in srgb, var(--lk-accent) 38%, transparent); }
+
+  /* Auto | Manual segmented toggle (shown when connected, in place of the status pill) */
+  .lk-modeswitch { flex: none; display: inline-flex; gap: 2px; padding: 2px;
+    border-radius: 999px; border: 1px solid var(--lk-line); background: var(--lk-elevated); }
+  .lk-modeswitch button { border: none; cursor: pointer; background: transparent; color: var(--lk-muted);
+    font-family: var(--lk-sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.01em;
+    padding: 4px 9px; border-radius: 999px; transition: background-color .15s, color .15s; }
+  .lk-modeswitch button[data-on="1"] { background: var(--lk-accent); color: var(--lk-on-accent); }
+  .lk-modeswitch button:not([data-on="1"]):hover { color: var(--lk-fg); }
+
   .lk-iconbtn {
     flex: none; width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer;
     background: transparent; color: var(--lk-muted); display: grid; place-items: center; --mdc-icon-size: 20px;
@@ -136,19 +146,42 @@ export const CARD_STYLES =
     background: linear-gradient(to top, var(--lk-surface) 46%, color-mix(in srgb, var(--lk-surface) 82%, transparent) 74%, transparent); }
   .lk-dock > * { pointer-events: auto; }
 
-  .lk-ptt-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-  .lk-ptt { width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer; --mdc-icon-size: 25px;
-    display: grid; place-items: center; background: var(--lk-accent); color: var(--lk-on-accent);
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--lk-accent) 14%, transparent), 0 14px 30px -16px color-mix(in srgb, var(--lk-accent) 90%, transparent);
-    transition: transform .08s, box-shadow .15s; touch-action: none; -webkit-user-select: none; user-select: none; }
-  .lk-ptt:active, .lk-ptt[data-holding="1"] { transform: scale(1.07);
-    box-shadow: 0 0 0 11px color-mix(in srgb, var(--lk-accent) 20%, transparent), 0 16px 34px -14px var(--lk-accent); }
-  .lk-ptt-hint { font-size: 0.72rem; font-weight: 600; color: var(--lk-muted); }
+  /* ---- manual turn: the composer becomes a listening bar (Cancel · meter · Send) ---- */
+  .lk-listen { width: 100%; min-height: 56px; display: flex; align-items: center; gap: 8px;
+    padding: 8px 8px 8px 10px; border-radius: 28px;
+    background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
+    border: 1px solid color-mix(in srgb, var(--lk-accent) 42%, transparent);
+    box-shadow: 0 14px 36px -18px color-mix(in srgb, var(--lk-accent) 85%, transparent); }
+  .lk-listen-cancel { flex: none; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+    --mdc-icon-size: 20px; display: grid; place-items: center; background: transparent; color: var(--lk-muted);
+    transition: background-color .15s, color .15s, transform .06s; }
+  .lk-listen-cancel:hover { color: var(--lk-danger); background: color-mix(in srgb, var(--lk-danger) 15%, transparent); }
+  .lk-listen-cancel:active { transform: scale(.92); }
+  .lk-listen-mid { flex: 1; min-width: 0; display: flex; align-items: center; gap: 11px; padding-left: 4px; }
+  .lk-listen-label { font-size: 0.85rem; font-weight: 600; color: var(--lk-fg); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; }
+  /* live input meter — the card's voice signature, echoing the orb */
+  .lk-eq { flex: none; display: inline-flex; align-items: center; gap: 3px; height: 20px; }
+  .lk-eq i { width: 3px; height: 18px; border-radius: 2px; background: var(--lk-accent);
+    transform: scaleY(.28); transform-origin: center; animation: lk-eq 1s ease-in-out infinite; }
+  .lk-eq i:nth-child(1) { animation-delay: -.9s; }
+  .lk-eq i:nth-child(2) { animation-delay: -.5s; }
+  .lk-eq i:nth-child(3) { animation-delay: -.2s; }
+  .lk-eq i:nth-child(4) { animation-delay: -.7s; }
+  .lk-eq i:nth-child(5) { animation-delay: -.4s; }
+  @keyframes lk-eq { 0%,100% { transform: scaleY(.28); } 50% { transform: scaleY(1); } }
+  .lk-listen-send { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 40px; padding: 0 14px 0 16px;
+    border: none; border-radius: 20px; cursor: pointer; --mdc-icon-size: 18px;
+    font-family: var(--lk-sans); font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em;
+    background: var(--lk-accent); color: var(--lk-on-accent); transition: transform .06s, opacity .15s; }
+  .lk-listen-send:hover { opacity: .95; }
+  .lk-listen-send:active { transform: scale(.96); }
 
   .lk-bar { width: 100%; height: 52px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 16px;
     border-radius: 26px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
+  .lk-bar[data-paused="1"] { border-style: dashed; border-color: color-mix(in srgb, var(--lk-muted) 45%, var(--lk-line)); }
   .lk-input { flex: 1; min-width: 0; height: 100%; border: none; background: transparent; color: var(--lk-fg);
     font: inherit; font-size: 1rem; padding: 0; }
   .lk-input:focus { outline: none; }
@@ -169,5 +202,6 @@ export const CARD_STYLES =
 
   @media (prefers-reduced-motion: reduce) {
     .lk-orb-core, .lk-orb::before, .lk-act-dot, .lk-msg, .lk-act { animation: none !important; }
+    .lk-eq i { animation: none !important; transform: scaleY(.6); }
   }
 `;

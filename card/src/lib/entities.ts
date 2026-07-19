@@ -166,16 +166,21 @@ function actionNames(args: ToolCall['args']): string[] {
   return [];
 }
 
-/** Best-effort set of entity_ids the agent's action tools targeted, matched by name. */
-export function resolveActionTargets(
+/**
+ * Entity_ids targeted by the *most recent* agent action, matched by name. Walks newest →
+ * oldest and returns the first action that resolves to at least one visible device, so the
+ * highlight always points at the latest thing the agent touched (and nothing older).
+ */
+export function resolveLatestActionTarget(
   hass: Hass,
   candidateIds: string[],
   toolCalls: ToolCall[]
 ): Set<string> {
   const index = nameIndex(hass, candidateIds);
-  const hits = new Set<string>();
-  for (const t of toolCalls) {
+  for (let i = toolCalls.length - 1; i >= 0; i--) {
+    const t = toolCalls[i];
     if (!isActionTool(t.name)) continue;
+    const hits = new Set<string>();
     for (const raw of actionNames(t.args)) {
       const norm = normalizeName(raw);
       if (!norm) continue;
@@ -191,8 +196,9 @@ export function resolveActionTargets(
         }
       }
     }
+    if (hits.size) return hits;
   }
-  return hits;
+  return new Set();
 }
 
 // ---- relevance to the spoken request --------------------------------------
@@ -251,9 +257,11 @@ export interface TileModel {
 }
 
 /**
- * Build the ordered tiles: acted-on devices first (pinned + flagged), then by relevance to
- * the request, then controllable-before-ambient. Filtered to voice-exposed entities
- * (config.entities are always allowed through).
+ * Build the ordered tiles: by relevance to the request, then controllable-before-ambient,
+ * then name. Order is deliberately independent of on/off state and of which device was
+ * acted on, so tiles never jump when you toggle one or when the agent acts — only the
+ * `touched` highlight (the latest acted-on device) moves. Filtered to voice-exposed
+ * entities (config.entities are always allowed through).
  */
 export function buildTiles(
   hass: Hass,
@@ -269,17 +277,13 @@ export function buildTiles(
   ].filter((id) => keep(hass, exposed, id));
 
   const candidates = Array.from(new Set([...explicit, ...areaPool]));
-  const touched = resolveActionTargets(hass, candidates, toolCalls);
+  const touched = resolveLatestActionTarget(hass, candidates, toolCalls);
 
   const ordered = candidates.sort((a, b) => {
-    const ta = Number(touched.has(b)) - Number(touched.has(a));
-    if (ta !== 0) return ta;
     const qa = queryRelevance(hass, b, query) - queryRelevance(hass, a, query);
     if (qa !== 0) return qa;
     const ra = (DOMAIN_RANK[domainOf(a)] ?? 15) - (DOMAIN_RANK[domainOf(b)] ?? 15);
     if (ra !== 0) return ra;
-    const aa = Number(isActive(hass.states[b])) - Number(isActive(hass.states[a]));
-    if (aa !== 0) return aa;
     return friendlyName(hass, a).localeCompare(friendlyName(hass, b));
   });
 

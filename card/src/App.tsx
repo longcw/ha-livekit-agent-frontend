@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ParticipantKind, Track } from 'livekit-client';
+import { ParticipantKind } from 'livekit-client';
 import {
   RoomAudioRenderer,
   SessionProvider,
@@ -7,7 +7,6 @@ import {
   useChat,
   useSession,
   useSessionContext,
-  useTrackToggle,
 } from '@livekit/components-react';
 import { Conversation } from './components/Conversation';
 import { DeviceTiles } from './components/DeviceTiles';
@@ -18,6 +17,7 @@ import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, useConversation } from './lib/conversation';
 import { useToolFeed } from './lib/tool-feed';
+import { loadTurnMode, saveTurnMode, type TurnMode } from './lib/turn-mode';
 
 export function Root({ store }: { store: HassStore }) {
   return (
@@ -59,41 +59,120 @@ function CardShell() {
   const hass = useHass();
   const config = useCardConfig();
   const session = useSessionContext();
-  const { state: agentState } = useAgent();
+  const agent = useAgent();
+  const agentState = agent.state;
   const { toolCalls, agentAreas } = useToolFeed();
   const [epoch, setEpoch] = useState(0);
+
+  // Refs so effects/handlers always see the live session + hass without re-subscribing.
+  const sessionRef = useRef(session);
+  sessionRef.current = session;
+  const hassRef = useRef(hass);
+  hassRef.current = hass;
 
   const connected = session.isConnected;
   const localIdentity = session.room?.localParticipant?.identity;
   const { items, addTyped } = useConversation(localIdentity, toolCalls, epoch);
   const { send } = useChat();
-  const mic = useTrackToggle({ source: Track.Source.Microphone });
 
-  const auto = config.input_mode !== 'push_to_talk';
-  const localParticipant = session.room?.localParticipant;
-  useEffect(() => {
-    if (!connected || !localParticipant) return;
-    localParticipant.setMicrophoneEnabled(auto);
-  }, [auto, connected, localParticipant]);
+  // --- turn mode (auto vs manual), persisted across reconnects ---
+  const [mode, setMode] = useState<TurnMode>(() => loadTurnMode(config));
+  const [turnActive, setTurnActive] = useState(false); // manual: a turn is open (recording)
+  const [autoPaused, setAutoPaused] = useState(false); // auto: input temporarily disabled
+  const didAutoStart = useRef(false); // manual: auto-open the first turn once per mount
 
-  const rpc = async (method: string) => {
-    const room = session.room;
+  const setMic = useCallback(
+    (on: boolean) => sessionRef.current.room?.localParticipant?.setMicrophoneEnabled(on),
+    [],
+  );
+
+  const rpc = useCallback(async (method: string, payload = '') => {
+    const room = sessionRef.current.room;
     const id = agentIdentity(room);
     if (!room || !id) return;
     try {
-      await room.localParticipant.performRpc({ destinationIdentity: id, method, payload: '' });
+      await room.localParticipant.performRpc({ destinationIdentity: id, method, payload });
     } catch (e) {
       console.error(`${method} failed`, e);
     }
-  };
+  }, []);
+
+  const changeMode = useCallback((next: TurnMode) => {
+    setMode((prev) => {
+      if (prev !== next) saveTurnMode(next);
+      return next;
+    });
+  }, []);
+
+  // Open the mic + turn on the agent. Shared by manual "start turn" and auto "resume".
+  const openTurn = useCallback(async () => {
+    await setMic(true);
+    await rpc('start_turn');
+  }, [rpc, setMic]);
+
+  // --- manual turn control ---
+  const onTurnStart = useCallback(async () => {
+    await openTurn();
+    setTurnActive(true);
+  }, [openTurn]);
+
+  const onTurnEnd = useCallback(async () => {
+    await rpc('end_turn'); // commit — the agent replies
+    await setMic(false);
+    setTurnActive(false);
+  }, [rpc, setMic]);
+
+  const onTurnCancel = useCallback(async () => {
+    await rpc('cancel_turn'); // discard
+    await setMic(false);
+    setTurnActive(false);
+  }, [rpc, setMic]);
+
+  // --- auto mode: pause / resume input via the same RPCs, so the agent actually stops
+  // listening rather than just muting the client mic ---
+  const onPause = useCallback(async () => {
+    await rpc('cancel_turn');
+    await setMic(false);
+    setAutoPaused(true);
+  }, [rpc, setMic]);
+
+  const onResume = useCallback(async () => {
+    await openTurn();
+    setAutoPaused(false);
+  }, [openTurn]);
+
+  // Baseline per mode, applied immediately on connect and whenever the mode flips: auto
+  // keeps the mic live (hands-free), manual mutes it until a turn is opened.
+  useEffect(() => {
+    if (!connected) return;
+    setTurnActive(false);
+    setAutoPaused(false);
+    setMic(mode === 'auto');
+  }, [connected, mode, setMic]);
+
+  // Once the agent is ready (its state reached listening/…, so the turn RPCs are
+  // registered): assert the mode, and in manual auto-open the first turn so the user can
+  // talk straight away on connect.
+  const agentReady = agent.isConnected;
+  useEffect(() => {
+    if (!connected || !agentReady) return;
+    let cancelled = false;
+    (async () => {
+      await rpc('set_turn_mode', mode);
+      if (cancelled) return;
+      if (mode === 'manual' && !didAutoStart.current) {
+        didAutoStart.current = true;
+        await onTurnStart();
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [connected, agentReady, mode, rpc, onTurnStart]);
 
   // --- auto-connect while the dashboard tab is open ---
   const autoConnect = config.auto_connect !== false;
   const [connecting, setConnecting] = useState(false);
-  const sessionRef = useRef(session);
-  sessionRef.current = session;
-  const hassRef = useRef(hass);
-  hassRef.current = hass;
 
   const startSession = useCallback(() => {
     setConnecting(true);
@@ -132,14 +211,14 @@ function CardShell() {
   const orbState = connected ? agentState || 'listening' : connecting ? 'connecting' : 'idle';
   const stateLabel = connected ? agentState || 'ready' : connecting ? 'connecting' : 'offline';
 
-  const dock = connected ? (auto ? 'auto' : 'ptt') : 'off';
-
   return (
-    <ha-card data-dock={dock}>
+    <ha-card data-dock={connected ? mode : 'off'}>
       <Header
         orbState={orbState}
         title={config.title || 'Home Voice'}
         connected={connected}
+        mode={mode}
+        onModeChange={changeMode}
         stateLabel={stateLabel}
         onEnd={() => session.end?.()}
       />
@@ -147,8 +226,9 @@ function CardShell() {
       <Conversation items={items} />
       <Dock
         connected={connected}
-        mode={auto ? 'auto' : 'ptt'}
-        micOn={mic.enabled}
+        mode={mode}
+        turnActive={turnActive}
+        autoPaused={autoPaused}
         startLabel={connecting ? 'Connecting…' : items.length ? 'New conversation' : 'Start talking'}
         onStart={startSession}
         onSend={async (text) => {
@@ -159,15 +239,11 @@ function CardShell() {
             console.error('send failed', e);
           }
         }}
-        onMicToggle={() => mic.toggle()}
-        onPttStart={async () => {
-          await localParticipant?.setMicrophoneEnabled(true);
-          rpc('start_turn');
-        }}
-        onPttEnd={async () => {
-          await rpc('end_turn');
-          await localParticipant?.setMicrophoneEnabled(false);
-        }}
+        onTurnStart={onTurnStart}
+        onTurnEnd={onTurnEnd}
+        onTurnCancel={onTurnCancel}
+        onPause={onPause}
+        onResume={onResume}
       />
     </ha-card>
   );

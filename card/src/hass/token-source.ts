@@ -1,4 +1,5 @@
 import { TokenSourceConfigurable } from 'livekit-client';
+import { loadTurnMode } from '../lib/turn-mode';
 import type { HassStore } from './store';
 
 /**
@@ -15,7 +16,9 @@ export class HassTokenSource extends TokenSourceConfigurable {
   async fetch() {
     const { hass, config } = this.store.getSnapshot();
     if (!hass) throw new Error('Home Assistant not ready');
-    const inputMode = config.input_mode === 'auto' ? 'auto' : 'push_to_talk';
+    // Boot the agent in the user's persisted mode so its turn detection matches the UI
+    // from the first frame. The card also re-asserts the mode over RPC once connected.
+    const inputMode = loadTurnMode(config) === 'manual' ? 'push_to_talk' : 'auto';
     return hass.callApi('POST', 'livekit_voice/token', { input_mode: inputMode });
   }
 }

@@ -14,9 +14,18 @@ import {
  */
 export function Conversation({ items, autoscroll = true }: { items: ConvItem[]; autoscroll?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Follow new messages only while the user is already at the bottom. This lands the view
+  // at the top on load (showing the start, not the tail) and never yanks away from earlier
+  // messages you've scrolled up to read.
+  const stick = useRef(false);
+
+  const onScroll = () => {
+    const el = ref.current;
+    if (el) stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
 
   useEffect(() => {
-    if (!autoscroll) return;
+    if (!autoscroll || !stick.current) return;
     const el = ref.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [items, autoscroll]);
@@ -31,7 +40,7 @@ export function Conversation({ items, autoscroll = true }: { items: ConvItem[]; 
   }
 
   return (
-    <div className="lk-convo" ref={ref}>
+    <div className="lk-convo" ref={ref} onScroll={onScroll}>
       {items.map((item) =>
         item.kind === 'message' ? (
           <MessageRow key={item.id} item={item} />

@@ -1,5 +1,6 @@
 // Visual preview harness: mounts the REAL card components in a shadow root with mock data
 // so `chrome --headless --screenshot` shows exactly what ships. Not part of the build.
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Conversation } from '../src/components/Conversation';
 import { DeviceTiles } from '../src/components/DeviceTiles';
@@ -16,6 +17,8 @@ const ICONS: Record<string, string> = {
   'mdi:microphone-off': 'M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z',
   'mdi:arrow-up': 'M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z',
   'mdi:close': 'M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z',
+  'mdi:check': 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z',
+  'mdi:pause': 'M14,19H18V5H14M6,19H10V5H6V19Z',
   'mdi:lightbulb': 'M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M9,21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9V21Z',
   'mdi:thermostat': 'M12,2A3,3 0 0,0 9,5V12.5C7.79,13.4 7,14.86 7,16.5A5,5 0 0,0 12,21.5A5,5 0 0,0 17,16.5C17,14.86 16.21,13.4 15,12.5V5A3,3 0 0,0 12,2M12,4A1,1 0 0,1 13,5V13.35L13.5,13.65C14.4,14.16 15,15.26 15,16.5A3,3 0 0,1 12,19.5A3,3 0 0,1 9,16.5C9,15.26 9.6,14.16 10.5,13.65L11,13.35V5A1,1 0 0,1 12,4Z',
   'mdi:gauge': 'M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12H19A7,7 0 0,1 12,19A7,7 0 0,1 5,12A7,7 0 0,1 12,5V7L15,4L12,1V3M12,12A2,2 0 0,0 10,14A2,2 0 0,0 12,16A2,2 0 0,0 14,14A2,2 0 0,0 12,12Z',
@@ -62,12 +65,14 @@ const mockHass: any = {
 };
 
 const store = new HassStore();
-store.setConfig({ type: 'livekit-voice-card', title: 'Home Voice', input_mode: 'push_to_talk', areas: ['书房'] });
+store.setConfig({ type: 'livekit-voice-card', title: 'Home Voice', input_mode: 'auto', areas: ['书房'] });
 store.setHass(mockHass);
 
 const toolCalls = [
   { callId: 'a1', name: 'get_devices', args: { area: '书房' }, status: 'done' as const, startedAt: 1 },
   { callId: 'a2', name: 'HassTurnOn', args: { name: '书房 射灯' }, status: 'done' as const, startedAt: 3 },
+  // latest action targets the strip — only this tile should carry the highlight
+  { callId: 'a3', name: 'HassTurnOn', args: { name: '书房 灯带' }, status: 'done' as const, startedAt: 7 },
 ];
 
 const items: ConvItem[] = [
@@ -79,25 +84,43 @@ const items: ConvItem[] = [
 ];
 
 const OFF = location.search.includes('off');
+const P = location.search;
 
+// URL params drive the reviewable states: ?off (disconnected), ?auto (auto mode),
+// ?active (manual turn in progress), ?paused (auto input muted). Default: manual, idle.
 function Preview() {
+  const [mode, setMode] = useState<'auto' | 'manual'>(
+    P.includes('auto') || P.includes('paused') ? 'auto' : 'manual',
+  );
+  const [turnActive, setTurnActive] = useState(P.includes('active'));
+  const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
   return (
     <HassStoreProvider value={store}>
-      <ha-card data-dock={OFF ? 'off' : 'ptt'}>
-        <Header orbState={OFF ? 'idle' : 'listening'} title="Home Voice" connected={!OFF} stateLabel={OFF ? 'offline' : 'listening'} onEnd={() => {}} />
+      <ha-card data-dock={OFF ? 'off' : mode}>
+        <Header
+          orbState={OFF ? 'idle' : 'listening'}
+          title="Home Voice"
+          connected={!OFF}
+          mode={mode}
+          onModeChange={setMode}
+          stateLabel={OFF ? 'offline' : 'listening'}
+          onEnd={() => {}}
+        />
         <DeviceTiles agentAreas={['书房']} toolCalls={toolCalls as any} query="打开射灯" />
         <Conversation items={OFF ? [] : items} />
         <Dock
           connected={!OFF}
-          mode="ptt"
-          micOn={false}
-          initialText={OFF ? '' : '打开书房的射灯'}
+          mode={mode}
+          turnActive={turnActive}
+          autoPaused={autoPaused}
           startLabel=""
           onStart={() => {}}
           onSend={async () => {}}
-          onMicToggle={() => {}}
-          onPttStart={() => {}}
-          onPttEnd={() => {}}
+          onTurnStart={() => setTurnActive(true)}
+          onTurnEnd={() => setTurnActive(false)}
+          onTurnCancel={() => setTurnActive(false)}
+          onPause={() => setAutoPaused(true)}
+          onResume={() => setAutoPaused(false)}
         />
       </ha-card>
     </HassStoreProvider>
