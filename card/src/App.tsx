@@ -244,11 +244,20 @@ function CardShell() {
   const startSession = useCallback(() => {
     setConnecting(true);
     setEpoch((e) => e + 1);
-    // autoSubscribe:false so connecting never activates a remote audio track. On iOS, a
-    // subscribed agent audio track (even while the agent is muted) flips the shared audio
-    // session to playback and interrupts background music the moment the page connects — so
-    // we defer subscribing to the agent's audio until spoken replies are turned on (below).
-    sessionRef.current.start?.({ roomConnectOptions: { autoSubscribe: false } });
+    // Connect without touching either half of the iOS audio session, so merely opening the
+    // dashboard never interrupts the user's background music:
+    //   - autoSubscribe:false — don't activate a remote audio track. On iOS a subscribed agent
+    //     audio track (even while the agent is muted) flips the shared session to playback. We
+    //     defer subscribing to the agent's audio until spoken replies are turned on (below).
+    //   - microphone.enabled:false — useSession().start() OTHERWISE grabs the mic by default
+    //     (setMicrophoneEnabled(true) with a preconnect buffer), and capturing the mic flips the
+    //     session to record/playAndRecord, stopping other apps' audio. The card owns the mic via
+    //     its turn-mode logic instead: it stays off on connect (manual) and is only opened when a
+    //     turn actually starts, so a dormant card leaves background music playing.
+    sessionRef.current.start?.({
+      tracks: { microphone: { enabled: false } },
+      roomConnectOptions: { autoSubscribe: false },
+    });
   }, []);
 
   useEffect(() => {
