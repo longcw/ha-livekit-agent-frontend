@@ -314,7 +314,7 @@ function CardShell() {
         mode={mode}
         turnActive={turnActive}
         autoPaused={autoPaused}
-        startLabel={connecting ? 'Connecting…' : items.length ? 'New conversation' : 'Start talking'}
+        startLabel={connecting ? 'Connecting…' : 'New conversation'}
         onStart={startSession}
         onSend={async (text) => {
           addTyped(text);

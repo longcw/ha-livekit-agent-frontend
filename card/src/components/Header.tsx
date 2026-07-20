@@ -53,17 +53,17 @@ export function Header({
   );
 }
 
-/** Segmented Auto | Manual toggle for the turn-detection mode. */
+/** Segmented Continuous | Manual toggle for the turn-detection mode. */
 function ModeSwitch({ mode, onChange }: { mode: TurnMode; onChange: (mode: TurnMode) => void }) {
   return (
     <div className="lk-modeswitch" role="group" aria-label="Turn mode">
       <button
         type="button"
         data-on={mode === 'auto' ? '1' : '0'}
-        title="Hands-free: talk continuously, the agent detects when you stop"
+        title="Continuous: talk hands-free, the agent detects when you stop"
         onClick={() => onChange('auto')}
       >
-        Auto
+        Continuous
       </button>
       <button
         type="button"

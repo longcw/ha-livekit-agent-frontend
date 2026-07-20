@@ -35365,12 +35365,12 @@ function Zx({ items: a, autoscroll: e = !0 }) {
     if (!e || !i.current) return;
     const c = t.current;
     c && (c.scrollTop = c.scrollHeight);
-  }, [a, e]), a.length ? /* @__PURE__ */ de.jsx("div", { className: "lk-convo", ref: t, onScroll: s, children: a.map(
+  }, [a, e]), /* @__PURE__ */ de.jsx("div", { className: "lk-convo", ref: t, onScroll: s, children: a.length ? a.map(
     (c) => c.kind === "message" ? /* @__PURE__ */ de.jsx(Wx, { item: c }, c.id) : /* @__PURE__ */ de.jsx($x, { item: c }, c.id)
-  ) }) : /* @__PURE__ */ de.jsxs("div", { className: "lk-empty", children: [
-    /* @__PURE__ */ de.jsx("ha-icon", { icon: "mdi:waveform" }),
+  ) : /* @__PURE__ */ de.jsxs("div", { className: "lk-empty", children: [
+    /* @__PURE__ */ de.jsx("ha-icon", { icon: "mdi:creation" }),
     /* @__PURE__ */ de.jsx("span", { children: "Ask about your home — “turn on the study light”, “what's the temperature?”" })
-  ] });
+  ] }) });
 }
 function Wx({ item: a }) {
   return /* @__PURE__ */ de.jsx("div", { className: "lk-msg", "data-role": a.role, children: /* @__PURE__ */ de.jsx("div", { className: "lk-bubble", children: a.text }) });
@@ -35818,9 +35818,9 @@ function wP({ mode: a, onChange: e }) {
       {
         type: "button",
         "data-on": a === "auto" ? "1" : "0",
-        title: "Hands-free: talk continuously, the agent detects when you stop",
+        title: "Continuous: talk hands-free, the agent detects when you stop",
         onClick: () => e("auto"),
-        children: "Auto"
+        children: "Continuous"
       }
     ),
     /* @__PURE__ */ de.jsx(
@@ -36085,7 +36085,7 @@ function FP() {
         mode: I,
         turnActive: C,
         autoPaused: _,
-        startLabel: re ? "Connecting…" : k.length ? "New conversation" : "Start talking",
+        startLabel: re ? "Connecting…" : "New conversation",
         onStart: pe,
         onSend: async (qe) => {
           D(qe);
@@ -36140,7 +36140,7 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
     --lk-ok: var(--success-color, #21b573);
     --lk-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --lk-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    --lk-h: 720px;
+    --lk-h: 540px;
     display: block;
   }
   * { box-sizing: border-box; }
@@ -36148,8 +36148,10 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
 
   ha-card {
     position: relative;
-    /* Tall by default, but never taller than the screen (minus HA header/tabs). */
-    height: min(var(--lk-h), calc(100dvh - 148px));
+    /* Content-sized: shrinks to fit (idle = just header + tiles + composer, no dead space)
+       and grows with the conversation up to the cap, then the timeline scrolls inside. */
+    height: auto;
+    max-height: min(var(--lk-h), calc(100dvh - 148px));
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -36160,9 +36162,9 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   }
 
   /* ---- header ---- */
-  .lk-top { display: flex; align-items: center; gap: 11px; padding: 15px 16px 9px; flex: none; }
+  .lk-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px 7px; flex: none; }
   .lk-titlewrap { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-  .lk-title { min-width: 0; font-size: 1.16rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+  .lk-title { min-width: 0; font-size: 1.04rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* live agent phase under the title: connecting / connected / listening / thinking / speaking */
   .lk-state { font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.11em;
@@ -36174,14 +36176,14 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   .lk-modeswitch { flex: none; display: inline-flex; gap: 2px; padding: 2px;
     border-radius: 999px; border: 1px solid var(--lk-line); background: var(--lk-elevated); }
   .lk-modeswitch button { border: none; cursor: pointer; background: transparent; color: var(--lk-muted);
-    font-family: var(--lk-sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.01em;
-    padding: 4px 9px; border-radius: 999px; transition: background-color .15s, color .15s; }
+    font-family: var(--lk-sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.01em;
+    padding: 4px 8px; border-radius: 999px; transition: background-color .15s, color .15s; }
   .lk-modeswitch button[data-on="1"] { background: var(--lk-accent); color: var(--lk-on-accent); }
   .lk-modeswitch button:not([data-on="1"]):hover { color: var(--lk-fg); }
 
   .lk-iconbtn {
-    flex: none; width: 34px; height: 34px; border-radius: 10px; border: none; cursor: pointer;
-    background: transparent; color: var(--lk-muted); display: grid; place-items: center; --mdc-icon-size: 20px;
+    flex: none; width: 32px; height: 32px; border-radius: 10px; border: none; cursor: pointer;
+    background: transparent; color: var(--lk-muted); display: grid; place-items: center; --mdc-icon-size: 19px;
   }
   .lk-iconbtn:hover { background: var(--lk-elevated); color: var(--lk-fg); }
   .lk-iconbtn[data-on="1"] { color: var(--lk-accent); }
@@ -36210,13 +36212,13 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
 
   /* ---- device tiles (horizontal rail) ---- */
   .lk-devices { flex: none; }
-  .lk-tiles { display: flex; gap: 9px; overflow-x: auto; padding: 6px 16px 10px;
+  .lk-tiles { flex: none; display: flex; gap: 8px; overflow-x: auto; padding: 5px 14px 9px;
     scroll-snap-type: x proximity; scrollbar-width: none; }
   .lk-tiles::-webkit-scrollbar { display: none; }
   .lk-tile {
-    flex: 0 0 124px; scroll-snap-align: start;
-    text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px;
-    padding: 11px; border-radius: 16px; overflow: hidden;
+    flex: 0 0 104px; scroll-snap-align: start;
+    text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 6px;
+    padding: 9px; border-radius: 13px; overflow: hidden;
     border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-fg);
     transition: border-color .18s, background-color .18s, box-shadow .18s, transform .06s;
   }
@@ -36228,31 +36230,33 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   .lk-tile[data-touched="1"] { border-color: transparent;
     background: color-mix(in srgb, var(--lk-accent) 14%, var(--lk-surface));
     box-shadow: inset 0 0 0 2px var(--lk-accent); }
-  .lk-tile-icon { --mdc-icon-size: 19px; width: 33px; height: 33px; border-radius: 10px;
+  .lk-tile-icon { --mdc-icon-size: 16px; width: 27px; height: 27px; border-radius: 8px;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--lk-elevated); color: var(--lk-muted); transition: background-color .18s, color .18s; }
   .lk-tile[data-active="1"] .lk-tile-icon { background: var(--lk-accent); color: var(--lk-on-accent); }
-  .lk-tile-state { font-family: var(--lk-mono); font-size: 1.02rem; font-weight: 600; line-height: 1.05;
+  .lk-tile-state { font-family: var(--lk-mono); font-size: 0.9rem; font-weight: 600; line-height: 1.05;
     letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lk-tile-name { font-size: 0.78rem; line-height: 1.2; color: var(--lk-muted);
+  .lk-tile-name { font-size: 0.72rem; line-height: 1.2; color: var(--lk-muted);
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .lk-more { align-self: center; cursor: pointer; --mdc-icon-size: 16px; display: inline-flex; align-items: center; gap: 3px;
     background: transparent; border: none; padding: 3px 10px; border-radius: 999px; color: var(--lk-muted); font-size: 0.8rem; font-weight: 600; }
   .lk-more:hover { color: var(--lk-fg); background: var(--lk-elevated); }
 
   /* ---- conversation (scrolls; dock floats over its bottom) ---- */
-  .lk-convo { flex: 1; overflow-y: auto; padding: 8px 16px calc(var(--lk-dock-h, 132px) + 12px);
-    display: flex; flex-direction: column; gap: 11px; scrollbar-width: thin; }
-  .lk-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
-    color: var(--lk-muted); font-size: 0.95rem; max-width: 240px; --mdc-icon-size: 26px; }
+  /* min-height:0 lets the timeline shrink to scroll once the card hits its max-height; the
+     bottom padding reserves room for the floating dock so short content never sits under it. */
+  .lk-convo { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 14px calc(var(--lk-dock-h, 100px) + 10px);
+    display: flex; flex-direction: column; gap: 9px; scrollbar-width: thin; }
+  .lk-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+    color: var(--lk-muted); font-size: 0.84rem; line-height: 1.4; max-width: 220px; --mdc-icon-size: 21px; }
   .lk-msg { display: flex; animation: lk-rise .22s ease both; }
   .lk-msg[data-role="user"] { justify-content: flex-end; }
-  .lk-bubble { max-width: 82%; padding: 10px 15px; border-radius: 19px; font-size: 1rem; line-height: 1.42;
+  .lk-bubble { max-width: 84%; padding: 8px 13px; border-radius: 16px; font-size: 0.92rem; line-height: 1.4;
     white-space: pre-wrap; word-break: break-word; }
-  .lk-msg[data-role="user"] .lk-bubble { background: var(--lk-accent); color: var(--lk-on-accent); border-bottom-right-radius: 6px; }
-  .lk-msg[data-role="agent"] .lk-bubble { background: var(--lk-elevated); color: var(--lk-fg); border-bottom-left-radius: 6px; }
-  .lk-act { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
-    padding: 6px 13px 6px 10px; border-radius: 999px; font-size: 0.86rem; --mdc-icon-size: 15px;
+  .lk-msg[data-role="user"] .lk-bubble { background: var(--lk-accent); color: var(--lk-on-accent); border-bottom-right-radius: 5px; }
+  .lk-msg[data-role="agent"] .lk-bubble { background: var(--lk-elevated); color: var(--lk-fg); border-bottom-left-radius: 5px; }
+  .lk-act { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; max-width: 100%;
+    padding: 5px 12px 5px 9px; border-radius: 999px; font-size: 0.8rem; --mdc-icon-size: 14px;
     border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-muted); animation: lk-rise .22s ease both; }
   .lk-act[data-kind="action"] { color: var(--lk-fg);
     border-color: color-mix(in srgb, var(--lk-accent) 34%, transparent);
@@ -36268,14 +36272,14 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   @keyframes lk-blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 
   /* ---- floating dock ---- */
-  .lk-dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 14px 13px;
+  .lk-dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 12px 11px;
     display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none;
     background: linear-gradient(to top, var(--lk-surface) 46%, color-mix(in srgb, var(--lk-surface) 82%, transparent) 74%, transparent); }
   .lk-dock > * { pointer-events: auto; }
 
   /* ---- manual turn: the composer becomes a listening bar (Cancel · meter · Send) ---- */
-  .lk-listen { width: 100%; min-height: 56px; display: flex; align-items: center; gap: 8px;
-    padding: 8px 8px 8px 10px; border-radius: 28px;
+  .lk-listen { width: 100%; min-height: 52px; display: flex; align-items: center; gap: 8px;
+    padding: 7px 7px 7px 10px; border-radius: 26px;
     background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
     border: 1px solid color-mix(in srgb, var(--lk-accent) 42%, transparent);
     box-shadow: 0 14px 36px -18px color-mix(in srgb, var(--lk-accent) 85%, transparent); }
@@ -36304,8 +36308,8 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   .lk-listen-send:hover { opacity: .95; }
   .lk-listen-send:active { transform: scale(.96); }
 
-  .lk-bar { width: 100%; height: 52px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 16px;
-    border-radius: 26px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+  .lk-bar { width: 100%; height: 48px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 15px;
+    border-radius: 24px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
   .lk-bar[data-paused="1"] { border-style: dashed; border-color: color-mix(in srgb, var(--lk-muted) 45%, var(--lk-line)); }
@@ -36318,9 +36322,9 @@ const qP = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   .lk-send:active { transform: scale(.93); }
   .lk-send[data-on="1"], .lk-send--accent { background: var(--lk-accent); color: var(--lk-on-accent); }
 
-  .lk-start { cursor: pointer; width: 100%; padding: 15px; border: none; border-radius: 18px; --mdc-icon-size: 21px;
+  .lk-start { cursor: pointer; width: 100%; padding: 13px; border: none; border-radius: 16px; --mdc-icon-size: 20px;
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-    font-family: var(--lk-sans); font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em;
+    font-family: var(--lk-sans); font-size: 0.96rem; font-weight: 700; letter-spacing: -0.01em;
     background: var(--lk-accent); color: var(--lk-on-accent);
     box-shadow: 0 14px 34px -18px color-mix(in srgb, var(--lk-accent) 90%, transparent); transition: transform .06s, opacity .2s; }
   .lk-start:hover { opacity: .95; }
