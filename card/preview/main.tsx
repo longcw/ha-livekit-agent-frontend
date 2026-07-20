@@ -44,6 +44,21 @@ if (!customElements.get('ha-icon')) customElements.define('ha-icon', HaIcon);
 function ent(entity_id: string, state: string, friendly_name: string, unit?: string) {
   return { entity_id, state, attributes: unit ? { friendly_name, unit_of_measurement: unit } : { friendly_name } };
 }
+// Study entities live in the configured area; the 客厅 (living-room) entities do NOT — they
+// only appear as tiles if the agent acts on them, which is exactly what the new pop-up logic
+// must surface (cross-area climate set, script fan-out).
+const ENT_AREA: Record<string, string> = {
+  'light.study_spot': 'study',
+  'light.study_strip': 'study',
+  'climate.study_ac': 'study',
+  'fan.study_fan': 'study',
+  'sensor.study_temp': 'study',
+  'sensor.study_hum': 'study',
+  'climate.living_ac': 'living',
+  'script.movie': 'living',
+  'light.living_main': 'living',
+  'cover.living_curtain': 'living',
+};
 const STATES: Record<string, any> = {
   'light.study_spot': ent('light.study_spot', 'on', '书房 射灯'),
   'light.study_strip': ent('light.study_strip', 'on', '书房 灯带'),
@@ -51,14 +66,18 @@ const STATES: Record<string, any> = {
   'fan.study_fan': ent('fan.study_fan', 'off', '书房 循环扇'),
   'sensor.study_temp': ent('sensor.study_temp', '26.5', '书房 温湿度', '°C'),
   'sensor.study_hum': ent('sensor.study_hum', '57', '书房 湿度', '%'),
+  'climate.living_ac': ent('climate.living_ac', 'cool', '客厅 空调'),
+  'script.movie': ent('script.movie', 'off', '观影模式'),
+  'light.living_main': ent('light.living_main', 'on', '客厅 主灯'),
+  'cover.living_curtain': ent('cover.living_curtain', 'open', '客厅 窗帘'),
 };
 const ENTITIES: Record<string, any> = {};
-for (const id of Object.keys(STATES)) ENTITIES[id] = { entity_id: id, area_id: 'study' };
+for (const id of Object.keys(STATES)) ENTITIES[id] = { entity_id: id, area_id: ENT_AREA[id] ?? 'study' };
 const mockHass: any = {
   states: STATES,
   entities: ENTITIES,
   devices: {},
-  areas: { study: { name: '书房' } },
+  areas: { study: { name: '书房' }, living: { name: '客厅' } },
   callWS: async () => ({
     exposed_entities: Object.fromEntries(Object.keys(STATES).map((id) => [id, { conversation: true }])),
   }),
@@ -69,12 +88,36 @@ const store = new HassStore();
 store.setConfig({ type: 'livekit-voice-card', title: 'Home Voice', input_mode: 'auto', areas: ['书房'] });
 store.setHass(mockHass);
 
-const toolCalls = [
-  { callId: 'a1', name: 'get_devices', args: { area: '书房' }, status: 'done' as const, startedAt: 1 },
-  { callId: 'a2', name: 'HassTurnOn', args: { name: '书房 射灯' }, status: 'done' as const, startedAt: 3 },
-  // latest action targets the strip — only this tile should carry the highlight
-  { callId: 'a3', name: 'HassTurnOn', args: { name: '书房 灯带' }, status: 'done' as const, startedAt: 7 },
-];
+// ?scenario=climate — agent sets 客厅空调 directly, no get_devices for that area.
+// ?scenario=script  — agent runs 观影模式 (verb-less script tool); its fan-out is simulated
+//                     below by mutating live state inside the state-diff window.
+const SCENARIO = new URLSearchParams(location.search).get('scenario');
+const SCENARIOS: Record<string, { toolCalls: any[]; agentAreas: string[]; query: string }> = {
+  default: {
+    toolCalls: [
+      { callId: 'a1', name: 'get_devices', args: { area: '书房' }, status: 'done', startedAt: 1 },
+      { callId: 'a2', name: 'HassTurnOn', args: { name: '书房 射灯' }, status: 'done', startedAt: 3 },
+      // latest action targets the strip — only this tile should carry the highlight
+      { callId: 'a3', name: 'HassTurnOn', args: { name: '书房 灯带' }, status: 'done', startedAt: 7 },
+    ],
+    agentAreas: ['书房'],
+    query: '打开射灯',
+  },
+  climate: {
+    toolCalls: [
+      { callId: 'c1', name: 'HassClimateSetTemperature', args: { name: '客厅 空调' }, status: 'done', startedAt: 3 },
+    ],
+    agentAreas: [],
+    query: '把客厅空调调到 24 度',
+  },
+  script: {
+    toolCalls: [{ callId: 's1', name: '观影模式', args: {}, status: 'running', startedAt: 3 }],
+    agentAreas: [],
+    query: '进入观影模式',
+  },
+};
+const SCN = SCENARIOS[SCENARIO ?? 'default'] ?? SCENARIOS.default;
+const toolCalls = SCN.toolCalls;
 
 const items: ConvItem[] = [
   { kind: 'message', id: 'm1', role: 'user', text: '书房有什么设备？', ts: 1 },
@@ -117,7 +160,7 @@ function Preview() {
           onToggleAudioOutput={() => setAudioOutput((v) => !v)}
           onEnd={() => {}}
         />
-        <DeviceTiles agentAreas={['书房']} toolCalls={toolCalls as any} query="打开射灯" />
+        <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} />
         <Conversation items={OFF ? [] : items} />
         <Dock
           connected={!OFF}
@@ -161,3 +204,19 @@ const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
 createRoot(mount).render(<Preview />);
+
+// Simulate the 观影模式 script's fan-out: shortly after mount (inside the state-diff window),
+// the curtain closes and the living-room light turns off. The card should detect these live
+// changes and pop them up alongside the script tile.
+if (SCENARIO === 'script') {
+  setTimeout(() => {
+    store.setHass({
+      ...mockHass,
+      states: {
+        ...STATES,
+        'cover.living_curtain': ent('cover.living_curtain', 'closed', '客厅 窗帘'),
+        'light.living_main': ent('light.living_main', 'off', '客厅 主灯'),
+      },
+    });
+  }, 500);
+}

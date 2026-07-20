@@ -1,5 +1,5 @@
 import type { CardConfig, Hass, HassEntity } from '../hass/store';
-import type { ToolCall } from './tool-feed';
+import type { ActedOn } from './acted-on';
 
 export function domainOf(entityId: string): string {
   return entityId.split('.')[0];
@@ -125,97 +125,10 @@ function isNoisy(hass: Hass, entityId: string): boolean {
   return false;
 }
 
-function keep(hass: Hass, exposed: Set<string> | null, entityId: string): boolean {
+export function keep(hass: Hass, exposed: Set<string> | null, entityId: string): boolean {
   if (!hass.states[entityId]) return false;
   if (exposed && exposed.size) return exposed.has(entityId);
   return !isNoisy(hass, entityId); // fallback when expose list unavailable
-}
-
-// ---- action-target resolution (which device the agent just controlled) -----
-
-function normalizeName(name: string): string {
-  return name.replace(/\s+/g, ' ').trim().toLowerCase();
-}
-
-function isActionTool(name: string): boolean {
-  if (/^(get|list)/i.test(name)) return false;
-  if (/livecontext|status|context|areas|domains|devices|info/i.test(name)) return false;
-  return /(turn|set|toggle|open|close|lock|unlock|start|stop|play|pause|activate|press|select|increase|decrease|cancel|dim|brighten|boost)/i.test(
-    name
-  );
-}
-
-/** normalized friendly_name (and comma-alias parts) -> entity_id, over the tile-eligible set. */
-function nameIndex(hass: Hass, ids: string[]): Map<string, string> {
-  const index = new Map<string, string>();
-  for (const id of ids) {
-    const fn = friendlyName(hass, id);
-    for (const part of [fn, ...fn.split(',')]) {
-      const key = normalizeName(part);
-      if (key && !index.has(key)) index.set(key, id);
-    }
-  }
-  return index;
-}
-
-function actionNames(args: ToolCall['args']): string[] {
-  if (!args || typeof args === 'string') return [];
-  const name = (args as Record<string, unknown>).name;
-  if (typeof name === 'string') return [name];
-  if (Array.isArray(name)) return name.map(String);
-  return [];
-}
-
-export interface ActionTargets {
-  /** Acted-on entity_ids, most-recent action first (deduped) — pinned to the front. */
-  ordered: string[];
-  /** Entity_ids from the single most-recent resolving action — the highlight. */
-  latest: Set<string>;
-}
-
-/**
- * Entity_ids targeted by agent actions, matched by name. Walks newest → oldest so `ordered`
- * lists every acted-on device most-recent-first (used to pin them to the front of the rail),
- * and `latest` is the first (newest) resolving action's targets — the moving highlight.
- */
-export function resolveActionTargets(
-  hass: Hass,
-  candidateIds: string[],
-  toolCalls: ToolCall[]
-): ActionTargets {
-  const index = nameIndex(hass, candidateIds);
-  const ordered: string[] = [];
-  const seen = new Set<string>();
-  let latest: Set<string> | null = null;
-  for (let i = toolCalls.length - 1; i >= 0; i--) {
-    const t = toolCalls[i];
-    if (!isActionTool(t.name)) continue;
-    const hits = new Set<string>();
-    for (const raw of actionNames(t.args)) {
-      const norm = normalizeName(raw);
-      if (!norm) continue;
-      if (index.has(norm)) {
-        hits.add(index.get(norm)!);
-        continue;
-      }
-      // loose contains match within the small candidate set
-      for (const [key, id] of index) {
-        if (key.includes(norm) || norm.includes(key)) {
-          hits.add(id);
-          break;
-        }
-      }
-    }
-    if (!hits.size) continue;
-    if (latest === null) latest = hits; // newest resolving action = highlight
-    for (const id of hits) {
-      if (!seen.has(id)) {
-        seen.add(id);
-        ordered.push(id);
-      }
-    }
-  }
-  return { ordered, latest: latest ?? new Set() };
 }
 
 // ---- relevance to the spoken request --------------------------------------
@@ -283,9 +196,9 @@ export interface TileModel {
 export function buildTiles(
   hass: Hass,
   config: CardConfig,
-  opts: { agentAreas: string[]; toolCalls: ToolCall[]; exposed: Set<string> | null; query: string }
+  opts: { agentAreas: string[]; actedOn: ActedOn; exposed: Set<string> | null; query: string }
 ): TileModel[] {
-  const { agentAreas, toolCalls, exposed, query } = opts;
+  const { agentAreas, actedOn, exposed, query } = opts;
 
   const explicit = (config.entities ?? []).filter((id) => hass.states[id]);
   const areaPool = [
@@ -293,9 +206,13 @@ export function buildTiles(
     ...(config.follow_agent !== false ? entitiesInAreas(hass, agentAreas) : []),
   ].filter((id) => keep(hass, exposed, id));
 
-  const candidates = Array.from(new Set([...explicit, ...areaPool]));
-  const { ordered: pinned, latest: touched } = resolveActionTargets(hass, candidates, toolCalls);
-  const pinRank = new Map(pinned.map((id, i) => [id, i]));
+  // Acted-on devices always surface, even outside the configured/queried areas (a script may
+  // touch a device in another room). resolveActedOn already restricts them to voice-exposed
+  // entities, so inject them directly rather than re-filtering by area.
+  const acted = actedOn.ordered.filter((id) => hass.states[id]);
+  const candidates = Array.from(new Set([...explicit, ...areaPool, ...acted]));
+  const touched = actedOn.latest;
+  const pinRank = new Map(actedOn.ordered.map((id, i) => [id, i]));
 
   const ordered = candidates.sort((a, b) => {
     // acted-on devices first, most-recently-acted leading
