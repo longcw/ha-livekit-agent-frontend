@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ParticipantKind } from 'livekit-client';
+import { ParticipantKind, Room, RoomEvent } from 'livekit-client';
 import {
   RoomAudioRenderer,
   SessionProvider,
@@ -31,10 +31,14 @@ export function Root({ store }: { store: HassStore }) {
 function SessionRoot() {
   const store = useStore();
   const tokenSource = useMemo(() => new HassTokenSource(store), [store]);
-  const session = useSession(tokenSource, {});
+  // Own the Room so we can set stopMicTrackOnMute: muting the mic (ending/cancelling a turn,
+  // or pausing in auto mode) then stops the underlying MediaStreamTrack, releasing the device
+  // so the browser/OS mic-recording indicator turns off between turns. It's re-acquired when
+  // the next turn opens (setMicrophoneEnabled(true)).
+  const room = useMemo(() => new Room({ publishDefaults: { stopMicTrackOnMute: true } }), []);
+  const session = useSession(tokenSource, { room });
   return (
     <SessionProvider session={session}>
-      <RoomAudioRenderer />
       <CardShell />
     </SessionProvider>
   );
@@ -205,6 +209,34 @@ function CardShell() {
     };
   }, [connected, agentReady, mode, startOnConnect, audioOutputConfig, rpc, onTurnStart]);
 
+  // Subscribe to the agent's audio track only while spoken replies are on (we connect with
+  // autoSubscribe:false). This is what keeps a dormant/text-only card from grabbing the iOS
+  // audio session and pausing the user's music: with no subscribed remote audio track there's
+  // nothing for iOS to activate. Turning audio output on subscribes (and the header toggle tap
+  // is a user gesture, unlocking iOS autoplay); turning it off unsubscribes to release again.
+  useEffect(() => {
+    const room = sessionRef.current.room;
+    if (!connected || !room) return;
+
+    const syncAgentAudio = () => {
+      for (const p of room.remoteParticipants.values()) {
+        if (p.kind !== ParticipantKind.AGENT && !p.isAgent) continue;
+        for (const pub of p.audioTrackPublications.values()) pub.setSubscribed(audioOutput);
+      }
+    };
+
+    syncAgentAudio();
+    if (!audioOutput) return; // off: unsubscribed above, nothing to keep in sync
+
+    // The agent may (re)publish its audio track, or (re)join, after output is enabled.
+    room.on(RoomEvent.TrackPublished, syncAgentAudio);
+    room.on(RoomEvent.ParticipantConnected, syncAgentAudio);
+    return () => {
+      room.off(RoomEvent.TrackPublished, syncAgentAudio);
+      room.off(RoomEvent.ParticipantConnected, syncAgentAudio);
+    };
+  }, [connected, audioOutput]);
+
   // --- auto-connect while the dashboard tab is open ---
   const autoConnect = config.auto_connect !== false;
   const [connecting, setConnecting] = useState(false);
@@ -212,7 +244,11 @@ function CardShell() {
   const startSession = useCallback(() => {
     setConnecting(true);
     setEpoch((e) => e + 1);
-    sessionRef.current.start?.();
+    // autoSubscribe:false so connecting never activates a remote audio track. On iOS, a
+    // subscribed agent audio track (even while the agent is muted) flips the shared audio
+    // session to playback and interrupts background music the moment the page connects — so
+    // we defer subscribing to the agent's audio until spoken replies are turned on (below).
+    sessionRef.current.start?.({ roomConnectOptions: { autoSubscribe: false } });
   }, []);
 
   useEffect(() => {
@@ -254,6 +290,12 @@ function CardShell() {
 
   return (
     <ha-card data-dock={connected ? mode : 'off'}>
+      {/* Only attach/play the agent's audio once spoken replies are on. Mounting the
+          renderer is what plays remote audio through an <audio> element, which on iOS flips
+          the shared audio session to playback and interrupts background music — so a dormant,
+          text-only card (audioOutput defaults off) must never mount it, or merely opening the
+          dashboard would pause the user's music. */}
+      {audioOutput && <RoomAudioRenderer />}
       <Header
         orbState={orbState}
         title={config.title || 'Home Voice'}
