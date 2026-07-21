@@ -381,7 +381,10 @@ function CardShell() {
         onEnd={() => session.end?.()}
       />
       <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
-      <Conversation items={items} />
+      {/* While disconnected (static/idle) show the initial empty view — don't leave a stale,
+          partial transcript (typed messages linger in local state after the room-sourced
+          items clear). The conversation belongs to a live session. */}
+      <Conversation items={connected ? items : []} />
       <Dock
         connected={connected}
         connecting={connecting}

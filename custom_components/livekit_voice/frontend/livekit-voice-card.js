@@ -36214,7 +36214,7 @@ function QP() {
       }
     ),
     /* @__PURE__ */ de.jsx(MP, { agentAreas: h, toolCalls: f, query: qi }),
-    /* @__PURE__ */ de.jsx(nP, { items: k }),
+    /* @__PURE__ */ de.jsx(nP, { items: T ? k : [] }),
     /* @__PURE__ */ de.jsx(
       xP,
       {
