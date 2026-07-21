@@ -69,6 +69,9 @@ class LiveKitTokenView(HomeAssistantView):
         room_name = f"ha-voice-{secrets.token_hex(4)}"
         metadata = json.dumps({"input_mode": input_mode})
 
+        # Connect media-free (can_subscribe=False): an idle/text connection then has no
+        # receive-audio transceiver, which on iOS grabs the audio session and stops the
+        # user's music. The agent grants subscribe at runtime only while replies are on.
         try:
             token = (
                 api.AccessToken(config[CONF_API_KEY], config[CONF_API_SECRET])
@@ -81,7 +84,7 @@ class LiveKitTokenView(HomeAssistantView):
                         room=room_name,
                         can_publish=True,
                         can_publish_data=True,
-                        can_subscribe=True,
+                        can_subscribe=False,
                     )
                 )
                 .with_room_config(
