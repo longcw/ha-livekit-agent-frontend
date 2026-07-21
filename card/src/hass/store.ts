@@ -47,7 +47,11 @@ export interface CardConfig {
   max_tiles?: number;
   /** Fixed card height in px. Default 720; always capped to the viewport height. */
   height?: number;
-  /** Connect automatically when the dashboard tab is open; disconnect on leave. Default true. */
+  /**
+   * Connect automatically when the dashboard tab is open; disconnect on leave. Default false —
+   * the card stays static (chat UI, no room connection) and connects lazily on the first
+   * send/speak, so merely opening the dashboard never touches the audio session.
+   */
   auto_connect?: boolean;
 }
 

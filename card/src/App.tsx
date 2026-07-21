@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ParticipantKind, Room, RoomEvent, Track } from 'livekit-client';
+import { ParticipantKind, type RemoteParticipant, Room, RoomEvent, Track } from 'livekit-client';
 import {
   RoomAudioRenderer,
   SessionProvider,
@@ -52,10 +52,13 @@ function lastUserText(items: ConvItem[]): string {
   return '';
 }
 
-function agentIdentity(room: any): string | null {
+const isAgentParticipant = (p: RemoteParticipant): boolean =>
+  p.kind === ParticipantKind.AGENT || p.isAgent;
+
+function agentIdentity(room: Room | undefined): string | null {
   if (!room) return null;
   for (const p of room.remoteParticipants.values()) {
-    if (p.kind === ParticipantKind.AGENT || p.isAgent) return p.identity;
+    if (isAgentParticipant(p)) return p.identity;
   }
   return null;
 }
@@ -195,51 +198,59 @@ function CardShell() {
     await rpc('start_turn');
   }, [connectSession, setMic, rpc]);
 
+  // Open the mic + start a turn, flagging `micStarting` for the cold-start UI and rolling back
+  // via `onFail` if the mic never comes up. Shared by push-to-talk and auto-mode resume.
+  const beginTurn = useCallback(
+    (onFail: () => void) => {
+      setMicStarting(true);
+      openTurn()
+        .catch((e) => {
+          console.error('open turn failed', e);
+          onFail();
+        })
+        .finally(() => setMicStarting(false));
+    },
+    [openTurn],
+  );
+
+  // Close the mic side of a turn: clear `micStarting`, tell the agent (commit or discard), and
+  // release the mic device. Shared by End / Cancel / Pause.
+  const stopTurn = useCallback(
+    async (method: 'end_turn' | 'cancel_turn') => {
+      setMicStarting(false);
+      await rpc(method);
+      await releaseMic();
+    },
+    [rpc, releaseMic],
+  );
+
   // --- manual turn control ---
   const onTurnStart = useCallback(() => {
     setTurnActive(true); // show the listening bar immediately
-    setMicStarting(true);
-    openTurn()
-      .catch((e) => {
-        console.error('start turn failed', e);
-        setTurnActive(false); // roll back if the mic never came up
-      })
-      .finally(() => setMicStarting(false));
-  }, [openTurn]);
+    beginTurn(() => setTurnActive(false));
+  }, [beginTurn]);
 
   const onTurnEnd = useCallback(async () => {
-    setMicStarting(false);
     setTurnActive(false);
-    await rpc('end_turn'); // commit — the agent replies
-    await releaseMic();
-  }, [rpc, releaseMic]);
+    await stopTurn('end_turn'); // commit — the agent replies
+  }, [stopTurn]);
 
   const onTurnCancel = useCallback(async () => {
-    setMicStarting(false);
     setTurnActive(false);
-    await rpc('cancel_turn'); // discard
-    await releaseMic();
-  }, [rpc, releaseMic]);
+    await stopTurn('cancel_turn'); // discard
+  }, [stopTurn]);
 
   // --- auto mode: start / pause continuous listening. Same RPCs so the agent actually stops
   // listening rather than just muting the client mic. ---
   const onPause = useCallback(async () => {
-    setMicStarting(false);
     setAutoPaused(true);
-    await rpc('cancel_turn');
-    await releaseMic();
-  }, [rpc, releaseMic]);
+    await stopTurn('cancel_turn');
+  }, [stopTurn]);
 
   const onResume = useCallback(() => {
     setAutoPaused(false); // go live immediately
-    setMicStarting(true);
-    openTurn()
-      .catch((e) => {
-        console.error('resume failed', e);
-        setAutoPaused(true); // roll back if the mic never came up
-      })
-      .finally(() => setMicStarting(false));
-  }, [openTurn]);
+    beginTurn(() => setAutoPaused(true));
+  }, [beginTurn]);
 
   // Send a text message. Connects first if needed — but NEVER acquires audio (no mic, and
   // autoSubscribe/audio-output stay off), so texting leaves background music playing.
@@ -310,7 +321,7 @@ function CardShell() {
 
     const syncAgentAudio = () => {
       for (const p of room.remoteParticipants.values()) {
-        if (p.kind !== ParticipantKind.AGENT && !p.isAgent) continue;
+        if (!isAgentParticipant(p)) continue;
         for (const pub of p.audioTrackPublications.values()) pub.setSubscribed(audioOutput);
       }
     };

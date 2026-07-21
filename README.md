@@ -73,7 +73,7 @@ title: Voice Assistant        # optional header title
 input_mode: push_to_talk      # push_to_talk (default) | auto
 audio_output: false           # default false: agent replies in text only (toggle in the header)
 start_on_connect: false       # default false: stay dormant (no STT) until you tap to talk
-auto_connect: true            # default true: connect while the dashboard tab is open
+auto_connect: false           # default false: stay static until the first send/speak, then connect lazily
 height: 720                   # card height in px (default 720; capped to the viewport)
 areas:                        # optional: show all entities in these areas as tiles
   - Living Room
@@ -84,9 +84,9 @@ entities:                     # optional: always show these specific entities
 follow_agent: true            # default true: also surface tiles for areas the agent looks at
 ```
 
-All fields are optional. **By default the card is text-only and dormant**: it connects to
-the worker but keeps STT and TTS off, so it's free to leave on any dashboard. Tap the mic to
-talk — which spins STT up just for that turn and tears it back down once you're idle — or flip
+All fields are optional. **By default the card is text-only and dormant**: it stays static
+until you send or speak, then connects with STT and TTS off, so it's free to leave on any
+dashboard. Tap the mic to talk — which spins STT up just for that turn and tears it back down once you're idle — or flip
 the header speaker to hear replies. Set `audio_output: true` and/or `start_on_connect: true`
 to speak and start listening the moment it connects; `input_mode: auto` makes it hands-free.
 `areas`/`entities` pin a fixed set of tiles that are always visible (like any native HA card).

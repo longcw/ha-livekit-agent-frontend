@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { RoomEvent } from 'livekit-client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSessionContext } from '@livekit/components-react';
+import { useRoomDataTopic } from './room-data';
 
 // Must match TOOL_CALL_TOPIC in agent/agent.py.
 export const TOOL_CALL_TOPIC = 'ha.tool_call';
@@ -38,71 +38,54 @@ export interface ToolFeed {
  */
 export function useToolFeed(): ToolFeed {
   const session = useSessionContext();
-  const room = session.room;
   const [tools, setTools] = useState<Record<string, ToolCall>>({});
 
-  useEffect(() => {
-    if (!room) return;
-    const decoder = new TextDecoder();
+  const onMessage = useCallback((data: any) => {
+    const update = data.update;
+    if (!update) return;
+    const at = typeof data.created_at === 'number' ? data.created_at * 1000 : Date.now();
 
-    const onData = (payload: Uint8Array, _p?: unknown, _k?: unknown, topic?: string) => {
-      if (topic !== TOOL_CALL_TOPIC) return;
-      let data: any;
-      try {
-        data = JSON.parse(decoder.decode(payload));
-      } catch {
-        return;
-      }
-      const update = data.update;
-      if (!update) return;
-      const at = typeof data.created_at === 'number' ? data.created_at * 1000 : Date.now();
-
-      if (update.type === 'tool_call_started') {
-        const fc = update.function_call ?? {};
-        const callId = String(fc.call_id);
-        let args: ToolCall['args'] = null;
-        if (typeof fc.arguments === 'string' && fc.arguments) {
-          try {
-            args = JSON.parse(fc.arguments);
-          } catch {
-            args = fc.arguments;
-          }
+    if (update.type === 'tool_call_started') {
+      const fc = update.function_call ?? {};
+      const callId = String(fc.call_id);
+      let args: ToolCall['args'] = null;
+      if (typeof fc.arguments === 'string' && fc.arguments) {
+        try {
+          args = JSON.parse(fc.arguments);
+        } catch {
+          args = fc.arguments;
         }
-        setTools((s) => ({
-          ...s,
-          [callId]: { callId, name: String(fc.name), args, status: 'running', startedAt: at },
-        }));
-      } else if (update.type === 'tool_call_ended') {
-        const callId = String(update.call_id);
-        setTools((s) => {
-          const prev =
-            s[callId] ??
-            ({ callId, name: 'tool', args: null, status: 'running', startedAt: at } as ToolCall);
-          return {
-            ...s,
-            [callId]: {
-              ...prev,
-              status: (update.status as ToolStatus) ?? 'done',
-              output: (update.message as string | null) ?? prev.output ?? null,
-              endedAt: at,
-            },
-          };
-        });
-      } else if (update.type === 'tool_call_updated') {
-        const callId = String(update.call_id);
-        setTools((s) => {
-          const prev = s[callId];
-          if (!prev) return s;
-          return { ...s, [callId]: { ...prev, output: (update.message as string) ?? prev.output } };
-        });
       }
-    };
-
-    room.on(RoomEvent.DataReceived, onData);
-    return () => {
-      room.off(RoomEvent.DataReceived, onData);
-    };
-  }, [room]);
+      setTools((s) => ({
+        ...s,
+        [callId]: { callId, name: String(fc.name), args, status: 'running', startedAt: at },
+      }));
+    } else if (update.type === 'tool_call_ended') {
+      const callId = String(update.call_id);
+      setTools((s) => {
+        const prev =
+          s[callId] ??
+          ({ callId, name: 'tool', args: null, status: 'running', startedAt: at } as ToolCall);
+        return {
+          ...s,
+          [callId]: {
+            ...prev,
+            status: (update.status as ToolStatus) ?? 'done',
+            output: (update.message as string | null) ?? prev.output ?? null,
+            endedAt: at,
+          },
+        };
+      });
+    } else if (update.type === 'tool_call_updated') {
+      const callId = String(update.call_id);
+      setTools((s) => {
+        const prev = s[callId];
+        if (!prev) return s;
+        return { ...s, [callId]: { ...prev, output: (update.message as string) ?? prev.output } };
+      });
+    }
+  }, []);
+  useRoomDataTopic(session.room, TOOL_CALL_TOPIC, onMessage);
 
   useEffect(() => {
     if (!session.isConnected) setTools({});

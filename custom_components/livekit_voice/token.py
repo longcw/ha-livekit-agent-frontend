@@ -32,8 +32,9 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-# Turn modes the card may request; forwarded to the worker as dispatch metadata so it
-# configures turn detection to match (see agent/agent.py `_push_to_talk_requested`).
+# Turn modes the card may request, forwarded to the worker as dispatch metadata. The current
+# worker (agent/agent.py) boots in manual turn detection and the card asserts the live mode over
+# the `set_turn_mode` RPC once connected, so this metadata is advisory (kept for future workers).
 _VALID_INPUT_MODES = ("auto", "push_to_talk")
 _TOKEN_TTL = timedelta(minutes=15)
 
