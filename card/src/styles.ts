@@ -179,12 +179,22 @@ export const CARD_STYLES =
   .lk-eq i:nth-child(4) { animation-delay: -.7s; }
   .lk-eq i:nth-child(5) { animation-delay: -.4s; }
   @keyframes lk-eq { 0%,100% { transform: scaleY(.28); } 50% { transform: scaleY(1); } }
+  /* Cold-start spinner shown while the mic is being acquired (App.tsx openTurn). Uses
+     currentColor: accent in the listening bar (matching the EQ it replaces), on-accent on the
+     round auto-resume button. */
+  .lk-spin { flex: none; box-sizing: border-box; width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid color-mix(in srgb, currentColor 26%, transparent); border-top-color: currentColor;
+    animation: lk-spin .7s linear infinite; }
+  .lk-listen-mid .lk-spin { color: var(--lk-accent); }
+  @keyframes lk-spin { to { transform: rotate(360deg); } }
   .lk-listen-send { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 40px; padding: 0 14px 0 16px;
     border: none; border-radius: 20px; cursor: pointer; --mdc-icon-size: 18px;
     font-family: var(--lk-sans); font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em;
     background: var(--lk-accent); color: var(--lk-on-accent); transition: transform .06s, opacity .15s; }
   .lk-listen-send:hover { opacity: .95; }
   .lk-listen-send:active { transform: scale(.96); }
+  .lk-listen-send:disabled { opacity: .45; cursor: default; }
+  .lk-listen-send:disabled:active { transform: none; }
 
   .lk-bar { width: 100%; height: 48px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 15px;
     border-radius: 24px; border: 1px solid var(--lk-line); background: var(--lk-surface);
@@ -199,6 +209,8 @@ export const CARD_STYLES =
     display: grid; place-items: center; background: var(--lk-elevated); color: var(--lk-fg); transition: background-color .15s, transform .06s; }
   .lk-send:active { transform: scale(.93); }
   .lk-send[data-on="1"], .lk-send--accent { background: var(--lk-accent); color: var(--lk-on-accent); }
+  .lk-send:disabled { cursor: default; }
+  .lk-send:disabled:active { transform: none; }
 
   .lk-start { cursor: pointer; width: 100%; padding: 13px; border: none; border-radius: 16px; --mdc-icon-size: 20px;
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;

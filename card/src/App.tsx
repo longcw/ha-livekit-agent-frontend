@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ParticipantKind, Room, RoomEvent } from 'livekit-client';
+import { ParticipantKind, Room, RoomEvent, Track } from 'livekit-client';
 import {
   RoomAudioRenderer,
   SessionProvider,
@@ -74,9 +74,10 @@ const AGENT_PHASES: Record<string, { orb: string; label: string }> = {
 };
 
 function agentPhase(connected: boolean, connecting: boolean, agentState: string | undefined) {
-  if (!connected) {
-    return connecting ? { orb: 'connecting', label: 'Connecting' } : { orb: 'idle', label: 'Offline' };
-  }
+  if (connecting) return { orb: 'connecting', label: 'Connecting' };
+  // Not connected is a normal, ready state now (the card connects lazily on the first
+  // send/speak) — not an error. A calm idle orb, distinct from the active connected states.
+  if (!connected) return { orb: 'idle', label: 'Ready' };
   return AGENT_PHASES[agentState ?? ''] ?? { orb: 'listening', label: 'Connected' };
 }
 
@@ -101,16 +102,44 @@ function CardShell() {
   const { items, addTyped } = useConversation(localIdentity, toolCalls, epoch);
   const { send } = useChat();
 
-  // --- turn mode (auto vs manual), persisted across reconnects ---
+  // Card-configured defaults. auto_connect defaults OFF: opening the card is static (chat UI,
+  // no room connection) and it connects lazily on the first send/speak — so merely opening or
+  // switching to the dashboard never touches the audio session or the user's music.
+  const autoConnect = config.auto_connect === true;
+  const audioOutputConfig = config.audio_output === true;
+  const startOnConnect = config.start_on_connect === true;
+
+  // --- turn mode (auto vs manual), persisted ---
   const [mode, setMode] = useState<TurnMode>(() => loadTurnMode(config));
   const [turnActive, setTurnActive] = useState(false); // manual: a turn is open (recording)
-  const [autoPaused, setAutoPaused] = useState(false); // auto: input temporarily disabled
-  const didAutoStart = useRef(false); // manual: auto-open the first turn once per mount
+  // auto: mic NOT live (either never started this session, or paused). Starts true — even in
+  // auto/continuous mode the mic only goes live once the user taps to talk, so a connected-for-
+  // text card never captures audio.
+  const [autoPaused, setAutoPaused] = useState(() => loadTurnMode(config) === 'auto');
+  const [micStarting, setMicStarting] = useState(false); // mic acquisition in flight (cold-start)
+  const [connecting, setConnecting] = useState(false);
+  const didAutoStart = useRef(false); // kiosk: auto-open the first turn once per mount
 
   const setMic = useCallback(
     (on: boolean) => sessionRef.current.room?.localParticipant?.setMicrophoneEnabled(on),
     [],
   );
+
+  // Fully release the mic (unpublish + stop the device), not just mute. Muting keeps the audio
+  // transceiver on the connection; on iOS a lingering audio transceiver flips the shared session
+  // into playAndRecord and interrupts background music. Unpublishing removes it, so no audio
+  // session is held between turns. The next turn re-publishes fresh.
+  const releaseMic = useCallback(async () => {
+    const lp = sessionRef.current.room?.localParticipant;
+    const pub = lp?.getTrackPublication(Track.Source.Microphone);
+    if (lp && pub?.track) {
+      try {
+        await lp.unpublishTrack(pub.track, true);
+      } catch (e) {
+        console.error('releaseMic failed', e);
+      }
+    }
+  }, []);
 
   const rpc = useCallback(async (method: string, payload = '') => {
     const room = sessionRef.current.room;
@@ -130,67 +159,128 @@ function CardShell() {
     });
   }, []);
 
-  // Card-configured defaults (optional). Defaults keep an embedded card zero-cost: no
-  // spoken replies and dormant (STT off) until the user opens a turn.
-  const startOnConnect = config.start_on_connect === true;
-  const audioOutputConfig = config.audio_output === true;
-
-  // Spoken replies (TTS) on/off. The agent owns the truth and broadcasts it, so the
-  // toggle just reflects `audioOutput` and asks the agent to flip.
   const toggleAudioOutput = useCallback(() => {
     rpc('set_audio_output', audioOutput ? 'off' : 'on');
   }, [rpc, audioOutput]);
 
-  // Open the mic + turn on the agent. Shared by manual "start turn" and auto "resume".
+  // Connect to the room WITHOUT acquiring any audio (mic off, autoSubscribe off). Resolves once
+  // connected (and the agent has joined). Called lazily on the first send/speak, or on open when
+  // auto_connect is set. A no-op if already connected.
+  const connectSession = useCallback(async () => {
+    const s = sessionRef.current;
+    if (s.isConnected) return;
+    setConnecting(true);
+    setEpoch((e) => e + 1); // a fresh connection starts a fresh conversation
+    try {
+      await s.start?.({
+        tracks: { microphone: { enabled: false } },
+        roomConnectOptions: { autoSubscribe: false },
+      });
+    } catch (e) {
+      console.error('connect failed', e);
+      setConnecting(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (connected) setConnecting(false);
+  }, [connected]);
+
+  // Open the mic + start a turn — connecting first if needed. The FIRST mic acquisition on iOS
+  // is slow (getUserMedia + the AVAudioSession switch, which is also what interrupts other apps'
+  // audio, so it can't be pre-warmed). Callers flag `micStarting` so the tap shows "Starting…"
+  // instead of feeling stuck, and so the user doesn't talk into a not-yet-live mic.
   const openTurn = useCallback(async () => {
+    await connectSession();
     await setMic(true);
     await rpc('start_turn');
-  }, [rpc, setMic]);
+  }, [connectSession, setMic, rpc]);
 
   // --- manual turn control ---
-  const onTurnStart = useCallback(async () => {
-    await openTurn();
-    setTurnActive(true);
+  const onTurnStart = useCallback(() => {
+    setTurnActive(true); // show the listening bar immediately
+    setMicStarting(true);
+    openTurn()
+      .catch((e) => {
+        console.error('start turn failed', e);
+        setTurnActive(false); // roll back if the mic never came up
+      })
+      .finally(() => setMicStarting(false));
   }, [openTurn]);
 
   const onTurnEnd = useCallback(async () => {
-    await rpc('end_turn'); // commit — the agent replies
-    await setMic(false);
+    setMicStarting(false);
     setTurnActive(false);
-  }, [rpc, setMic]);
+    await rpc('end_turn'); // commit — the agent replies
+    await releaseMic();
+  }, [rpc, releaseMic]);
 
   const onTurnCancel = useCallback(async () => {
-    await rpc('cancel_turn'); // discard
-    await setMic(false);
+    setMicStarting(false);
     setTurnActive(false);
-  }, [rpc, setMic]);
+    await rpc('cancel_turn'); // discard
+    await releaseMic();
+  }, [rpc, releaseMic]);
 
-  // --- auto mode: pause / resume input via the same RPCs, so the agent actually stops
-  // listening rather than just muting the client mic ---
+  // --- auto mode: start / pause continuous listening. Same RPCs so the agent actually stops
+  // listening rather than just muting the client mic. ---
   const onPause = useCallback(async () => {
-    await rpc('cancel_turn');
-    await setMic(false);
+    setMicStarting(false);
     setAutoPaused(true);
-  }, [rpc, setMic]);
+    await rpc('cancel_turn');
+    await releaseMic();
+  }, [rpc, releaseMic]);
 
-  const onResume = useCallback(async () => {
-    await openTurn();
-    setAutoPaused(false);
+  const onResume = useCallback(() => {
+    setAutoPaused(false); // go live immediately
+    setMicStarting(true);
+    openTurn()
+      .catch((e) => {
+        console.error('resume failed', e);
+        setAutoPaused(true); // roll back if the mic never came up
+      })
+      .finally(() => setMicStarting(false));
   }, [openTurn]);
 
-  // Baseline per mode, applied immediately on connect and whenever the mode flips: auto
-  // keeps the mic live (hands-free), manual mutes it until a turn is opened.
-  useEffect(() => {
-    if (!connected) return;
-    setTurnActive(false);
-    setAutoPaused(false);
-    setMic(mode === 'auto');
-  }, [connected, mode, setMic]);
+  // Send a text message. Connects first if needed — but NEVER acquires audio (no mic, and
+  // autoSubscribe/audio-output stay off), so texting leaves background music playing.
+  const onSend = useCallback(
+    async (text: string) => {
+      await connectSession();
+      addTyped(text);
+      try {
+        await send(text);
+      } catch (e) {
+        console.error('send failed', e);
+      }
+    },
+    [connectSession, addTyped, send],
+  );
 
-  // Once the agent is ready (its state reached listening/…, so the turn RPCs are
-  // registered): assert the mode and the configured audio-output default. In manual,
-  // only auto-open the first turn when start_on_connect is set — otherwise the card stays
-  // dormant (no STT) until the user taps to talk.
+  // Idle baseline whenever the card is NOT connected (static/offline). Deliberately does NOT
+  // reset on connect — a connect is usually triggered by a speak tap, whose turn must survive.
+  useEffect(() => {
+    if (connected) return;
+    setTurnActive(false);
+    setMicStarting(false);
+    setAutoPaused(mode === 'auto');
+  }, [connected, mode]);
+
+  // Mode flip: reset to the new mode's resting state, release any live mic, and tell the agent.
+  // The mic is never enabled here — only an explicit speak/resume opens it — so this can't start
+  // recording on its own.
+  useEffect(() => {
+    setTurnActive(false);
+    setMicStarting(false);
+    setAutoPaused(mode === 'auto');
+    if (sessionRef.current.isConnected) {
+      void releaseMic();
+      void rpc('set_turn_mode', mode);
+    }
+  }, [mode, releaseMic, rpc]);
+
+  // Once connected + agent ready: assert the mode and audio-output default. Auto-open a turn
+  // only for a kiosk that BOTH auto-connects and opts into start_on_connect — never for a
+  // lazily text-connected card, which must stay audio-free.
   const agentReady = agent.isConnected;
   useEffect(() => {
     if (!connected || !agentReady) return;
@@ -199,21 +289,21 @@ function CardShell() {
       await rpc('set_turn_mode', mode);
       await rpc('set_audio_output', audioOutputConfig ? 'on' : 'off');
       if (cancelled) return;
-      if (mode === 'manual' && startOnConnect && !didAutoStart.current) {
+      if (autoConnect && startOnConnect && !didAutoStart.current) {
         didAutoStart.current = true;
-        await onTurnStart();
+        if (mode === 'auto') onResume();
+        else onTurnStart();
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [connected, agentReady, mode, startOnConnect, audioOutputConfig, rpc, onTurnStart]);
+  }, [connected, agentReady, mode, autoConnect, startOnConnect, audioOutputConfig, rpc, onTurnStart, onResume]);
 
   // Subscribe to the agent's audio track only while spoken replies are on (we connect with
-  // autoSubscribe:false). This is what keeps a dormant/text-only card from grabbing the iOS
-  // audio session and pausing the user's music: with no subscribed remote audio track there's
-  // nothing for iOS to activate. Turning audio output on subscribes (and the header toggle tap
-  // is a user gesture, unlocking iOS autoplay); turning it off unsubscribes to release again.
+  // autoSubscribe:false). With no subscribed remote audio track there's nothing for iOS to
+  // activate, so a text-only card never grabs the playback session. Turning audio output on
+  // subscribes (the header toggle tap is a user gesture, unlocking iOS autoplay); off releases.
   useEffect(() => {
     const room = sessionRef.current.room;
     if (!connected || !room) return;
@@ -228,7 +318,6 @@ function CardShell() {
     syncAgentAudio();
     if (!audioOutput) return; // off: unsubscribed above, nothing to keep in sync
 
-    // The agent may (re)publish its audio track, or (re)join, after output is enabled.
     room.on(RoomEvent.TrackPublished, syncAgentAudio);
     room.on(RoomEvent.ParticipantConnected, syncAgentAudio);
     return () => {
@@ -237,45 +326,22 @@ function CardShell() {
     };
   }, [connected, audioOutput]);
 
-  // --- auto-connect while the dashboard tab is open ---
-  const autoConnect = config.auto_connect !== false;
-  const [connecting, setConnecting] = useState(false);
-
-  const startSession = useCallback(() => {
-    setConnecting(true);
-    setEpoch((e) => e + 1);
-    // Connect without touching either half of the iOS audio session, so merely opening the
-    // dashboard never interrupts the user's background music:
-    //   - autoSubscribe:false — don't activate a remote audio track. On iOS a subscribed agent
-    //     audio track (even while the agent is muted) flips the shared session to playback. We
-    //     defer subscribing to the agent's audio until spoken replies are turned on (below).
-    //   - microphone.enabled:false — useSession().start() OTHERWISE grabs the mic by default
-    //     (setMicrophoneEnabled(true) with a preconnect buffer), and capturing the mic flips the
-    //     session to record/playAndRecord, stopping other apps' audio. The card owns the mic via
-    //     its turn-mode logic instead: it stays off on connect (manual) and is only opened when a
-    //     turn actually starts, so a dormant card leaves background music playing.
-    sessionRef.current.start?.({
-      tracks: { microphone: { enabled: false } },
-      roomConnectOptions: { autoSubscribe: false },
-    });
-  }, []);
-
-  useEffect(() => {
-    if (connected) setConnecting(false);
-  }, [connected]);
-
+  // --- connection lifecycle ---
+  // Connect on open only when auto_connect is set; otherwise the card stays static until the
+  // first send/speak. Either way, fully disconnect when the tab is hidden/left (releasing
+  // everything so music is never held), and DON'T auto-reconnect on return unless auto_connect —
+  // returning shows the static card and the next send/speak reconnects.
   const [autoTried, setAutoTried] = useState(false);
   useEffect(() => {
     if (!autoConnect || autoTried || !hass || connected || document.hidden) return;
     setAutoTried(true);
-    startSession();
-  }, [autoConnect, autoTried, hass, connected, startSession]);
+    void connectSession();
+  }, [autoConnect, autoTried, hass, connected, connectSession]);
 
   useEffect(() => {
-    if (!autoConnect) return;
     const onVisibility = () => {
       if (document.hidden) sessionRef.current.end?.();
-      else if (!sessionRef.current.isConnected && hassRef.current) startSession();
+      else if (autoConnect && !sessionRef.current.isConnected && hassRef.current) void connectSession();
     };
     const onPageHide = () => sessionRef.current.end?.();
     document.addEventListener('visibilitychange', onVisibility);
@@ -285,7 +351,7 @@ function CardShell() {
       window.removeEventListener('pagehide', onPageHide);
       sessionRef.current.end?.(); // card removed (tab left)
     };
-  }, [autoConnect, startSession]);
+  }, [autoConnect, connectSession]);
 
   const query = lastUserText(items);
   const phase = agentPhase(connected, connecting, agentState);
@@ -298,12 +364,10 @@ function CardShell() {
   const stateLabel = dozing ? 'Sleeping' : phase.label;
 
   return (
-    <ha-card data-dock={connected ? mode : 'off'}>
-      {/* Only attach/play the agent's audio once spoken replies are on. Mounting the
-          renderer is what plays remote audio through an <audio> element, which on iOS flips
-          the shared audio session to playback and interrupts background music — so a dormant,
-          text-only card (audioOutput defaults off) must never mount it, or merely opening the
-          dashboard would pause the user's music. */}
+    <ha-card data-dock={mode}>
+      {/* Only attach/play the agent's audio once spoken replies are on. Mounting the renderer
+          plays remote audio through an <audio> element, which on iOS flips the shared session to
+          playback — so a text-only card (audioOutput defaults off) must never mount it. */}
       {audioOutput && <RoomAudioRenderer />}
       <Header
         orbState={orbState}
@@ -320,19 +384,12 @@ function CardShell() {
       <Conversation items={items} />
       <Dock
         connected={connected}
+        connecting={connecting}
         mode={mode}
         turnActive={turnActive}
         autoPaused={autoPaused}
-        startLabel={connecting ? 'Connecting…' : 'New conversation'}
-        onStart={startSession}
-        onSend={async (text) => {
-          addTyped(text);
-          try {
-            await send(text);
-          } catch (e) {
-            console.error('send failed', e);
-          }
-        }}
+        micStarting={micStarting}
+        onSend={onSend}
         onTurnStart={onTurnStart}
         onTurnEnd={onTurnEnd}
         onTurnCancel={onTurnCancel}

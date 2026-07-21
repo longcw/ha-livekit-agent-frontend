@@ -133,17 +133,19 @@ const OFF = location.search.includes('off');
 const P = location.search;
 
 // URL params drive the reviewable states: ?off (disconnected), ?auto (auto mode),
-// ?active (manual turn in progress), ?paused (auto input muted). Default: manual, idle.
+// ?active (manual turn in progress), ?paused (auto input muted), ?starting (mic cold-start).
+// Default: manual, idle.
 function Preview() {
   const [mode, setMode] = useState<'auto' | 'manual'>(
     P.includes('auto') || P.includes('paused') ? 'auto' : 'manual',
   );
-  const [turnActive, setTurnActive] = useState(P.includes('active'));
+  const [turnActive, setTurnActive] = useState(P.includes('active') || P.includes('starting'));
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
+  const [micStarting, setMicStarting] = useState(P.includes('starting'));
   const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
   const STATE_LABELS: Record<string, string> = {
-    idle: 'Offline', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
+    idle: 'Ready', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
     dozing: 'Sleeping',
   };
   return (
@@ -164,17 +166,31 @@ function Preview() {
         <Conversation items={OFF ? [] : items} />
         <Dock
           connected={!OFF}
+          connecting={false}
           mode={mode}
           turnActive={turnActive}
           autoPaused={autoPaused}
-          startLabel="New conversation"
-          onStart={() => {}}
+          micStarting={micStarting}
           onSend={async () => {}}
-          onTurnStart={() => setTurnActive(true)}
-          onTurnEnd={() => setTurnActive(false)}
-          onTurnCancel={() => setTurnActive(false)}
+          onTurnStart={() => {
+            setTurnActive(true);
+            setMicStarting(true);
+            setTimeout(() => setMicStarting(false), 1200);
+          }}
+          onTurnEnd={() => {
+            setTurnActive(false);
+            setMicStarting(false);
+          }}
+          onTurnCancel={() => {
+            setTurnActive(false);
+            setMicStarting(false);
+          }}
           onPause={() => setAutoPaused(true)}
-          onResume={() => setAutoPaused(false)}
+          onResume={() => {
+            setAutoPaused(false);
+            setMicStarting(true);
+            setTimeout(() => setMicStarting(false), 1200);
+          }}
         />
       </ha-card>
     </HassStoreProvider>
