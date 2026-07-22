@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Hass, HassEntity } from '../hass/store';
 import { domainOf, friendlyName, keep } from './entities';
+import { SCHEDULE_TASK } from './tasks';
 import type { ToolCall } from './tool-feed';
 
 // How long after an agent action we keep watching live Home Assistant state for changes
@@ -78,6 +79,29 @@ function argNames(args: ToolCall['args']): string[] {
   return [];
 }
 
+/** Device name(s) a `schedule_task` call targets, so a scheduled device pins like an action:
+ *  the explicit `name` inside its tool_args_json (function_call), plus its free-text
+ *  description / instruction (which usually embeds the exact device name) for a loose match. */
+function scheduleNames(args: ToolCall['args']): string[] {
+  if (!args || typeof args === 'string') return [];
+  const a = args as Record<string, unknown>;
+  const names: string[] = [];
+  if (typeof a.tool_args_json === 'string') {
+    try {
+      const n = (JSON.parse(a.tool_args_json) as Record<string, unknown>)?.name;
+      if (typeof n === 'string') names.push(n);
+      else if (Array.isArray(n)) names.push(...n.map(String));
+    } catch {
+      // ignore malformed JSON
+    }
+  }
+  for (const key of ['instruction', 'command_text', 'text', 'description']) {
+    const v = a[key];
+    if (typeof v === 'string' && v.trim()) names.push(v);
+  }
+  return names;
+}
+
 // ---- resolution ------------------------------------------------------------
 
 /**
@@ -110,8 +134,11 @@ export function resolveActedOn(
 
     const hits = new Set<string>();
 
-    // 1. `name` argument — exact, then a loose contains match within the id set.
-    for (const raw of argNames(call.args)) {
+    // 1. `name` argument — exact, then a loose contains match within the id set. A
+    //    schedule_task also contributes its scheduled device so it pins like an action.
+    const rawNames = argNames(call.args);
+    if (call.name === SCHEDULE_TASK) rawNames.push(...scheduleNames(call.args));
+    for (const raw of rawNames) {
       const norm = normalizeName(raw);
       if (!norm) continue;
       const exact = index.get(norm);

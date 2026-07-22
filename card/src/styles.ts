@@ -275,6 +275,17 @@ export const CARD_STYLES =
     background: linear-gradient(to top, var(--lk-surface) 46%, color-mix(in srgb, var(--lk-surface) 82%, transparent) 74%, transparent); }
   .lk-dock > * { pointer-events: auto; }
 
+  /* ---- one-tap quick replies the agent offers, above the composer ---- */
+  .lk-suggest { width: 100%; display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+  .lk-chip { flex: 0 0 auto; border-radius: 16px; padding: 6px 14px; cursor: pointer;
+    font: inherit; font-size: 0.85rem; font-weight: 600; line-height: 1.2; color: var(--lk-fg);
+    background: var(--lk-surface); border: 1px solid color-mix(in srgb, var(--lk-accent) 42%, var(--lk-line));
+    transition: background-color .15s, border-color .15s, transform .06s; }
+  .lk-chip:hover { background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
+    border-color: color-mix(in srgb, var(--lk-accent) 60%, var(--lk-line)); }
+  .lk-chip:active { transform: scale(.95); }
+  .lk-chip:disabled { cursor: default; opacity: .55; }
+
   /* ---- manual turn: the composer becomes a listening bar (Cancel · meter · Send) ---- */
   .lk-listen { width: 100%; min-height: 52px; display: flex; align-items: center; gap: 8px;
     padding: 7px 7px 7px 10px; border-radius: 26px;

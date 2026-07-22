@@ -12,7 +12,17 @@ import {
  * The conversation timeline: speech + typed messages and the agent's tool actions,
  * interleaved chronologically. Works for both the live session and stored history.
  */
-export function Conversation({ items, autoscroll = true }: { items: ConvItem[]; autoscroll?: boolean }) {
+export function Conversation({
+  items,
+  autoscroll = true,
+  reflowKey,
+}: {
+  items: ConvItem[];
+  autoscroll?: boolean;
+  /** Bump to re-pin to the bottom when something other than `items` changes the
+   *  dock height (e.g. quick-reply chips appearing), so the tail isn't occluded. */
+  reflowKey?: unknown;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   // Follow new messages only while the user is already at the bottom. This lands the view
   // at the top on load (showing the start, not the tail) and never yanks away from earlier
@@ -24,11 +34,33 @@ export function Conversation({ items, autoscroll = true }: { items: ConvItem[]; 
     if (el) stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
   };
 
-  useEffect(() => {
-    if (!autoscroll || !stick.current) return;
+  const pin = () => {
     const el = ref.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [items, autoscroll]);
+    if (el && autoscroll && stick.current) el.scrollTop = el.scrollHeight;
+  };
+
+  // Keep the tail visible as the timeline grows: a streaming reply mutates the last
+  // bubble's text (no `items` reference change), so an items-only effect pins once —
+  // before the final line lays out — and the tail slides under the floating dock. A
+  // MutationObserver re-pins on every content change (tokens + new rows) while the
+  // user is at the bottom. onScroll keeps `stick` current so it never yanks.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mo = new MutationObserver(() => pin());
+    mo.observe(el, { childList: true, subtree: true, characterData: true });
+    return () => mo.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoscroll]);
+
+  // Explicit re-pin on new items and on dock-height changes (reflowKey, e.g. chips):
+  // the rAF runs the frame after --lk-dock-h updates so the padding is right first.
+  useEffect(() => {
+    pin();
+    const raf = requestAnimationFrame(pin);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, autoscroll, reflowKey]);
 
   // The empty hint lives inside the scroll container (not in place of it) so the
   // conversation's dock-clearance padding applies and the floating dock never overlaps it.

@@ -20,6 +20,7 @@ import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, useConversation } from './lib/conversation';
 import { useSessionState } from './lib/session-state';
+import { useSuggestions } from './lib/suggestions';
 import type { Task } from './lib/tasks';
 import { useTasks } from './lib/tasks-api';
 import { useToolFeed } from './lib/tool-feed';
@@ -96,6 +97,7 @@ function CardShell() {
   const agent = useAgent();
   const agentState = agent.state;
   const { sttEnabled, audioOutput } = useSessionState();
+  const { suggestions, clear: clearSuggestions } = useSuggestions();
   const { toolCalls, agentAreas } = useToolFeed();
   const tasksApi = useTasks(toolCalls);
   const [epoch, setEpoch] = useState(0);
@@ -208,6 +210,7 @@ function CardShell() {
   // via `onFail` if the mic never comes up. Shared by push-to-talk and auto-mode resume.
   const beginTurn = useCallback(
     (onFail: () => void) => {
+      clearSuggestions(); // answering by voice — drop any quick replies
       setMicStarting(true);
       openTurn()
         .catch((e) => {
@@ -216,7 +219,7 @@ function CardShell() {
         })
         .finally(() => setMicStarting(false));
     },
-    [openTurn],
+    [openTurn, clearSuggestions],
   );
 
   // Close the mic side of a turn: clear `micStarting`, tell the agent (commit or discard), and
@@ -262,6 +265,7 @@ function CardShell() {
   // autoSubscribe/audio-output stay off), so texting leaves background music playing.
   const onSend = useCallback(
     async (text: string) => {
+      clearSuggestions(); // the user answered — drop any quick replies
       await connectSession();
       addTyped(text);
       try {
@@ -270,7 +274,7 @@ function CardShell() {
         console.error('send failed', e);
       }
     },
-    [connectSession, addTyped, send],
+    [connectSession, addTyped, send, clearSuggestions],
   );
 
   // Idle baseline whenever the card is NOT connected (static/offline). Deliberately does NOT
@@ -426,7 +430,7 @@ function CardShell() {
           {/* While disconnected (static/idle) show the initial empty view — don't leave a stale,
               partial transcript (typed messages linger in local state after the room-sourced
               items clear). The conversation belongs to a live session. */}
-          <Conversation items={connected ? items : []} />
+          <Conversation items={connected ? items : []} reflowKey={suggestions.length} />
           <Dock
             connected={connected}
             connecting={connecting}
@@ -440,6 +444,7 @@ function CardShell() {
             onTurnCancel={onTurnCancel}
             onPause={onPause}
             onResume={onResume}
+            suggestions={suggestions}
           />
         </>
       ) : (

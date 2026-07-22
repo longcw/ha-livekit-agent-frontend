@@ -39,6 +39,8 @@ export interface DockProps {
   onTurnCancel: () => void;
   onPause: () => void;
   onResume: () => void;
+  /** One-tap quick replies shown above the composer; tapping one sends it as the reply. */
+  suggestions?: string[];
   /** Preview only: pre-fill the input to inspect the send-button state. */
   initialText?: string;
 }
@@ -46,13 +48,14 @@ export interface DockProps {
 export function Dock(props: DockProps) {
   const { mode, turnActive, autoPaused, micStarting, connecting, onSend } = props;
   const { onTurnStart, onTurnEnd, onTurnCancel, onPause, onResume } = props;
+  const suggestions = props.suggestions ?? [];
   const dockRef = useDockHeight();
   const [text, setText] = useState(props.initialText ?? '');
   const [sending, setSending] = useState(false);
   const canSend = !sending && text.trim().length > 0;
 
-  const submit = async () => {
-    const message = text.trim();
+  const sendMessage = async (raw: string) => {
+    const message = raw.trim();
     if (!message || sending) return;
     setSending(true);
     setText('');
@@ -62,6 +65,7 @@ export function Dock(props: DockProps) {
       setSending(false);
     }
   };
+  const submit = () => sendMessage(text);
 
   // Manual turn in progress: the composer becomes a focused listening bar. While the mic is
   // still warming up (cold-start), show "Starting…" with a spinner and hold the Send button —
@@ -106,6 +110,20 @@ export function Dock(props: DockProps) {
 
   return (
     <div className="lk-dock" ref={dockRef}>
+      {suggestions.length > 0 && (
+        <div className="lk-suggest">
+          {suggestions.map((reply, i) => (
+            <button
+              key={`${i}-${reply}`}
+              className="lk-chip"
+              onClick={() => sendMessage(reply)}
+              disabled={sending}
+            >
+              {reply}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="lk-bar" data-paused={paused ? '1' : '0'}>
         <input
           className="lk-input"

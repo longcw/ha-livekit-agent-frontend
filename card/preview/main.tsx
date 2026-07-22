@@ -129,6 +129,28 @@ const SCENARIOS: Record<string, { toolCalls: any[]; agentAreas: string[]; query:
     agentAreas: [],
     query: '进入观影模式',
   },
+  // ?scenario=schedule — a function_call schedule targeting 书房 射灯; its tile should pin
+  // to the front + highlight, just like an immediate action.
+  schedule: {
+    toolCalls: [
+      { callId: 'sd1', name: 'get_devices', args: { area: '书房' }, status: 'done', startedAt: 1 },
+      {
+        callId: 'sd2',
+        name: 'schedule_task',
+        args: {
+          description: '一小时后打开书房 射灯',
+          schedule_type: 'once',
+          execution_type: 'function_call',
+          tool_name: 'HassTurnOn',
+          tool_args_json: '{"name": "书房 射灯"}',
+        },
+        status: 'done',
+        startedAt: 5,
+      },
+    ],
+    agentAreas: ['书房'],
+    query: '一小时后打开书房射灯',
+  },
 };
 const SCN = SCENARIOS[SCENARIO ?? 'default'] ?? SCENARIOS.default;
 const toolCalls = SCN.toolCalls;
@@ -142,6 +164,12 @@ const items: ConvItem[] = [
   { kind: 'message', id: 'm4', role: 'agent', text: '好的，书房射灯已经为您打开了。', ts: 6 },
   { kind: 'action', id: 'a3', ts: 7, name: 'GetLiveContext', args: {}, status: 'running' },
 ];
+if (location.search.includes('chips')) {
+  items.push(
+    { kind: 'message', id: 'm5', role: 'user', text: '一小时后关闭书房射灯', ts: 8 },
+    { kind: 'message', id: 'm6', role: 'agent', text: '好的，我会在今晚 21:30 关闭书房射灯，确认吗？', ts: 9 },
+  );
+}
 
 const OFF = location.search.includes('off');
 const P = location.search;
@@ -269,7 +297,7 @@ function Preview() {
                 onSeeAll={() => setTab('schedules')}
               />
             )}
-            <Conversation items={OFF ? [] : items} />
+            <Conversation items={OFF ? [] : items} reflowKey={P.includes('chips')} />
             <Dock
               connected={!OFF}
               connecting={false}
@@ -297,6 +325,7 @@ function Preview() {
                 setMicStarting(true);
                 setTimeout(() => setMicStarting(false), 1200);
               }}
+              suggestions={P.includes('chips') ? ['确认', '取消'] : undefined}
             />
           </>
         ) : (
@@ -338,6 +367,15 @@ const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
 createRoot(mount).render(<Preview />);
+
+// Preview-only: the timeline lands at the top by design, so scroll it to the bottom when
+// reviewing the quick-reply chips (?chips) to check the tail isn't hidden behind them.
+if (location.search.includes('chips')) {
+  setTimeout(() => {
+    const convo = shadow.querySelector('.lk-convo') as HTMLElement | null;
+    if (convo) convo.scrollTop = convo.scrollHeight;
+  }, 400);
+}
 
 // Simulate the 观影模式 script's fan-out: shortly after mount (inside the state-diff window),
 // the curtain closes and the living-room light turns off. The card should detect these live
