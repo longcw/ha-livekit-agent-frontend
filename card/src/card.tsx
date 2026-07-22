@@ -5,18 +5,39 @@ import { CARD_STYLES } from './styles';
 
 /**
  * The Lovelace custom card. Home Assistant calls `setConfig` once and `set hass` on every
- * state change; both feed the HassStore, which drives the React tree (mounted in a shadow
- * root) via useSyncExternalStore so tiles reflect live state.
+ * state change; both feed the HassStore, which drives the React tree (via useSyncExternalStore)
+ * so tiles reflect live state.
+ *
+ * Persistence across lovelace-view switches: HA *destroys and recreates* the card element when
+ * you switch views. To avoid tearing down the live LiveKit session (and losing the whole
+ * conversation) on every view switch, the store + React root + mount node live in module scope
+ * — a single persistent tree that is simply re-parented into whichever element HA currently has
+ * connected. React is never unmounted, so the session and conversation survive; the page
+ * unloading (which kills this JS context) is the only real teardown.
  */
-class LivekitVoiceCard extends HTMLElement {
-  private _store = new HassStore();
-  private _root: ReactRoot | null = null;
-  private _mount: HTMLElement | null = null;
+let sharedStore: HassStore | null = null;
+let sharedMount: HTMLDivElement | null = null;
+let sharedRoot: ReactRoot | null = null;
 
+function ensureTree(): { store: HassStore; mount: HTMLDivElement } {
+  if (!sharedStore) sharedStore = new HassStore();
+  if (!sharedMount) {
+    sharedMount = document.createElement('div');
+    sharedMount.className = 'lk-root';
+  }
+  if (!sharedRoot) {
+    sharedRoot = createRoot(sharedMount);
+    sharedRoot.render(<Root store={sharedStore} />);
+    console.debug('[livekit-voice-card] created persistent tree');
+  }
+  return { store: sharedStore, mount: sharedMount };
+}
+
+class LivekitVoiceCard extends HTMLElement {
   setConfig(config: any): void {
-    this._store.setConfig(config);
+    ensureTree().store.setConfig(config);
     if (config?.height) this.style.setProperty('--lk-h', `${config.height}px`);
-    this._render();
+    this._attach();
   }
 
   getGridOptions(): Record<string, unknown> {
@@ -24,8 +45,8 @@ class LivekitVoiceCard extends HTMLElement {
   }
 
   set hass(hass: any) {
-    this._store.setHass(hass);
-    this._render();
+    ensureTree().store.setHass(hass);
+    this._attach();
   }
 
   getCardSize(): number {
@@ -33,35 +54,27 @@ class LivekitVoiceCard extends HTMLElement {
   }
 
   connectedCallback(): void {
-    this._render();
+    this._attach();
   }
 
-  disconnectedCallback(): void {
-    // Leaving the dashboard tab removes the card. Tear down React (its effects end the
-    // LiveKit session) once we're sure this isn't a transient DOM move. A fresh element
-    // is created when the tab is reopened, which reconnects.
-    setTimeout(() => {
-      if (this.isConnected) return;
-      this._root?.unmount();
-      this._root = null;
-      this._mount = null;
-    }, 80);
-  }
+  // No teardown on disconnect: a view switch detaches the element, but the shared tree lives on
+  // and is re-parented into the next connected element (_attach). This preserves the session.
 
-  private _render(): void {
+  /** Ensure this element's shadow root holds the styles + the shared, persistent mount node. */
+  private _attach(): void {
     const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
-    if (!this._mount) {
-      shadow.innerHTML = '';
+    if (!shadow.querySelector('style[data-lk]')) {
       const style = document.createElement('style');
+      style.setAttribute('data-lk', '');
       style.textContent = CARD_STYLES;
-      const mount = document.createElement('div');
-      shadow.append(style, mount);
-      this._store.setHost(this);
-      this._mount = mount;
-      this._root = null;
+      shadow.appendChild(style);
     }
-    if (!this._root) this._root = createRoot(this._mount);
-    this._root.render(<Root store={this._store} />);
+    const { store, mount } = ensureTree();
+    store.setHost(this);
+    if (mount.parentNode !== shadow) {
+      shadow.appendChild(mount); // adopt the persistent React tree into this element
+      console.debug('[livekit-voice-card] re-attached persistent tree (session preserved)');
+    }
   }
 }
 

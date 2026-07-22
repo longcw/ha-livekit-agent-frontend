@@ -6,9 +6,14 @@ import { Conversation } from '../src/components/Conversation';
 import { DeviceTiles } from '../src/components/DeviceTiles';
 import { Dock } from '../src/components/Dock';
 import { Header } from '../src/components/Header';
+import { ScheduledTasks } from '../src/components/ScheduledTasks';
+import { SchedulesTab } from '../src/components/SchedulesTab';
+import { TaskEditor } from '../src/components/TaskEditor';
 import { HassStoreProvider } from '../src/hass/context';
 import { HassStore } from '../src/hass/store';
 import type { ConvItem } from '../src/lib/conversation';
+import type { Task } from '../src/lib/tasks';
+import type { TasksApi } from '../src/lib/tasks-api';
 import { CARD_STYLES } from '../src/styles';
 
 // ---- stub ha-icon (mdi paths) so icons render outside Home Assistant ----
@@ -28,6 +33,15 @@ const ICONS: Record<string, string> = {
   'mdi:creation': 'M19,1L17.74,3.75L15,5L17.74,6.26L19,9L20.26,6.26L23,5L20.26,3.75L19,1M9,4L6.5,9.5L1,12L6.5,14.5L9,20L11.5,14.5L17,12L11.5,9.5L9,4M19,15L17.74,17.75L15,19L17.74,20.25L19,23L20.26,20.25L23,19L20.26,17.75L19,15Z',
   'mdi:fan': 'M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12.5,2C17,2 17.11,5.57 14.75,6.75C13.76,7.24 13.32,8.29 13.13,9.22C13.61,9.42 14.03,9.73 14.35,10.13C18.05,8.13 22.03,8.92 22.03,12.5C22.03,17 18.46,17.1 17.28,14.73C16.79,13.74 15.74,13.3 14.81,13.11C14.61,13.59 14.3,14 13.9,14.34C15.9,18.04 15.11,22 11.53,22C7.03,22 6.93,18.45 9.29,17.27C10.28,16.78 10.72,15.73 10.91,14.8C10.43,14.6 10.02,14.29 9.69,13.89C5.99,15.89 2,15.1 2,11.5C2,7 5.58,6.91 6.76,9.27C7.25,10.26 8.29,10.71 9.22,10.9C9.42,10.41 9.73,10 10.13,9.67C8.13,5.97 8.92,2 12.5,2Z',
   'mdi:toggle-switch-variant': 'M16,7A5,5 0 0,1 21,12A5,5 0 0,1 16,17H8A5,5 0 0,1 3,12A5,5 0 0,1 8,7H16M16,9A3,3 0 0,0 13,12A3,3 0 0,0 16,15A3,3 0 0,0 19,12A3,3 0 0,0 16,9Z',
+  'mdi:magnify': 'M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z',
+  'mdi:refresh': 'M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z',
+  'mdi:calendar-clock': 'M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z',
+  'mdi:repeat': 'M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z',
+  'mdi:clock-outline': 'M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12.5,7H11V13L15.75,15.85L16.5,14.62L12.5,12.25V7Z',
+  'mdi:check-circle-outline': 'M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M16.59,7.58L10,14.17L7.41,11.59L6,13L10,17L18,9L16.59,7.58Z',
+  'mdi:cancel': 'M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M12,4C10.17,4 8.47,4.62 7.11,5.66L18.34,16.89C19.38,15.53 20,13.83 20,12C20,7.58 16.42,4 12,4M16.89,18.34L5.66,7.11C4.62,8.47 4,10.17 4,12C4,16.42 7.58,20 12,20C13.83,20 15.53,19.38 16.89,18.34Z',
+  'mdi:alert-circle-outline': 'M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z',
+  'mdi:calendar-blank-outline': 'M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8Z',
 };
 class HaIcon extends HTMLElement {
   static get observedAttributes() { return ['icon']; }
@@ -132,6 +146,70 @@ const items: ConvItem[] = [
 const OFF = location.search.includes('off');
 const P = location.search;
 
+// ?sched — show the scheduled-task rail in chat. ?tab=schedules — open the Schedules tab.
+// ?editor — open the task editor over MOCK_TASKS[0].
+const SHOW_SCHED = P.includes('sched') || P.includes('tab=schedules') || P.includes('editor');
+const MOCK_TASKS: Task[] = [
+  {
+    id: 't1',
+    description: '关闭主卧空调',
+    schedule_type: 'once',
+    run_at: '2026-07-22T21:30:00+08:00',
+    timezone: 'Asia/Shanghai',
+    execution: { type: 'function_call', tool: 'HassTurnOff', args: { name: '主卧 空调' } },
+    status: 'scheduled',
+    enabled: true,
+    created_at: '2026-07-22T20:30:00+08:00',
+    next_run_at: '2026-07-22T21:30:00+08:00',
+  },
+  {
+    id: 't2',
+    description: '每天早上打开阳台灯',
+    schedule_type: 'recurring',
+    cron: '0 8 * * *',
+    timezone: 'Asia/Shanghai',
+    execution: { type: 'command', text: '打开阳台灯' },
+    status: 'scheduled',
+    enabled: true,
+    created_at: '2026-07-20T09:00:00+08:00',
+    next_run_at: '2026-07-23T08:00:00+08:00',
+  },
+  {
+    id: 't3',
+    description: '工作日晚上关闭客厅灯',
+    schedule_type: 'recurring',
+    cron: '0 23 * * 1-5',
+    timezone: 'Asia/Shanghai',
+    execution: { type: 'command', text: '关闭客厅所有灯' },
+    status: 'scheduled',
+    enabled: false,
+    created_at: '2026-07-19T09:00:00+08:00',
+    next_run_at: '2026-07-22T23:00:00+08:00',
+  },
+  {
+    id: 't4',
+    description: '一小时后提醒喝水',
+    schedule_type: 'once',
+    run_at: '2026-07-21T15:00:00+08:00',
+    timezone: 'Asia/Shanghai',
+    execution: { type: 'command', text: '提醒喝水' },
+    status: 'completed',
+    enabled: true,
+    created_at: '2026-07-21T14:00:00+08:00',
+    next_run_at: null,
+  },
+];
+
+const mockApi: TasksApi = {
+  tasks: MOCK_TASKS,
+  loading: false,
+  error: null,
+  freshId: 't1',
+  refresh: async () => {},
+  save: async () => {},
+  remove: async () => {},
+};
+
 // URL params drive the reviewable states: ?off (disconnected), ?auto (auto mode),
 // ?active (manual turn in progress), ?paused (auto input muted), ?starting (mic cold-start).
 // Default: manual, idle.
@@ -143,6 +221,10 @@ function Preview() {
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
   const [micStarting, setMicStarting] = useState(P.includes('starting'));
   const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
+  const [tab, setTab] = useState<'chat' | 'schedules'>(
+    P.includes('tab=schedules') ? 'schedules' : 'chat',
+  );
+  const [editing, setEditing] = useState<Task | null>(P.includes('editor') ? MOCK_TASKS[0] : null);
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
   const STATE_LABELS: Record<string, string> = {
     idle: 'Ready', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
@@ -150,7 +232,7 @@ function Preview() {
   };
   return (
     <HassStoreProvider value={store}>
-      <ha-card data-dock={OFF ? 'off' : mode}>
+      <ha-card data-dock={OFF ? 'off' : mode} data-tall={tab === 'schedules' || editing ? '1' : '0'}>
         <Header
           orbState={orbState}
           title="Home Voice"
@@ -162,36 +244,72 @@ function Preview() {
           onToggleAudioOutput={() => setAudioOutput((v) => !v)}
           onEnd={() => {}}
         />
-        <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} />
-        <Conversation items={OFF ? [] : items} />
-        <Dock
-          connected={!OFF}
-          connecting={false}
-          mode={mode}
-          turnActive={turnActive}
-          autoPaused={autoPaused}
-          micStarting={micStarting}
-          onSend={async () => {}}
-          onTurnStart={() => {
-            setTurnActive(true);
-            setMicStarting(true);
-            setTimeout(() => setMicStarting(false), 1200);
-          }}
-          onTurnEnd={() => {
-            setTurnActive(false);
-            setMicStarting(false);
-          }}
-          onTurnCancel={() => {
-            setTurnActive(false);
-            setMicStarting(false);
-          }}
-          onPause={() => setAutoPaused(true)}
-          onResume={() => {
-            setAutoPaused(false);
-            setMicStarting(true);
-            setTimeout(() => setMicStarting(false), 1200);
-          }}
-        />
+        <div className="lk-tabs" role="tablist">
+          <button className="lk-tab" data-on={tab === 'chat' ? '1' : '0'} onClick={() => setTab('chat')}>
+            Chat
+          </button>
+          <button
+            className="lk-tab"
+            data-on={tab === 'schedules' ? '1' : '0'}
+            onClick={() => setTab('schedules')}
+          >
+            Schedules
+          </button>
+        </div>
+        {tab === 'chat' ? (
+          <>
+            {!P.includes('notiles') && (
+              <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} />
+            )}
+            {SHOW_SCHED && (
+              <ScheduledTasks
+                tasks={MOCK_TASKS}
+                freshId="t1"
+                onOpen={setEditing}
+                onSeeAll={() => setTab('schedules')}
+              />
+            )}
+            <Conversation items={OFF ? [] : items} />
+            <Dock
+              connected={!OFF}
+              connecting={false}
+              mode={mode}
+              turnActive={turnActive}
+              autoPaused={autoPaused}
+              micStarting={micStarting}
+              onSend={async () => {}}
+              onTurnStart={() => {
+                setTurnActive(true);
+                setMicStarting(true);
+                setTimeout(() => setMicStarting(false), 1200);
+              }}
+              onTurnEnd={() => {
+                setTurnActive(false);
+                setMicStarting(false);
+              }}
+              onTurnCancel={() => {
+                setTurnActive(false);
+                setMicStarting(false);
+              }}
+              onPause={() => setAutoPaused(true)}
+              onResume={() => {
+                setAutoPaused(false);
+                setMicStarting(true);
+                setTimeout(() => setMicStarting(false), 1200);
+              }}
+            />
+          </>
+        ) : (
+          <SchedulesTab api={mockApi} onOpen={setEditing} />
+        )}
+        {editing && (
+          <TaskEditor
+            task={editing}
+            onClose={() => setEditing(null)}
+            onSave={async () => {}}
+            onDelete={async () => {}}
+          />
+        )}
       </ha-card>
     </HassStoreProvider>
   );

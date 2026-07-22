@@ -7,6 +7,10 @@ CONF_LIVEKIT_URL = "livekit_url"
 CONF_API_KEY = "api_key"
 CONF_API_SECRET = "api_secret"
 CONF_AGENT_NAME = "agent_name"
+# Base URL of the scheduler service (e.g. http://192.168.1.50:8080) and its shared secret.
+# When set, the card's Schedules tab can list/manage tasks directly through a proxy.
+CONF_SCHEDULER_URL = "scheduler_url"
+CONF_SCHEDULER_TOKEN = "scheduler_token"
 
 # Matches AGENT_NAME in agent/agent.py (the worker's explicit-dispatch name).
 DEFAULT_AGENT_NAME = "ha-agent"
@@ -17,6 +21,11 @@ CARD_URL = "/livekit_voice/livekit-voice-card.js"
 
 # Token endpoint the card calls via `hass.callApi('POST', 'livekit_voice/token', ...)`.
 TOKEN_URL = "/api/livekit_voice/token"
+
+# Scheduler proxy the card calls via `hass.callApi(...)`; forwards to the scheduler service
+# so the Schedules tab can list/get/edit/delete tasks without a LiveKit connection.
+TASKS_URL = "/api/livekit_voice/tasks"
+TASK_URL = "/api/livekit_voice/tasks/{task_id}"
 
 # hass.data[DOMAIN] keys.
 DATA_CONFIG = "config"

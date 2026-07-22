@@ -12,11 +12,16 @@ import { Conversation } from './components/Conversation';
 import { DeviceTiles } from './components/DeviceTiles';
 import { Dock } from './components/Dock';
 import { Header } from './components/Header';
+import { ScheduledTasks } from './components/ScheduledTasks';
+import { SchedulesTab } from './components/SchedulesTab';
+import { TaskEditor } from './components/TaskEditor';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, useConversation } from './lib/conversation';
 import { useSessionState } from './lib/session-state';
+import type { Task } from './lib/tasks';
+import { useTasks } from './lib/tasks-api';
 import { useToolFeed } from './lib/tool-feed';
 import { loadTurnMode, saveTurnMode, type TurnMode } from './lib/turn-mode';
 
@@ -92,13 +97,14 @@ function CardShell() {
   const agentState = agent.state;
   const { sttEnabled, audioOutput } = useSessionState();
   const { toolCalls, agentAreas } = useToolFeed();
+  const tasksApi = useTasks(toolCalls);
   const [epoch, setEpoch] = useState(0);
+  const [tab, setTab] = useState<'chat' | 'schedules'>('chat');
+  const [editing, setEditing] = useState<Task | null>(null);
 
-  // Refs so effects/handlers always see the live session + hass without re-subscribing.
+  // Ref so effects/handlers always see the live session without re-subscribing.
   const sessionRef = useRef(session);
   sessionRef.current = session;
-  const hassRef = useRef(hass);
-  hassRef.current = hass;
 
   const connected = session.isConnected;
   const localIdentity = session.room?.localParticipant?.identity;
@@ -339,9 +345,11 @@ function CardShell() {
 
   // --- connection lifecycle ---
   // Connect on open only when auto_connect is set; otherwise the card stays static until the
-  // first send/speak. Either way, fully disconnect when the tab is hidden/left (releasing
-  // everything so music is never held), and DON'T auto-reconnect on return unless auto_connect —
-  // returning shows the static card and the next send/speak reconnects.
+  // first send/speak. The connection is media-free (no mic/subscribe until a turn), so it's
+  // cheap to keep alive: we deliberately do NOT tear it down on background / tab-visibility
+  // changes, on switching between our Chat/Schedules tabs, or on lovelace-view switches —
+  // returning shows the same state, with no refresh. We only release it when the page is
+  // actually unloaded (pagehide) or the card is removed (unmount).
   const [autoTried, setAutoTried] = useState(false);
   useEffect(() => {
     if (!autoConnect || autoTried || !hass || connected || document.hidden) return;
@@ -350,19 +358,13 @@ function CardShell() {
   }, [autoConnect, autoTried, hass, connected, connectSession]);
 
   useEffect(() => {
-    const onVisibility = () => {
-      if (document.hidden) sessionRef.current.end?.();
-      else if (autoConnect && !sessionRef.current.isConnected && hassRef.current) void connectSession();
-    };
     const onPageHide = () => sessionRef.current.end?.();
-    document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pagehide', onPageHide);
     return () => {
-      document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pagehide', onPageHide);
-      sessionRef.current.end?.(); // card removed (tab left)
+      sessionRef.current.end?.(); // card removed (view left / dashboard closed)
     };
-  }, [autoConnect, connectSession]);
+  }, []);
 
   const query = lastUserText(items);
   const phase = agentPhase(connected, connecting, agentState);
@@ -374,8 +376,12 @@ function CardShell() {
   const orbState = dozing ? 'dozing' : phase.orb;
   const stateLabel = dozing ? 'Sleeping' : phase.label;
 
+  // The card is content-sized for chat (compact when idle). The Schedules list and the editor
+  // sheet need a stable, roomy viewport instead — give the card a definite height for those.
+  const tall = tab === 'schedules' || editing !== null;
+
   return (
-    <ha-card data-dock={mode}>
+    <ha-card data-dock={mode} data-tall={tall ? '1' : '0'}>
       {/* Only attach/play the agent's audio once spoken replies are on. Mounting the renderer
           plays remote audio through an <audio> element, which on iOS flips the shared session to
           playback — so a text-only card (audioOutput defaults off) must never mount it. */}
@@ -391,25 +397,63 @@ function CardShell() {
         onToggleAudioOutput={toggleAudioOutput}
         onEnd={() => session.end?.()}
       />
-      <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
-      {/* While disconnected (static/idle) show the initial empty view — don't leave a stale,
-          partial transcript (typed messages linger in local state after the room-sourced
-          items clear). The conversation belongs to a live session. */}
-      <Conversation items={connected ? items : []} />
-      <Dock
-        connected={connected}
-        connecting={connecting}
-        mode={mode}
-        turnActive={turnActive}
-        autoPaused={autoPaused}
-        micStarting={micStarting}
-        onSend={onSend}
-        onTurnStart={onTurnStart}
-        onTurnEnd={onTurnEnd}
-        onTurnCancel={onTurnCancel}
-        onPause={onPause}
-        onResume={onResume}
-      />
+      <div className="lk-tabs" role="tablist">
+        <button
+          className="lk-tab"
+          data-on={tab === 'chat' ? '1' : '0'}
+          onClick={() => setTab('chat')}
+        >
+          Chat
+        </button>
+        <button
+          className="lk-tab"
+          data-on={tab === 'schedules' ? '1' : '0'}
+          onClick={() => setTab('schedules')}
+        >
+          Schedules
+        </button>
+      </div>
+
+      {tab === 'chat' ? (
+        <>
+          <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
+          <ScheduledTasks
+            tasks={tasksApi.tasks}
+            freshId={tasksApi.freshId}
+            onOpen={setEditing}
+            onSeeAll={() => setTab('schedules')}
+          />
+          {/* While disconnected (static/idle) show the initial empty view — don't leave a stale,
+              partial transcript (typed messages linger in local state after the room-sourced
+              items clear). The conversation belongs to a live session. */}
+          <Conversation items={connected ? items : []} />
+          <Dock
+            connected={connected}
+            connecting={connecting}
+            mode={mode}
+            turnActive={turnActive}
+            autoPaused={autoPaused}
+            micStarting={micStarting}
+            onSend={onSend}
+            onTurnStart={onTurnStart}
+            onTurnEnd={onTurnEnd}
+            onTurnCancel={onTurnCancel}
+            onPause={onPause}
+            onResume={onResume}
+          />
+        </>
+      ) : (
+        <SchedulesTab api={tasksApi} onOpen={setEditing} />
+      )}
+
+      {editing && (
+        <TaskEditor
+          task={editing}
+          onClose={() => setEditing(null)}
+          onSave={(patch) => tasksApi.save(editing.id, patch)}
+          onDelete={() => tasksApi.remove(editing.id)}
+        />
+      )}
     </ha-card>
   );
 }

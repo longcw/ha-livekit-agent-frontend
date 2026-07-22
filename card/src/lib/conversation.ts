@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranscriptions } from '@livekit/components-react';
+import { SCHEDULING_TOOLS } from './tasks';
 import type { ToolCall } from './tool-feed';
 
 // ---- conversation model ----------------------------------------------------
@@ -102,15 +103,18 @@ export function useConversation(
 
     const messages: ConvItem[] = [...[...bySegment.values()].map((v) => v.msg), ...typed];
     // Surface every tool call inline (reads and control actions alike); ActionRow styles
-    // reads vs. actions differently. Each shows its live status via the status dot.
-    const actions: ConvItem[] = toolCalls.map((t) => ({
-      kind: 'action',
-      id: t.callId,
-      ts: t.startedAt,
-      name: t.name,
-      args: t.args,
-      status: t.status,
-    }));
+    // reads vs. actions differently. Each shows its live status via the status dot. Scheduling
+    // tools are excluded — they render in the <ScheduledTasks> rail instead of as chips.
+    const actions: ConvItem[] = toolCalls
+      .filter((t) => !SCHEDULING_TOOLS.has(t.name))
+      .map((t) => ({
+        kind: 'action',
+        id: t.callId,
+        ts: t.startedAt,
+        name: t.name,
+        args: t.args,
+        status: t.status,
+      }));
 
     return [...messages, ...actions].sort((a, b) => a.ts - b.ts);
   }, [transcriptions, typed, toolCalls, localIdentity]);

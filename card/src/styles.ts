@@ -38,6 +38,11 @@ export const CARD_STYLES =
     color: var(--lk-fg);
     -webkit-font-smoothing: antialiased;
   }
+  /* Schedules tab / editor: a definite height (not content-sized) so the list scrolls in a
+     stable viewport and the editor sheet has room. */
+  ha-card[data-tall="1"] {
+    height: min(var(--lk-h), calc(100dvh - 148px));
+  }
 
   /* ---- header ---- */
   .lk-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px 7px; flex: none; }
@@ -119,6 +124,121 @@ export const CARD_STYLES =
   .lk-more { align-self: center; cursor: pointer; --mdc-icon-size: 16px; display: inline-flex; align-items: center; gap: 3px;
     background: transparent; border: none; padding: 3px 10px; border-radius: 999px; color: var(--lk-muted); font-size: 0.8rem; font-weight: 600; }
   .lk-more:hover { color: var(--lk-fg); background: var(--lk-elevated); }
+
+  /* ---- scheduled tasks (vertical list, above the conversation) ---- */
+  .lk-sched { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 10px 14px 8px; }
+  .lk-sched-head { display: inline-flex; align-items: center; gap: 6px; --mdc-icon-size: 14px;
+    font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--lk-muted); }
+  .lk-sched-item { display: flex; align-items: center; gap: 10px; padding: 8px 11px; border-radius: 12px;
+    border: 1px solid var(--lk-line); background: var(--lk-surface); animation: lk-rise .22s ease both; }
+  .lk-sched-item[data-fresh="1"] { border-color: transparent;
+    background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 42%, transparent); }
+  .lk-sched-icon { flex: none; --mdc-icon-size: 16px; width: 30px; height: 30px; border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--lk-elevated); color: var(--lk-muted); }
+  .lk-sched-item[data-fresh="1"] .lk-sched-icon { background: var(--lk-accent); color: var(--lk-on-accent); }
+  .lk-sched-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .lk-sched-desc { font-size: 0.9rem; font-weight: 600; line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-sched-when { font-family: var(--lk-mono); font-size: 0.72rem; color: var(--lk-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-sched-badge { flex: none; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.02em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 999px;
+    color: var(--lk-accent); background: color-mix(in srgb, var(--lk-accent) 14%, transparent); }
+  .lk-sched-more { align-self: flex-start; cursor: pointer; border: none; background: transparent; color: var(--lk-muted);
+    font-family: var(--lk-sans); font-size: 0.76rem; font-weight: 600; padding: 4px 8px; border-radius: 8px; }
+  .lk-sched-more:hover { color: var(--lk-fg); background: var(--lk-elevated); }
+
+  /* ---- tabs (Chat | Schedules) ---- */
+  .lk-tabs { flex: none; display: flex; gap: 4px; padding: 2px 14px 0; border-bottom: 1px solid var(--lk-line); }
+  .lk-tab { flex: 0 0 auto; border: none; background: transparent; cursor: pointer; color: var(--lk-muted);
+    font-family: var(--lk-sans); font-size: 0.82rem; font-weight: 700; padding: 8px 10px 9px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
+  .lk-tab[data-on="1"] { color: var(--lk-fg); border-bottom-color: var(--lk-accent); }
+  .lk-tab:not([data-on="1"]):hover { color: var(--lk-fg); }
+
+  /* ---- schedules tab (search + full list) ---- */
+  .lk-schedtab { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .lk-search { flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px;
+    --mdc-icon-size: 18px; color: var(--lk-muted); }
+  .lk-search-in { flex: 1; min-width: 0; height: 34px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+    border-radius: 10px; padding: 0 12px; color: var(--lk-fg); font: inherit; font-size: 0.9rem; }
+  .lk-search-in:focus { outline: none; border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
+  .lk-search-in::placeholder { color: var(--lk-muted); }
+  .lk-tasklist { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column;
+    gap: 6px; padding: 4px 14px 14px; scrollbar-width: thin; }
+  .lk-tasks-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--lk-muted); font-size: 0.85rem; text-align: center; max-width: 250px; --mdc-icon-size: 22px; padding: 26px 0; }
+  .lk-taskrow { text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 11px;
+    border-radius: 12px; border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-fg);
+    animation: lk-rise .2s ease both; transition: border-color .15s, background-color .15s; }
+  .lk-taskrow:hover { border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
+  .lk-taskrow[data-fresh="1"] { border-color: transparent; background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 42%, transparent); }
+  .lk-taskrow[data-status="cancelled"], .lk-taskrow[data-status="completed"], .lk-taskrow[data-status="missed"] { opacity: .62; }
+  .lk-taskrow-icon { flex: none; --mdc-icon-size: 16px; width: 30px; height: 30px; border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center; background: var(--lk-elevated); color: var(--lk-muted); }
+  .lk-taskrow[data-status="scheduled"] .lk-taskrow-icon { color: var(--lk-accent); }
+  .lk-taskrow-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .lk-taskrow-desc { font-size: 0.9rem; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-taskrow-when { font-family: var(--lk-mono); font-size: 0.7rem; color: var(--lk-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-taskrow-exec { font-size: 0.75rem; color: var(--lk-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-taskrow-tags { flex: none; display: flex; align-items: center; gap: 5px; --mdc-icon-size: 13px; }
+  .lk-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.03em; padding: 3px 7px; border-radius: 999px; color: var(--lk-accent);
+    background: color-mix(in srgb, var(--lk-accent) 14%, transparent); }
+  .lk-tag-muted { color: var(--lk-muted); background: var(--lk-elevated); }
+
+  /* ---- task editor (slide-up sheet) ---- */
+  .lk-editor { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: center;
+    background: color-mix(in srgb, #000 46%, transparent); animation: lk-fade .15s ease both; }
+  @keyframes lk-fade { from { opacity: 0; } to { opacity: 1; } }
+  .lk-editor-panel { width: 100%; max-height: 100%; display: flex; flex-direction: column; background: var(--lk-surface);
+    border-top-left-radius: 16px; border-top-right-radius: 16px; border-top: 1px solid var(--lk-line);
+    box-shadow: 0 -14px 40px -18px #000; animation: lk-rise .2s ease both; }
+  .lk-editor-head { flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 8px 8px 16px; font-weight: 700; font-size: 0.98rem; }
+  /* overflow-x: hidden is required — with overflow-y:auto, overflow-x would otherwise compute
+     to 'auto', and iOS's datetime-local input (intrinsically wide) then scrolls it sideways. */
+  .lk-editor-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 4px 16px 8px;
+    display: flex; flex-direction: column; gap: 13px; scrollbar-width: thin; }
+  .lk-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .lk-field-label { font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--lk-muted); }
+  /* min-width:0 lets the input shrink to the container (flex items default to min-width:auto =
+     content width, which iOS date/time inputs report far wider than the panel). */
+  .lk-in { width: 100%; min-width: 0; max-width: 100%; border: 1px solid var(--lk-line);
+    background: var(--lk-elevated); color: var(--lk-fg);
+    border-radius: 10px; padding: 9px 11px; font: inherit; font-size: 0.9rem; }
+  /* iOS gives datetime-local a wide native control that ignores width:100% (its right edge then
+     spills out of the panel). Dropping the native appearance makes it a normal box that fits;
+     tapping still opens the iOS date/time picker. */
+  input.lk-in[type="datetime-local"] { -webkit-appearance: none; appearance: none;
+    text-align: left; min-height: 38px; }
+  .lk-in:focus { outline: none; border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
+  .lk-ta { resize: vertical; min-height: 38px; line-height: 1.35; }
+  .lk-mono { font-family: var(--lk-mono); font-size: 0.82rem; }
+  .lk-hint { font-family: var(--lk-mono); font-size: 0.64rem; color: var(--lk-muted); }
+  .lk-seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: 10px; border: 1px solid var(--lk-line);
+    background: var(--lk-elevated); align-self: flex-start; }
+  .lk-seg button { border: none; cursor: pointer; background: transparent; color: var(--lk-muted); font-family: var(--lk-sans);
+    font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; transition: background-color .15s, color .15s; }
+  .lk-seg button[data-on="1"] { background: var(--lk-accent); color: var(--lk-on-accent); }
+  .lk-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+  .lk-switch input { width: 18px; height: 18px; accent-color: var(--lk-accent); }
+  .lk-editor-error { color: var(--lk-danger); font-size: 0.8rem; font-weight: 600; }
+  .lk-editor-actions { flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--lk-line); }
+  .lk-spacer { flex: 1; }
+  .lk-btn { border: 1px solid var(--lk-line); background: var(--lk-elevated); color: var(--lk-fg); cursor: pointer;
+    font-family: var(--lk-sans); font-size: 0.86rem; font-weight: 700; padding: 9px 15px; border-radius: 11px;
+    transition: transform .06s, opacity .15s, background-color .15s; }
+  .lk-btn:active { transform: scale(.97); }
+  .lk-btn:disabled { opacity: .5; cursor: default; }
+  .lk-btn-accent { background: var(--lk-accent); color: var(--lk-on-accent); border-color: transparent; }
+  .lk-btn-danger { background: transparent; border-color: transparent; color: var(--lk-danger); }
+  .lk-btn-danger:hover { background: color-mix(in srgb, var(--lk-danger) 14%, transparent); }
 
   /* ---- conversation (scrolls; dock floats over its bottom) ---- */
   /* min-height:0 lets the timeline shrink to scroll once the card hits its max-height; the

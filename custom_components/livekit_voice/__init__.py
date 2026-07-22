@@ -21,15 +21,21 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
+from .tasks import LiveKitTaskView, LiveKitTasksView
 from .token import LiveKitTokenView
 
 _LOGGER = logging.getLogger(__name__)
 
 
+def _merged_config(entry: ConfigEntry) -> dict:
+    """Options (set via the Options flow, e.g. scheduler URL/token) override data."""
+    return {**entry.data, **entry.options}
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up LiveKit Voice from a config entry."""
     store = hass.data.setdefault(DOMAIN, {})
-    store[DATA_CONFIG] = entry.data
+    store[DATA_CONFIG] = _merged_config(entry)
 
     # The HTTP view, static path, and frontend module can only be registered once per
     # HA process (they cannot be cleanly torn down), so guard behind a flag that
@@ -41,16 +47,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         add_extra_js_url(hass, CARD_URL)
         hass.http.register_view(LiveKitTokenView(hass))
+        hass.http.register_view(LiveKitTasksView(hass))
+        hass.http.register_view(LiveKitTaskView(hass))
         store[DATA_REGISTERED] = True
-        _LOGGER.debug("registered token view + card at %s", CARD_URL)
+        _LOGGER.debug("registered token + tasks views + card at %s", CARD_URL)
 
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True
 
 
 async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Keep the token view reading the latest config after an options update."""
-    hass.data[DOMAIN][DATA_CONFIG] = entry.data
+    """Keep the views reading the latest config after a data/options update."""
+    hass.data[DOMAIN][DATA_CONFIG] = _merged_config(entry)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
