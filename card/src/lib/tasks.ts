@@ -17,7 +17,7 @@ export const SCHEDULING_TOOLS = new Set<string>([
 ]);
 
 export interface Execution {
-  type: 'command' | 'function_call';
+  type: 'instruction' | 'function_call';
   text?: string;
   tool?: string;
   args?: Record<string, unknown>;
@@ -96,7 +96,7 @@ export function whenLabel(task: Task): string {
 /** A one-line summary of what a task does (its action). */
 export function executionSummary(task: Task): string {
   const e = task.execution || {};
-  if (e.type === 'command') return e.text ?? '';
+  if (e.type === 'instruction') return e.text ?? '';
   if (e.type === 'function_call') {
     const args = e.args && Object.keys(e.args).length ? ` ${JSON.stringify(e.args)}` : '';
     return `${e.tool ?? ''}${args}`;

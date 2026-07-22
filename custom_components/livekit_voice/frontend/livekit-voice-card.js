@@ -35350,7 +35350,7 @@ function WT(i) {
 }
 function Y0(i) {
   const e = i.execution || {};
-  if (e.type === "command") return e.text ?? "";
+  if (e.type === "instruction") return e.text ?? "";
   if (e.type === "function_call") {
     const t = e.args && Object.keys(e.args).length ? ` ${JSON.stringify(e.args)}` : "";
     return `${e.tool ?? ""}${t}`;
@@ -36108,7 +36108,7 @@ function rD({
   onDelete: a
 }) {
   const [s, c] = A.useState(i.description), [u, d] = A.useState(i.schedule_type), [h, f] = A.useState(mP(i.run_at ?? i.next_run_at)), [p, v] = A.useState(i.cron ?? ""), [y, k] = A.useState(
-    i.execution?.type === "function_call" ? "function_call" : "command"
+    i.execution?.type === "function_call" ? "function_call" : "instruction"
   ), [C, T] = A.useState(i.execution?.text ?? ""), [P, M] = A.useState(i.execution?.tool ?? ""), [I, te] = A.useState(
     i.execution?.args && Object.keys(i.execution.args).length ? JSON.stringify(i.execution.args, null, 2) : ""
   ), [w, E] = A.useState(i.enabled), [x, N] = A.useState(!1), [G, X] = A.useState(!1), [Q, J] = A.useState(null), ne = () => {
@@ -36120,9 +36120,9 @@ function rD({
       if (!p.trim()) throw new Error("Enter a cron expression.");
       me.schedule = { type: "recurring", cron: p.trim(), timezone: i.timezone };
     }
-    if (y === "command") {
-      if (!C.trim()) throw new Error("Enter the command text.");
-      me.execution = { type: "command", text: C.trim() };
+    if (y === "instruction") {
+      if (!C.trim()) throw new Error("Enter the instruction.");
+      me.execution = { type: "instruction", text: C.trim() };
     } else {
       if (!P.trim()) throw new Error("Enter the tool name.");
       let F = {};
@@ -36219,9 +36219,9 @@ function rD({
           /* @__PURE__ */ z.jsx(
             "button",
             {
-              "data-on": y === "command" ? "1" : "0",
-              onClick: () => k("command"),
-              children: "Command"
+              "data-on": y === "instruction" ? "1" : "0",
+              onClick: () => k("instruction"),
+              children: "Instruction"
             }
           ),
           /* @__PURE__ */ z.jsx(
@@ -36233,7 +36233,7 @@ function rD({
             }
           )
         ] }),
-        y === "command" ? /* @__PURE__ */ z.jsx(
+        y === "instruction" ? /* @__PURE__ */ z.jsx(
           "textarea",
           {
             className: "lk-in lk-ta",

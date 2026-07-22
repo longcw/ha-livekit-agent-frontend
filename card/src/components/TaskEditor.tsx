@@ -3,7 +3,7 @@ import { type Task, toLocalInput } from '../lib/tasks';
 
 /**
  * Modal editor for a single task. Edits everything — description, schedule (once time or
- * recurring cron), the action (command text or tool + JSON args), and enabled — plus delete.
+ * recurring cron), the action (instruction text or tool + JSON args), and enabled — plus delete.
  * Times are entered/shown in the browser's local zone and saved against the task's timezone
  * (a single-home assumption: the browser and the home share a zone).
  */
@@ -22,10 +22,10 @@ export function TaskEditor({
   const [schedType, setSchedType] = useState<'once' | 'recurring'>(task.schedule_type);
   const [runAt, setRunAt] = useState(toLocalInput(task.run_at ?? task.next_run_at));
   const [cron, setCron] = useState(task.cron ?? '');
-  const [execType, setExecType] = useState<'command' | 'function_call'>(
-    task.execution?.type === 'function_call' ? 'function_call' : 'command',
+  const [execType, setExecType] = useState<'instruction' | 'function_call'>(
+    task.execution?.type === 'function_call' ? 'function_call' : 'instruction',
   );
-  const [commandText, setCommandText] = useState(task.execution?.text ?? '');
+  const [instructionText, setInstructionText] = useState(task.execution?.text ?? '');
   const [toolName, setToolName] = useState(task.execution?.tool ?? '');
   const [argsText, setArgsText] = useState(
     task.execution?.args && Object.keys(task.execution.args).length
@@ -46,9 +46,9 @@ export function TaskEditor({
       if (!cron.trim()) throw new Error('Enter a cron expression.');
       patch.schedule = { type: 'recurring', cron: cron.trim(), timezone: task.timezone };
     }
-    if (execType === 'command') {
-      if (!commandText.trim()) throw new Error('Enter the command text.');
-      patch.execution = { type: 'command', text: commandText.trim() };
+    if (execType === 'instruction') {
+      if (!instructionText.trim()) throw new Error('Enter the instruction.');
+      patch.execution = { type: 'instruction', text: instructionText.trim() };
     } else {
       if (!toolName.trim()) throw new Error('Enter the tool name.');
       let args: unknown = {};
@@ -155,10 +155,10 @@ export function TaskEditor({
             <span className="lk-field-label">Action</span>
             <div className="lk-seg">
               <button
-                data-on={execType === 'command' ? '1' : '0'}
-                onClick={() => setExecType('command')}
+                data-on={execType === 'instruction' ? '1' : '0'}
+                onClick={() => setExecType('instruction')}
               >
-                Command
+                Instruction
               </button>
               <button
                 data-on={execType === 'function_call' ? '1' : '0'}
@@ -167,13 +167,13 @@ export function TaskEditor({
                 Function call
               </button>
             </div>
-            {execType === 'command' ? (
+            {execType === 'instruction' ? (
               <textarea
                 className="lk-in lk-ta"
                 rows={2}
                 placeholder="e.g. turn off the master bedroom AC"
-                value={commandText}
-                onChange={(e) => setCommandText(e.target.value)}
+                value={instructionText}
+                onChange={(e) => setInstructionText(e.target.value)}
               />
             ) : (
               <>
