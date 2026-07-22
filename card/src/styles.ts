@@ -171,13 +171,20 @@ export const CARD_STYLES =
     gap: 6px; padding: 4px 14px 14px; scrollbar-width: thin; }
   .lk-tasks-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;
     color: var(--lk-muted); font-size: 0.85rem; text-align: center; max-width: 250px; --mdc-icon-size: 22px; padding: 26px 0; }
-  .lk-taskrow { text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 11px;
+  .lk-taskrow { display: flex; align-items: center;
     border-radius: 12px; border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-fg);
     animation: lk-rise .2s ease both; transition: border-color .15s, background-color .15s; }
   .lk-taskrow:hover { border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
   .lk-taskrow[data-fresh="1"] { border-color: transparent; background: color-mix(in srgb, var(--lk-accent) 12%, var(--lk-surface));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 42%, transparent); }
   .lk-taskrow[data-status="cancelled"], .lk-taskrow[data-status="completed"], .lk-taskrow[data-status="missed"] { opacity: .62; }
+  /* clickable body (opens the editor); the action buttons live outside it so they aren't nested in a button */
+  .lk-taskrow-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left;
+    cursor: pointer; border: none; background: transparent; color: inherit; padding: 9px 4px 9px 11px; }
+  .lk-taskrow-acts { flex: none; display: flex; align-items: center; gap: 2px; padding: 0 6px 0 2px; }
+  .lk-taskrow-acts .lk-iconbtn { width: 30px; height: 30px; --mdc-icon-size: 17px; }
+  .lk-taskrow-del:hover { color: var(--lk-danger); background: color-mix(in srgb, var(--lk-danger) 14%, transparent); }
+  .lk-taskrow-del[data-armed="1"], .lk-taskrow-del[data-armed="1"]:hover { color: var(--lk-on-accent); background: var(--lk-danger); }
   .lk-taskrow-icon { flex: none; --mdc-icon-size: 16px; width: 30px; height: 30px; border-radius: 9px;
     display: inline-flex; align-items: center; justify-content: center; background: var(--lk-elevated); color: var(--lk-muted); }
   .lk-taskrow[data-status="scheduled"] .lk-taskrow-icon { color: var(--lk-accent); }
@@ -196,7 +203,8 @@ export const CARD_STYLES =
     background: color-mix(in srgb, #000 46%, transparent); animation: lk-fade .15s ease both; }
   @keyframes lk-fade { from { opacity: 0; } to { opacity: 1; } }
   .lk-editor-panel { width: 100%; max-height: 100%; display: flex; flex-direction: column; background: var(--lk-surface);
-    border-top-left-radius: 16px; border-top-right-radius: 16px; border-top: 1px solid var(--lk-line);
+    border-top-left-radius: var(--ha-card-border-radius, 12px); border-top-right-radius: var(--ha-card-border-radius, 12px);
+    border-top: 1px solid var(--lk-line);
     box-shadow: 0 -14px 40px -18px #000; animation: lk-rise .2s ease both; }
   .lk-editor-head { flex: none; display: flex; align-items: center; justify-content: space-between;
     padding: 11px 8px 8px 16px; font-weight: 700; font-size: 0.98rem; }
