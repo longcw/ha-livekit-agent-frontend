@@ -80,22 +80,21 @@ function argNames(args: ToolCall['args']): string[] {
 }
 
 /** Device name(s) a `schedule_task` call targets, so a scheduled device pins like an action:
- *  the explicit `name` inside its tool_args_json (function_call), plus its free-text
- *  description / instruction (which usually embeds the exact device name) for a loose match. */
+ *  the explicit `name` inside each step's args, plus its free-text description /
+ *  instruction (which usually embeds the exact device name) for a loose match. */
 function scheduleNames(args: ToolCall['args']): string[] {
   if (!args || typeof args === 'string') return [];
   const a = args as Record<string, unknown>;
   const names: string[] = [];
-  if (typeof a.tool_args_json === 'string') {
-    try {
-      const n = (JSON.parse(a.tool_args_json) as Record<string, unknown>)?.name;
-      if (typeof n === 'string') names.push(n);
-      else if (Array.isArray(n)) names.push(...n.map(String));
-    } catch {
-      // ignore malformed JSON
+  if (Array.isArray(a.steps)) {
+    for (const step of a.steps) {
+      const stepArgs = (step as Record<string, unknown>)?.args as Record<string, unknown> | undefined;
+      const name = stepArgs?.name;
+      if (typeof name === 'string') names.push(name);
+      else if (Array.isArray(name)) names.push(...name.map(String));
     }
   }
-  for (const key of ['instruction', 'command_text', 'text', 'description']) {
+  for (const key of ['instruction', 'description']) {
     const v = a[key];
     if (typeof v === 'string' && v.trim()) names.push(v);
   }

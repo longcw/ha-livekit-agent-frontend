@@ -16,11 +16,16 @@ export const SCHEDULING_TOOLS = new Set<string>([
   UPDATE_SCHEDULED_TASK,
 ]);
 
-export interface Execution {
-  type: 'instruction' | 'function_call';
-  text?: string;
-  tool?: string;
+export interface Step {
+  tool: string;
   args?: Record<string, unknown>;
+}
+
+export interface Execution {
+  // Deterministic tool calls, replayed in order at run time (stop at first failure).
+  steps: Step[];
+  // Optional natural-language instruction run by the LLM after the steps.
+  instruction?: string | null;
 }
 
 export interface Task {
@@ -93,15 +98,16 @@ export function whenLabel(task: Task): string {
   return fmtDateTime(task.next_run_at ?? task.run_at) || 'Scheduled';
 }
 
-/** A one-line summary of what a task does (its action). */
+/** A one-line summary of what a task does: its steps, then its instruction. */
 export function executionSummary(task: Task): string {
-  const e = task.execution || {};
-  if (e.type === 'instruction') return e.text ?? '';
-  if (e.type === 'function_call') {
-    const args = e.args && Object.keys(e.args).length ? ` ${JSON.stringify(e.args)}` : '';
-    return `${e.tool ?? ''}${args}`;
+  const e = task.execution || ({} as Execution);
+  const parts: string[] = [];
+  for (const s of e.steps ?? []) {
+    const args = s.args && Object.keys(s.args).length ? ` ${JSON.stringify(s.args)}` : '';
+    parts.push(`${s.tool ?? ''}${args}`);
   }
-  return '';
+  if (e.instruction) parts.push(e.instruction);
+  return parts.join(' · ');
 }
 
 /** Convert an ISO instant to a value for <input type="datetime-local"> (browser-local). */

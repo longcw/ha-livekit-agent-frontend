@@ -226,6 +226,17 @@ export const CARD_STYLES =
   .lk-seg button { border: none; cursor: pointer; background: transparent; color: var(--lk-muted); font-family: var(--lk-sans);
     font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; transition: background-color .15s, color .15s; }
   .lk-seg button[data-on="1"] { background: var(--lk-accent); color: var(--lk-on-accent); }
+  .lk-steps { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .lk-step { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 8px;
+    border: 1px solid var(--lk-line); border-radius: 10px; background: var(--lk-elevated); }
+  .lk-step-head { display: flex; align-items: center; gap: 2px; }
+  .lk-step-num { font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--lk-muted); }
+  .lk-iconbtn:disabled { opacity: .3; cursor: default; background: transparent; }
+  .lk-addstep { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; --mdc-icon-size: 15px;
+    cursor: pointer; border: 1px dashed var(--lk-line); background: transparent; color: var(--lk-muted);
+    border-radius: 9px; padding: 6px 10px; font-family: var(--lk-sans); font-size: 0.8rem; font-weight: 600; }
+  .lk-addstep:hover { color: var(--lk-fg); border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
   .lk-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
   .lk-switch input { width: 18px; height: 18px; accent-color: var(--lk-accent); }
   .lk-editor-error { color: var(--lk-danger); font-size: 0.8rem; font-weight: 600; }

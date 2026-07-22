@@ -1,11 +1,25 @@
 import { useState } from 'react';
 import { type Task, toLocalInput } from '../lib/tasks';
 
+/** A step being edited: the args are kept as raw JSON text so partial edits don't reset. */
+interface StepDraft {
+  tool: string;
+  argsText: string;
+}
+
+function initialSteps(task: Task): StepDraft[] {
+  return (task.execution?.steps ?? []).map((s) => ({
+    tool: s.tool ?? '',
+    argsText: s.args && Object.keys(s.args).length ? JSON.stringify(s.args, null, 2) : '',
+  }));
+}
+
 /**
  * Modal editor for a single task. Edits everything — description, schedule (once time or
- * recurring cron), the action (instruction text or tool + JSON args), and enabled — plus delete.
- * Times are entered/shown in the browser's local zone and saved against the task's timezone
- * (a single-home assumption: the browser and the home share a zone).
+ * recurring cron), the action (an ordered list of tool-call steps and/or a natural-language
+ * instruction), and enabled — plus delete. Times are entered/shown in the browser's local
+ * zone and saved against the task's timezone (a single-home assumption: the browser and the
+ * home share a zone).
  */
 export function TaskEditor({
   task,
@@ -22,20 +36,25 @@ export function TaskEditor({
   const [schedType, setSchedType] = useState<'once' | 'recurring'>(task.schedule_type);
   const [runAt, setRunAt] = useState(toLocalInput(task.run_at ?? task.next_run_at));
   const [cron, setCron] = useState(task.cron ?? '');
-  const [execType, setExecType] = useState<'instruction' | 'function_call'>(
-    task.execution?.type === 'function_call' ? 'function_call' : 'instruction',
-  );
-  const [instructionText, setInstructionText] = useState(task.execution?.text ?? '');
-  const [toolName, setToolName] = useState(task.execution?.tool ?? '');
-  const [argsText, setArgsText] = useState(
-    task.execution?.args && Object.keys(task.execution.args).length
-      ? JSON.stringify(task.execution.args, null, 2)
-      : '',
-  );
+  const [steps, setSteps] = useState<StepDraft[]>(() => initialSteps(task));
+  const [instruction, setInstruction] = useState(task.execution?.instruction ?? '');
   const [enabled, setEnabled] = useState(task.enabled);
   const [busy, setBusy] = useState(false);
   const [confirmDel, setConfirmDel] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const addStep = () => setSteps((s) => [...s, { tool: '', argsText: '' }]);
+  const removeStep = (i: number) => setSteps((s) => s.filter((_, idx) => idx !== i));
+  const updateStep = (i: number, patch: Partial<StepDraft>) =>
+    setSteps((s) => s.map((st, idx) => (idx === i ? { ...st, ...patch } : st)));
+  const moveStep = (i: number, dir: -1 | 1) =>
+    setSteps((s) => {
+      const j = i + dir;
+      if (j < 0 || j >= s.length) return s;
+      const next = [...s];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
 
   const buildPatch = (): Record<string, unknown> => {
     const patch: Record<string, unknown> = { description: description.trim(), enabled };
@@ -46,21 +65,30 @@ export function TaskEditor({
       if (!cron.trim()) throw new Error('Enter a cron expression.');
       patch.schedule = { type: 'recurring', cron: cron.trim(), timezone: task.timezone };
     }
-    if (execType === 'instruction') {
-      if (!instructionText.trim()) throw new Error('Enter the instruction.');
-      patch.execution = { type: 'instruction', text: instructionText.trim() };
-    } else {
-      if (!toolName.trim()) throw new Error('Enter the tool name.');
-      let args: unknown = {};
-      if (argsText.trim()) {
+
+    // Build steps, skipping fully-empty rows; a row with args but no tool is an error.
+    const builtSteps: { tool: string; args: Record<string, unknown> }[] = [];
+    steps.forEach((st, i) => {
+      const tool = st.tool.trim();
+      if (!tool) {
+        if (st.argsText.trim()) throw new Error(`Step ${i + 1}: enter a tool name.`);
+        return;
+      }
+      let args: Record<string, unknown> = {};
+      if (st.argsText.trim()) {
         try {
-          args = JSON.parse(argsText);
+          args = JSON.parse(st.argsText);
         } catch {
-          throw new Error('Args must be valid JSON.');
+          throw new Error(`Step ${i + 1}: args must be valid JSON.`);
         }
       }
-      patch.execution = { type: 'function_call', tool: toolName.trim(), args };
+      builtSteps.push({ tool, args });
+    });
+    const instr = instruction.trim();
+    if (!builtSteps.length && !instr) {
+      throw new Error('Add at least one step or an instruction.');
     }
+    patch.execution = { steps: builtSteps, instruction: instr || null };
     return patch;
   };
 
@@ -152,46 +180,70 @@ export function TaskEditor({
           </div>
 
           <div className="lk-field">
-            <span className="lk-field-label">Action</span>
-            <div className="lk-seg">
-              <button
-                data-on={execType === 'instruction' ? '1' : '0'}
-                onClick={() => setExecType('instruction')}
-              >
-                Instruction
-              </button>
-              <button
-                data-on={execType === 'function_call' ? '1' : '0'}
-                onClick={() => setExecType('function_call')}
-              >
-                Function call
+            <span className="lk-field-label">Steps</span>
+            <div className="lk-steps">
+              {steps.map((st, i) => (
+                // Positional key: inputs are fully controlled (value from state[i]), so
+                // reconciliation by index is correct here.
+                <div className="lk-step" key={i}>
+                  <div className="lk-step-head">
+                    <span className="lk-step-num">Step {i + 1}</span>
+                    <span className="lk-spacer" />
+                    <button
+                      className="lk-iconbtn"
+                      onClick={() => moveStep(i, -1)}
+                      disabled={i === 0}
+                      aria-label="Move step up"
+                    >
+                      <ha-icon icon="mdi:arrow-up" />
+                    </button>
+                    <button
+                      className="lk-iconbtn"
+                      onClick={() => moveStep(i, 1)}
+                      disabled={i === steps.length - 1}
+                      aria-label="Move step down"
+                    >
+                      <ha-icon icon="mdi:arrow-down" />
+                    </button>
+                    <button
+                      className="lk-iconbtn"
+                      onClick={() => removeStep(i)}
+                      aria-label="Remove step"
+                    >
+                      <ha-icon icon="mdi:close" />
+                    </button>
+                  </div>
+                  <input
+                    className="lk-in lk-mono"
+                    placeholder="HassTurnOn"
+                    value={st.tool}
+                    onChange={(e) => updateStep(i, { tool: e.target.value })}
+                  />
+                  <textarea
+                    className="lk-in lk-ta lk-mono"
+                    rows={2}
+                    placeholder='{"name": "主卧 空调"}'
+                    value={st.argsText}
+                    onChange={(e) => updateStep(i, { argsText: e.target.value })}
+                  />
+                </div>
+              ))}
+              <button className="lk-addstep" onClick={addStep}>
+                <ha-icon icon="mdi:plus" /> Add step
               </button>
             </div>
-            {execType === 'instruction' ? (
-              <textarea
-                className="lk-in lk-ta"
-                rows={2}
-                placeholder="e.g. turn off the master bedroom AC"
-                value={instructionText}
-                onChange={(e) => setInstructionText(e.target.value)}
-              />
-            ) : (
-              <>
-                <input
-                  className="lk-in lk-mono"
-                  placeholder="HassTurnOff"
-                  value={toolName}
-                  onChange={(e) => setToolName(e.target.value)}
-                />
-                <textarea
-                  className="lk-in lk-ta lk-mono"
-                  rows={3}
-                  placeholder='{"name": "主卧 空调"}'
-                  value={argsText}
-                  onChange={(e) => setArgsText(e.target.value)}
-                />
-              </>
-            )}
+          </div>
+
+          <div className="lk-field">
+            <span className="lk-field-label">Reply / instruction (optional)</span>
+            <textarea
+              className="lk-in lk-ta"
+              rows={2}
+              placeholder="e.g. tell me tomorrow's weather"
+              value={instruction}
+              onChange={(e) => setInstruction(e.target.value)}
+            />
+            <span className="lk-hint">Runs after the steps; leave empty for a silent batch.</span>
           </div>
 
           <label className="lk-switch">
