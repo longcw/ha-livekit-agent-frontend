@@ -33,6 +33,24 @@ jobs:
           if ! git diff --quiet custom_components/livekit_voice/frontend/livekit-voice-card.js; then
             echo "::warning::committed bundle differs from a fresh build for this tag"
           fi
-      - uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
+      # Native gh CLI instead of a third-party action: it retries transient GitHub API
+      # failures (the release step has flaked during GitHub incidents) and is idempotent, so
+      # re-running the tag doesn't error on an already-created release.
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "release $tag already exists — skipping"
+            exit 0
+          fi
+          for i in 1 2 3; do
+            if gh release create "$tag" --verify-tag --generate-notes; then
+              exit 0
+            fi
+            echo "::warning::release attempt $i for $tag failed; retrying in 10s"
+            sleep 10
+          done
+          echo "::error::failed to create release $tag after 3 attempts"
+          exit 1
