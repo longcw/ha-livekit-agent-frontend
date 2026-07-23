@@ -198,6 +198,40 @@ export const CARD_STYLES =
     background: color-mix(in srgb, var(--lk-accent) 14%, transparent); }
   .lk-tag-muted { color: var(--lk-muted); background: var(--lk-elevated); }
 
+  /* ---- settings tab (channel checkbox list) ---- */
+  .lk-settings { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .lk-settings-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 14px; scrollbar-width: thin; }
+  .lk-set-sec { display: flex; flex-direction: column; }
+  .lk-set-sechead { display: flex; align-items: center; gap: 8px; }
+  .lk-set-title { font-size: 0.9rem; font-weight: 700; color: var(--lk-fg); }
+  .lk-set-saving { margin-left: auto; font-family: var(--lk-mono); font-size: 0.6rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--lk-muted); }
+  .lk-set-desc { margin: 4px 0 9px; font-size: 0.76rem; color: var(--lk-muted); line-height: 1.35; }
+  .lk-checklist { display: flex; flex-direction: column; gap: 5px; }
+  .lk-checkrow { display: flex; align-items: center; gap: 10px; cursor: pointer; text-align: left;
+    padding: 7px 11px; border-radius: 10px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+    color: var(--lk-fg); transition: border-color .15s, background-color .15s; }
+  .lk-checkrow:hover { border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
+  .lk-checkrow[data-on="1"] { border-color: color-mix(in srgb, var(--lk-accent) 42%, transparent);
+    background: color-mix(in srgb, var(--lk-accent) 10%, var(--lk-surface)); }
+  .lk-check { flex: none; width: 19px; height: 19px; border-radius: 6px; display: grid; place-items: center;
+    border: 1.5px solid var(--lk-line); color: var(--lk-on-accent); --mdc-icon-size: 13px;
+    transition: background-color .15s, border-color .15s; }
+  .lk-checkrow[data-on="1"] .lk-check { background: var(--lk-accent); border-color: var(--lk-accent); }
+  .lk-checkrow[data-on="0"] .lk-check ha-icon { opacity: 0; }
+  .lk-checkrow-ic { flex: none; color: var(--lk-muted); --mdc-icon-size: 17px; display: grid; place-items: center; }
+  .lk-checkrow-label { flex: 1; min-width: 0; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-testbtn { margin-top: 12px; align-self: flex-start; display: inline-flex; align-items: center; gap: 7px;
+    cursor: pointer; font-family: var(--lk-sans); font-size: 0.8rem; font-weight: 700; padding: 8px 14px;
+    border-radius: 10px; border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-fg);
+    --mdc-icon-size: 16px; transition: border-color .15s, background-color .15s, color .15s; }
+  .lk-testbtn:hover:not(:disabled) { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); color: var(--lk-accent); }
+  .lk-testbtn:disabled { opacity: .5; cursor: default; }
+  .lk-testbtn[data-sent="1"] { color: var(--lk-ok); border-color: color-mix(in srgb, var(--lk-ok) 42%, transparent); }
+  .lk-set-hint { margin: 9px 2px 0; font-size: 0.72rem; color: var(--lk-muted); line-height: 1.4; }
+  .lk-set-err { margin: 9px 2px 0; font-size: 0.72rem; color: var(--lk-danger); }
+
   /* ---- task editor (slide-up sheet) ---- */
   .lk-editor { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: center;
     background: color-mix(in srgb, #000 46%, transparent); animation: lk-fade .15s ease both; }

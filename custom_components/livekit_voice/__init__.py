@@ -21,7 +21,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
-from .tasks import LiveKitTaskView, LiveKitTasksView
+from .tasks import LiveKitSettingsView, LiveKitTaskView, LiveKitTasksView
 from .token import LiveKitTokenView
 
 _LOGGER = logging.getLogger(__name__)
@@ -49,8 +49,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitTokenView(hass))
         hass.http.register_view(LiveKitTasksView(hass))
         hass.http.register_view(LiveKitTaskView(hass))
+        hass.http.register_view(LiveKitSettingsView(hass))
         store[DATA_REGISTERED] = True
-        _LOGGER.debug("registered token + tasks views + card at %s", CARD_URL)
+        _LOGGER.debug("registered token + tasks + settings views + card at %s", CARD_URL)
 
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True

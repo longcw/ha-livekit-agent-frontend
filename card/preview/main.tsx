@@ -8,6 +8,7 @@ import { Dock } from '../src/components/Dock';
 import { Header } from '../src/components/Header';
 import { ScheduledTasks } from '../src/components/ScheduledTasks';
 import { SchedulesTab } from '../src/components/SchedulesTab';
+import { SettingsTab } from '../src/components/SettingsTab';
 import { TaskEditor } from '../src/components/TaskEditor';
 import { HassStoreProvider } from '../src/hass/context';
 import { HassStore } from '../src/hass/store';
@@ -46,6 +47,9 @@ const ICONS: Record<string, string> = {
   'mdi:cancel': 'M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M12,4C10.17,4 8.47,4.62 7.11,5.66L18.34,16.89C19.38,15.53 20,13.83 20,12C20,7.58 16.42,4 12,4M16.89,18.34L5.66,7.11C4.62,8.47 4,10.17 4,12C4,16.42 7.58,20 12,20C13.83,20 15.53,19.38 16.89,18.34Z',
   'mdi:alert-circle-outline': 'M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z',
   'mdi:calendar-blank-outline': 'M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8Z',
+  'mdi:bell-outline': 'M16,17H7V10.5C7,8 9,6 11.5,6C14,6 16,8 16,10.5M18,16V10.5C18,7.43 15.86,4.86 13,4.18V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V4.18C7.13,4.86 5,7.43 5,10.5V16L3,18V19H20V18M11.5,22A2,2 0 0,0 13.5,20H9.5A2,2 0 0,0 11.5,22Z',
+  'mdi:cellphone': 'M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z',
+  'mdi:send': 'M2,21L23,12L2,3V10L17,12L2,14V21Z',
 };
 class HaIcon extends HTMLElement {
   static get observedAttributes() { return ['icon']; }
@@ -96,10 +100,27 @@ const mockHass: any = {
   entities: ENTITIES,
   devices: {},
   areas: { study: { name: '书房' }, living: { name: '客厅' } },
+  services: {
+    notify: {
+      persistent_notification: {},
+      notify: {},
+      send_message: {},
+      mobile_app_longs_iphone: {},
+      mobile_app_ipad: {},
+    },
+  },
   callWS: async () => ({
     exposed_entities: Object.fromEntries(Object.keys(STATES).map((id) => [id, { conversation: true }])),
   }),
   callService: async () => {},
+  callApi: async (method: string, path: string, params?: any) => {
+    if (path.startsWith('livekit_voice/settings')) {
+      return method === 'PUT'
+        ? params
+        : { notify_targets: ['persistent_notification', 'mobile_app_longs_iphone'] };
+    }
+    return {};
+  },
 };
 
 const store = new HassStore();
@@ -257,8 +278,8 @@ function Preview() {
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
   const [micStarting, setMicStarting] = useState(P.includes('starting'));
   const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
-  const [tab, setTab] = useState<'chat' | 'schedules'>(
-    P.includes('tab=schedules') ? 'schedules' : 'chat',
+  const [tab, setTab] = useState<'chat' | 'schedules' | 'settings'>(
+    P.includes('tab=settings') ? 'settings' : P.includes('tab=schedules') ? 'schedules' : 'chat',
   );
   const [editing, setEditing] = useState<Task | null>(P.includes('editor') ? MOCK_TASKS[0] : null);
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
@@ -268,7 +289,7 @@ function Preview() {
   };
   return (
     <HassStoreProvider value={store}>
-      <ha-card data-dock={OFF ? 'off' : mode} data-tall={tab === 'schedules' || editing ? '1' : '0'}>
+      <ha-card data-dock={OFF ? 'off' : mode} data-tall={tab !== 'chat' || editing ? '1' : '0'}>
         <Header
           orbState={orbState}
           title="Home Voice"
@@ -290,6 +311,13 @@ function Preview() {
             onClick={() => setTab('schedules')}
           >
             Schedules
+          </button>
+          <button
+            className="lk-tab"
+            data-on={tab === 'settings' ? '1' : '0'}
+            onClick={() => setTab('settings')}
+          >
+            Settings
           </button>
         </div>
         {tab === 'chat' ? (
@@ -336,8 +364,10 @@ function Preview() {
               suggestions={P.includes('chips') ? ['确认', '取消'] : undefined}
             />
           </>
-        ) : (
+        ) : tab === 'schedules' ? (
           <SchedulesTab api={mockApi} onOpen={setEditing} />
+        ) : (
+          <SettingsTab />
         )}
         {editing && (
           <TaskEditor

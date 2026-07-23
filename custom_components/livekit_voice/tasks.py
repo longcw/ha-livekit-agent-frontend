@@ -21,6 +21,7 @@ from .const import (
     CONF_SCHEDULER_URL,
     DATA_CONFIG,
     DOMAIN,
+    SETTINGS_URL,
     TASK_URL,
     TASKS_URL,
 )
@@ -111,3 +112,22 @@ class LiveKitTaskView(HomeAssistantView):
 
     async def delete(self, request: web.Request, task_id: str) -> web.Response:
         return await _forward(self._hass, "DELETE", f"/tasks/{task_id}")
+
+
+class LiveKitSettingsView(HomeAssistantView):
+    """Get / update shared settings (e.g. notify.* push targets)."""
+
+    url = SETTINGS_URL
+    name = "api:livekit_voice:settings"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def get(self, request: web.Request) -> web.Response:
+        return await _forward(self._hass, "GET", "/settings")
+
+    async def put(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "PUT", "/settings", json_body=await _json_body(request)
+        )

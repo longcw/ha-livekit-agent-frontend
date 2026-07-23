@@ -18,6 +18,8 @@ export interface Hass {
   devices?: Record<string, any>;
   /** Area registry: area_id -> { name, ... } */
   areas?: Record<string, any>;
+  /** Service registry: domain -> { service_name -> {...} } (e.g. services.notify). */
+  services?: Record<string, Record<string, any>>;
   language?: string;
   callService: (domain: string, service: string, data?: Record<string, any>) => Promise<any>;
   callApi: <T = any>(method: string, path: string, parameters?: any) => Promise<T>;

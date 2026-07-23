@@ -14,6 +14,7 @@ import { Dock } from './components/Dock';
 import { Header } from './components/Header';
 import { ScheduledTasks } from './components/ScheduledTasks';
 import { SchedulesTab } from './components/SchedulesTab';
+import { SettingsTab } from './components/SettingsTab';
 import { TaskEditor } from './components/TaskEditor';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
@@ -101,7 +102,7 @@ function CardShell() {
   const { toolCalls, agentAreas } = useToolFeed();
   const tasksApi = useTasks(toolCalls);
   const [epoch, setEpoch] = useState(0);
-  const [tab, setTab] = useState<'chat' | 'schedules'>('chat');
+  const [tab, setTab] = useState<'chat' | 'schedules' | 'settings'>('chat');
   const [editing, setEditing] = useState<Task | null>(null);
 
   // Ref so effects/handlers always see the live session without re-subscribing.
@@ -380,9 +381,9 @@ function CardShell() {
   const orbState = dozing ? 'dozing' : phase.orb;
   const stateLabel = dozing ? 'Sleeping' : phase.label;
 
-  // The card is content-sized for chat (compact when idle). The Schedules list and the editor
-  // sheet need a stable, roomy viewport instead — give the card a definite height for those.
-  const tall = tab === 'schedules' || editing !== null;
+  // The card is content-sized for chat (compact when idle). The Schedules/Settings tabs and
+  // the editor sheet need a stable, roomy viewport instead — give the card a definite height.
+  const tall = tab !== 'chat' || editing !== null;
 
   return (
     <ha-card data-dock={mode} data-tall={tall ? '1' : '0'}>
@@ -416,6 +417,13 @@ function CardShell() {
         >
           Schedules
         </button>
+        <button
+          className="lk-tab"
+          data-on={tab === 'settings' ? '1' : '0'}
+          onClick={() => setTab('settings')}
+        >
+          Settings
+        </button>
       </div>
 
       {tab === 'chat' ? (
@@ -447,8 +455,10 @@ function CardShell() {
             suggestions={suggestions}
           />
         </>
-      ) : (
+      ) : tab === 'schedules' ? (
         <SchedulesTab api={tasksApi} onOpen={setEditing} />
+      ) : (
+        <SettingsTab />
       )}
 
       {editing && (
