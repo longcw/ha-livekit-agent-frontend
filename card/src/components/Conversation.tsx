@@ -15,19 +15,22 @@ import {
 export function Conversation({
   items,
   autoscroll = true,
+  startAtEnd = false,
   reflowKey,
 }: {
   items: ConvItem[];
   autoscroll?: boolean;
+  /** Open on the latest message rather than the first, e.g. for a stored conversation. */
+  startAtEnd?: boolean;
   /** Bump to re-pin to the bottom when something other than `items` changes the
    *  dock height (e.g. quick-reply chips appearing), so the tail isn't occluded. */
   reflowKey?: unknown;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  // Follow new messages only while the user is already at the bottom. This lands the view
-  // at the top on load (showing the start, not the tail) and never yanks away from earlier
-  // messages you've scrolled up to read.
-  const stick = useRef(false);
+  // Follow new messages only while the user is already at the bottom. Unless startAtEnd,
+  // this lands the view at the top on load (showing the start, not the tail), and it never
+  // yanks away from earlier messages you've scrolled up to read.
+  const stick = useRef(startAtEnd);
 
   const onScroll = () => {
     const el = ref.current;

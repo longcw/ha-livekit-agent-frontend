@@ -37,7 +37,7 @@ export function TextTab({ api }: { api: TextChatApi }) {
           <ha-icon icon="mdi:message-plus-outline" />
         </button>
       </div>
-      <Conversation items={items} />
+      <Conversation items={items} startAtEnd />
       <div className="lk-dock" ref={dockRef}>
         <div className="lk-bar">
           <input

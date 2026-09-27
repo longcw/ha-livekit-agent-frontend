@@ -35417,26 +35417,27 @@ function xP(i, e, t) {
 function oC({
   items: i,
   autoscroll: e = !0,
-  reflowKey: t
+  startAtEnd: t = !1,
+  reflowKey: a
 }) {
-  const a = A.useRef(null), s = A.useRef(!1), c = () => {
-    const d = a.current;
-    d && (s.current = d.scrollHeight - d.scrollTop - d.clientHeight < 80);
-  }, u = () => {
-    const d = a.current;
-    d && e && s.current && (d.scrollTop = d.scrollHeight);
+  const s = A.useRef(null), c = A.useRef(t), u = () => {
+    const h = s.current;
+    h && (c.current = h.scrollHeight - h.scrollTop - h.clientHeight < 80);
+  }, d = () => {
+    const h = s.current;
+    h && e && c.current && (h.scrollTop = h.scrollHeight);
   };
   return A.useEffect(() => {
-    const d = a.current;
-    if (!d) return;
-    const h = new MutationObserver(() => u());
-    return h.observe(d, { childList: !0, subtree: !0, characterData: !0 }), () => h.disconnect();
+    const h = s.current;
+    if (!h) return;
+    const f = new MutationObserver(() => d());
+    return f.observe(h, { childList: !0, subtree: !0, characterData: !0 }), () => f.disconnect();
   }, [e]), A.useEffect(() => {
-    u();
-    const d = requestAnimationFrame(u);
-    return () => cancelAnimationFrame(d);
-  }, [i, e, t]), /* @__PURE__ */ D.jsx("div", { className: "lk-convo", ref: a, onScroll: c, children: i.length ? i.map(
-    (d) => d.kind === "message" ? /* @__PURE__ */ D.jsx(_P, { item: d }, d.id) : /* @__PURE__ */ D.jsx(MP, { item: d }, d.id)
+    d();
+    const h = requestAnimationFrame(d);
+    return () => cancelAnimationFrame(h);
+  }, [i, e, a]), /* @__PURE__ */ D.jsx("div", { className: "lk-convo", ref: s, onScroll: u, children: i.length ? i.map(
+    (h) => h.kind === "message" ? /* @__PURE__ */ D.jsx(_P, { item: h }, h.id) : /* @__PURE__ */ D.jsx(MP, { item: h }, h.id)
   ) : /* @__PURE__ */ D.jsxs("div", { className: "lk-empty", children: [
     /* @__PURE__ */ D.jsx("ha-icon", { icon: "mdi:creation" }),
     /* @__PURE__ */ D.jsx("span", { children: "Ask about your home — “turn on the study light”, “what's the temperature?”" })
@@ -36294,7 +36295,7 @@ function mD({ api: i }) {
         }
       )
     ] }),
-    /* @__PURE__ */ D.jsx(oC, { items: e }),
+    /* @__PURE__ */ D.jsx(oC, { items: e, startAtEnd: !0 }),
     /* @__PURE__ */ D.jsx("div", { className: "lk-dock", ref: d, children: /* @__PURE__ */ D.jsxs("div", { className: "lk-bar", children: [
       /* @__PURE__ */ D.jsx(
         "input",
