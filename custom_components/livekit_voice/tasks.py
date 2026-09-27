@@ -63,6 +63,7 @@ async def _forward(
                 body=body,
                 status=resp.status,
                 content_type=resp.content_type or "application/json",
+                charset=resp.charset,
             )
     except ClientError as err:
         _LOGGER.warning("%s request failed: %s", name, err)
