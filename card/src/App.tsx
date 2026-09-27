@@ -15,6 +15,7 @@ import { Header } from './components/Header';
 import { ScheduledTasks } from './components/ScheduledTasks';
 import { SchedulesTab } from './components/SchedulesTab';
 import { SettingsTab } from './components/SettingsTab';
+import { TextTab } from './components/TextTab';
 import { TaskEditor } from './components/TaskEditor';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
@@ -24,6 +25,7 @@ import { useSessionState } from './lib/session-state';
 import { useSuggestions } from './lib/suggestions';
 import type { Task } from './lib/tasks';
 import { useTasks } from './lib/tasks-api';
+import { useTextChat } from './lib/text-chat';
 import { useToolFeed } from './lib/tool-feed';
 import { loadTurnMode, saveTurnMode, type TurnMode } from './lib/turn-mode';
 
@@ -91,6 +93,14 @@ function agentPhase(connected: boolean, connecting: boolean, agentState: string 
   return AGENT_PHASES[agentState ?? ''] ?? { orb: 'listening', label: 'Connected' };
 }
 
+type Tab = 'chat' | 'text' | 'schedules' | 'settings';
+const TABS: readonly Tab[] = ['chat', 'text', 'schedules', 'settings'];
+
+function linkedTab(): Tab | null {
+  const value = new URLSearchParams(window.location.search).get('lk_tab');
+  return TABS.includes(value as Tab) ? (value as Tab) : null;
+}
+
 function CardShell() {
   const hass = useHass();
   const config = useCardConfig();
@@ -102,7 +112,19 @@ function CardShell() {
   const { toolCalls, agentAreas } = useToolFeed();
   const tasksApi = useTasks(toolCalls);
   const [epoch, setEpoch] = useState(0);
-  const [tab, setTab] = useState<'chat' | 'schedules' | 'settings'>('chat');
+  const [tab, setTab] = useState<Tab>(() => linkedTab() ?? 'chat');
+  const textChat = useTextChat(tab === 'text');
+
+  // `?lk_tab=text` opens a tab — how a tap on the phone's Live Activity lands on the Text tab.
+  // HA fires `location-changed` when it navigates, and the card outlives view switches.
+  useEffect(() => {
+    const onLocation = () => {
+      const linked = linkedTab();
+      if (linked) setTab(linked);
+    };
+    window.addEventListener('location-changed', onLocation);
+    return () => window.removeEventListener('location-changed', onLocation);
+  }, []);
   const [editing, setEditing] = useState<Task | null>(null);
 
   // Ref so effects/handlers always see the live session without re-subscribing.
@@ -412,6 +434,13 @@ function CardShell() {
         </button>
         <button
           className="lk-tab"
+          data-on={tab === 'text' ? '1' : '0'}
+          onClick={() => setTab('text')}
+        >
+          Text
+        </button>
+        <button
+          className="lk-tab"
           data-on={tab === 'schedules' ? '1' : '0'}
           onClick={() => setTab('schedules')}
         >
@@ -455,6 +484,8 @@ function CardShell() {
             suggestions={suggestions}
           />
         </>
+      ) : tab === 'text' ? (
+        <TextTab api={textChat} />
       ) : tab === 'schedules' ? (
         <SchedulesTab api={tasksApi} onOpen={setEditing} />
       ) : (

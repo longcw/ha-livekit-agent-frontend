@@ -1,9 +1,9 @@
-"""Scheduler proxy endpoints for the dashboard card's Schedules tab.
+"""Proxy endpoints for the dashboard card's Schedules, Settings and Text tabs.
 
 The card calls these (via ``hass.callApi``, so Home Assistant auth applies) and they forward
-to the scheduler service, attaching the shared secret. This keeps the scheduler reachable
-only from Home Assistant (not the browser) and lets the management tab work without a LiveKit
-connection.
+to the scheduler service or the worker, attaching the shared secret. This keeps both
+reachable only from Home Assistant (not the browser) and lets the tabs work without a
+LiveKit connection.
 """
 
 from __future__ import annotations
@@ -17,6 +17,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
+    CHAT_HISTORY_URL,
+    CHAT_URL,
+    CONF_CHAT_TOKEN,
+    CONF_CHAT_URL,
     CONF_SCHEDULER_TOKEN,
     CONF_SCHEDULER_URL,
     DATA_CONFIG,
@@ -36,15 +40,18 @@ async def _forward(
     *,
     query: dict | None = None,
     json_body: object | None = None,
+    service: tuple[str, str, str] = ("scheduler", CONF_SCHEDULER_URL, CONF_SCHEDULER_TOKEN),
 ) -> web.Response:
-    """Forward a request to the scheduler service and relay its JSON response."""
+    """Forward a request to a backing service (the scheduler by default) and relay its
+    response."""
+    name, url_key, token_key = service
     config = hass.data.get(DOMAIN, {}).get(DATA_CONFIG) or {}
-    base = config.get(CONF_SCHEDULER_URL)
+    base = config.get(url_key)
     if not base:
-        return web.json_response({"detail": "scheduler not configured"}, status=503)
+        return web.json_response({"detail": f"{name} not configured"}, status=503)
 
     url = f"{base.rstrip('/')}{path}"
-    token = config.get(CONF_SCHEDULER_TOKEN)
+    token = config.get(token_key)
     headers = {"Authorization": f"Bearer {token}"} if token else None
     session = async_get_clientsession(hass)
     try:
@@ -58,8 +65,8 @@ async def _forward(
                 content_type=resp.content_type or "application/json",
             )
     except ClientError as err:
-        _LOGGER.warning("scheduler request failed: %s", err)
-        return web.json_response({"detail": f"scheduler unreachable: {err}"}, status=502)
+        _LOGGER.warning("%s request failed: %s", name, err)
+        return web.json_response({"detail": f"{name} unreachable: {err}"}, status=502)
 
 
 async def _json_body(request: web.Request) -> object | None:
@@ -130,4 +137,39 @@ class LiveKitSettingsView(HomeAssistantView):
     async def put(self, request: web.Request) -> web.Response:
         return await _forward(
             self._hass, "PUT", "/settings", json_body=await _json_body(request)
+        )
+
+
+_WORKER = ("worker", CONF_CHAT_URL, CONF_CHAT_TOKEN)
+
+
+class LiveKitChatView(HomeAssistantView):
+    """Send one message into the worker's persisted text conversation."""
+
+    url = CHAT_URL
+    name = "api:livekit_voice:chat"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "POST", "/chat", json_body=await _json_body(request), service=_WORKER
+        )
+
+
+class LiveKitChatHistoryView(HomeAssistantView):
+    """Read the text conversation's messages and tool calls (`?limit=`)."""
+
+    url = CHAT_HISTORY_URL
+    name = "api:livekit_voice:chat_history"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def get(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "GET", "/chat/history", query=dict(request.query), service=_WORKER
         )

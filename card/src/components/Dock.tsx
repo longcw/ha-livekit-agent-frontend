@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { TurnMode } from '../lib/turn-mode';
 
 /** Publishes the dock's height as `--lk-dock-h` on the card so the chat can pad past it. */
-function useDockHeight() {
+export function useDockHeight() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;

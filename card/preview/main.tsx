@@ -9,6 +9,8 @@ import { Header } from '../src/components/Header';
 import { ScheduledTasks } from '../src/components/ScheduledTasks';
 import { SchedulesTab } from '../src/components/SchedulesTab';
 import { SettingsTab } from '../src/components/SettingsTab';
+import { TextTab } from '../src/components/TextTab';
+import { useTextChat } from '../src/lib/text-chat';
 import { TaskEditor } from '../src/components/TaskEditor';
 import { HassStoreProvider } from '../src/hass/context';
 import { HassStore } from '../src/hass/store';
@@ -114,6 +116,11 @@ const mockHass: any = {
   }),
   callService: async () => {},
   callApi: async (method: string, path: string, params?: any) => {
+    if (path.startsWith('livekit_voice/chat/history')) {
+      const t = Date.now() - 60_000;
+      return { conversation_id: 'DB_preview', busy: location.search.includes('busy'), items: MOCK_TEXT(t) };
+    }
+    if (path.startsWith('livekit_voice/chat')) return 'ok';
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
         ? params
@@ -278,8 +285,14 @@ function Preview() {
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
   const [micStarting, setMicStarting] = useState(P.includes('starting'));
   const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
-  const [tab, setTab] = useState<'chat' | 'schedules' | 'settings'>(
-    P.includes('tab=settings') ? 'settings' : P.includes('tab=schedules') ? 'schedules' : 'chat',
+  const [tab, setTab] = useState<'chat' | 'text' | 'schedules' | 'settings'>(
+    P.includes('tab=settings')
+      ? 'settings'
+      : P.includes('tab=schedules')
+        ? 'schedules'
+        : P.includes('tab=text')
+          ? 'text'
+          : 'chat',
   );
   const [editing, setEditing] = useState<Task | null>(P.includes('editor') ? MOCK_TASKS[0] : null);
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
@@ -304,6 +317,9 @@ function Preview() {
         <div className="lk-tabs" role="tablist">
           <button className="lk-tab" data-on={tab === 'chat' ? '1' : '0'} onClick={() => setTab('chat')}>
             Chat
+          </button>
+          <button className="lk-tab" data-on={tab === 'text' ? '1' : '0'} onClick={() => setTab('text')}>
+            Text
           </button>
           <button
             className="lk-tab"
@@ -364,6 +380,8 @@ function Preview() {
               suggestions={P.includes('chips') ? ['确认', '取消'] : undefined}
             />
           </>
+        ) : tab === 'text' ? (
+          <PreviewTextTab />
         ) : tab === 'schedules' ? (
           <SchedulesTab api={mockApi} onOpen={setEditing} />
         ) : (
@@ -429,4 +447,21 @@ if (SCENARIO === 'script') {
       },
     });
   }, 500);
+}
+
+// the persisted text conversation, as /chat/history returns it (?tab=text, +busy)
+function MOCK_TEXT(t: number) {
+  const running = location.search.includes('busy');
+  return [
+    { kind: 'message', id: 'm1', role: 'user', text: '客厅的灯开着吗？', ts: t },
+    { kind: 'action', id: 'a1', ts: t + 1, name: 'GetLiveContext', args: { area: '客厅', domain: ['light', 'switch'] }, status: 'done' },
+    { kind: 'message', id: 'm2', role: 'agent', text: '客厅的背景灯开着，客厅照明和过道照明都关着。', ts: t + 2 },
+    { kind: 'message', id: 'm3', role: 'user', text: '把背景灯关了', ts: t + 3 },
+    { kind: 'action', id: 'a2', ts: t + 4, name: 'HassTurnOff', args: { name: '背景灯 电视 左键' }, status: running ? 'running' : 'done' },
+    ...(running ? [] : [{ kind: 'message', id: 'm4', role: 'agent', text: '已经把背景灯关掉了。', ts: t + 5 }]),
+  ];
+}
+
+function PreviewTextTab() {
+  return <TextTab api={useTextChat(true)} />;
 }

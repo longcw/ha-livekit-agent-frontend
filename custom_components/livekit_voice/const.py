@@ -11,6 +11,10 @@ CONF_AGENT_NAME = "agent_name"
 # When set, the card's Schedules tab can list/manage tasks directly through a proxy.
 CONF_SCHEDULER_URL = "scheduler_url"
 CONF_SCHEDULER_TOKEN = "scheduler_token"
+# Base URL of the worker's HTTP app (e.g. http://192.168.1.50:8952) and its TEXT_API_TOKEN.
+# When set, the card's Text tab shows and continues the worker's persisted text conversation.
+CONF_CHAT_URL = "chat_url"
+CONF_CHAT_TOKEN = "chat_token"
 
 # Matches AGENT_NAME in agent/agent.py (the worker's explicit-dispatch name).
 DEFAULT_AGENT_NAME = "ha-agent"
@@ -28,6 +32,9 @@ TASKS_URL = "/api/livekit_voice/tasks"
 TASK_URL = "/api/livekit_voice/tasks/{task_id}"
 # Settings proxy (e.g. notify.* push targets); forwards to the scheduler's /settings.
 SETTINGS_URL = "/api/livekit_voice/settings"
+# Text chat proxy for the Text tab; forwards to the worker's /chat and /chat/history.
+CHAT_URL = "/api/livekit_voice/chat"
+CHAT_HISTORY_URL = "/api/livekit_voice/chat/history"
 
 # hass.data[DOMAIN] keys.
 DATA_CONFIG = "config"

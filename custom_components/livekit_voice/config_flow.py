@@ -16,6 +16,8 @@ from homeassistant.core import callback
 
 from .const import (
     CONF_AGENT_NAME,
+    CONF_CHAT_TOKEN,
+    CONF_CHAT_URL,
     CONF_API_KEY,
     CONF_API_SECRET,
     CONF_LIVEKIT_URL,
@@ -49,6 +51,9 @@ class LiveKitVoiceConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Optional: enables the card's Schedules tab. Also editable later via Options.
                 vol.Optional(CONF_SCHEDULER_URL, default=""): str,
                 vol.Optional(CONF_SCHEDULER_TOKEN, default=""): str,
+                # Optional: enables the card's Text tab.
+                vol.Optional(CONF_CHAT_URL, default=""): str,
+                vol.Optional(CONF_CHAT_TOKEN, default=""): str,
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema)
@@ -94,6 +99,10 @@ class LiveKitVoiceOptionsFlow(OptionsFlow):
                 ): str,
                 vol.Optional(
                     CONF_SCHEDULER_TOKEN, default=current.get(CONF_SCHEDULER_TOKEN, "")
+                ): str,
+                vol.Optional(CONF_CHAT_URL, default=current.get(CONF_CHAT_URL, "")): str,
+                vol.Optional(
+                    CONF_CHAT_TOKEN, default=current.get(CONF_CHAT_TOKEN, "")
                 ): str,
             }
         )

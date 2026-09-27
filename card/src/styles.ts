@@ -161,6 +161,7 @@ export const CARD_STYLES =
 
   /* ---- schedules tab (search + full list) ---- */
   .lk-schedtab { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .lk-texthead { flex: 1; min-width: 0; font-size: 12px; color: var(--lk-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .lk-search { flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px;
     --mdc-icon-size: 18px; color: var(--lk-muted); }
   .lk-search-in { flex: 1; min-width: 0; height: 34px; border: 1px solid var(--lk-line); background: var(--lk-surface);
