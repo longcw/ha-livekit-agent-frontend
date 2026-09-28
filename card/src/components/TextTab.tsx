@@ -60,7 +60,12 @@ export function TextTab({
           <ha-icon icon="mdi:message-plus-outline" />
         </button>
       </div>
-      <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={lastUserText(items)} />
+      <DeviceTiles
+        agentAreas={agentAreas}
+        toolCalls={toolCalls}
+        query={lastUserText(items)}
+        showRecent
+      />
       <ScheduledTasks
         tasks={tasksApi.tasks}
         freshId={tasksApi.freshId}

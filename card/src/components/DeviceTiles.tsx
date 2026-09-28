@@ -15,17 +15,20 @@ export function DeviceTiles({
   agentAreas,
   toolCalls,
   query,
+  showRecent,
 }: {
   agentAreas: string[];
   toolCalls: ToolCall[];
   query: string;
+  /** Pin devices changed within `recent_minutes`; off while no conversation is live. */
+  showRecent: boolean;
 }) {
   const hass = useHass();
   const config = useCardConfig();
   const host = useStore().host;
   const exposed = useExposedEntities(hass);
   const actedOn = useActedOnEntities(hass, exposed, toolCalls);
-  const recentMinutes = config.recent_minutes ?? 60;
+  const recentMinutes = showRecent ? (config.recent_minutes ?? 60) : 0;
   const recent = useMemo(
     () => (hass ? recentlyChanged(hass, exposed, recentMinutes) : []),
     [hass, exposed, recentMinutes]

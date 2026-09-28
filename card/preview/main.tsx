@@ -340,7 +340,7 @@ function Preview() {
         {tab === 'chat' ? (
           <>
             {!P.includes('notiles') && (
-              <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} />
+              <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} showRecent={!OFF} />
             )}
             {SHOW_SCHED && (
               <ScheduledTasks

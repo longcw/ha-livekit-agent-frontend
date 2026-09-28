@@ -35846,18 +35846,19 @@ function aD(i) {
 function mC({
   agentAreas: i,
   toolCalls: e,
-  query: t
+  query: t,
+  showRecent: a
 }) {
-  const a = xs(), s = dC(), c = Lu().host, u = aD(a), d = tD(a, u, e), h = s.recent_minutes ?? 60, f = A.useMemo(
-    () => a ? nD(a, u, h) : [],
-    [a, u, h]
-  ), p = A.useMemo(
-    () => a ? KP(a, s, { agentAreas: i, actedOn: d, exposed: u, query: t, recent: f }) : [],
-    [a, s, i, d, u, t, f]
-  ), v = A.useRef(null), y = p.find((k) => k.touched)?.entityId;
+  const s = xs(), c = dC(), u = Lu().host, d = aD(s), h = tD(s, d, e), f = a ? c.recent_minutes ?? 60 : 0, p = A.useMemo(
+    () => s ? nD(s, d, f) : [],
+    [s, d, f]
+  ), v = A.useMemo(
+    () => s ? KP(s, c, { agentAreas: i, actedOn: h, exposed: d, query: t, recent: p }) : [],
+    [s, c, i, h, d, t, p]
+  ), y = A.useRef(null), k = v.find((w) => w.touched)?.entityId;
   return A.useEffect(() => {
-    y && v.current?.scrollTo({ left: 0, behavior: "smooth" });
-  }, [y]), !a || p.length === 0 ? null : /* @__PURE__ */ D.jsx("div", { className: "lk-tiles", ref: v, children: p.map((k) => /* @__PURE__ */ D.jsx(rD, { entityId: k.entityId, touched: k.touched, hass: a, host: c }, k.entityId)) });
+    k && y.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [k]), !s || v.length === 0 ? null : /* @__PURE__ */ D.jsx("div", { className: "lk-tiles", ref: y, children: v.map((w) => /* @__PURE__ */ D.jsx(rD, { entityId: w.entityId, touched: w.touched, hass: s, host: u }, w.entityId)) });
 }
 function rD({
   entityId: i,
@@ -36329,7 +36330,15 @@ function yD({
         }
       )
     ] }),
-    /* @__PURE__ */ D.jsx(mC, { agentAreas: u, toolCalls: c, query: cC(s) }),
+    /* @__PURE__ */ D.jsx(
+      mC,
+      {
+        agentAreas: u,
+        toolCalls: c,
+        query: cC(s),
+        showRecent: !0
+      }
+    ),
     /* @__PURE__ */ D.jsx(
       gC,
       {
@@ -37050,7 +37059,15 @@ function FD() {
       )
     ] }),
     v === "chat" ? /* @__PURE__ */ D.jsxs(D.Fragment, { children: [
-      /* @__PURE__ */ D.jsx(mC, { agentAreas: p, toolCalls: f, query: Uu }),
+      /* @__PURE__ */ D.jsx(
+        mC,
+        {
+          agentAreas: p,
+          toolCalls: f,
+          query: Uu,
+          showRecent: E
+        }
+      ),
       /* @__PURE__ */ D.jsx(
         gC,
         {

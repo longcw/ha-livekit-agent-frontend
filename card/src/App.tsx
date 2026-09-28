@@ -454,7 +454,12 @@ function CardShell() {
 
       {tab === 'chat' ? (
         <>
-          <DeviceTiles agentAreas={agentAreas} toolCalls={toolCalls} query={query} />
+          <DeviceTiles
+            agentAreas={agentAreas}
+            toolCalls={toolCalls}
+            query={query}
+            showRecent={connected}
+          />
           <ScheduledTasks
             tasks={tasksApi.tasks}
             freshId={tasksApi.freshId}
