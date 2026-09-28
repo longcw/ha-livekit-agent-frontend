@@ -183,7 +183,7 @@ function changeToken(e: HassEntity): string {
 }
 
 /** Voice-exposed actuator entities — the set the state-diff watches. */
-function actuatorIds(hass: Hass, exposed: Set<string> | null): string[] {
+export function actuatorIds(hass: Hass, exposed: Set<string> | null): string[] {
   return Object.keys(hass.states).filter(
     (id) => ACTUATOR_DOMAINS.has(domainOf(id)) && keep(hass, exposed, id)
   );
@@ -322,4 +322,30 @@ export function useActedOnEntities(
         : { ordered: [], latest: new Set<string>() },
     [hass, universe, toolCalls, callChanges]
   );
+}
+
+/**
+ * Actuators whose state changed within `minutes`, newest first, whatever changed them. A
+ * second in which a large share of them changed together is an HA restart resetting every
+ * `last_changed`, so its entities are left out.
+ */
+export function recentlyChanged(hass: Hass, exposed: Set<string> | null, minutes: number): string[] {
+  if (minutes <= 0) return [];
+  const since = Date.now() - minutes * 60_000;
+  const ids = actuatorIds(hass, exposed);
+  const recent: [string, number][] = [];
+  const perSecond = new Map<number, number>();
+  for (const id of ids) {
+    const e = hass.states[id];
+    const at = Date.parse(e?.last_changed ?? '');
+    if (!(at >= since) || e.state === 'unavailable' || e.state === 'unknown') continue;
+    recent.push([id, at]);
+    const second = Math.floor(at / 1000);
+    perSecond.set(second, (perSecond.get(second) ?? 0) + 1);
+  }
+  const burst = Math.max(10, ids.length * 0.3);
+  return recent
+    .filter(([, at]) => (perSecond.get(Math.floor(at / 1000)) ?? 0) < burst)
+    .sort((a, b) => b[1] - a[1])
+    .map(([id]) => id);
 }

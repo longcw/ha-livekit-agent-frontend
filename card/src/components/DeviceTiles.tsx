@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { openMoreInfo, useCardConfig, useHass, useStore } from '../hass/context';
 import type { Hass } from '../hass/store';
-import { useActedOnEntities } from '../lib/acted-on';
+import { recentlyChanged, useActedOnEntities } from '../lib/acted-on';
 import { buildTiles, formatState, friendlyName, iconFor, isActive, tapService } from '../lib/entities';
 import { useExposedEntities } from '../lib/exposed';
 import type { ToolCall } from '../lib/tool-feed';
@@ -25,10 +25,16 @@ export function DeviceTiles({
   const host = useStore().host;
   const exposed = useExposedEntities(hass);
   const actedOn = useActedOnEntities(hass, exposed, toolCalls);
+  const recentMinutes = config.recent_minutes ?? 60;
+  const recent = useMemo(
+    () => (hass ? recentlyChanged(hass, exposed, recentMinutes) : []),
+    [hass, exposed, recentMinutes]
+  );
 
   const tiles = useMemo(
-    () => (hass ? buildTiles(hass, config, { agentAreas, actedOn, exposed, query }) : []),
-    [hass, config, agentAreas, actedOn, exposed, query]
+    () =>
+      hass ? buildTiles(hass, config, { agentAreas, actedOn, exposed, query, recent }) : [],
+    [hass, config, agentAreas, actedOn, exposed, query, recent]
   );
 
   // When the agent acts, the target is pinned to the front — scroll the rail back to the

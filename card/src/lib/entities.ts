@@ -196,9 +196,16 @@ export interface TileModel {
 export function buildTiles(
   hass: Hass,
   config: CardConfig,
-  opts: { agentAreas: string[]; actedOn: ActedOn; exposed: Set<string> | null; query: string }
+  opts: {
+    agentAreas: string[];
+    actedOn: ActedOn;
+    exposed: Set<string> | null;
+    query: string;
+    /** Recently changed devices, newest first, pinned after the acted-on ones. */
+    recent: string[];
+  }
 ): TileModel[] {
-  const { agentAreas, actedOn, exposed, query } = opts;
+  const { agentAreas, actedOn, exposed, query, recent } = opts;
 
   const explicit = (config.entities ?? []).filter((id) => hass.states[id]);
   const areaPool = [
@@ -209,13 +216,15 @@ export function buildTiles(
   // Acted-on devices always surface, even outside the configured/queried areas (a script may
   // touch a device in another room). resolveActedOn already restricts them to voice-exposed
   // entities, so inject them directly rather than re-filtering by area.
-  const acted = actedOn.ordered.filter((id) => hass.states[id]);
-  const candidates = Array.from(new Set([...explicit, ...areaPool, ...acted]));
+  const pinned = Array.from(new Set([...actedOn.ordered, ...recent])).filter(
+    (id) => hass.states[id]
+  );
+  const candidates = Array.from(new Set([...explicit, ...areaPool, ...pinned]));
   const touched = actedOn.latest;
-  const pinRank = new Map(actedOn.ordered.map((id, i) => [id, i]));
+  const pinRank = new Map(pinned.map((id, i) => [id, i]));
 
   const ordered = candidates.sort((a, b) => {
-    // acted-on devices first, most-recently-acted leading
+    // acted-on devices first, most-recently-acted leading, then recently changed ones
     const pa = pinRank.get(a) ?? Infinity;
     const pb = pinRank.get(b) ?? Infinity;
     if (pa !== pb) return pa - pb;

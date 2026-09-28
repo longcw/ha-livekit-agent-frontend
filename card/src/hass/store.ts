@@ -45,6 +45,9 @@ export interface CardConfig {
   areas?: string[];
   /** Also surface tiles for areas the agent looks at (get_devices). Default true. */
   follow_agent?: boolean;
+  /** Pin devices whose state changed within this many minutes, whatever changed them.
+   *  Default 60; 0 turns it off. */
+  recent_minutes?: number;
   /** How many tiles to show before "Show more". Default 8. */
   max_tiles?: number;
   /** Fixed card height in px. Default 720; always capped to the viewport height. */
