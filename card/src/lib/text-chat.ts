@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHass } from '../hass/context';
 import type { ConvItem } from './conversation';
 import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
@@ -50,6 +50,7 @@ export function useTextChat(active: boolean): TextChatApi {
   const hass = useHass();
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const lastBody = useRef('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // our message, shown until the conversation has it
@@ -59,8 +60,14 @@ export function useTextChat(active: boolean): TextChatApi {
     if (!hass) return;
     try {
       const data = await hass.callApi<History>('GET', HISTORY_PATH);
-      setHistory(Array.isArray(data?.items) ? data.items : []);
-      setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
+      // a poll that brings nothing new keeps the same arrays: the device tiles read a
+      // changed tool-call list as new agent activity and keep watching for state changes
+      const body = JSON.stringify([data?.items, data?.suggestions]);
+      if (body !== lastBody.current) {
+        lastBody.current = body;
+        setHistory(Array.isArray(data?.items) ? data.items : []);
+        setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
+      }
       setBusy(Boolean(data?.busy));
       setError(null);
     } catch (e) {
