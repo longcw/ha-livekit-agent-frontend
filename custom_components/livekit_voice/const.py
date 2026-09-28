@@ -35,7 +35,10 @@ SETTINGS_URL = "/api/livekit_voice/settings"
 # Text chat proxy for the Text tab; forwards to the worker's /chat and /chat/history.
 CHAT_URL = "/api/livekit_voice/chat"
 CHAT_HISTORY_URL = "/api/livekit_voice/chat/history"
+# Turn progress on a phone (start / progress / final); the worker posts here with an HA token.
+PROGRESS_URL = "/api/livekit_voice/progress"
 
 # hass.data[DOMAIN] keys.
 DATA_CONFIG = "config"
 DATA_REGISTERED = "registered"
+DATA_PROGRESS = "progress"

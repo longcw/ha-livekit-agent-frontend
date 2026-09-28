@@ -21,6 +21,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
+from .progress import LiveKitProgressView
 from .tasks import (
     LiveKitChatHistoryView,
     LiveKitChatView,
@@ -58,8 +59,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitSettingsView(hass))
         hass.http.register_view(LiveKitChatView(hass))
         hass.http.register_view(LiveKitChatHistoryView(hass))
+        hass.http.register_view(LiveKitProgressView(hass))
         store[DATA_REGISTERED] = True
-        _LOGGER.debug("registered token + tasks + settings + chat views + card at %s", CARD_URL)
+        _LOGGER.debug("registered token, tasks, settings, chat and progress views + card at %s", CARD_URL)
 
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True
