@@ -5,7 +5,9 @@ Assistant, this view can read from the mobile_app integration whether the phone'
 Activity for the tag is running, which the worker cannot see: it updates a running
 activity, starts one otherwise, holds updates until the phone reports a new activity's
 token (before that, mobile_app sends an update as another start), and gives the answer
-notification a sound only when the activity cannot carry the answer.
+notification a sound only when the activity cannot carry the answer. Activity pushes go
+straight to APNs: over local push the app confirms them only once it is next opened, so
+mobile_app would stall 10 s on each and then drop the local channel.
 """
 
 from __future__ import annotations
@@ -20,6 +22,8 @@ from aiohttp import web
 
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_call_later
 from homeassistant.util import slugify
 
@@ -122,7 +126,7 @@ class LiveKitProgressView(HomeAssistantView):
                 activity.cancel_clear = None
             activity.held = None
             # a start always alerts, whether it starts the activity or updates the running one
-            await _notify(hass, target, message, title, data)
+            await _notify(hass, target, message, title, data, apns=webhook_id)
             if not running:
                 activity.started_at = time.monotonic()
         else:
@@ -130,7 +134,7 @@ class LiveKitProgressView(HomeAssistantView):
             alerting = phase == "final" and running
             update = data if alerting else {**data, "alert": QUIET_ALERT}
             if running:
-                await _notify(hass, target, message, title, update)
+                await _notify(hass, target, message, title, update, apns=webhook_id)
             elif activity.started_at is not None:
                 activity.held = (message, title, update)
                 if activity.waiter is None or activity.waiter.done():
@@ -144,7 +148,8 @@ class LiveKitProgressView(HomeAssistantView):
         if phase == "final":
             answer_sound = running is not True
             await _answer(hass, target, tag, body, sound=answer_sound)
-            _schedule_clear(hass, activity, target, tag, float(body.get("clear_after") or 900))
+            clear_after = float(body.get("clear_after") or 900)
+            _schedule_clear(hass, activity, target, webhook_id, tag, clear_after)
 
         state = "running" if running else "starting" if activity.started_at else "none"
         if running is None:
@@ -153,8 +158,36 @@ class LiveKitProgressView(HomeAssistantView):
 
 
 async def _notify(
-    hass: HomeAssistant, target: str, message: str, title: str, data: dict[str, Any]
+    hass: HomeAssistant,
+    target: str,
+    message: str,
+    title: str,
+    data: dict[str, Any],
+    *,
+    apns: str | None = None,
 ) -> None:
+    """Send through ``notify``, or straight to APNs for the registration ``apns`` names."""
+    if apns is not None:
+        try:
+            from homeassistant.components.mobile_app.live_activity import (
+                prepare_live_activity_remote_push,
+            )
+            from homeassistant.components.mobile_app.notify import _send_message
+
+            entry = hass.data["mobile_app"]["config_entries"][apns]
+        except (ImportError, KeyError, TypeError):
+            _LOGGER.debug("no direct APNs path, sending through notify", exc_info=True)
+        else:
+            payload = {"message": message, "title": title, "data": data}
+            payload, on_success = prepare_live_activity_remote_push(hass, entry.data, payload)
+            try:
+                await _send_message(async_get_clientsession(hass), entry, payload)
+            except HomeAssistantError as err:
+                _LOGGER.warning("Live Activity push to %s failed: %s", target, err)
+            else:
+                if on_success is not None:
+                    on_success()
+            return
     await hass.services.async_call(
         "notify",
         target,
@@ -174,7 +207,7 @@ async def _send_when_running(
             if activity.held is not None:
                 message, title, data = activity.held
                 activity.held = None
-                await _notify(hass, target, message, title, data)
+                await _notify(hass, target, message, title, data, apns=webhook_id)
             return
         await asyncio.sleep(0.5)
     _LOGGER.debug("the activity %s on %s never reported a token", tag, target)
@@ -205,7 +238,12 @@ async def _answer(
 
 
 def _schedule_clear(
-    hass: HomeAssistant, activity: _Activity, target: str, tag: str, delay: float
+    hass: HomeAssistant,
+    activity: _Activity,
+    target: str,
+    webhook_id: str | None,
+    tag: str,
+    delay: float,
 ) -> None:
     if activity.cancel_clear is not None:
         activity.cancel_clear()
@@ -213,6 +251,6 @@ def _schedule_clear(
     async def _clear(_now: Any) -> None:
         activity.cancel_clear = None
         activity.started_at = None
-        await _notify(hass, target, "clear_notification", "", {"tag": tag})
+        await _notify(hass, target, "clear_notification", "", {"tag": tag}, apns=webhook_id)
 
     activity.cancel_clear = async_call_later(hass, delay, _clear)
