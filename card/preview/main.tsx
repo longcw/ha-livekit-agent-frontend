@@ -118,7 +118,8 @@ const mockHass: any = {
   callApi: async (method: string, path: string, params?: any) => {
     if (path.startsWith('livekit_voice/chat/history')) {
       const t = Date.now() - 60_000;
-      return { conversation_id: 'DB_preview', busy: location.search.includes('busy'), items: MOCK_TEXT(t) };
+      const chips = location.search.includes('chips') ? ['确认', '取消'] : [];
+      return { conversation_id: 'DB_preview', busy: location.search.includes('busy'), items: MOCK_TEXT(t), suggestions: chips };
     }
     if (path.startsWith('livekit_voice/chat')) return 'ok';
     if (path.startsWith('livekit_voice/settings')) {
@@ -463,5 +464,7 @@ function MOCK_TEXT(t: number) {
 }
 
 function PreviewTextTab() {
-  return <TextTab api={useTextChat(true)} />;
+  return (
+    <TextTab api={useTextChat(true)} tasksApi={mockApi} onOpenTask={() => {}} onSeeAllTasks={() => {}} />
+  );
 }

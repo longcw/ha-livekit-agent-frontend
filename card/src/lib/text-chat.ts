@@ -1,18 +1,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHass } from '../hass/context';
 import type { ConvItem } from './conversation';
+import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
 
 const CHAT_PATH = 'livekit_voice/chat';
 const HISTORY_PATH = 'livekit_voice/chat/history';
 
+type HistoryItem = ConvItem & { call_id?: string; output?: string };
+
 interface History {
   conversation_id: string | null;
   busy: boolean;
-  items: ConvItem[];
+  items: HistoryItem[];
+  /** Quick replies the agent offered since the user last spoke. */
+  suggestions?: string[];
 }
 
 export interface TextChatApi {
   items: ConvItem[];
+  /** The conversation's tool calls, shaped like the live tool feed's. */
+  toolCalls: ToolCall[];
+  /** Areas the agent looked at, for the device tiles. */
+  agentAreas: string[];
+  /** Quick replies for the agent's last question. */
+  suggestions: string[];
   /** A turn is running — this card's, or one sent from elsewhere (e.g. an iPhone Shortcut). */
   busy: boolean;
   error: string | null;
@@ -37,7 +48,8 @@ function humanizeError(e: unknown): string {
  */
 export function useTextChat(active: boolean): TextChatApi {
   const hass = useHass();
-  const [history, setHistory] = useState<ConvItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // our message, shown until the conversation has it
@@ -48,6 +60,7 @@ export function useTextChat(active: boolean): TextChatApi {
     try {
       const data = await hass.callApi<History>('GET', HISTORY_PATH);
       setHistory(Array.isArray(data?.items) ? data.items : []);
+      setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
       setBusy(Boolean(data?.busy));
       setError(null);
     } catch (e) {
@@ -96,5 +109,34 @@ export function useTextChat(active: boolean): TextChatApi {
     return [...history, mine];
   }, [history, pending]);
 
-  return { items, busy: busy || pending !== null, error, send, renew, refresh };
+  const { toolCalls, agentAreas } = useMemo(() => {
+    const calls: ToolCall[] = [];
+    const areas = new Set<string>();
+    for (const i of history) {
+      if (i.kind !== 'action') continue;
+      calls.push({
+        callId: i.call_id ?? i.id,
+        name: i.name,
+        args: i.args,
+        status: i.status as ToolStatus,
+        output: i.output ?? null,
+        startedAt: i.ts,
+      });
+      for (const a of argAreas(i.args)) areas.add(a);
+    }
+    return { toolCalls: calls, agentAreas: [...areas] };
+  }, [history]);
+
+  return {
+    items,
+    toolCalls,
+    agentAreas,
+    // an answer in flight makes the last question's replies stale
+    suggestions: busy || pending !== null ? [] : suggestions,
+    busy: busy || pending !== null,
+    error,
+    send,
+    renew,
+    refresh,
+  };
 }

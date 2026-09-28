@@ -18,7 +18,7 @@ export interface ToolCall {
 }
 
 /** Areas referenced by an agent tool call (e.g. get_devices(area=...)). */
-function argAreas(args: ToolCall['args']): string[] {
+export function argAreas(args: ToolCall['args']): string[] {
   if (!args || typeof args === 'string') return [];
   const area = (args as Record<string, unknown>).area;
   if (typeof area === 'string') return [area];

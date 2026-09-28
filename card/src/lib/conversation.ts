@@ -28,6 +28,15 @@ export type ConvItem = ConvMessage | ConvAction;
 
 // ---- display helpers -------------------------------------------------------
 
+/** The user's latest message, which the device tiles rank against. */
+export function lastUserText(items: ConvItem[]): string {
+  for (let i = items.length - 1; i >= 0; i--) {
+    const it = items[i];
+    if (it.kind === 'message' && it.role === 'user') return it.text;
+  }
+  return '';
+}
+
 export function humanizeTool(name: string): string {
   const s = name
     .replace(/^Hass/, '')

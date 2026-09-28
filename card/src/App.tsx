@@ -20,7 +20,7 @@ import { TaskEditor } from './components/TaskEditor';
 import { HassStoreProvider, useCardConfig, useHass, useStore } from './hass/context';
 import type { HassStore } from './hass/store';
 import { HassTokenSource } from './hass/token-source';
-import { type ConvItem, useConversation } from './lib/conversation';
+import { type ConvItem, lastUserText, useConversation } from './lib/conversation';
 import { useSessionState } from './lib/session-state';
 import { useSuggestions } from './lib/suggestions';
 import type { Task } from './lib/tasks';
@@ -51,14 +51,6 @@ function SessionRoot() {
       <CardShell />
     </SessionProvider>
   );
-}
-
-function lastUserText(items: ConvItem[]): string {
-  for (let i = items.length - 1; i >= 0; i--) {
-    const it = items[i];
-    if (it.kind === 'message' && it.role === 'user') return it.text;
-  }
-  return '';
 }
 
 const isAgentParticipant = (p: RemoteParticipant): boolean =>
@@ -110,10 +102,15 @@ function CardShell() {
   const { sttEnabled, audioOutput } = useSessionState();
   const { suggestions, clear: clearSuggestions } = useSuggestions();
   const { toolCalls, agentAreas } = useToolFeed();
-  const tasksApi = useTasks(toolCalls);
-  const [epoch, setEpoch] = useState(0);
   const [tab, setTab] = useState<Tab>(() => linkedTab() ?? 'chat');
   const textChat = useTextChat(tab === 'text');
+  // the text conversation schedules tasks too, so its calls refresh the list as well
+  const allToolCalls = useMemo(
+    () => [...toolCalls, ...textChat.toolCalls],
+    [toolCalls, textChat.toolCalls],
+  );
+  const tasksApi = useTasks(allToolCalls);
+  const [epoch, setEpoch] = useState(0);
 
   // `?lk_tab=text` opens a tab — how a tap on the phone's Live Activity lands on the Text tab.
   // HA fires `location-changed` when it navigates, and the card outlives view switches.
@@ -485,7 +482,12 @@ function CardShell() {
           />
         </>
       ) : tab === 'text' ? (
-        <TextTab api={textChat} />
+        <TextTab
+          api={textChat}
+          tasksApi={tasksApi}
+          onOpenTask={setEditing}
+          onSeeAllTasks={() => setTab('schedules')}
+        />
       ) : tab === 'schedules' ? (
         <SchedulesTab api={tasksApi} onOpen={setEditing} />
       ) : (
