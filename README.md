@@ -82,6 +82,7 @@ entities:                     # optional: always show these specific entities
   - light.study_spotlight
   - climate.bedroom_ac
 follow_agent: true            # default true: also surface tiles for areas the agent looks at
+recent_minutes: 60            # default 60: pin devices changed in the last N minutes, whatever changed them (0 = off)
 ```
 
 All fields are optional. **By default the card is text-only and dormant**: it stays static
