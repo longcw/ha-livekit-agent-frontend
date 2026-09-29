@@ -68,7 +68,10 @@ class LiveKitTokenView(HomeAssistantView):
         agent_name = config.get(CONF_AGENT_NAME) or DEFAULT_AGENT_NAME
         identity = f"ha-user-{secrets.token_hex(4)}"
         room_name = f"ha-voice-{secrets.token_hex(4)}"
-        metadata = json.dumps({"input_mode": input_mode})
+        user = request.get("hass_user")
+        metadata = json.dumps(
+            {"input_mode": input_mode, "ha_user_id": user.id if user else None}
+        )
 
         # Connect media-free (can_subscribe=False): an idle/text connection then has no
         # receive-audio transceiver, which on iOS grabs the audio session and stops the
