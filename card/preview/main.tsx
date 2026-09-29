@@ -55,6 +55,10 @@ const ICONS: Record<string, string> = {
   'mdi:view-grid-outline': 'M3,11H11V3H3M5,5H9V9H5M13,21H21V13H13M15,15H19V19H15M3,21H11V13H3M5,15H9V19H5M13,3V11H21V3M19,9H15V5H19Z',
   'mdi:message-plus-outline': 'M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3M11,14H13V12H15V10H13V8H11V10H9V12H11V14Z',
   'mdi:send': 'M2,21L23,12L2,3V10L17,12L2,14V21Z',
+  'mdi:history': 'M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3',
+  'mdi:arrow-left': 'M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z',
+  'mdi:message-text-outline': 'M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H5.17L4,17.17V4H20V16M6,7H18V9H6V7M6,11H15V13H6V11Z',
+  'mdi:message-reply-text-outline': 'M9,11H18V13H9V11M18,7H6V9H18V7M22,4V22L18,18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2H20A2,2 0 0,1 22,4M20,4H4V16H18.83L20,17.17V4Z',
   'mdi:chevron-down': 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z',
 };
 class HaIcon extends HTMLElement {
@@ -135,6 +139,20 @@ const mockHass: any = {
       return { conversation_id: 'DB_preview', busy, task_id, items: MOCK_TEXT(t), suggestions: chips };
     }
     if (path.startsWith('livekit_voice/chat/cancel')) return { cancelled: true };
+    if (path.startsWith('livekit_voice/chat/conversations')) {
+      const now = Date.now();
+      return {
+        current: 'DB_preview',
+        conversations: [
+          { id: 'DB_preview', title: '书房有什么设备？', created: now - 3_600_000, updated: now - 60_000 },
+          { id: 'DB_b', title: '一小时后关闭书房射灯', created: now - 90_000_000, updated: now - 86_000_000 },
+          { id: 'DB_c', title: 'Turn off every light downstairs and close the living room curtains', created: now - 200_000_000, updated: now - 190_000_000 },
+          { id: 'DB_d', title: '', created: now - 300_000_000, updated: now - 300_000_000 },
+        ],
+      };
+    }
+    if (path.startsWith('livekit_voice/chat/switch')) return { switched: true };
+    if (path.startsWith('livekit_voice/chat/delete')) return { deleted: true };
     if (path.startsWith('livekit_voice/chat')) return 'ok';
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
@@ -465,6 +483,18 @@ if (P.includes('open'))
       if (sc) sc.scrollTop = sc.scrollHeight;
     }, 100);
   }, 300);
+
+// ?hist — open the Text tab's conversation list (=N: then open the Nth row, =delN: arm its delete)
+const HIST = new URLSearchParams(location.search).get('hist');
+if (HIST != null)
+  setTimeout(() => {
+    (shadow.querySelector('[aria-label="Conversations"]') as HTMLElement | null)?.click();
+    if (HIST) setTimeout(() => {
+      const n = Number(HIST.replace('del', ''));
+      const sel = HIST.startsWith('del') ? '.lk-taskrow-del' : '.lk-taskrow-main';
+      shadow.querySelectorAll<HTMLElement>(sel)[n]?.click();
+    }, 300);
+  }, 400);
 
 // ?expand=N — tap the Nth tool-call row and scroll it to the top of the timeline (+stay: leave the view where it is)
 const EXPAND = new URLSearchParams(location.search).get('expand');

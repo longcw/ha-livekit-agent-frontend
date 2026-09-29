@@ -184,6 +184,7 @@ export const CARD_STYLES =
   /* clickable body (opens the editor); the action buttons live outside it so they aren't nested in a button */
   .lk-taskrow-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left;
     cursor: pointer; border: none; background: transparent; color: inherit; padding: 9px 4px 9px 11px; }
+  .lk-taskrow-main:last-child { padding-right: 12px; }
   .lk-taskrow-acts { flex: none; display: flex; align-items: center; gap: 2px; padding: 0 6px 0 2px; }
   .lk-taskrow-acts .lk-iconbtn { width: 30px; height: 30px; --mdc-icon-size: 17px; }
   .lk-taskrow-del:hover { color: var(--lk-danger); background: color-mix(in srgb, var(--lk-danger) 14%, transparent); }

@@ -12,11 +12,14 @@ The card renders device tiles from live ``hass.states`` and controls them with
 
 from __future__ import annotations
 
+import hashlib
 import logging
 from pathlib import Path
 
+from aiohttp import web
+
 from homeassistant.components.frontend import add_extra_js_url
-from homeassistant.components.http import StaticPathConfig
+from homeassistant.components.http import HomeAssistantView
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -24,7 +27,10 @@ from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
 from .progress import LiveKitProgressView
 from .tasks import (
     LiveKitChatCancelView,
+    LiveKitChatConversationsView,
+    LiveKitChatDeleteView,
     LiveKitChatHistoryView,
+    LiveKitChatSwitchView,
     LiveKitChatView,
     LiveKitSettingsView,
     LiveKitTaskView,
@@ -33,6 +39,20 @@ from .tasks import (
 from .token import LiveKitTokenView
 
 _LOGGER = logging.getLogger(__name__)
+
+_CARD_PATH = Path(__file__).parent / "frontend" / CARD_FILENAME
+
+
+class LiveKitCardView(HomeAssistantView):
+    """Serve the card bundle, revalidated on every load so a changed file is picked up."""
+
+    url = CARD_URL
+    name = "livekit_voice:card"
+    # loaded by a <script> tag, which carries no HA auth
+    requires_auth = False
+
+    async def get(self, request: web.Request) -> web.FileResponse:
+        return web.FileResponse(_CARD_PATH, headers={"Cache-Control": "no-cache"})
 
 
 def _merged_config(entry: ConfigEntry) -> dict:
@@ -49,11 +69,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # HA process (they cannot be cleanly torn down), so guard behind a flag that
     # survives entry reloads but not a full restart.
     if not store.get(DATA_REGISTERED):
-        card_path = Path(__file__).parent / "frontend" / CARD_FILENAME
-        await hass.http.async_register_static_paths(
-            [StaticPathConfig(CARD_URL, str(card_path), cache_headers=False)]
+        hass.http.register_view(LiveKitCardView())
+        # the content hash in the URL makes a new bundle a new URL, past any cache
+        digest = await hass.async_add_executor_job(
+            lambda: hashlib.sha256(_CARD_PATH.read_bytes()).hexdigest()[:12]
         )
-        add_extra_js_url(hass, CARD_URL)
+        add_extra_js_url(hass, f"{CARD_URL}?v={digest}")
         hass.http.register_view(LiveKitTokenView(hass))
         hass.http.register_view(LiveKitTasksView(hass))
         hass.http.register_view(LiveKitTaskView(hass))
@@ -61,6 +82,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitChatView(hass))
         hass.http.register_view(LiveKitChatHistoryView(hass))
         hass.http.register_view(LiveKitChatCancelView(hass))
+        hass.http.register_view(LiveKitChatConversationsView(hass))
+        hass.http.register_view(LiveKitChatSwitchView(hass))
+        hass.http.register_view(LiveKitChatDeleteView(hass))
         hass.http.register_view(LiveKitProgressView(hass))
         store[DATA_REGISTERED] = True
         _LOGGER.debug("registered token, tasks, settings, chat and progress views + card at %s", CARD_URL)

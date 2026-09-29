@@ -21,7 +21,10 @@ from homeassistant.util import slugify
 
 from .const import (
     CHAT_CANCEL_URL,
+    CHAT_CONVERSATIONS_URL,
+    CHAT_DELETE_URL,
     CHAT_HISTORY_URL,
+    CHAT_SWITCH_URL,
     CHAT_URL,
     CONF_CHAT_TOKEN,
     CONF_CHAT_URL,
@@ -95,6 +98,15 @@ def _as_user(request: web.Request) -> dict[str, str]:
     if (user_id := _ha_user_id(request)) is not None:
         query["ha_user_id"] = user_id
     return query
+
+
+async def _chat_body(request: web.Request) -> dict:
+    """A chat request's body, speaking for the logged-in HA user and no one else."""
+    body = await _json_body(request)
+    body = dict(body) if isinstance(body, dict) else {}
+    body.pop("user", None)
+    body["ha_user_id"] = _ha_user_id(request)
+    return body
 
 
 async def _task_body(request: web.Request) -> object | None:
@@ -217,16 +229,13 @@ class LiveKitChatView(HomeAssistantView):
         self._hass = hass
 
     async def post(self, request: web.Request) -> web.Response:
-        body = await _json_body(request)
-        body = dict(body) if isinstance(body, dict) else {}
-        # the HA login names the person, so a client-sent identity is never forwarded
-        body.pop("user", None)
-        body["ha_user_id"] = _ha_user_id(request)
+        body = await _chat_body(request)
         return await _forward(self._hass, "POST", "/chat", json_body=body, service=_WORKER)
 
 
 class LiveKitChatHistoryView(HomeAssistantView):
-    """Read the text conversation's messages and tool calls (`?limit=`)."""
+    """Read a text conversation's messages and tool calls (`?limit=`,
+    `?conversation_id=` for a past one)."""
 
     url = CHAT_HISTORY_URL
     name = "api:livekit_voice:chat_history"
@@ -252,11 +261,55 @@ class LiveKitChatCancelView(HomeAssistantView):
         self._hass = hass
 
     async def post(self, request: web.Request) -> web.Response:
-        body = await _json_body(request)
-        body = dict(body) if isinstance(body, dict) else {}
-        # the HA login names the person, so a client-sent identity is never forwarded
-        body.pop("user", None)
-        body["ha_user_id"] = _ha_user_id(request)
+        body = await _chat_body(request)
         return await _forward(
             self._hass, "POST", "/chat/cancel", json_body=body, service=_WORKER
+        )
+
+
+class LiveKitChatConversationsView(HomeAssistantView):
+    """List the user's text conversations, latest first."""
+
+    url = CHAT_CONVERSATIONS_URL
+    name = "api:livekit_voice:chat_conversations"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def get(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "GET", "/chat/conversations", query=_as_user(request), service=_WORKER
+        )
+
+
+class LiveKitChatSwitchView(HomeAssistantView):
+    """Make one of the user's conversations the current one (`{"conversation_id"}`)."""
+
+    url = CHAT_SWITCH_URL
+    name = "api:livekit_voice:chat_switch"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "POST", "/chat/switch", json_body=await _chat_body(request), service=_WORKER
+        )
+
+
+class LiveKitChatDeleteView(HomeAssistantView):
+    """Delete one of the user's past conversations (`{"conversation_id"}`)."""
+
+    url = CHAT_DELETE_URL
+    name = "api:livekit_voice:chat_delete"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "POST", "/chat/delete", json_body=await _chat_body(request), service=_WORKER
         )

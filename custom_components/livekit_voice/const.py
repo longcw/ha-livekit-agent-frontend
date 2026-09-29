@@ -32,10 +32,13 @@ TASKS_URL = "/api/livekit_voice/tasks"
 TASK_URL = "/api/livekit_voice/tasks/{task_id}"
 # Settings proxy (e.g. notify.* push targets); forwards to the scheduler's /settings.
 SETTINGS_URL = "/api/livekit_voice/settings"
-# Text chat proxy for the Text tab; forwards to the worker's /chat and /chat/history.
+# Text chat proxy for the Text tab; forwards to the worker's /chat and /chat/*.
 CHAT_URL = "/api/livekit_voice/chat"
 CHAT_HISTORY_URL = "/api/livekit_voice/chat/history"
 CHAT_CANCEL_URL = "/api/livekit_voice/chat/cancel"
+CHAT_CONVERSATIONS_URL = "/api/livekit_voice/chat/conversations"
+CHAT_SWITCH_URL = "/api/livekit_voice/chat/switch"
+CHAT_DELETE_URL = "/api/livekit_voice/chat/delete"
 # Turn progress on a phone (start / progress / final); the worker posts here with an HA token.
 PROGRESS_URL = "/api/livekit_voice/progress"
 

@@ -6,6 +6,9 @@ import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
 const CHAT_PATH = 'livekit_voice/chat';
 const HISTORY_PATH = 'livekit_voice/chat/history';
 const CANCEL_PATH = 'livekit_voice/chat/cancel';
+const CONVERSATIONS_PATH = 'livekit_voice/chat/conversations';
+const SWITCH_PATH = 'livekit_voice/chat/switch';
+const DELETE_PATH = 'livekit_voice/chat/delete';
 
 type HistoryItem = ConvItem & { call_id?: string; output_chars?: number };
 
@@ -17,6 +20,19 @@ interface History {
   items: HistoryItem[];
   /** Quick replies the agent offered since the user last spoke. */
   suggestions?: string[];
+}
+
+/** One of the person's conversations, titled by its first message. */
+export interface ConversationSummary {
+  id: string;
+  title: string;
+  created: number;
+  updated: number;
+}
+
+export interface ConversationList {
+  current: string | null;
+  conversations: ConversationSummary[];
 }
 
 export interface TextChatApi {
@@ -38,6 +54,21 @@ export interface TextChatApi {
   send: (text: string) => Promise<void>;
   renew: () => Promise<void>;
   refresh: () => Promise<void>;
+  /** The person's conversations, latest first. */
+  listConversations: () => Promise<ConversationList>;
+  /** A past conversation's items, read without making it current. */
+  readConversation: (id: string) => Promise<ConvItem[]>;
+  /** Make a past conversation the current one; false while a turn runs. */
+  switchConversation: (id: string) => Promise<boolean>;
+  /** Delete a past conversation; the current one is never deleted. */
+  deleteConversation: (id: string) => Promise<boolean>;
+}
+
+// a call keeps its call_id from running to done, so its row (and whether it is expanded) survives the polls
+function toConvItems(history: HistoryItem[]): ConvItem[] {
+  return history.map<ConvItem>((i) =>
+    i.kind === 'action' ? { ...i, id: i.call_id ?? i.id, outputChars: i.output_chars } : i,
+  );
 }
 
 function humanizeError(e: unknown): string {
@@ -140,11 +171,39 @@ export function useTextChat(active: boolean): TextChatApi {
     await refresh();
   }, [hass, taskId, refresh]);
 
+  const listConversations = useCallback(async () => {
+    const data = await hass!.callApi<ConversationList>('GET', CONVERSATIONS_PATH);
+    return { current: data?.current ?? null, conversations: data?.conversations ?? [] };
+  }, [hass]);
+
+  const readConversation = useCallback(
+    async (id: string) => {
+      const query = `?conversation_id=${encodeURIComponent(id)}`;
+      const data = await hass!.callApi<History>('GET', HISTORY_PATH + query);
+      return toConvItems(Array.isArray(data?.items) ? data.items : []);
+    },
+    [hass],
+  );
+
+  const switchConversation = useCallback(
+    async (id: string) => {
+      const res = await hass!.callApi<{ switched?: boolean }>('POST', SWITCH_PATH, { conversation_id: id });
+      await refresh();
+      return Boolean(res?.switched);
+    },
+    [hass, refresh],
+  );
+
+  const deleteConversation = useCallback(
+    async (id: string) => {
+      const res = await hass!.callApi<{ deleted?: boolean }>('POST', DELETE_PATH, { conversation_id: id });
+      return Boolean(res?.deleted);
+    },
+    [hass],
+  );
+
   const items = useMemo(() => {
-    // a call keeps its call_id from running to done, so its row (and whether it is expanded) survives the polls
-    const conv = history.map<ConvItem>((i) =>
-      i.kind === 'action' ? { ...i, id: i.call_id ?? i.id, outputChars: i.output_chars } : i,
-    );
+    const conv = toConvItems(history);
     const last = [...history].reverse().find((i) => i.kind === 'message' && i.role === 'user');
     if (!pending || (last?.kind === 'message' && last.text === pending)) return conv;
     const mine: ConvItem = { kind: 'message', id: 'pending', role: 'user', text: pending, ts: Date.now() };
@@ -183,5 +242,9 @@ export function useTextChat(active: boolean): TextChatApi {
     send,
     renew,
     refresh,
+    listConversations,
+    readConversation,
+    switchConversation,
+    deleteConversation,
   };
 }

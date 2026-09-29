@@ -7,6 +7,7 @@ import { Conversation } from './Conversation';
 import { DeviceTiles } from './DeviceTiles';
 import { useDockHeight } from './Dock';
 import { ScheduledTasks } from './ScheduledTasks';
+import { TextHistory } from './TextHistory';
 
 // shown as the schedules rail and the chips instead of as inline action rows
 const HIDDEN_TOOLS = new Set([...SCHEDULING_TOOLS, 'suggest_replies']);
@@ -30,11 +31,14 @@ export function TextTab({
   const { items, toolCalls, agentAreas, suggestions, busy, canStop, stopping, error, stop, send, renew, refresh } = api;
   const dockRef = useDockHeight();
   const [text, setText] = useState('');
+  const [history, setHistory] = useState(false);
   const canSend = !busy && text.trim().length > 0;
   const shown = useMemo(
     () => items.filter((i) => i.kind !== 'action' || !HIDDEN_TOOLS.has(i.name)),
     [items],
   );
+
+  if (history) return <TextHistory api={api} onClose={() => setHistory(false)} />;
 
   const submit = (raw: string) => {
     const message = raw.trim();
@@ -51,6 +55,14 @@ export function TextTab({
         </span>
         <button className="lk-iconbtn" onClick={() => void refresh()} aria-label="Refresh">
           <ha-icon icon="mdi:refresh" />
+        </button>
+        <button
+          className="lk-iconbtn"
+          onClick={() => setHistory(true)}
+          aria-label="Conversations"
+          title="Conversations"
+        >
+          <ha-icon icon="mdi:history" />
         </button>
         <button
           className="lk-iconbtn"

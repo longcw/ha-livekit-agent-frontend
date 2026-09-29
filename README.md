@@ -62,7 +62,7 @@ Two independent control paths that both end at HA and reflect back into the card
    in YAML — see options below).
 6. Open the dashboard **over HTTPS** and tap **Start voice**.
 
-When a new version is released, HACS offers the update; restart HA and hard-refresh the
+When a new version is released, HACS offers the update; restart HA and reload the
 dashboard to pick up the new card.
 
 ## Card options
