@@ -28,7 +28,7 @@ export function TextTab({
   onOpenTask: (t: Task) => void;
   onSeeAllTasks: () => void;
 }) {
-  const { items, toolCalls, agentAreas, suggestions, busy, canStop, stopping, error, stop, send, renew, refresh } = api;
+  const { items, toolCalls, agentAreas, suggestions, busy, canStop, stopping, forceStop, error, stop, send, renew, refresh } = api;
   const dockRef = useDockHeight();
   const [text, setText] = useState('');
   const [history, setHistory] = useState(false);
@@ -51,7 +51,8 @@ export function TextTab({
     <>
       <div className="lk-search">
         <span className="lk-texthead">
-          {error ?? (stopping ? 'Stopping…' : busy ? 'Working…' : 'Shared with your phone')}
+          {error ??
+            (stopping ? 'Stopping…' : forceStop ? 'Still working in the background' : busy ? 'Working…' : 'Shared with your phone')}
         </span>
         <button className="lk-iconbtn" onClick={() => void refresh()} aria-label="Refresh">
           <ha-icon icon="mdi:refresh" />
@@ -116,9 +117,10 @@ export function TextTab({
           {busy ? (
             <button
               className="lk-send lk-send--accent lk-stop"
-              title={stopping ? 'Stopping…' : 'Stop'}
-              aria-label={stopping ? 'Stopping' : 'Stop'}
+              title={stopping ? 'Stopping…' : forceStop ? 'Force stop: also cancel background work' : 'Stop'}
+              aria-label={stopping ? 'Stopping' : forceStop ? 'Force stop' : 'Stop'}
               data-stopping={stopping ? '1' : '0'}
+              data-force={forceStop ? '1' : '0'}
               onClick={() => void stop()}
               disabled={!canStop}
             >

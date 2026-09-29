@@ -142,6 +142,8 @@ function ActionRow({ item, onToggle }: { item: ConvAction; onToggle: () => void 
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const action = isActionTool(item.name);
+  // an MCP server's update, which the worker shows as a row: its text is all there is to see
+  const update = item.name === 'update_from';
   const target = actionTarget(item.args);
   const failed = item.status === 'error';
   const output = item.output;
@@ -162,14 +164,19 @@ function ActionRow({ item, onToggle }: { item: ConvAction; onToggle: () => void 
         }}
       >
         <span className="lk-act-dot" />
-        <ha-icon icon={action ? 'mdi:flash' : 'mdi:radar'} />
+        <ha-icon icon={update ? 'mdi:bell-outline' : action ? 'mdi:flash' : 'mdi:radar'} />
         <span className="lk-act-text">
           {humanizeTool(item.name)}
           {target && <span className="lk-act-target"> {target}</span>}
         </span>
         <ha-icon className="lk-act-chev" icon="mdi:chevron-down" />
       </button>
-      {open && (
+      {open && update && (
+        <div className="lk-act-details" id={detailsId}>
+          <div className="lk-act-update">{output}</div>
+        </div>
+      )}
+      {open && !update && (
         <div className="lk-act-details" id={detailsId}>
           <div className="lk-act-status" data-status={item.status}>
             <span className="lk-act-dot" />

@@ -50,6 +50,9 @@ export interface TextChatApi {
   canStop: boolean;
   /** A stop was sent for the running turn and it has not ended yet. */
   stopping: boolean;
+  /** The reply was stopped but the turn still runs work in the background, so the next
+   *  stop is a force stop, which cancels that work too. */
+  forceStop: boolean;
   error: string | null;
   stop: () => Promise<void>;
   /** Load the conversation ahead of a message, so its first reply does not wait. */
@@ -97,6 +100,9 @@ export function useTextChat(active: boolean): TextChatApi {
   const [taskId, setTaskId] = useState<string | null>(null);
   // the task a stop was sent for; a newer turn has another id, so it is never shown as stopping
   const [stoppingId, setStoppingId] = useState<string | null>(null);
+  // when the reply was stopped, and the task a force stop was sent for
+  const [stoppedAt, setStoppedAt] = useState(0);
+  const [forcingId, setForcingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   // our message, shown until the conversation has it
   const [pending, setPending] = useState<string | null>(null);
@@ -157,7 +163,10 @@ export function useTextChat(active: boolean): TextChatApi {
 
   // the stopped turn is over once history is idle and our own send has resolved
   useEffect(() => {
-    if (!busy && pending === null) setStoppingId(null);
+    if (!busy && pending === null) {
+      setStoppingId(null);
+      setForcingId(null);
+    }
   }, [busy, pending]);
 
   // the worker loads a conversation it had unloaded only on a message, or when asked here;
@@ -171,19 +180,29 @@ export function useTextChat(active: boolean): TextChatApi {
     if (active) warm();
   }, [active, warm]);
 
+  // a turn still busy this long after its reply was stopped is running background work
+  const forceStop =
+    taskId !== null && stoppingId === taskId && forcingId !== taskId && Date.now() - stoppedAt > 1500;
+
   const stop = useCallback(async () => {
     if (!hass || !taskId) return;
-    setStoppingId(taskId);
+    const force = forceStop;
+    const undo = force ? () => setForcingId(null) : () => setStoppingId(null);
+    if (force) setForcingId(taskId);
+    else {
+      setStoppingId(taskId);
+      setStoppedAt(Date.now());
+    }
     try {
       // the worker stops the turn only while this task is still the running one
-      const res = await hass.callApi<{ cancelled?: boolean }>('POST', CANCEL_PATH, { task_id: taskId });
-      if (!res?.cancelled) setStoppingId(null);
+      const res = await hass.callApi<{ cancelled?: boolean }>('POST', CANCEL_PATH, { task_id: taskId, force });
+      if (!res?.cancelled) undo();
     } catch (e) {
-      setStoppingId(null);
+      undo();
       setError(humanizeError(e));
     }
     await refresh();
-  }, [hass, taskId, refresh]);
+  }, [hass, taskId, forceStop, refresh]);
 
   const listConversations = useCallback(async () => {
     const data = await hass!.callApi<ConversationList>('GET', CONVERSATIONS_PATH);
@@ -249,8 +268,9 @@ export function useTextChat(active: boolean): TextChatApi {
     // an answer in flight makes the last question's replies stale
     suggestions: busy || pending !== null ? [] : suggestions,
     busy: busy || pending !== null,
-    canStop: taskId !== null && stoppingId !== taskId,
-    stopping: stoppingId !== null && (stoppingId === taskId || taskId === null),
+    canStop: taskId !== null && (stoppingId !== taskId || forceStop),
+    stopping: !forceStop && stoppingId !== null && (stoppingId === taskId || taskId === null),
+    forceStop,
     error,
     stop,
     warm,

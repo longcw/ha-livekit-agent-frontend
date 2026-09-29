@@ -509,7 +509,8 @@ if (EXPAND != null)
     }, 100);
   }, 600);
 
-// ?busy&stopping — tap the stop button once it is enabled, to show the stopping state
+// ?busy&stopping — tap the stop button once it is enabled, to show the stopping state; as the
+// preview stays busy, the button turns into force stop 1.5 s later
 if (location.search.includes('stopping')) {
   const tap = setInterval(() => {
     const btn = shadow.querySelector<HTMLButtonElement>('.lk-stop:not(:disabled)');
@@ -555,6 +556,16 @@ function MOCK_TEXT(t: number) {
     { kind: 'message', id: 'm3', role: 'user', text: '把背景灯关了', ts: t + 3 },
     { kind: 'action', id: 'a2', ts: t + 4, name: 'HassTurnOff', args: { name: '背景灯 电视 左键' }, status: running ? 'running' : 'done' },
     ...(running ? [] : [{ kind: 'message', id: 'm4', role: 'agent', text: '已经把背景灯关掉了。', ts: t + 5 }]),
+    // ?update — an MCP server's update, which the worker returns as a row, not as the person
+    ...(location.search.includes('update')
+      ? [
+          {
+            kind: 'action', id: 'u1', call_id: 'u1', ts: t + 6, name: 'update_from', args: { name: 'Claude Code' },
+            status: 'done', output: '"RAM check" finished.\nLast message: 12 GB of 16 GB in use.',
+          },
+          { kind: 'message', id: 'u2', role: 'agent', text: 'Claude Code 的内存检查完成了：16 GB 中用了 12 GB。', ts: t + 7 },
+        ]
+      : []),
     ...(location.search.includes('md') ? MD_ITEMS(t + 6) : []),
     ...(location.search.includes('tools') ? TOOL_ITEMS(t + 6) : []),
   ];

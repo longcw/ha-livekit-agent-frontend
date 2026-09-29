@@ -334,6 +334,9 @@ export const CARD_STYLES =
     white-space: pre-wrap; word-break: break-word; }
   .lk-msg[data-role="user"] .lk-bubble { background: var(--lk-accent); color: var(--lk-on-accent); border-bottom-right-radius: 5px; }
   .lk-msg[data-role="agent"] .lk-bubble { background: var(--lk-elevated); color: var(--lk-fg); border-bottom-left-radius: 5px; }
+  /* what was said and what a tool got and returned can be copied, whatever the dashboard
+     around the card sets; a long press on iOS then offers Copy */
+  .lk-bubble, .lk-act-details { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
   /* agent replies rendered from Markdown */
   .lk-md { white-space: normal; }
   .lk-md :where(p, ul, ol, pre, blockquote, hr, .lk-md-table) { margin: 0; }
@@ -373,6 +376,7 @@ export const CARD_STYLES =
   .lk-act-details { width: 100%; min-width: 0; padding: 9px 10px 10px; border-radius: 12px;
     border: 1px solid var(--lk-line); background: var(--lk-surface); font-size: 0.78rem; color: var(--lk-fg); }
   .lk-act-status { display: flex; align-items: center; gap: 7px; font-weight: 700; }
+  .lk-act-update { white-space: pre-wrap; word-break: break-word; line-height: 1.45; }
   .lk-act-status[data-status="running"] .lk-act-dot { background: var(--lk-accent); animation: lk-blink 1s ease-in-out infinite; }
   .lk-act-status[data-status="done"] .lk-act-dot { background: var(--lk-ok); }
   .lk-act-status[data-status="error"], .lk-act-status[data-status="cancelled"] { color: var(--lk-danger); }
@@ -478,6 +482,8 @@ export const CARD_STYLES =
   .lk-stop:disabled { opacity: .45; }
   .lk-stop[data-stopping="1"]:disabled { opacity: 1; }
   .lk-stop-sq { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
+  /* the second press cancels the background work too, so it reads as a warning */
+  .lk-stop[data-force="1"] { background: var(--error-color, #db4437); color: #fff; }
 
   .lk-start { cursor: pointer; width: 100%; padding: 13px; border: none; border-radius: 16px; --mdc-icon-size: 20px;
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;
