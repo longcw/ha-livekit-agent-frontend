@@ -7,7 +7,7 @@ const CHAT_PATH = 'livekit_voice/chat';
 const HISTORY_PATH = 'livekit_voice/chat/history';
 const CANCEL_PATH = 'livekit_voice/chat/cancel';
 
-type HistoryItem = ConvItem & { call_id?: string; output?: string };
+type HistoryItem = ConvItem & { call_id?: string; output_chars?: number };
 
 interface History {
   conversation_id: string | null;
@@ -141,10 +141,14 @@ export function useTextChat(active: boolean): TextChatApi {
   }, [hass, taskId, refresh]);
 
   const items = useMemo(() => {
+    // a call keeps its call_id from running to done, so its row (and whether it is expanded) survives the polls
+    const conv = history.map<ConvItem>((i) =>
+      i.kind === 'action' ? { ...i, id: i.call_id ?? i.id, outputChars: i.output_chars } : i,
+    );
     const last = [...history].reverse().find((i) => i.kind === 'message' && i.role === 'user');
-    if (!pending || (last?.kind === 'message' && last.text === pending)) return history;
+    if (!pending || (last?.kind === 'message' && last.text === pending)) return conv;
     const mine: ConvItem = { kind: 'message', id: 'pending', role: 'user', text: pending, ts: Date.now() };
-    return [...history, mine];
+    return [...conv, mine];
   }, [history, pending]);
 
   const { toolCalls, agentAreas } = useMemo(() => {

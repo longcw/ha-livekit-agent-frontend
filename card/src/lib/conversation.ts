@@ -22,6 +22,10 @@ export interface ConvAction {
   name: string;
   args: Record<string, unknown> | string | null;
   status: 'running' | 'done' | 'error' | 'cancelled';
+  /** The tool's result, or its error text; possibly clipped. */
+  output?: string | null;
+  /** The full output length, present when `output` was clipped. */
+  outputChars?: number;
 }
 
 export type ConvItem = ConvMessage | ConvAction;
@@ -60,6 +64,42 @@ export function actionTarget(args: Record<string, unknown> | string | null): str
   const name = args.name ?? args.area ?? args.domain;
   if (Array.isArray(name)) return name.map(String).join(', ');
   return name != null ? String(name) : '';
+}
+
+/** Pretty-prints JSON for display; clipped JSON is re-indented as far as it goes, anything else stays as text. */
+export function prettyJson(value: unknown, clipped = false): string {
+  if (typeof value !== 'string') return JSON.stringify(value, null, 2);
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    if (!clipped || !/^\s*[[{]/.test(value)) return value;
+  }
+  // a clipped document never parses, so indent it token by token instead
+  let out = '';
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  const nl = () => '\n' + '  '.repeat(depth);
+  for (const ch of value) {
+    if (inStr) {
+      out += ch;
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+    } else if (ch === '"') {
+      inStr = true;
+      out += ch;
+    } else if (ch === '{' || ch === '[') {
+      depth++;
+      out += ch + nl();
+    } else if (ch === '}' || ch === ']') {
+      depth = Math.max(0, depth - 1);
+      out += nl() + ch;
+    } else if (ch === ',') out += ',' + nl();
+    else if (ch === ':') out += ': ';
+    else if (!/\s/.test(ch)) out += ch;
+  }
+  return out;
 }
 
 // ---- the live conversation -------------------------------------------------
@@ -123,6 +163,7 @@ export function useConversation(
         name: t.name,
         args: t.args,
         status: t.status,
+        output: t.output,
       }));
 
     return [...messages, ...actions].sort((a, b) => a.ts - b.ts);

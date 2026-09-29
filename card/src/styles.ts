@@ -357,9 +357,36 @@ export const CARD_STYLES =
   .lk-md th, .lk-md td { padding: 4px 10px 4px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--lk-line); }
   .lk-md th { font-weight: 700; }
   .lk-md tr:last-child td { border-bottom: none; }
-  .lk-act { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; max-width: 100%;
-    padding: 5px 12px 5px 9px; border-radius: 999px; font-size: 0.8rem; --mdc-icon-size: 14px;
-    border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-muted); animation: lk-rise .22s ease both; }
+  /* a tool call: a tappable pill that expands into its arguments and output */
+  .lk-act-row { align-self: flex-start; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    max-width: 100%; min-width: 0; animation: lk-rise .22s ease both; }
+  .lk-act-row[data-open="1"] { align-self: stretch; }
+  .lk-act { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; margin: 0;
+    padding: 5px 9px 5px 9px; border-radius: 999px; font: inherit; font-size: 0.8rem; text-align: left; cursor: pointer;
+    --mdc-icon-size: 14px; border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-muted);
+    transition: border-color .15s ease, background .15s ease; }
+  .lk-act:hover { border-color: color-mix(in srgb, var(--lk-fg) 22%, transparent); }
+  .lk-act:focus-visible { outline: 2px solid var(--lk-accent); outline-offset: 2px; }
+  .lk-act-chev { --mdc-icon-size: 15px; flex: none; margin-left: -1px; opacity: .6; transition: transform .18s ease; }
+  .lk-act[aria-expanded="true"] .lk-act-chev { transform: rotate(180deg); }
+  .lk-act-details { width: 100%; min-width: 0; padding: 9px 10px 10px; border-radius: 12px;
+    border: 1px solid var(--lk-line); background: var(--lk-surface); font-size: 0.78rem; color: var(--lk-fg); }
+  .lk-act-status { display: flex; align-items: center; gap: 7px; font-weight: 700; }
+  .lk-act-status[data-status="running"] .lk-act-dot { background: var(--lk-accent); animation: lk-blink 1s ease-in-out infinite; }
+  .lk-act-status[data-status="done"] .lk-act-dot { background: var(--lk-ok); }
+  .lk-act-status[data-status="error"], .lk-act-status[data-status="cancelled"] { color: var(--lk-danger); }
+  .lk-act-status[data-status="error"] .lk-act-dot, .lk-act-status[data-status="cancelled"] .lk-act-dot { background: var(--lk-danger); }
+  .lk-act-name { margin-left: auto; font-family: var(--lk-mono); font-weight: 400; font-size: 0.72rem; color: var(--lk-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .lk-act-label { margin: 10px 0 4px; font-size: 0.68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--lk-muted); }
+  .lk-act-note { font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .lk-act-code { margin: 0; padding: 7px 9px; max-height: 200px; overflow: auto; white-space: pre; scrollbar-width: thin;
+    border-radius: 8px; font-family: var(--lk-mono); font-size: 0.72rem; line-height: 1.5; color: var(--lk-fg);
+    background: color-mix(in srgb, var(--lk-fg) 6%, transparent); }
+  .lk-act-code[data-error="1"] { white-space: pre-wrap; word-break: break-word; color: var(--lk-danger);
+    background: color-mix(in srgb, var(--lk-danger) 9%, transparent); }
+  .lk-act-none { color: var(--lk-muted); font-style: italic; }
   .lk-act[data-kind="action"] { color: var(--lk-fg);
     border-color: color-mix(in srgb, var(--lk-accent) 34%, transparent);
     background: color-mix(in srgb, var(--lk-accent) 9%, var(--lk-surface)); }
@@ -461,7 +488,7 @@ export const CARD_STYLES =
   .lk-start:disabled { opacity: .5; cursor: default; box-shadow: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .lk-orb-core, .lk-orb::before, .lk-act-dot, .lk-msg, .lk-act { animation: none !important; }
+    .lk-orb-core, .lk-orb::before, .lk-act-dot, .lk-msg, .lk-act-row { animation: none !important; }
     .lk-eq i { animation: none !important; transform: scaleY(.6); }
   }
 `;

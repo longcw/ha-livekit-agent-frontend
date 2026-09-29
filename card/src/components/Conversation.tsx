@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import {
   actionTarget,
   type ConvAction,
@@ -6,6 +6,7 @@ import {
   type ConvMessage,
   humanizeTool,
   isActionTool,
+  prettyJson,
 } from '../lib/conversation';
 import { Markdown } from './Markdown';
 
@@ -43,9 +44,19 @@ export function Conversation({
     stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
   };
 
+  // a row the user expands grows in place: hold the view for that frame instead of pinning
+  const holding = useRef(false);
+  const hold = () => {
+    holding.current = true;
+    requestAnimationFrame(() => {
+      holding.current = false;
+      onScroll();
+    });
+  };
+
   const pin = () => {
     const el = ref.current;
-    if (el && autoscroll && stick.current) el.scrollTop = el.scrollHeight;
+    if (el && autoscroll && stick.current && !holding.current) el.scrollTop = el.scrollHeight;
   };
 
   // Keep the tail visible as the timeline grows: a streaming reply mutates the last
@@ -92,7 +103,7 @@ export function Conversation({
           item.kind === 'message' ? (
             <MessageRow key={item.id} item={item} />
           ) : (
-            <ActionRow key={item.id} item={item} />
+            <ActionRow key={item.id} item={item} onToggle={hold} />
           )
         )
       ) : (
@@ -120,17 +131,80 @@ function MessageRow({ item }: { item: ConvMessage }) {
   );
 }
 
-function ActionRow({ item }: { item: ConvAction }) {
+const STATUS_WORDS: Record<ConvAction['status'], string> = {
+  running: 'Running…',
+  done: 'Done',
+  error: 'Failed',
+  cancelled: 'Cancelled',
+};
+
+function ActionRow({ item, onToggle }: { item: ConvAction; onToggle: () => void }) {
+  const [open, setOpen] = useState(false);
+  const detailsId = useId();
   const action = isActionTool(item.name);
   const target = actionTarget(item.args);
+  const failed = item.status === 'error';
+  const output = item.output;
+  const clipped = output != null && item.outputChars != null && item.outputChars > output.length;
+  const hasArgs = item.args != null && !(typeof item.args === 'object' && !Object.keys(item.args).length);
   return (
-    <div className="lk-act" data-kind={action ? 'action' : 'read'} data-status={item.status}>
-      <span className="lk-act-dot" />
-      <ha-icon icon={action ? 'mdi:flash' : 'mdi:radar'} />
-      <span className="lk-act-text">
-        {humanizeTool(item.name)}
-        {target && <span className="lk-act-target"> {target}</span>}
-      </span>
+    <div className="lk-act-row" data-open={open ? '1' : '0'}>
+      <button
+        type="button"
+        className="lk-act"
+        data-kind={action ? 'action' : 'read'}
+        data-status={item.status}
+        aria-expanded={open}
+        aria-controls={detailsId}
+        onClick={() => {
+          onToggle();
+          setOpen((v) => !v);
+        }}
+      >
+        <span className="lk-act-dot" />
+        <ha-icon icon={action ? 'mdi:flash' : 'mdi:radar'} />
+        <span className="lk-act-text">
+          {humanizeTool(item.name)}
+          {target && <span className="lk-act-target"> {target}</span>}
+        </span>
+        <ha-icon className="lk-act-chev" icon="mdi:chevron-down" />
+      </button>
+      {open && (
+        <div className="lk-act-details" id={detailsId}>
+          <div className="lk-act-status" data-status={item.status}>
+            <span className="lk-act-dot" />
+            {STATUS_WORDS[item.status]}
+            <span className="lk-act-name">{item.name}</span>
+          </div>
+          <div className="lk-act-label">Arguments</div>
+          {hasArgs ? (
+            <pre className="lk-act-code">{prettyJson(item.args)}</pre>
+          ) : (
+            <div className="lk-act-none">None</div>
+          )}
+          {item.status !== 'running' && (
+            <>
+              <div className="lk-act-label">
+                {failed ? 'Error' : 'Output'}
+                {clipped && (
+                  <span className="lk-act-note">
+                    {' '}
+                    · first {output.replace(/…$/, '').length.toLocaleString('en-US')} of{' '}
+                    {item.outputChars!.toLocaleString('en-US')} characters
+                  </span>
+                )}
+              </div>
+              {output ? (
+                <pre className="lk-act-code" data-error={failed ? '1' : '0'}>
+                  {prettyJson(output, clipped)}
+                </pre>
+              ) : (
+                <div className="lk-act-none">{output === '' ? 'Empty' : 'Not recorded'}</div>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

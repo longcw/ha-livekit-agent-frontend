@@ -449,7 +449,9 @@ const shadow = host.attachShadow({ mode: 'open' });
 const style = document.createElement('style');
 // Match production sizing: the card is content-sized (capped via max-height in CARD_STYLES),
 // so we DON'T force ha-card to fill the frame — we only apply the HA card chrome.
-style.textContent = CARD_STYLES + `\n:host{${THEME}} ha-card{${HA_CARD}}`;
+// ?h=N — raise the card's height cap to N px, to review a tall timeline in one shot
+const CAP = new URLSearchParams(location.search).get('h');
+style.textContent = CARD_STYLES + `\n:host{${THEME}${CAP ? `--lk-h:${Number(CAP)}px;` : ''}} ha-card{${HA_CARD}}`;
 const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
@@ -463,6 +465,18 @@ if (P.includes('open'))
       if (sc) sc.scrollTop = sc.scrollHeight;
     }, 100);
   }, 300);
+
+// ?expand=N — tap the Nth tool-call row and scroll it to the top of the timeline (+stay: leave the view where it is)
+const EXPAND = new URLSearchParams(location.search).get('expand');
+if (EXPAND != null)
+  setTimeout(() => {
+    const row = shadow.querySelectorAll<HTMLButtonElement>('.lk-act')[Number(EXPAND)];
+    row?.click();
+    if (!P.includes('stay')) setTimeout(() => {
+      const convo = shadow.querySelector<HTMLElement>('.lk-convo');
+      if (convo && row) convo.scrollTop += row.getBoundingClientRect().top - convo.getBoundingClientRect().top - 8;
+    }, 100);
+  }, 600);
 
 // ?busy&stopping — tap the stop button once it is enabled, to show the stopping state
 if (location.search.includes('stopping')) {
@@ -511,6 +525,31 @@ function MOCK_TEXT(t: number) {
     { kind: 'action', id: 'a2', ts: t + 4, name: 'HassTurnOff', args: { name: '背景灯 电视 左键' }, status: running ? 'running' : 'done' },
     ...(running ? [] : [{ kind: 'message', id: 'm4', role: 'agent', text: '已经把背景灯关掉了。', ts: t + 5 }]),
     ...(location.search.includes('md') ? MD_ITEMS(t + 6) : []),
+    ...(location.search.includes('tools') ? TOOL_ITEMS(t + 6) : []),
+  ];
+}
+
+// ?tools — finished calls with output: a clipped JSON result and a failed call (+expand=N taps the Nth row)
+function TOOL_ITEMS(t: number) {
+  const entities = Array.from({ length: 60 }, (_, i) => ({
+    entity_id: `light.living_${i}`, name: `客厅 灯 ${i}`, state: i % 3 ? 'off' : 'on', area: '客厅',
+    attributes: { brightness: 128 + i, color_mode: 'brightness', supported_features: 44 },
+  }));
+  const full = JSON.stringify({ success: true, result: { entities, count: entities.length } });
+  return [
+    { kind: 'message', id: 't1', role: 'user', text: '客厅都有什么灯？', ts: t },
+    {
+      kind: 'action', id: 'h-t2', call_id: 'call_live', ts: t + 1, name: 'GetLiveContext',
+      args: { area: '客厅', domain: ['light'], include: { attributes: true, state: true } },
+      status: 'done', output: full.slice(0, 1000) + '…', output_chars: full.length,
+    },
+    { kind: 'message', id: 't3', role: 'user', text: '把阳台灯调到 50%', ts: t + 2 },
+    {
+      kind: 'action', id: 'h-t4', call_id: 'call_fail', ts: t + 3, name: 'HassLightSet',
+      args: { name: '阳台 灯', brightness: 50 }, status: 'error',
+      output: 'MatchFailedError: no entity named "阳台 灯" is exposed to the voice assistant',
+    },
+    { kind: 'message', id: 't5', role: 'agent', text: '没有找到阳台灯，它可能没有开放给语音助手。', ts: t + 4 },
   ];
 }
 
@@ -554,8 +593,9 @@ function PreviewTextTab({ showTiles }: { showTiles: boolean }) {
   return (
     <TextTab
       api={useTextChat(true)}
-      tasksApi={mockApi}
-      showTiles={showTiles}
+      // ?bare — no tiles or schedules rail, leaving the timeline the whole card
+      tasksApi={P.includes('bare') ? { ...mockApi, tasks: [] } : mockApi}
+      showTiles={showTiles && !P.includes('bare')}
       onOpenTask={() => {}}
       onSeeAllTasks={() => {}}
     />
