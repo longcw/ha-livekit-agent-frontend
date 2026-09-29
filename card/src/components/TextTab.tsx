@@ -17,15 +17,17 @@ const HIDDEN_TOOLS = new Set([...SCHEDULING_TOOLS, 'suggest_replies']);
 export function TextTab({
   api,
   tasksApi,
+  showTiles,
   onOpenTask,
   onSeeAllTasks,
 }: {
   api: TextChatApi;
   tasksApi: TasksApi;
+  showTiles: boolean;
   onOpenTask: (t: Task) => void;
   onSeeAllTasks: () => void;
 }) {
-  const { items, toolCalls, agentAreas, suggestions, busy, error, send, renew, refresh } = api;
+  const { items, toolCalls, agentAreas, suggestions, busy, canStop, stopping, error, stop, send, renew, refresh } = api;
   const dockRef = useDockHeight();
   const [text, setText] = useState('');
   const canSend = !busy && text.trim().length > 0;
@@ -45,7 +47,7 @@ export function TextTab({
     <>
       <div className="lk-search">
         <span className="lk-texthead">
-          {error ?? (busy ? 'Working…' : 'Shared with your phone')}
+          {error ?? (stopping ? 'Stopping…' : busy ? 'Working…' : 'Shared with your phone')}
         </span>
         <button className="lk-iconbtn" onClick={() => void refresh()} aria-label="Refresh">
           <ha-icon icon="mdi:refresh" />
@@ -61,6 +63,7 @@ export function TextTab({
         </button>
       </div>
       <DeviceTiles
+        hidden={!showTiles}
         agentAreas={agentAreas}
         toolCalls={toolCalls}
         query={lastUserText(items)}
@@ -98,8 +101,15 @@ export function TextTab({
             }}
           />
           {busy ? (
-            <button className="lk-send lk-send--accent" title="Working…" disabled>
-              <span className="lk-spin" aria-hidden="true" />
+            <button
+              className="lk-send lk-send--accent lk-stop"
+              title={stopping ? 'Stopping…' : 'Stop'}
+              aria-label={stopping ? 'Stopping' : 'Stop'}
+              data-stopping={stopping ? '1' : '0'}
+              onClick={() => void stop()}
+              disabled={!canStop}
+            >
+              {stopping ? <span className="lk-spin" aria-hidden="true" /> : <span className="lk-stop-sq" aria-hidden="true" />}
             </button>
           ) : (
             <button

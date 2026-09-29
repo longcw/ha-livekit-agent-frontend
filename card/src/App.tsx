@@ -23,6 +23,7 @@ import { HassTokenSource } from './hass/token-source';
 import { type ConvItem, lastUserText, useConversation } from './lib/conversation';
 import { useSessionState } from './lib/session-state';
 import { useSuggestions } from './lib/suggestions';
+import { useTilesVisible } from './lib/tiles-visible';
 import type { Task } from './lib/tasks';
 import { useTasks } from './lib/tasks-api';
 import { useTextChat } from './lib/text-chat';
@@ -103,6 +104,7 @@ function CardShell() {
   const { suggestions, clear: clearSuggestions } = useSuggestions();
   const { toolCalls, agentAreas } = useToolFeed();
   const [tab, setTab] = useState<Tab>(() => linkedTab() ?? 'chat');
+  const [tilesVisible, toggleTiles] = useTilesVisible();
   const textChat = useTextChat(tab === 'text');
   // the text conversation schedules tasks too, so its calls refresh the list as well
   const allToolCalls = useMemo(
@@ -450,11 +452,24 @@ function CardShell() {
         >
           Settings
         </button>
+        {(tab === 'chat' || tab === 'text') && (
+          <button
+            className="lk-iconbtn lk-tabs-end"
+            data-on={tilesVisible ? '1' : '0'}
+            onClick={toggleTiles}
+            aria-pressed={tilesVisible}
+            aria-label={tilesVisible ? 'Hide devices' : 'Show devices'}
+            title={tilesVisible ? 'Hide devices' : 'Show devices'}
+          >
+            <ha-icon icon="mdi:view-grid-outline" />
+          </button>
+        )}
       </div>
 
       {tab === 'chat' ? (
         <>
           <DeviceTiles
+            hidden={!tilesVisible}
             agentAreas={agentAreas}
             toolCalls={toolCalls}
             query={query}
@@ -490,6 +505,7 @@ function CardShell() {
         <TextTab
           api={textChat}
           tasksApi={tasksApi}
+          showTiles={tilesVisible}
           onOpenTask={setEditing}
           onSeeAllTasks={() => setTab('schedules')}
         />

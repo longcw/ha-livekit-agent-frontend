@@ -12,11 +12,14 @@ import type { ToolCall } from '../lib/tool-feed';
  * toggles a controllable device; long-press / right-click opens HA's more-info dialog.
  */
 export function DeviceTiles({
+  hidden = false,
   agentAreas,
   toolCalls,
   query,
   showRecent,
 }: {
+  /** Collapse the rail while keeping its acted-on tracking alive for when it is shown again. */
+  hidden?: boolean;
   agentAreas: string[];
   toolCalls: ToolCall[];
   query: string;
@@ -48,7 +51,7 @@ export function DeviceTiles({
     if (lead) rail.current?.scrollTo({ left: 0, behavior: 'smooth' });
   }, [lead]);
 
-  if (!hass || tiles.length === 0) return null;
+  if (hidden || !hass || tiles.length === 0) return null;
 
   return (
     <div className="lk-tiles" ref={rail}>

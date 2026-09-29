@@ -7,6 +7,7 @@ import {
   humanizeTool,
   isActionTool,
 } from '../lib/conversation';
+import { Markdown } from './Markdown';
 
 /**
  * The conversation timeline: speech + typed messages and the agent's tool actions,
@@ -31,10 +32,15 @@ export function Conversation({
   // this lands the view at the top on load (showing the start, not the tail), and it never
   // yanks away from earlier messages you've scrolled up to read.
   const stick = useRef(startAtEnd);
+  // where the user left the view, restored when the browser resets it
+  const savedTop = useRef(0);
 
   const onScroll = () => {
     const el = ref.current;
-    if (el) stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    // a detached or hidden timeline has no size, so its scroll events aren't the user's
+    if (!el || !el.clientHeight) return;
+    savedTop.current = el.scrollTop;
+    stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
   };
 
   const pin = () => {
@@ -47,12 +53,24 @@ export function Conversation({
   // before the final line lays out — and the tail slides under the floating dock. A
   // MutationObserver re-pins on every content change (tokens + new rows) while the
   // user is at the bottom. onScroll keeps `stick` current so it never yanks.
+  // The ResizeObserver covers what changes the view without touching the items: the card
+  // re-parenting into a new element on a view switch (which resets scrollTop to 0), the view
+  // being shown after loading hidden, and the rails above growing or collapsing.
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const mo = new MutationObserver(() => pin());
     mo.observe(el, { childList: true, subtree: true, characterData: true });
-    return () => mo.disconnect();
+    const ro = new ResizeObserver(() => {
+      if (!el.clientHeight) return;
+      if (autoscroll && stick.current) pin();
+      else el.scrollTop = savedTop.current;
+    });
+    ro.observe(el);
+    return () => {
+      mo.disconnect();
+      ro.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoscroll]);
 
@@ -90,7 +108,14 @@ export function Conversation({
 function MessageRow({ item }: { item: ConvMessage }) {
   return (
     <div className="lk-msg" data-role={item.role}>
-      <div className="lk-bubble">{item.text}</div>
+      {/* the agent's replies are Markdown; the user's own text stays literal */}
+      {item.role === 'agent' ? (
+        <div className="lk-bubble lk-md">
+          <Markdown text={item.text} />
+        </div>
+      ) : (
+        <div className="lk-bubble">{item.text}</div>
+      )}
     </div>
   );
 }

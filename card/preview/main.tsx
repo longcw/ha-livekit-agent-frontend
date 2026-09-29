@@ -11,6 +11,7 @@ import { SchedulesTab } from '../src/components/SchedulesTab';
 import { SettingsTab } from '../src/components/SettingsTab';
 import { TextTab } from '../src/components/TextTab';
 import { useTextChat } from '../src/lib/text-chat';
+import { useTilesVisible } from '../src/lib/tiles-visible';
 import { TaskEditor } from '../src/components/TaskEditor';
 import { HassStoreProvider } from '../src/hass/context';
 import { HassStore } from '../src/hass/store';
@@ -51,6 +52,8 @@ const ICONS: Record<string, string> = {
   'mdi:calendar-blank-outline': 'M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8Z',
   'mdi:bell-outline': 'M16,17H7V10.5C7,8 9,6 11.5,6C14,6 16,8 16,10.5M18,16V10.5C18,7.43 15.86,4.86 13,4.18V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V4.18C7.13,4.86 5,7.43 5,10.5V16L3,18V19H20V18M11.5,22A2,2 0 0,0 13.5,20H9.5A2,2 0 0,0 11.5,22Z',
   'mdi:cellphone': 'M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z',
+  'mdi:view-grid-outline': 'M3,11H11V3H3M5,5H9V9H5M13,21H21V13H13M15,15H19V19H15M3,21H11V13H3M5,15H9V19H5M13,3V11H21V3M19,9H15V5H19Z',
+  'mdi:message-plus-outline': 'M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3M11,14H13V12H15V10H13V8H11V10H9V12H11V14Z',
   'mdi:send': 'M2,21L23,12L2,3V10L17,12L2,14V21Z',
 };
 class HaIcon extends HTMLElement {
@@ -119,8 +122,12 @@ const mockHass: any = {
     if (path.startsWith('livekit_voice/chat/history')) {
       const t = Date.now() - 60_000;
       const chips = location.search.includes('chips') ? ['确认', '取消'] : [];
-      return { conversation_id: 'DB_preview', busy: location.search.includes('busy'), items: MOCK_TEXT(t), suggestions: chips };
+      // ?busy runs a turn whose task id is known; add &notask for the first second before it is
+      const busy = location.search.includes('busy');
+      const task_id = busy && !location.search.includes('notask') ? 'task_preview' : null;
+      return { conversation_id: 'DB_preview', busy, task_id, items: MOCK_TEXT(t), suggestions: chips };
     }
+    if (path.startsWith('livekit_voice/chat/cancel')) return { cancelled: true };
     if (path.startsWith('livekit_voice/chat')) return 'ok';
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
@@ -296,6 +303,7 @@ function Preview() {
           : 'chat',
   );
   const [editing, setEditing] = useState<Task | null>(P.includes('editor') ? MOCK_TASKS[0] : null);
+  const [tilesVisible, toggleTiles] = useTilesVisible();
   const orbState = new URLSearchParams(location.search).get('state') || (OFF ? 'idle' : 'listening');
   const STATE_LABELS: Record<string, string> = {
     idle: 'Ready', connecting: 'Connecting', listening: 'Listening', thinking: 'Thinking', speaking: 'Speaking',
@@ -336,11 +344,21 @@ function Preview() {
           >
             Settings
           </button>
+          {(tab === 'chat' || tab === 'text') && (
+            <button
+              className="lk-iconbtn lk-tabs-end"
+              data-on={tilesVisible ? '1' : '0'}
+              onClick={toggleTiles}
+              aria-label={tilesVisible ? 'Hide devices' : 'Show devices'}
+            >
+              <ha-icon icon="mdi:view-grid-outline" />
+            </button>
+          )}
         </div>
         {tab === 'chat' ? (
           <>
             {!P.includes('notiles') && (
-              <DeviceTiles agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} showRecent={!OFF} />
+              <DeviceTiles hidden={!tilesVisible} agentAreas={SCN.agentAreas} toolCalls={toolCalls as any} query={SCN.query} showRecent={!OFF} />
             )}
             {SHOW_SCHED && (
               <ScheduledTasks
@@ -382,7 +400,7 @@ function Preview() {
             />
           </>
         ) : tab === 'text' ? (
-          <PreviewTextTab />
+          <PreviewTextTab showTiles={tilesVisible} />
         ) : tab === 'schedules' ? (
           <SchedulesTab api={mockApi} onOpen={setEditing} />
         ) : (
@@ -425,6 +443,17 @@ mount.className = 'lk-root';
 shadow.append(style, mount);
 createRoot(mount).render(<Preview />);
 
+// ?busy&stopping — tap the stop button once it is enabled, to show the stopping state
+if (location.search.includes('stopping')) {
+  const tap = setInterval(() => {
+    const btn = shadow.querySelector<HTMLButtonElement>('.lk-stop:not(:disabled)');
+    if (btn) {
+      clearInterval(tap);
+      btn.click();
+    }
+  }, 200);
+}
+
 // Preview-only: the timeline lands at the top by design, so scroll it to the bottom when
 // reviewing the quick-reply chips (?chips) to check the tail isn't hidden behind them.
 if (location.search.includes('chips')) {
@@ -460,11 +489,54 @@ function MOCK_TEXT(t: number) {
     { kind: 'message', id: 'm3', role: 'user', text: '把背景灯关了', ts: t + 3 },
     { kind: 'action', id: 'a2', ts: t + 4, name: 'HassTurnOff', args: { name: '背景灯 电视 左键' }, status: running ? 'running' : 'done' },
     ...(running ? [] : [{ kind: 'message', id: 'm4', role: 'agent', text: '已经把背景灯关掉了。', ts: t + 5 }]),
+    ...(location.search.includes('md') ? MD_ITEMS(t + 6) : []),
   ];
 }
 
-function PreviewTextTab() {
+// ?md — agent replies exercising the Markdown renderer (and a user message that must stay literal)
+function MD_ITEMS(t: number) {
+  return [
+    { kind: 'message', id: 'md1', role: 'user', text: 'which lights are on? **not bold** <b>raw</b>', ts: t },
+    {
+      kind: 'message', id: 'md2', role: 'agent', ts: t + 1,
+      text: [
+        '### Living room',
+        'Two lights are **on** and one is *dimmed*:',
+        '',
+        '- **背景灯** — on, 60%',
+        '- Ceiling `light.living_main` — on',
+        '  - scene: ~~movie~~ evening',
+        '- Hallway — off',
+        '',
+        '1. Say "turn off all"',
+        '2. Or tap a tile',
+        '',
+        '> Tip: schedules live in the Schedules tab.',
+        '',
+        '| Device | State |',
+        '|---|---|',
+        '| 背景灯 | on |',
+        '| Hallway | off |',
+        '',
+        'Docs: [HA scripts](https://www.home-assistant.io/docs/scripts/) or https://example.com/a_b.',
+        '<img src=x onerror="alert(1)"> [bad](javascript:alert(1)) [wiki](https://en.wikipedia.org/wiki/Hue_(color))',
+      ].join('\n'),
+    },
+    {
+      kind: 'message', id: 'md3', role: 'agent', ts: t + 2,
+      text: 'Here is the automation:\n\n```yaml\nalias: Evening lights\ntrigger:\n  - platform: sun\n    event: sunset\naction:\n  - service: light.turn_on\n    target: { entity_id: light.living_main }\n```',
+    },
+  ];
+}
+
+function PreviewTextTab({ showTiles }: { showTiles: boolean }) {
   return (
-    <TextTab api={useTextChat(true)} tasksApi={mockApi} onOpenTask={() => {}} onSeeAllTasks={() => {}} />
+    <TextTab
+      api={useTextChat(true)}
+      tasksApi={mockApi}
+      showTiles={showTiles}
+      onOpenTask={() => {}}
+      onSeeAllTasks={() => {}}
+    />
   );
 }

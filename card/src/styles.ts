@@ -158,6 +158,8 @@ export const CARD_STYLES =
     border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
   .lk-tab[data-on="1"] { color: var(--lk-fg); border-bottom-color: var(--lk-accent); }
   .lk-tab:not([data-on="1"]):hover { color: var(--lk-fg); }
+  /* device tiles show/hide toggle, at the far end of the tab bar */
+  .lk-tabs-end { margin-left: auto; align-self: center; --mdc-icon-size: 18px; }
 
   /* ---- schedules tab (search + full list) ---- */
   .lk-schedtab { flex: 1; min-height: 0; display: flex; flex-direction: column; }
@@ -307,6 +309,30 @@ export const CARD_STYLES =
     white-space: pre-wrap; word-break: break-word; }
   .lk-msg[data-role="user"] .lk-bubble { background: var(--lk-accent); color: var(--lk-on-accent); border-bottom-right-radius: 5px; }
   .lk-msg[data-role="agent"] .lk-bubble { background: var(--lk-elevated); color: var(--lk-fg); border-bottom-left-radius: 5px; }
+  /* agent replies rendered from Markdown */
+  .lk-md { white-space: normal; }
+  .lk-md :where(p, ul, ol, pre, blockquote, hr, .lk-md-table) { margin: 0; }
+  .lk-md > * + *, .lk-md blockquote > * + * { margin-top: 8px; }
+  .lk-md li > * + * { margin-top: 2px; }
+  .lk-md ul, .lk-md ol { padding-left: 1.3em; }
+  .lk-md li + li { margin-top: 2px; }
+  .lk-md li::marker { color: var(--lk-muted); }
+  .lk-md-h { font-weight: 700; letter-spacing: -0.01em; }
+  .lk-md strong { font-weight: 700; }
+  .lk-md a { color: var(--lk-accent); text-decoration: underline; text-decoration-thickness: 1px;
+    text-underline-offset: 2px; overflow-wrap: anywhere; }
+  .lk-md code { font-family: var(--lk-mono); font-size: 0.84em; padding: 1px 5px; border-radius: 5px;
+    background: color-mix(in srgb, var(--lk-fg) 9%, transparent); }
+  .lk-md pre { padding: 8px 10px; border-radius: 9px; overflow-x: auto; white-space: pre; scrollbar-width: thin;
+    background: color-mix(in srgb, var(--lk-fg) 7%, transparent); }
+  .lk-md pre code { padding: 0; background: none; font-size: 0.8rem; line-height: 1.45; }
+  .lk-md blockquote { padding-left: 10px; border-left: 3px solid var(--lk-line); color: var(--lk-muted); }
+  .lk-md hr { border: none; border-top: 1px solid var(--lk-line); }
+  .lk-md-table { overflow-x: auto; scrollbar-width: thin; }
+  .lk-md table { border-collapse: collapse; font-size: 0.86em; }
+  .lk-md th, .lk-md td { padding: 4px 10px 4px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--lk-line); }
+  .lk-md th { font-weight: 700; }
+  .lk-md tr:last-child td { border-bottom: none; }
   .lk-act { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; max-width: 100%;
     padding: 5px 12px 5px 9px; border-radius: 999px; font-size: 0.8rem; --mdc-icon-size: 14px;
     border: 1px solid var(--lk-line); background: var(--lk-surface); color: var(--lk-muted); animation: lk-rise .22s ease both; }
@@ -396,6 +422,10 @@ export const CARD_STYLES =
   .lk-send[data-on="1"], .lk-send--accent { background: var(--lk-accent); color: var(--lk-on-accent); }
   .lk-send:disabled { cursor: default; }
   .lk-send:disabled:active { transform: none; }
+  /* stop replaces send while a text turn runs; dimmed until the turn's task id is known */
+  .lk-stop:disabled { opacity: .45; }
+  .lk-stop[data-stopping="1"]:disabled { opacity: 1; }
+  .lk-stop-sq { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
 
   .lk-start { cursor: pointer; width: 100%; padding: 13px; border: none; border-radius: 16px; --mdc-icon-size: 20px;
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;

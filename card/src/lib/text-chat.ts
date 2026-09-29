@@ -5,12 +5,15 @@ import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
 
 const CHAT_PATH = 'livekit_voice/chat';
 const HISTORY_PATH = 'livekit_voice/chat/history';
+const CANCEL_PATH = 'livekit_voice/chat/cancel';
 
 type HistoryItem = ConvItem & { call_id?: string; output?: string };
 
 interface History {
   conversation_id: string | null;
   busy: boolean;
+  /** The running turn's task, once it has started. */
+  task_id?: string | null;
   items: HistoryItem[];
   /** Quick replies the agent offered since the user last spoke. */
   suggestions?: string[];
@@ -26,7 +29,12 @@ export interface TextChatApi {
   suggestions: string[];
   /** A turn is running — this card's, or one sent from elsewhere (e.g. an iPhone Shortcut). */
   busy: boolean;
+  /** The running turn can be stopped: its task id is known. */
+  canStop: boolean;
+  /** A stop was sent for the running turn and it has not ended yet. */
+  stopping: boolean;
   error: string | null;
+  stop: () => Promise<void>;
   send: (text: string) => Promise<void>;
   renew: () => Promise<void>;
   refresh: () => Promise<void>;
@@ -52,6 +60,9 @@ export function useTextChat(active: boolean): TextChatApi {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const lastBody = useRef('');
   const [busy, setBusy] = useState(false);
+  const [taskId, setTaskId] = useState<string | null>(null);
+  // the task a stop was sent for; a newer turn has another id, so it is never shown as stopping
+  const [stoppingId, setStoppingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   // our message, shown until the conversation has it
   const [pending, setPending] = useState<string | null>(null);
@@ -69,6 +80,7 @@ export function useTextChat(active: boolean): TextChatApi {
         setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
       }
       setBusy(Boolean(data?.busy));
+      setTaskId(data?.busy && data.task_id ? data.task_id : null);
       setError(null);
     } catch (e) {
       setError(humanizeError(e));
@@ -109,6 +121,25 @@ export function useTextChat(active: boolean): TextChatApi {
 
   const renew = useCallback(() => post({ new: true }), [post]);
 
+  // the stopped turn is over once history is idle and our own send has resolved
+  useEffect(() => {
+    if (!busy && pending === null) setStoppingId(null);
+  }, [busy, pending]);
+
+  const stop = useCallback(async () => {
+    if (!hass || !taskId) return;
+    setStoppingId(taskId);
+    try {
+      // the worker stops the turn only while this task is still the running one
+      const res = await hass.callApi<{ cancelled?: boolean }>('POST', CANCEL_PATH, { task_id: taskId });
+      if (!res?.cancelled) setStoppingId(null);
+    } catch (e) {
+      setStoppingId(null);
+      setError(humanizeError(e));
+    }
+    await refresh();
+  }, [hass, taskId, refresh]);
+
   const items = useMemo(() => {
     const last = [...history].reverse().find((i) => i.kind === 'message' && i.role === 'user');
     if (!pending || (last?.kind === 'message' && last.text === pending)) return history;
@@ -141,7 +172,10 @@ export function useTextChat(active: boolean): TextChatApi {
     // an answer in flight makes the last question's replies stale
     suggestions: busy || pending !== null ? [] : suggestions,
     busy: busy || pending !== null,
+    canStop: taskId !== null && stoppingId !== taskId,
+    stopping: stoppingId !== null && (stoppingId === taskId || taskId === null),
     error,
+    stop,
     send,
     renew,
     refresh,
