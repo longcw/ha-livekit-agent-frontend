@@ -105,6 +105,7 @@ export function TextTab({
             value={text}
             placeholder="Message…"
             onChange={(e) => setText(e.target.value)}
+            onFocus={api.warm}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();

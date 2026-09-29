@@ -21,6 +21,7 @@ from homeassistant.util import slugify
 
 from .const import (
     CHAT_CANCEL_URL,
+    CHAT_WARM_URL,
     CHAT_CONVERSATIONS_URL,
     CHAT_DELETE_URL,
     CHAT_HISTORY_URL,
@@ -264,6 +265,23 @@ class LiveKitChatCancelView(HomeAssistantView):
         body = await _chat_body(request)
         return await _forward(
             self._hass, "POST", "/chat/cancel", json_body=body, service=_WORKER
+        )
+
+
+class LiveKitChatWarmView(HomeAssistantView):
+    """Load the user's current text conversation ahead of their message."""
+
+    url = CHAT_WARM_URL
+    name = "api:livekit_voice:chat_warm"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        body = await _chat_body(request)
+        return await _forward(
+            self._hass, "POST", "/chat/warm", json_body=body, service=_WORKER
         )
 
 

@@ -27,6 +27,7 @@ from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
 from .progress import LiveKitProgressView
 from .tasks import (
     LiveKitChatCancelView,
+    LiveKitChatWarmView,
     LiveKitChatConversationsView,
     LiveKitChatDeleteView,
     LiveKitChatHistoryView,
@@ -82,6 +83,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitChatView(hass))
         hass.http.register_view(LiveKitChatHistoryView(hass))
         hass.http.register_view(LiveKitChatCancelView(hass))
+        hass.http.register_view(LiveKitChatWarmView(hass))
         hass.http.register_view(LiveKitChatConversationsView(hass))
         hass.http.register_view(LiveKitChatSwitchView(hass))
         hass.http.register_view(LiveKitChatDeleteView(hass))

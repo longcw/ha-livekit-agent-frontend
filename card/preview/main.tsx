@@ -151,6 +151,7 @@ const mockHass: any = {
         ],
       };
     }
+    if (path.startsWith('livekit_voice/chat/warm')) return { warming: false };
     if (path.startsWith('livekit_voice/chat/switch')) return { switched: true };
     if (path.startsWith('livekit_voice/chat/delete')) return { deleted: true };
     if (path.startsWith('livekit_voice/chat')) return 'ok';

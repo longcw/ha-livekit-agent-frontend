@@ -6,6 +6,7 @@ import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
 const CHAT_PATH = 'livekit_voice/chat';
 const HISTORY_PATH = 'livekit_voice/chat/history';
 const CANCEL_PATH = 'livekit_voice/chat/cancel';
+const WARM_PATH = 'livekit_voice/chat/warm';
 const CONVERSATIONS_PATH = 'livekit_voice/chat/conversations';
 const SWITCH_PATH = 'livekit_voice/chat/switch';
 const DELETE_PATH = 'livekit_voice/chat/delete';
@@ -51,6 +52,8 @@ export interface TextChatApi {
   stopping: boolean;
   error: string | null;
   stop: () => Promise<void>;
+  /** Load the conversation ahead of a message, so its first reply does not wait. */
+  warm: () => void;
   send: (text: string) => Promise<void>;
   renew: () => Promise<void>;
   refresh: () => Promise<void>;
@@ -157,6 +160,17 @@ export function useTextChat(active: boolean): TextChatApi {
     if (!busy && pending === null) setStoppingId(null);
   }, [busy, pending]);
 
+  // the worker loads a conversation it had unloaded only on a message, or when asked here;
+  // a conversation already loaded makes it a no-op
+  const warm = useCallback(() => {
+    if (!hass) return;
+    hass.callApi('POST', WARM_PATH, {}).catch(() => undefined);
+  }, [hass]);
+
+  useEffect(() => {
+    if (active) warm();
+  }, [active, warm]);
+
   const stop = useCallback(async () => {
     if (!hass || !taskId) return;
     setStoppingId(taskId);
@@ -239,6 +253,7 @@ export function useTextChat(active: boolean): TextChatApi {
     stopping: stoppingId !== null && (stoppingId === taskId || taskId === null),
     error,
     stop,
+    warm,
     send,
     renew,
     refresh,
