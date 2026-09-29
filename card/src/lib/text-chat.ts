@@ -180,9 +180,16 @@ export function useTextChat(active: boolean): TextChatApi {
     if (active) warm();
   }, [active, warm]);
 
-  // a turn still busy this long after its reply was stopped is running background work
+  // the agent has answered since the person last spoke, so a busy turn has only its
+  // background work left, and the only stop that ends it is a force stop
+  const lastUser = history.reduce((at, i, n) => (i.kind === 'message' && i.role === 'user' ? n : at), -1);
+  const reply = history.slice(lastUser + 1).find((i) => i.kind === 'message' && i.role === 'agent');
+  // a turn that is only finishing up after its reply is not running work yet
+  const replied = reply !== undefined && Date.now() - reply.ts > 1500;
+  // likewise a turn still busy this long after its reply was stopped
+  const stoppedLong = stoppingId === taskId && Date.now() - stoppedAt > 1500;
   const forceStop =
-    taskId !== null && stoppingId === taskId && forcingId !== taskId && Date.now() - stoppedAt > 1500;
+    taskId !== null && pending === null && forcingId !== taskId && (replied || stoppedLong);
 
   const stop = useCallback(async () => {
     if (!hass || !taskId) return;

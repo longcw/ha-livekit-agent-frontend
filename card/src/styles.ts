@@ -330,7 +330,10 @@ export const CARD_STYLES =
     color: var(--lk-muted); font-size: 0.84rem; line-height: 1.4; max-width: 220px; --mdc-icon-size: 21px; }
   .lk-msg { display: flex; animation: lk-rise .22s ease both; }
   .lk-msg[data-role="user"] { justify-content: flex-end; }
-  .lk-bubble { max-width: 84%; padding: 8px 13px; border-radius: 16px; font-size: 0.92rem; line-height: 1.4;
+  .lk-msg-col { display: flex; flex-direction: column; align-items: flex-start; max-width: 84%; min-width: 0; }
+  .lk-msg[data-role="user"] .lk-msg-col { align-items: flex-end; }
+  .lk-time { margin: 3px 7px 0; font-size: 0.66rem; line-height: 1; color: var(--lk-muted); font-variant-numeric: tabular-nums; }
+  .lk-bubble { max-width: 100%; padding: 8px 13px; border-radius: 16px; font-size: 0.92rem; line-height: 1.4;
     white-space: pre-wrap; word-break: break-word; }
   .lk-msg[data-role="user"] .lk-bubble { background: var(--lk-accent); color: var(--lk-on-accent); border-bottom-right-radius: 5px; }
   .lk-msg[data-role="agent"] .lk-bubble { background: var(--lk-elevated); color: var(--lk-fg); border-bottom-left-radius: 5px; }

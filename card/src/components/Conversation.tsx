@@ -117,16 +117,32 @@ export function Conversation({
 }
 
 function MessageRow({ item }: { item: ConvMessage }) {
+  const sent = new Date(item.ts);
+  // today's messages need only the time; older ones say which day too
+  const today = sent.toDateString() === new Date().toDateString();
+  const time = sent.toLocaleString(undefined, {
+    ...(today ? {} : { month: 'short', day: 'numeric' }),
+    hour: 'numeric',
+    minute: '2-digit',
+  });
   return (
     <div className="lk-msg" data-role={item.role}>
-      {/* the agent's replies are Markdown; the user's own text stays literal */}
-      {item.role === 'agent' ? (
-        <div className="lk-bubble lk-md">
-          <Markdown text={item.text} />
-        </div>
-      ) : (
-        <div className="lk-bubble">{item.text}</div>
-      )}
+      <div className="lk-msg-col">
+        {/* the agent's replies are Markdown; the user's own text stays literal */}
+        {item.role === 'agent' ? (
+          <div className="lk-bubble lk-md">
+            <Markdown text={item.text} />
+          </div>
+        ) : (
+          <div className="lk-bubble">{item.text}</div>
+        )}
+        {/* a missing timestamp reads as 1970, which is no time at all */}
+        {item.ts > 1e12 && (
+          <time className="lk-time" dateTime={sent.toISOString()}>
+            {time}
+          </time>
+        )}
+      </div>
     </div>
   );
 }
