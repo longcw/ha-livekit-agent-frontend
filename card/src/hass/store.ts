@@ -21,6 +21,8 @@ export interface Hass {
   /** Service registry: domain -> { service_name -> {...} } (e.g. services.notify). */
   services?: Record<string, Record<string, any>>;
   language?: string;
+  /** The logged-in Home Assistant user. */
+  user?: { id: string; name: string; is_admin: boolean; is_owner?: boolean };
   callService: (domain: string, service: string, data?: Record<string, any>) => Promise<any>;
   callApi: <T = any>(method: string, path: string, parameters?: any) => Promise<T>;
   callWS?: <T = any>(msg: any) => Promise<T>;

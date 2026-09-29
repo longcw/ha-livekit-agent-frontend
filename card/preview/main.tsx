@@ -55,6 +55,7 @@ const ICONS: Record<string, string> = {
   'mdi:view-grid-outline': 'M3,11H11V3H3M5,5H9V9H5M13,21H21V13H13M15,15H19V19H15M3,21H11V13H3M5,15H9V19H5M13,3V11H21V3M19,9H15V5H19Z',
   'mdi:message-plus-outline': 'M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3M11,14H13V12H15V10H13V8H11V10H9V12H11V14Z',
   'mdi:send': 'M2,21L23,12L2,3V10L17,12L2,14V21Z',
+  'mdi:chevron-down': 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z',
 };
 class HaIcon extends HTMLElement {
   static get observedAttributes() { return ['icon']; }
@@ -114,7 +115,13 @@ const mockHass: any = {
       mobile_app_ipad: {},
     },
   },
-  callWS: async () => ({
+  // ?nonadmin — a viewer who cannot list HA accounts
+  user: { id: 'u-long', name: 'Long', is_admin: !location.search.includes('nonadmin') },
+  callWS: async (msg: any) => msg?.type === 'config/auth/list' ? [
+    { id: 'u-long', name: 'Long', system_generated: false },
+    { id: 'u-mia', name: 'Mia', system_generated: false },
+    { id: 'u-sys', name: 'Supervisor', system_generated: true },
+  ] : ({
     exposed_entities: Object.fromEntries(Object.keys(STATES).map((id) => [id, { conversation: true }])),
   }),
   callService: async () => {},
@@ -132,7 +139,12 @@ const mockHass: any = {
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
         ? params
-        : { notify_targets: ['persistent_notification', 'mobile_app_longs_iphone'] };
+        : {
+            users: [
+              { name: 'Long', ha_user_id: 'u-long', notify_targets: ['mobile_app_ipad', 'mobile_app_longs_iphone'] },
+              { name: 'Mia', ha_user_id: null, notify_targets: [] },
+            ],
+          };
     }
     return {};
   },
@@ -442,6 +454,15 @@ const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
 createRoot(mount).render(<Preview />);
+// ?open — expand the first person in the Settings tab and scroll to its end (+top: stay at the top)
+if (P.includes('open'))
+  setTimeout(() => {
+    (shadow.querySelector('.lk-person-main') as HTMLElement | null)?.click();
+    if (!P.includes('top')) setTimeout(() => {
+      const sc = shadow.querySelector('.lk-settings-scroll');
+      if (sc) sc.scrollTop = sc.scrollHeight;
+    }, 100);
+  }, 300);
 
 // ?busy&stopping — tap the stop button once it is enabled, to show the stopping state
 if (location.search.includes('stopping')) {

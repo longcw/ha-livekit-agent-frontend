@@ -234,6 +234,30 @@ export const CARD_STYLES =
   .lk-testbtn[data-sent="1"] { color: var(--lk-ok); border-color: color-mix(in srgb, var(--lk-ok) 42%, transparent); }
   .lk-set-hint { margin: 9px 2px 0; font-size: 0.72rem; color: var(--lk-muted); line-height: 1.4; }
   .lk-set-err { margin: 9px 2px 0; font-size: 0.72rem; color: var(--lk-danger); }
+  .lk-checkrow .lk-tag { flex: none; }
+  .lk-people { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+  .lk-person { border-radius: 12px; border: 1px solid var(--lk-line); background: var(--lk-surface);
+    transition: border-color .15s; }
+  .lk-person[data-open="1"] { border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
+  .lk-person-head { display: flex; align-items: center; padding-right: 6px; }
+  .lk-person-head .lk-iconbtn { width: 30px; height: 30px; --mdc-icon-size: 17px; }
+  .lk-person-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer;
+    border: none; background: transparent; color: var(--lk-fg); padding: 8px 4px 8px 10px; font: inherit; }
+  .lk-person-av { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 0.8rem; font-weight: 700; color: var(--lk-accent); background: color-mix(in srgb, var(--lk-accent) 14%, transparent); }
+  .lk-person-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .lk-person-name { font-size: 0.88rem; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-person-sum { font-size: 0.72rem; color: var(--lk-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lk-person-chev { flex: none; color: var(--lk-muted); --mdc-icon-size: 18px; transition: transform .15s; }
+  .lk-person[data-open="1"] .lk-person-chev { transform: rotate(180deg); }
+  .lk-person-detail { display: flex; flex-direction: column; gap: 11px; padding: 4px 10px 11px; }
+  .lk-person-sel { padding: 7px 10px; font-size: 0.85rem; }
+  .lk-person-id { font-family: var(--lk-mono); font-size: 0.72rem; color: var(--lk-muted); overflow-wrap: anywhere; }
+  .lk-person-hint { margin-top: 2px; }
+  .lk-person-detail .lk-testbtn { margin-top: 10px; }
+  .lk-person-add { display: flex; align-items: center; gap: 6px; }
+  .lk-person-add .lk-search-in { height: 34px; }
+  .lk-person-addbtn { margin-top: 0; height: 34px; padding: 0 12px; }
 
   /* ---- task editor (slide-up sheet) ---- */
   .lk-editor { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: center;
