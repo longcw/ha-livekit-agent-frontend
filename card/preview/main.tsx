@@ -136,7 +136,7 @@ const mockHass: any = {
       // ?busy runs a turn whose task id is known; add &notask for the first second before it is
       const busy = location.search.includes('busy');
       const task_id = busy && !location.search.includes('notask') ? 'task_preview' : null;
-      return { conversation_id: 'DB_preview', busy: busy || SENT.busy, task_id, items: [...(SENT.fresh ? [] : MOCK_TEXT(t)), ...SENT.items], suggestions: chips };
+      return { conversation_id: 'DB_preview', busy: busy || SENT.busy, task_id, items: [...(SENT.fresh ? [] : MOCK_TEXT(t)), ...SENT.items], suggestions: chips, usage: SENT.fresh ? null : { input: 48213, output: 1387, cached: 31744 } };
     }
     if (path.startsWith('livekit_voice/chat/cancel')) return { cancelled: true };
     if (path.startsWith('livekit_voice/chat/conversations')) {

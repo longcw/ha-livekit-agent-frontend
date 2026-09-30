@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { lastUserText } from '../lib/conversation';
 import { SCHEDULING_TOOLS, type Task } from '../lib/tasks';
 import type { TasksApi } from '../lib/tasks-api';
-import type { TextChatApi } from '../lib/text-chat';
+import type { TextChatApi, TokenUsage } from '../lib/text-chat';
 import { Conversation } from './Conversation';
 import { DeviceTiles } from './DeviceTiles';
 import { Composer, useDockHeight } from './Dock';
@@ -11,6 +11,21 @@ import { TextHistory } from './TextHistory';
 
 // shown as the schedules rail and the chips instead of as inline action rows
 const HIDDEN_TOOLS = new Set([...SCHEDULING_TOOLS, 'suggest_replies']);
+
+// 950, 12.3k, 1.2M
+const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
+
+function UsageLabel({ usage }: { usage: TokenUsage }) {
+  const full = (n: number) => n.toLocaleString('en');
+  return (
+    <span
+      className="lk-usage"
+      title={`LLM tokens in this conversation: ${full(usage.input)} input (${full(usage.cached)} cached), ${full(usage.output)} output`}
+    >
+      {compact.format(usage.input)} in · {compact.format(usage.cached)} cached · {compact.format(usage.output)} out
+    </span>
+  );
+}
 
 /** The Text tab: the persisted text conversation shared with the phone, with the same
  *  device tiles, schedules rail and quick replies as the Chat tab, and a composer that
@@ -28,7 +43,7 @@ export function TextTab({
   onOpenTask: (t: Task) => void;
   onSeeAllTasks: () => void;
 }) {
-  const { items, toolCalls, agentAreas, suggestions, busy, canStop, stopping, forceStop, error, stop, send, renew, refresh } = api;
+  const { items, toolCalls, agentAreas, suggestions, usage, busy, canStop, stopping, forceStop, error, stop, send, renew, refresh } = api;
   const dockRef = useDockHeight();
   const [text, setText] = useState('');
   const [history, setHistory] = useState(false);
@@ -51,8 +66,10 @@ export function TextTab({
     <>
       <div className="lk-search">
         <span className="lk-texthead">
-          {error ??
-            (stopping ? 'Stopping…' : forceStop ? 'Still working in the background' : busy ? 'Working…' : 'Shared with your phone')}
+          <span className="lk-textstatus">
+            {error ?? (stopping ? 'Stopping…' : forceStop ? 'Still working in the background' : busy ? 'Working…' : '')}
+          </span>
+          {usage && <UsageLabel usage={usage} />}
         </span>
         <button className="lk-iconbtn" onClick={() => void refresh()} aria-label="Refresh">
           <ha-icon icon="mdi:refresh" />

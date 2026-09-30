@@ -21,6 +21,14 @@ interface History {
   items: HistoryItem[];
   /** Quick replies the agent offered since the user last spoke. */
   suggestions?: string[];
+  usage?: TokenUsage | null;
+}
+
+/** The LLM tokens a conversation has used; `cached` is the part of `input` read from cache. */
+export interface TokenUsage {
+  input: number;
+  output: number;
+  cached: number;
 }
 
 /** One of the person's conversations, titled by its first message. */
@@ -44,6 +52,8 @@ export interface TextChatApi {
   agentAreas: string[];
   /** Quick replies for the agent's last question. */
   suggestions: string[];
+  /** The conversation's LLM token totals, once it has used any. */
+  usage: TokenUsage | null;
   /** A turn is running — this card's, or one sent from elsewhere (e.g. an iPhone Shortcut). */
   busy: boolean;
   /** The running turn can be stopped: its task id is known. */
@@ -98,6 +108,7 @@ export function useTextChat(active: boolean): TextChatApi {
   const ready = useHass() !== null;
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [usage, setUsage] = useState<TokenUsage | null>(null);
   const lastBody = useRef('');
   const [busy, setBusy] = useState(false);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -136,13 +147,14 @@ export function useTextChat(active: boolean): TextChatApi {
       if (changing.current || at !== epoch.current) return;
       // a poll that brings nothing new keeps the same arrays: the device tiles read a
       // changed tool-call list as new agent activity and keep watching for state changes
-      const body = JSON.stringify([data?.items, data?.suggestions]);
+      const body = JSON.stringify([data?.items, data?.suggestions, data?.usage]);
       if (body !== lastBody.current) {
         lastBody.current = body;
         const next = Array.isArray(data?.items) ? data.items : [];
         historyLen.current = next.length;
         setHistory(next);
         setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
+        setUsage(data?.usage ?? null);
       }
       setBusy(Boolean(data?.busy));
       setTaskId(data?.busy && data.task_id ? data.task_id : null);
@@ -327,6 +339,7 @@ export function useTextChat(active: boolean): TextChatApi {
     agentAreas,
     // an answer in flight makes the last question's replies stale
     suggestions: busy || pending !== null ? [] : suggestions,
+    usage,
     busy: busy || pending !== null,
     canStop: taskId !== null && (stoppingId !== taskId || forceStop),
     stopping: !forceStop && stoppingId !== null && (stoppingId === taskId || taskId === null),
