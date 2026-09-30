@@ -492,6 +492,11 @@ const mount = document.createElement('div');
 mount.className = 'lk-root';
 shadow.append(style, mount);
 createRoot(mount).render(<Preview />);
+// ?hiddenmount — mount the card undisplayed and show it later, like a dashboard view opened after load
+if (P.includes('hiddenmount')) {
+  host.style.display = 'none';
+  setTimeout(() => (host.style.display = ''), 800);
+}
 // ?open — expand the first person in the Settings tab and scroll to its end (+top: stay at the top)
 if (P.includes('open'))
   setTimeout(() => {

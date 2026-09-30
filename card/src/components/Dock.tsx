@@ -157,12 +157,27 @@ export function Composer({
   onFocus?: () => void;
 }) {
   const ref = useRef<HTMLTextAreaElement>(null);
-  useLayoutEffect(() => {
+  const fit = () => {
     const el = ref.current;
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
+    // an unrendered field measures 0, which would pin it to a sliver that scrolls its placeholder
+    if (el.scrollHeight) el.style.height = `${el.scrollHeight}px`;
+  };
+  useLayoutEffect(fit, [value]);
+  // refit when the field first gets laid out or its width re-wraps the text
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let width = -1;
+    const ro = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width === width) return;
+      width = entry.contentRect.width;
+      fit();
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   return (
     <textarea
       ref={ref}
