@@ -136,7 +136,7 @@ const mockHass: any = {
       // ?busy runs a turn whose task id is known; add &notask for the first second before it is
       const busy = location.search.includes('busy');
       const task_id = busy && !location.search.includes('notask') ? 'task_preview' : null;
-      return { conversation_id: 'DB_preview', busy, task_id, items: MOCK_TEXT(t), suggestions: chips };
+      return { conversation_id: 'DB_preview', busy: busy || SENT.busy, task_id, items: [...(SENT.fresh ? [] : MOCK_TEXT(t)), ...SENT.items], suggestions: chips };
     }
     if (path.startsWith('livekit_voice/chat/cancel')) return { cancelled: true };
     if (path.startsWith('livekit_voice/chat/conversations')) {
@@ -154,6 +154,23 @@ const mockHass: any = {
     if (path.startsWith('livekit_voice/chat/warm')) return { warming: false };
     if (path.startsWith('livekit_voice/chat/switch')) return { switched: true };
     if (path.startsWith('livekit_voice/chat/delete')) return { deleted: true };
+    if (path === 'livekit_voice/chat' && params?.new) {
+      // starting a conversation takes the worker a moment
+      await new Promise((r) => setTimeout(r, 1500));
+      SENT.fresh = true;
+      SENT.items = [];
+      return 'Started a new conversation.';
+    }
+    if (path === 'livekit_voice/chat' && params?.text) {
+      // a sent message reaches the conversation shortly, and its reply a moment later
+      const n = SENT.items.length;
+      SENT.busy = true;
+      setTimeout(() => SENT.items.push({ kind: 'message', id: `s${n}`, role: 'user', text: params.text, ts: Date.now() }), 300);
+      await new Promise((r) => setTimeout(r, 1500));
+      SENT.items.push({ kind: 'message', id: `s${n + 1}`, role: 'agent', text: `收到：${params.text}`, ts: Date.now() });
+      SENT.busy = false;
+      return 'ok';
+    }
     if (path.startsWith('livekit_voice/chat')) return 'ok';
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
@@ -545,6 +562,8 @@ if (SCENARIO === 'script') {
     });
   }, 500);
 }
+
+const SENT: { busy: boolean; fresh: boolean; items: any[] } = { busy: false, fresh: false, items: [] };
 
 // the persisted text conversation, as /chat/history returns it (?tab=text, +busy)
 function MOCK_TEXT(t: number) {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { TurnMode } from '../lib/turn-mode';
 
 /** Publishes the dock's height as `--lk-dock-h` on the card so the chat can pad past it. */
@@ -125,19 +125,7 @@ export function Dock(props: DockProps) {
         </div>
       )}
       <div className="lk-bar" data-paused={paused ? '1' : '0'}>
-        <input
-          className="lk-input"
-          type="text"
-          value={text}
-          placeholder={placeholder}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              submit();
-            }
-          }}
-        />
+        <Composer value={text} placeholder={placeholder} onChange={setText} onSubmit={submit} />
         <TrailingButton
           canSend={canSend}
           busy={sending || micStarting}
@@ -150,6 +138,48 @@ export function Dock(props: DockProps) {
         />
       </div>
     </div>
+  );
+}
+
+/** The message field: grows with its text up to a few lines, sends on Enter and breaks the line
+ *  on Shift+Enter. An Enter that commits an IME candidate (pinyin typing English) is left to the IME. */
+export function Composer({
+  value,
+  placeholder,
+  onChange,
+  onSubmit,
+  onFocus,
+}: {
+  value: string;
+  placeholder: string;
+  onChange: (text: string) => void;
+  onSubmit: () => void;
+  onFocus?: () => void;
+}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
+  return (
+    <textarea
+      ref={ref}
+      className="lk-input"
+      rows={1}
+      value={value}
+      placeholder={placeholder}
+      enterKeyHint="send"
+      onChange={(e) => onChange(e.target.value)}
+      onFocus={onFocus}
+      onKeyDown={(e) => {
+        // Safari ends the composition before this keydown, so only keyCode 229 marks it there
+        if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing || e.keyCode === 229) return;
+        e.preventDefault();
+        onSubmit();
+      }}
+    />
   );
 }
 

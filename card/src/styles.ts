@@ -466,13 +466,14 @@ export const CARD_STYLES =
   .lk-listen-send:disabled { opacity: .45; cursor: default; }
   .lk-listen-send:disabled:active { transform: none; }
 
-  .lk-bar { width: 100%; height: 48px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 15px;
+  .lk-bar { width: 100%; min-height: 48px; display: flex; align-items: flex-end; gap: 7px; padding: 3px 3px 3px 15px;
     border-radius: 24px; border: 1px solid var(--lk-line); background: var(--lk-surface);
     box-shadow: 0 12px 30px -20px #000; }
   .lk-bar:focus-within { border-color: color-mix(in srgb, var(--lk-accent) 52%, var(--lk-line)); }
   .lk-bar[data-paused="1"] { border-style: dashed; border-color: color-mix(in srgb, var(--lk-muted) 45%, var(--lk-line)); }
-  .lk-input { flex: 1; min-width: 0; height: 100%; border: none; background: transparent; color: var(--lk-fg);
-    font: inherit; font-size: 1rem; padding: 0; }
+  .lk-input { flex: 1; min-width: 0; border: none; background: transparent; color: var(--lk-fg);
+    font: inherit; font-size: 1rem; line-height: 22px; padding: 9px 0; margin: 0; resize: none; display: block;
+    box-sizing: border-box; max-height: 128px; overflow-y: auto; scrollbar-width: thin; }
   .lk-input:focus { outline: none; }
   .lk-input::placeholder { color: var(--lk-muted); }
   .lk-send { flex: none; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; --mdc-icon-size: 20px;

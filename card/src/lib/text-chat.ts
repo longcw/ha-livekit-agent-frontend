@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHass } from '../hass/context';
+import { useHass, useStore } from '../hass/context';
 import type { ConvItem } from './conversation';
 import { argAreas, type ToolCall, type ToolStatus } from './tool-feed';
 
@@ -64,8 +64,8 @@ export interface TextChatApi {
   listConversations: () => Promise<ConversationList>;
   /** A past conversation's items, read without making it current. */
   readConversation: (id: string) => Promise<ConvItem[]>;
-  /** Make a past conversation the current one; false while a turn runs. */
-  switchConversation: (id: string) => Promise<boolean>;
+  /** Make a past conversation the current one, showing `items` meanwhile; false while a turn runs. */
+  switchConversation: (id: string, items?: ConvItem[]) => Promise<boolean>;
   /** Delete a past conversation; the current one is never deleted. */
   deleteConversation: (id: string) => Promise<boolean>;
 }
@@ -89,10 +89,13 @@ function humanizeError(e: unknown): string {
  * The worker's persisted text conversation, through the Home Assistant chat proxy — the same
  * conversation an iPhone Shortcut posts into. Polls while `active`: every second while a turn
  * runs, so its tool calls appear as they happen, and every few seconds otherwise, so turns
- * sent from elsewhere show up too.
+ * sent from elsewhere show up too. Starting or switching a conversation shows it at once and
+ * runs the request in the background, ahead of any message sent after it.
  */
 export function useTextChat(active: boolean): TextChatApi {
-  const hass = useHass();
+  // read at call time: HA replaces the hass object on every state change
+  const store = useStore();
+  const ready = useHass() !== null;
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const lastBody = useRef('');
@@ -106,17 +109,39 @@ export function useTextChat(active: boolean): TextChatApi {
   const [error, setError] = useState<string | null>(null);
   // our message, shown until the conversation has it
   const [pending, setPending] = useState<string | null>(null);
+  // the last message we sent: its row keeps this key once the conversation has it, so it is not remounted
+  const sent = useRef({ text: '', key: '', from: 0, ts: 0 });
+  const historyLen = useRef(0);
+  // what a conversation change shows until the worker has made it
+  const [shown, setShown] = useState<ConvItem[] | null>(null);
+  // requests that change the conversation, and messages, go out in order
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+  // conversation changes in flight; `epoch` moves on each one, so a poll that
+  // straddles one is dropped instead of showing the conversation it replaces
+  const changing = useRef(0);
+  const epoch = useRef(0);
+
+  const enqueue = useCallback(<T,>(request: () => Promise<T>): Promise<T> => {
+    const run = queue.current.then(request, request);
+    queue.current = run.catch(() => undefined);
+    return run;
+  }, []);
 
   const refresh = useCallback(async () => {
+    const hass = store.getSnapshot().hass;
     if (!hass) return;
+    const at = epoch.current;
     try {
       const data = await hass.callApi<History>('GET', HISTORY_PATH);
+      if (changing.current || at !== epoch.current) return;
       // a poll that brings nothing new keeps the same arrays: the device tiles read a
       // changed tool-call list as new agent activity and keep watching for state changes
       const body = JSON.stringify([data?.items, data?.suggestions]);
       if (body !== lastBody.current) {
         lastBody.current = body;
-        setHistory(Array.isArray(data?.items) ? data.items : []);
+        const next = Array.isArray(data?.items) ? data.items : [];
+        historyLen.current = next.length;
+        setHistory(next);
         setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
       }
       setBusy(Boolean(data?.busy));
@@ -125,41 +150,69 @@ export function useTextChat(active: boolean): TextChatApi {
     } catch (e) {
       setError(humanizeError(e));
     }
-  }, [hass]);
+  }, [store]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || !ready) return;
     void refresh();
     const timer = setInterval(() => void refresh(), busy || pending ? 1000 : 5000);
     return () => clearInterval(timer);
-  }, [active, busy, pending, refresh]);
-
-  const post = useCallback(
-    async (body: Record<string, unknown>) => {
-      if (!hass) return;
-      setBusy(true);
-      try {
-        // the reply is the whole turn as text; the history poll already rendered it
-        await hass.callApi('POST', CHAT_PATH, body);
-      } catch (e) {
-        setError(humanizeError(e));
-      } finally {
-        setPending(null);
-        await refresh();
-      }
-    },
-    [hass, refresh],
-  );
+  }, [active, ready, busy, pending, refresh]);
 
   const send = useCallback(
     async (text: string) => {
+      sent.current = { text, key: `sent-${Date.now()}`, from: historyLen.current, ts: Date.now() };
       setPending(text);
-      await post({ text, steps: false });
+      try {
+        // answered once the turn starts; the history poll shows the rest
+        await enqueue(() => store.getSnapshot().hass!.callApi('POST', CHAT_PATH, { text, steps: false }));
+      } catch (e) {
+        setError(humanizeError(e));
+      } finally {
+        // clearing our message before the conversation has it would blink it out for a round trip
+        await refresh();
+        setPending(null);
+      }
     },
-    [post],
+    [store, enqueue, refresh],
   );
 
-  const renew = useCallback(() => post({ new: true }), [post]);
+  // the worker loads a conversation it had unloaded only on a message, or when asked here;
+  // a conversation already loaded makes it a no-op
+  const warm = useCallback(() => {
+    store.getSnapshot().hass?.callApi('POST', WARM_PATH, {}).catch(() => undefined);
+  }, [store]);
+
+  /** Show `view` at once while `request` changes the conversation, then settle on the worker's. */
+  const change = useCallback(
+    async <T,>(view: ConvItem[], request: () => Promise<T>): Promise<T | undefined> => {
+      changing.current++;
+      epoch.current++;
+      historyLen.current = view.length;
+      setShown(view);
+      // the conversation changed to has no turn of its own yet
+      setBusy(false);
+      setTaskId(null);
+      setError(null);
+      try {
+        return await enqueue(request);
+      } catch (e) {
+        setError(humanizeError(e));
+        return undefined;
+      } finally {
+        changing.current--;
+        epoch.current++;
+        await refresh();
+        if (!changing.current) setShown(null);
+        warm();
+      }
+    },
+    [enqueue, refresh, warm],
+  );
+
+  const renew = useCallback(async () => {
+    await change([], () => store.getSnapshot().hass!.callApi('POST', CHAT_PATH, { new: true }));
+  }, [store, change]);
 
   // the stopped turn is over once history is idle and our own send has resolved
   useEffect(() => {
@@ -169,21 +222,16 @@ export function useTextChat(active: boolean): TextChatApi {
     }
   }, [busy, pending]);
 
-  // the worker loads a conversation it had unloaded only on a message, or when asked here;
-  // a conversation already loaded makes it a no-op
-  const warm = useCallback(() => {
-    if (!hass) return;
-    hass.callApi('POST', WARM_PATH, {}).catch(() => undefined);
-  }, [hass]);
-
   useEffect(() => {
-    if (active) warm();
-  }, [active, warm]);
+    if (active && ready) warm();
+  }, [active, ready, warm]);
+
+  const base = useMemo(() => shown ?? toConvItems(history), [shown, history]);
 
   // the agent has answered since the person last spoke, so a busy turn has only its
   // background work left, and the only stop that ends it is a force stop
-  const lastUser = history.reduce((at, i, n) => (i.kind === 'message' && i.role === 'user' ? n : at), -1);
-  const reply = history.slice(lastUser + 1).find((i) => i.kind === 'message' && i.role === 'agent');
+  const lastUser = base.reduce((at, i, n) => (i.kind === 'message' && i.role === 'user' ? n : at), -1);
+  const reply = base.slice(lastUser + 1).find((i) => i.kind === 'message' && i.role === 'agent');
   // a turn that is only finishing up after its reply is not running work yet
   const replied = reply !== undefined && Date.now() - reply.ts > 1500;
   // likewise a turn still busy this long after its reply was stopped
@@ -192,6 +240,7 @@ export function useTextChat(active: boolean): TextChatApi {
     taskId !== null && pending === null && forcingId !== taskId && (replied || stoppedLong);
 
   const stop = useCallback(async () => {
+    const hass = store.getSnapshot().hass;
     if (!hass || !taskId) return;
     const force = forceStop;
     const undo = force ? () => setForcingId(null) : () => setStoppingId(null);
@@ -209,54 +258,58 @@ export function useTextChat(active: boolean): TextChatApi {
       setError(humanizeError(e));
     }
     await refresh();
-  }, [hass, taskId, forceStop, refresh]);
+  }, [store, taskId, forceStop, refresh]);
 
   const listConversations = useCallback(async () => {
-    const data = await hass!.callApi<ConversationList>('GET', CONVERSATIONS_PATH);
+    const data = await store.getSnapshot().hass!.callApi<ConversationList>('GET', CONVERSATIONS_PATH);
     return { current: data?.current ?? null, conversations: data?.conversations ?? [] };
-  }, [hass]);
+  }, [store]);
 
   const readConversation = useCallback(
     async (id: string) => {
       const query = `?conversation_id=${encodeURIComponent(id)}`;
-      const data = await hass!.callApi<History>('GET', HISTORY_PATH + query);
+      const data = await store.getSnapshot().hass!.callApi<History>('GET', HISTORY_PATH + query);
       return toConvItems(Array.isArray(data?.items) ? data.items : []);
     },
-    [hass],
+    [store],
   );
 
   const switchConversation = useCallback(
-    async (id: string) => {
-      const res = await hass!.callApi<{ switched?: boolean }>('POST', SWITCH_PATH, { conversation_id: id });
-      await refresh();
-      return Boolean(res?.switched);
+    async (id: string, items: ConvItem[] = []) => {
+      const res = await change(items, () =>
+        store.getSnapshot().hass!.callApi<{ switched?: boolean }>('POST', SWITCH_PATH, { conversation_id: id }),
+      );
+      const switched = Boolean(res?.switched);
+      if (res && !switched) setError('A reply is still running; try again when it ends.');
+      return switched;
     },
-    [hass, refresh],
+    [store, change],
   );
 
   const deleteConversation = useCallback(
     async (id: string) => {
-      const res = await hass!.callApi<{ deleted?: boolean }>('POST', DELETE_PATH, { conversation_id: id });
+      const res = await store.getSnapshot().hass!.callApi<{ deleted?: boolean }>('POST', DELETE_PATH, { conversation_id: id });
       return Boolean(res?.deleted);
     },
-    [hass],
+    [store],
   );
 
   const items = useMemo(() => {
-    const conv = toConvItems(history);
-    const last = [...history].reverse().find((i) => i.kind === 'message' && i.role === 'user');
-    if (!pending || (last?.kind === 'message' && last.text === pending)) return conv;
-    const mine: ConvItem = { kind: 'message', id: 'pending', role: 'user', text: pending, ts: Date.now() };
-    return [...conv, mine];
-  }, [history, pending]);
+    const conv = [...base];
+    const { text, key, from, ts } = sent.current;
+    const at = conv.findIndex((i, n) => n >= from && i.kind === 'message' && i.role === 'user' && i.text === text);
+    if (at >= 0) conv[at] = { ...conv[at], id: key };
+    else if (pending !== null) conv.push({ kind: 'message', id: key, role: 'user', text: pending, ts });
+    return conv;
+  }, [base, pending]);
 
   const { toolCalls, agentAreas } = useMemo(() => {
     const calls: ToolCall[] = [];
     const areas = new Set<string>();
-    for (const i of history) {
+    for (const i of base) {
       if (i.kind !== 'action') continue;
       calls.push({
-        callId: i.call_id ?? i.id,
+        callId: i.id,
         name: i.name,
         args: i.args,
         status: i.status as ToolStatus,
@@ -266,7 +319,7 @@ export function useTextChat(active: boolean): TextChatApi {
       for (const a of argAreas(i.args)) areas.add(a);
     }
     return { toolCalls: calls, agentAreas: [...areas] };
-  }, [history]);
+  }, [base]);
 
   return {
     items,

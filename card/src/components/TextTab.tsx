@@ -5,7 +5,7 @@ import type { TasksApi } from '../lib/tasks-api';
 import type { TextChatApi } from '../lib/text-chat';
 import { Conversation } from './Conversation';
 import { DeviceTiles } from './DeviceTiles';
-import { useDockHeight } from './Dock';
+import { Composer, useDockHeight } from './Dock';
 import { ScheduledTasks } from './ScheduledTasks';
 import { TextHistory } from './TextHistory';
 
@@ -100,19 +100,12 @@ export function TextTab({
           </div>
         )}
         <div className="lk-bar">
-          <input
-            className="lk-input"
-            type="text"
+          <Composer
             value={text}
             placeholder="Message…"
-            onChange={(e) => setText(e.target.value)}
+            onChange={setText}
+            onSubmit={() => submit(text)}
             onFocus={api.warm}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                submit(text);
-              }
-            }}
           />
           {busy ? (
             <button

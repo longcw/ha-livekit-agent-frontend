@@ -24,8 +24,7 @@ export function TextHistory({ api, onClose }: { api: TextChatApi; onClose: () =>
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [open, setOpen] = useState<ConversationSummary | null>(null);
   const [items, setItems] = useState<ConvItem[] | null>(null);
-  const [switching, setSwitching] = useState(false);
-  const dockRef = useDockHeight();
+    const dockRef = useDockHeight();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -73,20 +72,11 @@ export function TextHistory({ api, onClose }: { api: TextChatApi; onClose: () =>
     await load();
   };
 
-  const resume = async () => {
+  // the conversation shows at once; a refusal comes back as the Text tab's error
+  const resume = () => {
     if (!open) return;
-    setSwitching(true);
-    try {
-      if (await switchConversation(open.id)) {
-        onClose();
-        return;
-      }
-      setError('A reply is still running; try again when it ends.');
-    } catch {
-      setError('Could not switch conversations.');
-    } finally {
-      setSwitching(false);
-    }
+    void switchConversation(open.id, items ?? []);
+    onClose();
   };
 
   if (open) {
@@ -106,7 +96,7 @@ export function TextHistory({ api, onClose }: { api: TextChatApi; onClose: () =>
           <Conversation items={items} startAtEnd />
         )}
         <div className="lk-dock" ref={dockRef}>
-          <button className="lk-listen-send lk-resume" onClick={() => void resume()} disabled={busy || switching}>
+          <button className="lk-listen-send lk-resume" onClick={resume} disabled={busy || items === null}>
             <ha-icon icon="mdi:message-reply-text-outline" />
             Continue this conversation
           </button>
