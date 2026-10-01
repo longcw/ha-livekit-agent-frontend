@@ -234,7 +234,7 @@ class LiveKitSettingsView(HomeAssistantView):
         data = json.loads(resp.body)
         data["device_names"] = _device_names(self._hass)
         # the MCP servers a person can be given, which only the worker knows
-        servers = await _forward(self._hass, "GET", "/servers", service=_WORKER)
+        servers = await _forward(self._hass, "GET", "/mcp/servers", service=_WORKER)
         if servers.status == 200 and isinstance(servers.body, bytes):
             data["servers"] = json.loads(servers.body).get("servers") or []
         return web.json_response(data)
