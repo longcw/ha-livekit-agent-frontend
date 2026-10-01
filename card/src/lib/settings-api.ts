@@ -15,10 +15,14 @@ export interface NotifyTarget {
 
 /** A family member with their own memory, conversation and notification devices. */
 export interface Person {
+  /** Fixed once set; every service knows the person by it. The scheduler fills it in. */
+  id?: string;
   name: string;
   /** The HA account that resolves to this person on the card and in voice sessions. */
   ha_user_id: string | null;
   notify_targets: string[];
+  /** Restricted MCP servers the agent may use for this person; not edited here. */
+  servers?: string[];
 }
 
 /** An HA login that can be linked to a person. */
@@ -54,6 +58,8 @@ function toPeople(raw: unknown): Person[] {
   return raw
     .filter((u) => u && typeof u.name === 'string')
     .map((u) => ({
+      // fields this tab does not edit, such as id and servers, are saved back as they came
+      ...u,
       name: u.name,
       ha_user_id: typeof u.ha_user_id === 'string' && u.ha_user_id ? u.ha_user_id : null,
       notify_targets: Array.isArray(u.notify_targets) ? u.notify_targets : [],

@@ -1,6 +1,6 @@
 var ah = { exports: {} }, Ao = {};
 var yy;
-function n1() {
+function nw() {
   if (yy) return Ao;
   yy = 1;
   var i = Symbol.for("react.transitional.element"), e = Symbol.for("react.fragment");
@@ -22,45 +22,45 @@ function n1() {
   return Ao.Fragment = e, Ao.jsx = t, Ao.jsxs = t, Ao;
 }
 var ky;
-function i1() {
-  return ky || (ky = 1, ah.exports = n1()), ah.exports;
+function iw() {
+  return ky || (ky = 1, ah.exports = nw()), ah.exports;
 }
-var w = i1(), rh = { exports: {} }, Oo = {}, sh = { exports: {} }, oh = {};
+var x = iw(), rh = { exports: {} }, Oo = {}, sh = { exports: {} }, oh = {};
 var Sy;
-function a1() {
+function aw() {
   return Sy || (Sy = 1, (function(i) {
-    function e(j, $) {
-      var re = j.length;
-      j.push($);
-      e: for (; 0 < re; ) {
-        var be = re - 1 >>> 1, Ce = j[be];
-        if (0 < s(Ce, $))
-          j[be] = $, j[re] = Ce, re = be;
+    function e(F, ie) {
+      var le = F.length;
+      F.push(ie);
+      e: for (; 0 < le; ) {
+        var we = le - 1 >>> 1, xe = F[we];
+        if (0 < s(xe, ie))
+          F[we] = ie, F[le] = xe, le = we;
         else break e;
       }
     }
-    function t(j) {
-      return j.length === 0 ? null : j[0];
+    function t(F) {
+      return F.length === 0 ? null : F[0];
     }
-    function a(j) {
-      if (j.length === 0) return null;
-      var $ = j[0], re = j.pop();
-      if (re !== $) {
-        j[0] = re;
-        e: for (var be = 0, Ce = j.length, O = Ce >>> 1; be < O; ) {
-          var Q = 2 * (be + 1) - 1, le = j[Q], de = Q + 1, ge = j[de];
-          if (0 > s(le, re))
-            de < Ce && 0 > s(ge, le) ? (j[be] = ge, j[de] = re, be = de) : (j[be] = le, j[Q] = re, be = Q);
-          else if (de < Ce && 0 > s(ge, re))
-            j[be] = ge, j[de] = re, be = de;
+    function a(F) {
+      if (F.length === 0) return null;
+      var ie = F[0], le = F.pop();
+      if (le !== ie) {
+        F[0] = le;
+        e: for (var we = 0, xe = F.length, O = xe >>> 1; we < O; ) {
+          var Q = 2 * (we + 1) - 1, oe = F[Q], ue = Q + 1, ge = F[ue];
+          if (0 > s(oe, le))
+            ue < xe && 0 > s(ge, oe) ? (F[we] = ge, F[ue] = le, we = ue) : (F[we] = oe, F[Q] = le, we = Q);
+          else if (ue < xe && 0 > s(ge, le))
+            F[we] = ge, F[ue] = le, we = ue;
           else break e;
         }
       }
-      return $;
+      return ie;
     }
-    function s(j, $) {
-      var re = j.sortIndex - $.sortIndex;
-      return re !== 0 ? re : j.id - $.id;
+    function s(F, ie) {
+      var le = F.sortIndex - ie.sortIndex;
+      return le !== 0 ? le : F.id - ie.id;
     }
     if (i.unstable_now = void 0, typeof performance == "object" && typeof performance.now == "function") {
       var c = performance;
@@ -73,123 +73,123 @@ function a1() {
         return u.now() - d;
       };
     }
-    var h = [], f = [], p = 1, v = null, b = 3, k = !1, x = !1, T = !1, P = !1, _ = typeof setTimeout == "function" ? setTimeout : null, U = typeof clearTimeout == "function" ? clearTimeout : null, B = typeof setImmediate < "u" ? setImmediate : null;
-    function S(j) {
-      for (var $ = t(f); $ !== null; ) {
-        if ($.callback === null) a(f);
-        else if ($.startTime <= j)
-          a(f), $.sortIndex = $.expirationTime, e(h, $);
+    var h = [], f = [], p = 1, v = null, b = 3, k = !1, w = !1, T = !1, P = !1, _ = typeof setTimeout == "function" ? setTimeout : null, U = typeof clearTimeout == "function" ? clearTimeout : null, z = typeof setImmediate < "u" ? setImmediate : null;
+    function S(F) {
+      for (var ie = t(f); ie !== null; ) {
+        if (ie.callback === null) a(f);
+        else if (ie.startTime <= F)
+          a(f), ie.sortIndex = ie.expirationTime, e(h, ie);
         else break;
-        $ = t(f);
+        ie = t(f);
       }
     }
-    function C(j) {
-      if (T = !1, S(j), !x)
+    function C(F) {
+      if (T = !1, S(F), !w)
         if (t(h) !== null)
-          x = !0, M || (M = !0, te());
+          w = !0, M || (M = !0, Z());
         else {
-          var $ = t(f);
-          $ !== null && oe(C, $.startTime - j);
+          var ie = t(f);
+          ie !== null && pe(C, ie.startTime - F);
         }
     }
-    var M = !1, D = -1, V = 5, Z = -1;
-    function F() {
-      return P ? !0 : !(i.unstable_now() - Z < V);
+    var M = !1, D = -1, H = 5, W = -1;
+    function B() {
+      return P ? !0 : !(i.unstable_now() - W < H);
     }
     function G() {
       if (P = !1, M) {
-        var j = i.unstable_now();
-        Z = j;
-        var $ = !0;
+        var F = i.unstable_now();
+        W = F;
+        var ie = !0;
         try {
           e: {
-            x = !1, T && (T = !1, U(D), D = -1), k = !0;
-            var re = b;
+            w = !1, T && (T = !1, U(D), D = -1), k = !0;
+            var le = b;
             try {
               t: {
-                for (S(j), v = t(h); v !== null && !(v.expirationTime > j && F()); ) {
-                  var be = v.callback;
-                  if (typeof be == "function") {
+                for (S(F), v = t(h); v !== null && !(v.expirationTime > F && B()); ) {
+                  var we = v.callback;
+                  if (typeof we == "function") {
                     v.callback = null, b = v.priorityLevel;
-                    var Ce = be(
-                      v.expirationTime <= j
+                    var xe = we(
+                      v.expirationTime <= F
                     );
-                    if (j = i.unstable_now(), typeof Ce == "function") {
-                      v.callback = Ce, S(j), $ = !0;
+                    if (F = i.unstable_now(), typeof xe == "function") {
+                      v.callback = xe, S(F), ie = !0;
                       break t;
                     }
-                    v === t(h) && a(h), S(j);
+                    v === t(h) && a(h), S(F);
                   } else a(h);
                   v = t(h);
                 }
-                if (v !== null) $ = !0;
+                if (v !== null) ie = !0;
                 else {
                   var O = t(f);
-                  O !== null && oe(
+                  O !== null && pe(
                     C,
-                    O.startTime - j
-                  ), $ = !1;
+                    O.startTime - F
+                  ), ie = !1;
                 }
               }
               break e;
             } finally {
-              v = null, b = re, k = !1;
+              v = null, b = le, k = !1;
             }
-            $ = void 0;
+            ie = void 0;
           }
         } finally {
-          $ ? te() : M = !1;
+          ie ? Z() : M = !1;
         }
       }
     }
-    var te;
-    if (typeof B == "function")
-      te = function() {
-        B(G);
+    var Z;
+    if (typeof z == "function")
+      Z = function() {
+        z(G);
       };
     else if (typeof MessageChannel < "u") {
-      var he = new MessageChannel(), me = he.port2;
-      he.port1.onmessage = G, te = function() {
-        me.postMessage(null);
+      var fe = new MessageChannel(), he = fe.port2;
+      fe.port1.onmessage = G, Z = function() {
+        he.postMessage(null);
       };
     } else
-      te = function() {
+      Z = function() {
         _(G, 0);
       };
-    function oe(j, $) {
+    function pe(F, ie) {
       D = _(function() {
-        j(i.unstable_now());
-      }, $);
+        F(i.unstable_now());
+      }, ie);
     }
-    i.unstable_IdlePriority = 5, i.unstable_ImmediatePriority = 1, i.unstable_LowPriority = 4, i.unstable_NormalPriority = 3, i.unstable_Profiling = null, i.unstable_UserBlockingPriority = 2, i.unstable_cancelCallback = function(j) {
-      j.callback = null;
-    }, i.unstable_forceFrameRate = function(j) {
-      0 > j || 125 < j ? console.error(
+    i.unstable_IdlePriority = 5, i.unstable_ImmediatePriority = 1, i.unstable_LowPriority = 4, i.unstable_NormalPriority = 3, i.unstable_Profiling = null, i.unstable_UserBlockingPriority = 2, i.unstable_cancelCallback = function(F) {
+      F.callback = null;
+    }, i.unstable_forceFrameRate = function(F) {
+      0 > F || 125 < F ? console.error(
         "forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported"
-      ) : V = 0 < j ? Math.floor(1e3 / j) : 5;
+      ) : H = 0 < F ? Math.floor(1e3 / F) : 5;
     }, i.unstable_getCurrentPriorityLevel = function() {
       return b;
-    }, i.unstable_next = function(j) {
+    }, i.unstable_next = function(F) {
       switch (b) {
         case 1:
         case 2:
         case 3:
-          var $ = 3;
+          var ie = 3;
           break;
         default:
-          $ = b;
+          ie = b;
       }
-      var re = b;
-      b = $;
+      var le = b;
+      b = ie;
       try {
-        return j();
+        return F();
       } finally {
-        b = re;
+        b = le;
       }
     }, i.unstable_requestPaint = function() {
       P = !0;
-    }, i.unstable_runWithPriority = function(j, $) {
-      switch (j) {
+    }, i.unstable_runWithPriority = function(F, ie) {
+      switch (F) {
         case 1:
         case 2:
         case 3:
@@ -197,69 +197,69 @@ function a1() {
         case 5:
           break;
         default:
-          j = 3;
+          F = 3;
       }
-      var re = b;
-      b = j;
+      var le = b;
+      b = F;
       try {
-        return $();
+        return ie();
       } finally {
-        b = re;
+        b = le;
       }
-    }, i.unstable_scheduleCallback = function(j, $, re) {
-      var be = i.unstable_now();
-      switch (typeof re == "object" && re !== null ? (re = re.delay, re = typeof re == "number" && 0 < re ? be + re : be) : re = be, j) {
+    }, i.unstable_scheduleCallback = function(F, ie, le) {
+      var we = i.unstable_now();
+      switch (typeof le == "object" && le !== null ? (le = le.delay, le = typeof le == "number" && 0 < le ? we + le : we) : le = we, F) {
         case 1:
-          var Ce = -1;
+          var xe = -1;
           break;
         case 2:
-          Ce = 250;
+          xe = 250;
           break;
         case 5:
-          Ce = 1073741823;
+          xe = 1073741823;
           break;
         case 4:
-          Ce = 1e4;
+          xe = 1e4;
           break;
         default:
-          Ce = 5e3;
+          xe = 5e3;
       }
-      return Ce = re + Ce, j = {
+      return xe = le + xe, F = {
         id: p++,
-        callback: $,
-        priorityLevel: j,
-        startTime: re,
-        expirationTime: Ce,
+        callback: ie,
+        priorityLevel: F,
+        startTime: le,
+        expirationTime: xe,
         sortIndex: -1
-      }, re > be ? (j.sortIndex = re, e(f, j), t(h) === null && j === t(f) && (T ? (U(D), D = -1) : T = !0, oe(C, re - be))) : (j.sortIndex = Ce, e(h, j), x || k || (x = !0, M || (M = !0, te()))), j;
-    }, i.unstable_shouldYield = F, i.unstable_wrapCallback = function(j) {
-      var $ = b;
+      }, le > we ? (F.sortIndex = le, e(f, F), t(h) === null && F === t(f) && (T ? (U(D), D = -1) : T = !0, pe(C, le - we))) : (F.sortIndex = xe, e(h, F), w || k || (w = !0, M || (M = !0, Z()))), F;
+    }, i.unstable_shouldYield = B, i.unstable_wrapCallback = function(F) {
+      var ie = b;
       return function() {
-        var re = b;
-        b = $;
+        var le = b;
+        b = ie;
         try {
-          return j.apply(this, arguments);
+          return F.apply(this, arguments);
         } finally {
-          b = re;
+          b = le;
         }
       };
     };
   })(oh)), oh;
 }
 var Ty;
-function r1() {
-  return Ty || (Ty = 1, sh.exports = a1()), sh.exports;
+function rw() {
+  return Ty || (Ty = 1, sh.exports = aw()), sh.exports;
 }
 var ch = { exports: {} }, Re = {};
 var Cy;
-function s1() {
+function sw() {
   if (Cy) return Re;
   Cy = 1;
   var i = Symbol.for("react.transitional.element"), e = Symbol.for("react.portal"), t = Symbol.for("react.fragment"), a = Symbol.for("react.strict_mode"), s = Symbol.for("react.profiler"), c = Symbol.for("react.consumer"), u = Symbol.for("react.context"), d = Symbol.for("react.forward_ref"), h = Symbol.for("react.suspense"), f = Symbol.for("react.memo"), p = Symbol.for("react.lazy"), v = Symbol.for("react.activity"), b = Symbol.iterator;
   function k(O) {
     return O === null || typeof O != "object" ? null : (O = b && O[b] || O["@@iterator"], typeof O == "function" ? O : null);
   }
-  var x = {
+  var w = {
     isMounted: function() {
       return !1;
     },
@@ -270,8 +270,8 @@ function s1() {
     enqueueSetState: function() {
     }
   }, T = Object.assign, P = {};
-  function _(O, Q, le) {
-    this.props = O, this.context = Q, this.refs = P, this.updater = le || x;
+  function _(O, Q, oe) {
+    this.props = O, this.context = Q, this.refs = P, this.updater = oe || w;
   }
   _.prototype.isReactComponent = {}, _.prototype.setState = function(O, Q) {
     if (typeof O != "object" && typeof O != "function" && O != null)
@@ -285,42 +285,42 @@ function s1() {
   function U() {
   }
   U.prototype = _.prototype;
-  function B(O, Q, le) {
-    this.props = O, this.context = Q, this.refs = P, this.updater = le || x;
+  function z(O, Q, oe) {
+    this.props = O, this.context = Q, this.refs = P, this.updater = oe || w;
   }
-  var S = B.prototype = new U();
-  S.constructor = B, T(S, _.prototype), S.isPureReactComponent = !0;
+  var S = z.prototype = new U();
+  S.constructor = z, T(S, _.prototype), S.isPureReactComponent = !0;
   var C = Array.isArray;
   function M() {
   }
-  var D = { H: null, A: null, T: null, S: null }, V = Object.prototype.hasOwnProperty;
-  function Z(O, Q, le) {
-    var de = le.ref;
+  var D = { H: null, A: null, T: null, S: null }, H = Object.prototype.hasOwnProperty;
+  function W(O, Q, oe) {
+    var ue = oe.ref;
     return {
       $$typeof: i,
       type: O,
       key: Q,
-      ref: de !== void 0 ? de : null,
-      props: le
+      ref: ue !== void 0 ? ue : null,
+      props: oe
     };
   }
-  function F(O, Q) {
-    return Z(O.type, Q, O.props);
+  function B(O, Q) {
+    return W(O.type, Q, O.props);
   }
   function G(O) {
     return typeof O == "object" && O !== null && O.$$typeof === i;
   }
-  function te(O) {
+  function Z(O) {
     var Q = { "=": "=0", ":": "=2" };
-    return "$" + O.replace(/[=:]/g, function(le) {
-      return Q[le];
+    return "$" + O.replace(/[=:]/g, function(oe) {
+      return Q[oe];
     });
   }
-  var he = /\/+/g;
-  function me(O, Q) {
-    return typeof O == "object" && O !== null && O.key != null ? te("" + O.key) : Q.toString(36);
+  var fe = /\/+/g;
+  function he(O, Q) {
+    return typeof O == "object" && O !== null && O.key != null ? Z("" + O.key) : Q.toString(36);
   }
-  function oe(O) {
+  function pe(O) {
     switch (O.status) {
       case "fulfilled":
         return O.value;
@@ -343,102 +343,102 @@ function s1() {
     }
     throw O;
   }
-  function j(O, Q, le, de, ge) {
-    var ce = typeof O;
-    (ce === "undefined" || ce === "boolean") && (O = null);
-    var fe = !1;
-    if (O === null) fe = !0;
+  function F(O, Q, oe, ue, ge) {
+    var se = typeof O;
+    (se === "undefined" || se === "boolean") && (O = null);
+    var de = !1;
+    if (O === null) de = !0;
     else
-      switch (ce) {
+      switch (se) {
         case "bigint":
         case "string":
         case "number":
-          fe = !0;
+          de = !0;
           break;
         case "object":
           switch (O.$$typeof) {
             case i:
             case e:
-              fe = !0;
+              de = !0;
               break;
             case p:
-              return fe = O._init, j(
-                fe(O._payload),
+              return de = O._init, F(
+                de(O._payload),
                 Q,
-                le,
-                de,
+                oe,
+                ue,
                 ge
               );
           }
       }
-    if (fe)
-      return ge = ge(O), fe = de === "" ? "." + me(O, 0) : de, C(ge) ? (le = "", fe != null && (le = fe.replace(he, "$&/") + "/"), j(ge, Q, le, "", function(xt) {
+    if (de)
+      return ge = ge(O), de = ue === "" ? "." + he(O, 0) : ue, C(ge) ? (oe = "", de != null && (oe = de.replace(fe, "$&/") + "/"), F(ge, Q, oe, "", function(xt) {
         return xt;
-      })) : ge != null && (G(ge) && (ge = F(
+      })) : ge != null && (G(ge) && (ge = B(
         ge,
-        le + (ge.key == null || O && O.key === ge.key ? "" : ("" + ge.key).replace(
-          he,
+        oe + (ge.key == null || O && O.key === ge.key ? "" : ("" + ge.key).replace(
+          fe,
           "$&/"
-        ) + "/") + fe
+        ) + "/") + de
       )), Q.push(ge)), 1;
-    fe = 0;
-    var we = de === "" ? "." : de + ":";
+    de = 0;
+    var Ce = ue === "" ? "." : ue + ":";
     if (C(O))
       for (var Be = 0; Be < O.length; Be++)
-        de = O[Be], ce = we + me(de, Be), fe += j(
-          de,
+        ue = O[Be], se = Ce + he(ue, Be), de += F(
+          ue,
           Q,
-          le,
-          ce,
+          oe,
+          se,
           ge
         );
     else if (Be = k(O), typeof Be == "function")
-      for (O = Be.call(O), Be = 0; !(de = O.next()).done; )
-        de = de.value, ce = we + me(de, Be++), fe += j(
-          de,
+      for (O = Be.call(O), Be = 0; !(ue = O.next()).done; )
+        ue = ue.value, se = Ce + he(ue, Be++), de += F(
+          ue,
           Q,
-          le,
-          ce,
+          oe,
+          se,
           ge
         );
-    else if (ce === "object") {
+    else if (se === "object") {
       if (typeof O.then == "function")
-        return j(
-          oe(O),
+        return F(
+          pe(O),
           Q,
-          le,
-          de,
+          oe,
+          ue,
           ge
         );
       throw Q = String(O), Error(
         "Objects are not valid as a React child (found: " + (Q === "[object Object]" ? "object with keys {" + Object.keys(O).join(", ") + "}" : Q) + "). If you meant to render a collection of children, use an array instead."
       );
     }
-    return fe;
+    return de;
   }
-  function $(O, Q, le) {
+  function ie(O, Q, oe) {
     if (O == null) return O;
-    var de = [], ge = 0;
-    return j(O, de, "", "", function(ce) {
-      return Q.call(le, ce, ge++);
-    }), de;
+    var ue = [], ge = 0;
+    return F(O, ue, "", "", function(se) {
+      return Q.call(oe, se, ge++);
+    }), ue;
   }
-  function re(O) {
+  function le(O) {
     if (O._status === -1) {
       var Q = O._result;
       Q = Q(), Q.then(
-        function(le) {
-          (O._status === 0 || O._status === -1) && (O._status = 1, O._result = le);
+        function(oe) {
+          (O._status === 0 || O._status === -1) && (O._status = 1, O._result = oe);
         },
-        function(le) {
-          (O._status === 0 || O._status === -1) && (O._status = 2, O._result = le);
+        function(oe) {
+          (O._status === 0 || O._status === -1) && (O._status = 2, O._result = oe);
         }
       ), O._status === -1 && (O._status = 0, O._result = Q);
     }
     if (O._status === 1) return O._result.default;
     throw O._result;
   }
-  var be = typeof reportError == "function" ? reportError : function(O) {
+  var we = typeof reportError == "function" ? reportError : function(O) {
     if (typeof window == "object" && typeof window.ErrorEvent == "function") {
       var Q = new window.ErrorEvent("error", {
         bubbles: !0,
@@ -452,25 +452,25 @@ function s1() {
       return;
     }
     console.error(O);
-  }, Ce = {
-    map: $,
-    forEach: function(O, Q, le) {
-      $(
+  }, xe = {
+    map: ie,
+    forEach: function(O, Q, oe) {
+      ie(
         O,
         function() {
           Q.apply(this, arguments);
         },
-        le
+        oe
       );
     },
     count: function(O) {
       var Q = 0;
-      return $(O, function() {
+      return ie(O, function() {
         Q++;
       }), Q;
     },
     toArray: function(O) {
-      return $(O, function(Q) {
+      return ie(O, function(Q) {
         return Q;
       }) || [];
     },
@@ -482,7 +482,7 @@ function s1() {
       return O;
     }
   };
-  return Re.Activity = v, Re.Children = Ce, Re.Component = _, Re.Fragment = t, Re.Profiler = s, Re.PureComponent = B, Re.StrictMode = a, Re.Suspense = h, Re.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = D, Re.__COMPILER_RUNTIME = {
+  return Re.Activity = v, Re.Children = xe, Re.Component = _, Re.Fragment = t, Re.Profiler = s, Re.PureComponent = z, Re.StrictMode = a, Re.Suspense = h, Re.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = D, Re.__COMPILER_RUNTIME = {
     __proto__: null,
     c: function(O) {
       return D.H.useMemoCache(O);
@@ -493,23 +493,23 @@ function s1() {
     };
   }, Re.cacheSignal = function() {
     return null;
-  }, Re.cloneElement = function(O, Q, le) {
+  }, Re.cloneElement = function(O, Q, oe) {
     if (O == null)
       throw Error(
         "The argument must be a React element, but you passed " + O + "."
       );
-    var de = T({}, O.props), ge = O.key;
+    var ue = T({}, O.props), ge = O.key;
     if (Q != null)
-      for (ce in Q.key !== void 0 && (ge = "" + Q.key), Q)
-        !V.call(Q, ce) || ce === "key" || ce === "__self" || ce === "__source" || ce === "ref" && Q.ref === void 0 || (de[ce] = Q[ce]);
-    var ce = arguments.length - 2;
-    if (ce === 1) de.children = le;
-    else if (1 < ce) {
-      for (var fe = Array(ce), we = 0; we < ce; we++)
-        fe[we] = arguments[we + 2];
-      de.children = fe;
+      for (se in Q.key !== void 0 && (ge = "" + Q.key), Q)
+        !H.call(Q, se) || se === "key" || se === "__self" || se === "__source" || se === "ref" && Q.ref === void 0 || (ue[se] = Q[se]);
+    var se = arguments.length - 2;
+    if (se === 1) ue.children = oe;
+    else if (1 < se) {
+      for (var de = Array(se), Ce = 0; Ce < se; Ce++)
+        de[Ce] = arguments[Ce + 2];
+      ue.children = de;
     }
-    return Z(O.type, ge, de);
+    return W(O.type, ge, ue);
   }, Re.createContext = function(O) {
     return O = {
       $$typeof: u,
@@ -522,22 +522,22 @@ function s1() {
       $$typeof: c,
       _context: O
     }, O;
-  }, Re.createElement = function(O, Q, le) {
-    var de, ge = {}, ce = null;
+  }, Re.createElement = function(O, Q, oe) {
+    var ue, ge = {}, se = null;
     if (Q != null)
-      for (de in Q.key !== void 0 && (ce = "" + Q.key), Q)
-        V.call(Q, de) && de !== "key" && de !== "__self" && de !== "__source" && (ge[de] = Q[de]);
-    var fe = arguments.length - 2;
-    if (fe === 1) ge.children = le;
-    else if (1 < fe) {
-      for (var we = Array(fe), Be = 0; Be < fe; Be++)
-        we[Be] = arguments[Be + 2];
-      ge.children = we;
+      for (ue in Q.key !== void 0 && (se = "" + Q.key), Q)
+        H.call(Q, ue) && ue !== "key" && ue !== "__self" && ue !== "__source" && (ge[ue] = Q[ue]);
+    var de = arguments.length - 2;
+    if (de === 1) ge.children = oe;
+    else if (1 < de) {
+      for (var Ce = Array(de), Be = 0; Be < de; Be++)
+        Ce[Be] = arguments[Be + 2];
+      ge.children = Ce;
     }
     if (O && O.defaultProps)
-      for (de in fe = O.defaultProps, fe)
-        ge[de] === void 0 && (ge[de] = fe[de]);
-    return Z(O, ce, ge);
+      for (ue in de = O.defaultProps, de)
+        ge[ue] === void 0 && (ge[ue] = de[ue]);
+    return W(O, se, ge);
   }, Re.createRef = function() {
     return { current: null };
   }, Re.forwardRef = function(O) {
@@ -546,7 +546,7 @@ function s1() {
     return {
       $$typeof: p,
       _payload: { _status: -1, _result: O },
-      _init: re
+      _init: le
     };
   }, Re.memo = function(O, Q) {
     return {
@@ -555,22 +555,22 @@ function s1() {
       compare: Q === void 0 ? null : Q
     };
   }, Re.startTransition = function(O) {
-    var Q = D.T, le = {};
-    D.T = le;
+    var Q = D.T, oe = {};
+    D.T = oe;
     try {
-      var de = O(), ge = D.S;
-      ge !== null && ge(le, de), typeof de == "object" && de !== null && typeof de.then == "function" && de.then(M, be);
-    } catch (ce) {
-      be(ce);
+      var ue = O(), ge = D.S;
+      ge !== null && ge(oe, ue), typeof ue == "object" && ue !== null && typeof ue.then == "function" && ue.then(M, we);
+    } catch (se) {
+      we(se);
     } finally {
-      Q !== null && le.types !== null && (Q.types = le.types), D.T = Q;
+      Q !== null && oe.types !== null && (Q.types = oe.types), D.T = Q;
     }
   }, Re.unstable_useCacheRefresh = function() {
     return D.H.useCacheRefresh();
   }, Re.use = function(O) {
     return D.H.use(O);
-  }, Re.useActionState = function(O, Q, le) {
-    return D.H.useActionState(O, Q, le);
+  }, Re.useActionState = function(O, Q, oe) {
+    return D.H.useActionState(O, Q, oe);
   }, Re.useCallback = function(O, Q) {
     return D.H.useCallback(O, Q);
   }, Re.useContext = function(O) {
@@ -584,8 +584,8 @@ function s1() {
     return D.H.useEffectEvent(O);
   }, Re.useId = function() {
     return D.H.useId();
-  }, Re.useImperativeHandle = function(O, Q, le) {
-    return D.H.useImperativeHandle(O, Q, le);
+  }, Re.useImperativeHandle = function(O, Q, oe) {
+    return D.H.useImperativeHandle(O, Q, oe);
   }, Re.useInsertionEffect = function(O, Q) {
     return D.H.useInsertionEffect(O, Q);
   }, Re.useLayoutEffect = function(O, Q) {
@@ -594,17 +594,17 @@ function s1() {
     return D.H.useMemo(O, Q);
   }, Re.useOptimistic = function(O, Q) {
     return D.H.useOptimistic(O, Q);
-  }, Re.useReducer = function(O, Q, le) {
-    return D.H.useReducer(O, Q, le);
+  }, Re.useReducer = function(O, Q, oe) {
+    return D.H.useReducer(O, Q, oe);
   }, Re.useRef = function(O) {
     return D.H.useRef(O);
   }, Re.useState = function(O) {
     return D.H.useState(O);
-  }, Re.useSyncExternalStore = function(O, Q, le) {
+  }, Re.useSyncExternalStore = function(O, Q, oe) {
     return D.H.useSyncExternalStore(
       O,
       Q,
-      le
+      oe
     );
   }, Re.useTransition = function() {
     return D.H.useTransition();
@@ -612,11 +612,11 @@ function s1() {
 }
 var Ey;
 function Mm() {
-  return Ey || (Ey = 1, ch.exports = s1()), ch.exports;
+  return Ey || (Ey = 1, ch.exports = sw()), ch.exports;
 }
 var lh = { exports: {} }, Kt = {};
 var wy;
-function o1() {
+function ow() {
   if (wy) return Kt;
   wy = 1;
   var i = Mm();
@@ -749,7 +749,7 @@ function o1() {
   }, Kt.version = "19.2.7", Kt;
 }
 var xy;
-function c1() {
+function cw() {
   if (xy) return lh.exports;
   xy = 1;
   function i() {
@@ -760,13 +760,13 @@ function c1() {
         console.error(e);
       }
   }
-  return i(), lh.exports = o1(), lh.exports;
+  return i(), lh.exports = ow(), lh.exports;
 }
 var Ry;
-function l1() {
+function lw() {
   if (Ry) return Oo;
   Ry = 1;
-  var i = r1(), e = Mm(), t = c1();
+  var i = rw(), e = Mm(), t = cw();
   function a(n) {
     var r = "https://react.dev/errors/" + n;
     if (1 < arguments.length) {
@@ -875,15 +875,15 @@ function l1() {
     }
     return null;
   }
-  var v = Object.assign, b = Symbol.for("react.element"), k = Symbol.for("react.transitional.element"), x = Symbol.for("react.portal"), T = Symbol.for("react.fragment"), P = Symbol.for("react.strict_mode"), _ = Symbol.for("react.profiler"), U = Symbol.for("react.consumer"), B = Symbol.for("react.context"), S = Symbol.for("react.forward_ref"), C = Symbol.for("react.suspense"), M = Symbol.for("react.suspense_list"), D = Symbol.for("react.memo"), V = Symbol.for("react.lazy"), Z = Symbol.for("react.activity"), F = Symbol.for("react.memo_cache_sentinel"), G = Symbol.iterator;
-  function te(n) {
+  var v = Object.assign, b = Symbol.for("react.element"), k = Symbol.for("react.transitional.element"), w = Symbol.for("react.portal"), T = Symbol.for("react.fragment"), P = Symbol.for("react.strict_mode"), _ = Symbol.for("react.profiler"), U = Symbol.for("react.consumer"), z = Symbol.for("react.context"), S = Symbol.for("react.forward_ref"), C = Symbol.for("react.suspense"), M = Symbol.for("react.suspense_list"), D = Symbol.for("react.memo"), H = Symbol.for("react.lazy"), W = Symbol.for("react.activity"), B = Symbol.for("react.memo_cache_sentinel"), G = Symbol.iterator;
+  function Z(n) {
     return n === null || typeof n != "object" ? null : (n = G && n[G] || n["@@iterator"], typeof n == "function" ? n : null);
   }
-  var he = Symbol.for("react.client.reference");
-  function me(n) {
+  var fe = Symbol.for("react.client.reference");
+  function he(n) {
     if (n == null) return null;
     if (typeof n == "function")
-      return n.$$typeof === he ? null : n.displayName || n.name || null;
+      return n.$$typeof === fe ? null : n.displayName || n.name || null;
     if (typeof n == "string") return n;
     switch (n) {
       case T:
@@ -896,14 +896,14 @@ function l1() {
         return "Suspense";
       case M:
         return "SuspenseList";
-      case Z:
+      case W:
         return "Activity";
     }
     if (typeof n == "object")
       switch (n.$$typeof) {
-        case x:
+        case w:
           return "Portal";
-        case B:
+        case z:
           return n.displayName || "Context";
         case U:
           return (n._context.displayName || "Context") + ".Consumer";
@@ -911,34 +911,34 @@ function l1() {
           var r = n.render;
           return n = n.displayName, n || (n = r.displayName || r.name || "", n = n !== "" ? "ForwardRef(" + n + ")" : "ForwardRef"), n;
         case D:
-          return r = n.displayName || null, r !== null ? r : me(n.type) || "Memo";
-        case V:
+          return r = n.displayName || null, r !== null ? r : he(n.type) || "Memo";
+        case H:
           r = n._payload, n = n._init;
           try {
-            return me(n(r));
+            return he(n(r));
           } catch {
           }
       }
     return null;
   }
-  var oe = Array.isArray, j = e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, $ = t.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, re = {
+  var pe = Array.isArray, F = e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ie = t.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
     pending: !1,
     data: null,
     method: null,
     action: null
-  }, be = [], Ce = -1;
+  }, we = [], xe = -1;
   function O(n) {
     return { current: n };
   }
   function Q(n) {
-    0 > Ce || (n.current = be[Ce], be[Ce] = null, Ce--);
+    0 > xe || (n.current = we[xe], we[xe] = null, xe--);
   }
-  function le(n, r) {
-    Ce++, be[Ce] = n.current, n.current = r;
+  function oe(n, r) {
+    xe++, we[xe] = n.current, n.current = r;
   }
-  var de = O(null), ge = O(null), ce = O(null), fe = O(null);
-  function we(n, r) {
-    switch (le(ce, r), le(ge, n), le(de, null), r.nodeType) {
+  var ue = O(null), ge = O(null), se = O(null), de = O(null);
+  function Ce(n, r) {
+    switch (oe(se, r), oe(ge, n), oe(ue, null), r.nodeType) {
       case 9:
       case 11:
         n = (n = r.documentElement) && (n = n.namespaceURI) ? qb(n) : 0;
@@ -958,18 +958,18 @@ function l1() {
               n = 0;
           }
     }
-    Q(de), le(de, n);
+    Q(ue), oe(ue, n);
   }
   function Be() {
-    Q(de), Q(ge), Q(ce);
+    Q(ue), Q(ge), Q(se);
   }
   function xt(n) {
-    n.memoizedState !== null && le(fe, n);
-    var r = de.current, o = Hb(r, n.type);
-    r !== o && (le(ge, n), le(de, o));
+    n.memoizedState !== null && oe(de, n);
+    var r = ue.current, o = Hb(r, n.type);
+    r !== o && (oe(ge, n), oe(ue, o));
   }
   function At(n) {
-    ge.current === n && (Q(de), Q(ge)), fe.current === n && (Q(fe), xo._currentValue = re);
+    ge.current === n && (Q(ue), Q(ge)), de.current === n && (Q(de), xo._currentValue = le);
   }
   var qn, Hn;
   function Rt(n) {
@@ -984,10 +984,10 @@ function l1() {
     return `
 ` + qn + n + Hn;
   }
-  var xe = !1;
+  var Ee = !1;
   function Ge(n, r) {
-    if (!n || xe) return "";
-    xe = !0;
+    if (!n || Ee) return "";
+    Ee = !0;
     var o = Error.prepareStackTrace;
     Error.prepareStackTrace = void 0;
     try {
@@ -995,27 +995,27 @@ function l1() {
         DetermineComponentFrameRoot: function() {
           try {
             if (r) {
-              var ie = function() {
+              var ne = function() {
                 throw Error();
               };
-              if (Object.defineProperty(ie.prototype, "props", {
+              if (Object.defineProperty(ne.prototype, "props", {
                 set: function() {
                   throw Error();
                 }
               }), typeof Reflect == "object" && Reflect.construct) {
                 try {
-                  Reflect.construct(ie, []);
+                  Reflect.construct(ne, []);
                 } catch (J) {
                   var K = J;
                 }
-                Reflect.construct(n, [], ie);
+                Reflect.construct(n, [], ne);
               } else {
                 try {
-                  ie.call();
+                  ne.call();
                 } catch (J) {
                   K = J;
                 }
-                n.call(ie.prototype);
+                n.call(ne.prototype);
               }
             } else {
               try {
@@ -1023,7 +1023,7 @@ function l1() {
               } catch (J) {
                 K = J;
               }
-              (ie = n()) && typeof ie.catch == "function" && ie.catch(function() {
+              (ne = n()) && typeof ne.catch == "function" && ne.catch(function() {
               });
             }
           } catch (J) {
@@ -1046,32 +1046,32 @@ function l1() {
       var g = l.DetermineComponentFrameRoot(), y = g[0], E = g[1];
       if (y && E) {
         var N = y.split(`
-`), H = E.split(`
+`), V = E.split(`
 `);
         for (m = l = 0; l < N.length && !N[l].includes("DetermineComponentFrameRoot"); )
           l++;
-        for (; m < H.length && !H[m].includes(
+        for (; m < V.length && !V[m].includes(
           "DetermineComponentFrameRoot"
         ); )
           m++;
-        if (l === N.length || m === H.length)
-          for (l = N.length - 1, m = H.length - 1; 1 <= l && 0 <= m && N[l] !== H[m]; )
+        if (l === N.length || m === V.length)
+          for (l = N.length - 1, m = V.length - 1; 1 <= l && 0 <= m && N[l] !== V[m]; )
             m--;
         for (; 1 <= l && 0 <= m; l--, m--)
-          if (N[l] !== H[m]) {
+          if (N[l] !== V[m]) {
             if (l !== 1 || m !== 1)
               do
-                if (l--, m--, 0 > m || N[l] !== H[m]) {
-                  var W = `
+                if (l--, m--, 0 > m || N[l] !== V[m]) {
+                  var $ = `
 ` + N[l].replace(" at new ", " at ");
-                  return n.displayName && W.includes("<anonymous>") && (W = W.replace("<anonymous>", n.displayName)), W;
+                  return n.displayName && $.includes("<anonymous>") && ($ = $.replace("<anonymous>", n.displayName)), $;
                 }
               while (1 <= l && 0 <= m);
             break;
           }
       }
     } finally {
-      xe = !1, Error.prepareStackTrace = o;
+      Ee = !1, Error.prepareStackTrace = o;
     }
     return (o = n ? n.displayName || n.name : "") ? Rt(o) : "";
   }
@@ -1247,17 +1247,17 @@ Error generating stack: ` + l.message + `
   function VC(n, r, o, l, m, g) {
     var y = n.pendingLanes;
     n.pendingLanes = o, n.suspendedLanes = 0, n.pingedLanes = 0, n.warmLanes = 0, n.expiredLanes &= o, n.entangledLanes &= o, n.errorRecoveryDisabledLanes &= o, n.shellSuspendCounter = 0;
-    var E = n.entanglements, N = n.expirationTimes, H = n.hiddenUpdates;
+    var E = n.entanglements, N = n.expirationTimes, V = n.hiddenUpdates;
     for (o = y & ~o; 0 < o; ) {
-      var W = 31 - vn(o), ie = 1 << W;
-      E[W] = 0, N[W] = -1;
-      var K = H[W];
+      var $ = 31 - vn(o), ne = 1 << $;
+      E[$] = 0, N[$] = -1;
+      var K = V[$];
       if (K !== null)
-        for (H[W] = null, W = 0; W < K.length; W++) {
-          var J = K[W];
+        for (V[$] = null, $ = 0; $ < K.length; $++) {
+          var J = K[$];
           J !== null && (J.lane &= -536870913);
         }
-      o &= ~ie;
+      o &= ~ne;
     }
     l !== 0 && Ep(n, l, 0), g !== 0 && m === 0 && n.tag !== 0 && (n.suspendedLanes |= g & ~(y & ~r));
   }
@@ -1320,15 +1320,15 @@ Error generating stack: ` + l.message + `
     return n &= -n, 2 < n ? 8 < n ? (n & 134217727) !== 0 ? 32 : 268435456 : 8 : 2;
   }
   function Rp() {
-    var n = $.p;
+    var n = ie.p;
     return n !== 0 ? n : (n = window.event, n === void 0 ? 32 : fy(n.type));
   }
   function _p(n, r) {
-    var o = $.p;
+    var o = ie.p;
     try {
-      return $.p = n, r();
+      return ie.p = n, r();
     } finally {
-      $.p = o;
+      ie.p = o;
     }
   }
   var Wi = Math.random().toString(36).slice(2), jt = "__reactFiber$" + Wi, rn = "__reactProps$" + Wi, Cr = "__reactContainer$" + Wi, Qu = "__reactEvents$" + Wi, GC = "__reactListeners$" + Wi, KC = "__reactHandles$" + Wi, Mp = "__reactResources$" + Wi, Bs = "__reactMarker$" + Wi;
@@ -1560,7 +1560,7 @@ Error generating stack: ` + l.message + `
     if (r == null) {
       if (l != null) {
         if (o != null) throw Error(a(92));
-        if (oe(l)) {
+        if (pe(l)) {
           if (1 < l.length) throw Error(a(93));
           l = l[0];
         }
@@ -2347,15 +2347,15 @@ Error generating stack: ` + l.message + `
     var y = 0;
     if (l = n, typeof n == "function") yd(n) && (y = 1);
     else if (typeof n == "string")
-      y = Vw(
+      y = V1(
         n,
         o,
-        de.current
+        ue.current
       ) ? 26 : n === "html" || n === "head" || n === "body" ? 27 : 5;
     else
       e: switch (n) {
-        case Z:
-          return n = yn(31, o, r, m), n.elementType = Z, n.lanes = g, n;
+        case W:
+          return n = yn(31, o, r, m), n.elementType = W, n.lanes = g, n;
         case T:
           return Ga(o.children, m, g, r);
         case P:
@@ -2370,7 +2370,7 @@ Error generating stack: ` + l.message + `
         default:
           if (typeof n == "object" && n !== null)
             switch (n.$$typeof) {
-              case B:
+              case z:
                 y = 10;
                 break e;
               case U:
@@ -2382,7 +2382,7 @@ Error generating stack: ` + l.message + `
               case D:
                 y = 14;
                 break e;
-              case V:
+              case H:
                 y = 16, l = null;
                 break e;
             }
@@ -2562,7 +2562,7 @@ Error generating stack: ` + l.message + `
   }
   var xd = O(null), Ya = null, _i = null;
   function ia(n, r, o) {
-    le(xd, r._currentValue), r._currentValue = o;
+    oe(xd, r._currentValue), r._currentValue = o;
   }
   function Mi(n) {
     n._currentValue = xd.current, Q(xd);
@@ -2629,7 +2629,7 @@ Error generating stack: ` + l.message + `
           var E = m.type;
           bn(m.pendingProps.value, y.value) || (n !== null ? n.push(E) : n = [E]);
         }
-      } else if (m === fe.current) {
+      } else if (m === de.current) {
         if (y = m.alternate, y === null) throw Error(a(387));
         y.memoizedState.memoizedState !== m.memoizedState.memoizedState && (n !== null ? n.push(xo) : n = [xo]);
       }
@@ -2683,7 +2683,7 @@ Error generating stack: ` + l.message + `
       });
     };
   }, FE = i.unstable_scheduleCallback, qE = i.unstable_NormalPriority, yt = {
-    $$typeof: B,
+    $$typeof: z,
     Consumer: null,
     Provider: null,
     _currentValue: null,
@@ -2744,8 +2744,8 @@ Error generating stack: ` + l.message + `
       }
     ), l;
   }
-  var Rg = j.S;
-  j.S = function(n, r) {
+  var Rg = F.S;
+  F.S = function(n, r) {
     ub = Xt(), typeof r == "object" && r !== null && typeof r.then == "function" && HE(n, r), Rg !== null && Rg(n, r);
   };
   var Ja = O(null);
@@ -2754,7 +2754,7 @@ Error generating stack: ` + l.message + `
     return n !== null ? n : et.pooledCache;
   }
   function Lc(n, r) {
-    r === null ? le(Ja, Ja.current) : le(Ja, r.pool);
+    r === null ? oe(Ja, Ja.current) : oe(Ja, r.pool);
   }
   function _g() {
     var n = Od();
@@ -2835,70 +2835,70 @@ Error generating stack: ` + l.message + `
     ));
   }
   function Dg(n) {
-    function r(z, I) {
+    function r(j, I) {
       if (n) {
-        var q = z.deletions;
-        q === null ? (z.deletions = [I], z.flags |= 16) : q.push(I);
+        var q = j.deletions;
+        q === null ? (j.deletions = [I], j.flags |= 16) : q.push(I);
       }
     }
-    function o(z, I) {
+    function o(j, I) {
       if (!n) return null;
       for (; I !== null; )
-        r(z, I), I = I.sibling;
+        r(j, I), I = I.sibling;
       return null;
     }
-    function l(z) {
-      for (var I = /* @__PURE__ */ new Map(); z !== null; )
-        z.key !== null ? I.set(z.key, z) : I.set(z.index, z), z = z.sibling;
+    function l(j) {
+      for (var I = /* @__PURE__ */ new Map(); j !== null; )
+        j.key !== null ? I.set(j.key, j) : I.set(j.index, j), j = j.sibling;
       return I;
     }
-    function m(z, I) {
-      return z = xi(z, I), z.index = 0, z.sibling = null, z;
+    function m(j, I) {
+      return j = xi(j, I), j.index = 0, j.sibling = null, j;
     }
-    function g(z, I, q) {
-      return z.index = q, n ? (q = z.alternate, q !== null ? (q = q.index, q < I ? (z.flags |= 67108866, I) : q) : (z.flags |= 67108866, I)) : (z.flags |= 1048576, I);
+    function g(j, I, q) {
+      return j.index = q, n ? (q = j.alternate, q !== null ? (q = q.index, q < I ? (j.flags |= 67108866, I) : q) : (j.flags |= 67108866, I)) : (j.flags |= 1048576, I);
     }
-    function y(z) {
-      return n && z.alternate === null && (z.flags |= 67108866), z;
+    function y(j) {
+      return n && j.alternate === null && (j.flags |= 67108866), j;
     }
-    function E(z, I, q, ne) {
-      return I === null || I.tag !== 6 ? (I = kd(q, z.mode, ne), I.return = z, I) : (I = m(I, q), I.return = z, I);
+    function E(j, I, q, te) {
+      return I === null || I.tag !== 6 ? (I = kd(q, j.mode, te), I.return = j, I) : (I = m(I, q), I.return = j, I);
     }
-    function N(z, I, q, ne) {
-      var ke = q.type;
-      return ke === T ? W(
-        z,
+    function N(j, I, q, te) {
+      var ye = q.type;
+      return ye === T ? $(
+        j,
         I,
         q.props.children,
-        ne,
+        te,
         q.key
-      ) : I !== null && (I.elementType === ke || typeof ke == "object" && ke !== null && ke.$$typeof === V && Xa(ke) === I.type) ? (I = m(I, q.props), no(I, q), I.return = z, I) : (I = Oc(
+      ) : I !== null && (I.elementType === ye || typeof ye == "object" && ye !== null && ye.$$typeof === H && Xa(ye) === I.type) ? (I = m(I, q.props), no(I, q), I.return = j, I) : (I = Oc(
         q.type,
         q.key,
         q.props,
         null,
-        z.mode,
-        ne
-      ), no(I, q), I.return = z, I);
+        j.mode,
+        te
+      ), no(I, q), I.return = j, I);
     }
-    function H(z, I, q, ne) {
-      return I === null || I.tag !== 4 || I.stateNode.containerInfo !== q.containerInfo || I.stateNode.implementation !== q.implementation ? (I = Sd(q, z.mode, ne), I.return = z, I) : (I = m(I, q.children || []), I.return = z, I);
+    function V(j, I, q, te) {
+      return I === null || I.tag !== 4 || I.stateNode.containerInfo !== q.containerInfo || I.stateNode.implementation !== q.implementation ? (I = Sd(q, j.mode, te), I.return = j, I) : (I = m(I, q.children || []), I.return = j, I);
     }
-    function W(z, I, q, ne, ke) {
+    function $(j, I, q, te, ye) {
       return I === null || I.tag !== 7 ? (I = Ga(
         q,
-        z.mode,
-        ne,
-        ke
-      ), I.return = z, I) : (I = m(I, q), I.return = z, I);
+        j.mode,
+        te,
+        ye
+      ), I.return = j, I) : (I = m(I, q), I.return = j, I);
     }
-    function ie(z, I, q) {
+    function ne(j, I, q) {
       if (typeof I == "string" && I !== "" || typeof I == "number" || typeof I == "bigint")
         return I = kd(
           "" + I,
-          z.mode,
+          j.mode,
           q
-        ), I.return = z, I;
+        ), I.return = j, I;
       if (typeof I == "object" && I !== null) {
         switch (I.$$typeof) {
           case k:
@@ -2907,303 +2907,303 @@ Error generating stack: ` + l.message + `
               I.key,
               I.props,
               null,
-              z.mode,
+              j.mode,
               q
-            ), no(q, I), q.return = z, q;
-          case x:
+            ), no(q, I), q.return = j, q;
+          case w:
             return I = Sd(
               I,
-              z.mode,
+              j.mode,
               q
-            ), I.return = z, I;
-          case V:
-            return I = Xa(I), ie(z, I, q);
+            ), I.return = j, I;
+          case H:
+            return I = Xa(I), ne(j, I, q);
         }
-        if (oe(I) || te(I))
+        if (pe(I) || Z(I))
           return I = Ga(
             I,
-            z.mode,
+            j.mode,
             q,
             null
-          ), I.return = z, I;
+          ), I.return = j, I;
         if (typeof I.then == "function")
-          return ie(z, jc(I), q);
-        if (I.$$typeof === B)
-          return ie(
-            z,
-            Nc(z, I),
+          return ne(j, jc(I), q);
+        if (I.$$typeof === z)
+          return ne(
+            j,
+            Nc(j, I),
             q
           );
-        zc(z, I);
+        zc(j, I);
       }
       return null;
     }
-    function K(z, I, q, ne) {
-      var ke = I !== null ? I.key : null;
+    function K(j, I, q, te) {
+      var ye = I !== null ? I.key : null;
       if (typeof q == "string" && q !== "" || typeof q == "number" || typeof q == "bigint")
-        return ke !== null ? null : E(z, I, "" + q, ne);
+        return ye !== null ? null : E(j, I, "" + q, te);
       if (typeof q == "object" && q !== null) {
         switch (q.$$typeof) {
           case k:
-            return q.key === ke ? N(z, I, q, ne) : null;
-          case x:
-            return q.key === ke ? H(z, I, q, ne) : null;
-          case V:
-            return q = Xa(q), K(z, I, q, ne);
+            return q.key === ye ? N(j, I, q, te) : null;
+          case w:
+            return q.key === ye ? V(j, I, q, te) : null;
+          case H:
+            return q = Xa(q), K(j, I, q, te);
         }
-        if (oe(q) || te(q))
-          return ke !== null ? null : W(z, I, q, ne, null);
+        if (pe(q) || Z(q))
+          return ye !== null ? null : $(j, I, q, te, null);
         if (typeof q.then == "function")
           return K(
-            z,
+            j,
             I,
             jc(q),
-            ne
+            te
           );
-        if (q.$$typeof === B)
+        if (q.$$typeof === z)
           return K(
-            z,
+            j,
             I,
-            Nc(z, q),
-            ne
+            Nc(j, q),
+            te
           );
-        zc(z, q);
+        zc(j, q);
       }
       return null;
     }
-    function J(z, I, q, ne, ke) {
-      if (typeof ne == "string" && ne !== "" || typeof ne == "number" || typeof ne == "bigint")
-        return z = z.get(q) || null, E(I, z, "" + ne, ke);
-      if (typeof ne == "object" && ne !== null) {
-        switch (ne.$$typeof) {
+    function J(j, I, q, te, ye) {
+      if (typeof te == "string" && te !== "" || typeof te == "number" || typeof te == "bigint")
+        return j = j.get(q) || null, E(I, j, "" + te, ye);
+      if (typeof te == "object" && te !== null) {
+        switch (te.$$typeof) {
           case k:
-            return z = z.get(
-              ne.key === null ? q : ne.key
-            ) || null, N(I, z, ne, ke);
-          case x:
-            return z = z.get(
-              ne.key === null ? q : ne.key
-            ) || null, H(I, z, ne, ke);
-          case V:
-            return ne = Xa(ne), J(
-              z,
+            return j = j.get(
+              te.key === null ? q : te.key
+            ) || null, N(I, j, te, ye);
+          case w:
+            return j = j.get(
+              te.key === null ? q : te.key
+            ) || null, V(I, j, te, ye);
+          case H:
+            return te = Xa(te), J(
+              j,
               I,
               q,
-              ne,
-              ke
+              te,
+              ye
             );
         }
-        if (oe(ne) || te(ne))
-          return z = z.get(q) || null, W(I, z, ne, ke, null);
-        if (typeof ne.then == "function")
+        if (pe(te) || Z(te))
+          return j = j.get(q) || null, $(I, j, te, ye, null);
+        if (typeof te.then == "function")
           return J(
-            z,
+            j,
             I,
             q,
-            jc(ne),
-            ke
+            jc(te),
+            ye
           );
-        if (ne.$$typeof === B)
+        if (te.$$typeof === z)
           return J(
-            z,
+            j,
             I,
             q,
-            Nc(I, ne),
-            ke
+            Nc(I, te),
+            ye
           );
-        zc(I, ne);
+        zc(I, te);
       }
       return null;
     }
-    function pe(z, I, q, ne) {
-      for (var ke = null, He = null, ve = I, De = I = 0, ze = null; ve !== null && De < q.length; De++) {
+    function me(j, I, q, te) {
+      for (var ye = null, He = null, ve = I, De = I = 0, ze = null; ve !== null && De < q.length; De++) {
         ve.index > De ? (ze = ve, ve = null) : ze = ve.sibling;
         var Ve = K(
-          z,
+          j,
           ve,
           q[De],
-          ne
+          te
         );
         if (Ve === null) {
           ve === null && (ve = ze);
           break;
         }
-        n && ve && Ve.alternate === null && r(z, ve), I = g(Ve, I, De), He === null ? ke = Ve : He.sibling = Ve, He = Ve, ve = ze;
+        n && ve && Ve.alternate === null && r(j, ve), I = g(Ve, I, De), He === null ? ye = Ve : He.sibling = Ve, He = Ve, ve = ze;
       }
       if (De === q.length)
-        return o(z, ve), Fe && Ri(z, De), ke;
+        return o(j, ve), Fe && Ri(j, De), ye;
       if (ve === null) {
         for (; De < q.length; De++)
-          ve = ie(z, q[De], ne), ve !== null && (I = g(
+          ve = ne(j, q[De], te), ve !== null && (I = g(
             ve,
             I,
             De
-          ), He === null ? ke = ve : He.sibling = ve, He = ve);
-        return Fe && Ri(z, De), ke;
+          ), He === null ? ye = ve : He.sibling = ve, He = ve);
+        return Fe && Ri(j, De), ye;
       }
       for (ve = l(ve); De < q.length; De++)
         ze = J(
           ve,
-          z,
+          j,
           De,
           q[De],
-          ne
+          te
         ), ze !== null && (n && ze.alternate !== null && ve.delete(
           ze.key === null ? De : ze.key
         ), I = g(
           ze,
           I,
           De
-        ), He === null ? ke = ze : He.sibling = ze, He = ze);
+        ), He === null ? ye = ze : He.sibling = ze, He = ze);
       return n && ve.forEach(function(Sa) {
-        return r(z, Sa);
-      }), Fe && Ri(z, De), ke;
+        return r(j, Sa);
+      }), Fe && Ri(j, De), ye;
     }
-    function Te(z, I, q, ne) {
+    function Se(j, I, q, te) {
       if (q == null) throw Error(a(151));
-      for (var ke = null, He = null, ve = I, De = I = 0, ze = null, Ve = q.next(); ve !== null && !Ve.done; De++, Ve = q.next()) {
+      for (var ye = null, He = null, ve = I, De = I = 0, ze = null, Ve = q.next(); ve !== null && !Ve.done; De++, Ve = q.next()) {
         ve.index > De ? (ze = ve, ve = null) : ze = ve.sibling;
-        var Sa = K(z, ve, Ve.value, ne);
+        var Sa = K(j, ve, Ve.value, te);
         if (Sa === null) {
           ve === null && (ve = ze);
           break;
         }
-        n && ve && Sa.alternate === null && r(z, ve), I = g(Sa, I, De), He === null ? ke = Sa : He.sibling = Sa, He = Sa, ve = ze;
+        n && ve && Sa.alternate === null && r(j, ve), I = g(Sa, I, De), He === null ? ye = Sa : He.sibling = Sa, He = Sa, ve = ze;
       }
       if (Ve.done)
-        return o(z, ve), Fe && Ri(z, De), ke;
+        return o(j, ve), Fe && Ri(j, De), ye;
       if (ve === null) {
         for (; !Ve.done; De++, Ve = q.next())
-          Ve = ie(z, Ve.value, ne), Ve !== null && (I = g(Ve, I, De), He === null ? ke = Ve : He.sibling = Ve, He = Ve);
-        return Fe && Ri(z, De), ke;
+          Ve = ne(j, Ve.value, te), Ve !== null && (I = g(Ve, I, De), He === null ? ye = Ve : He.sibling = Ve, He = Ve);
+        return Fe && Ri(j, De), ye;
       }
       for (ve = l(ve); !Ve.done; De++, Ve = q.next())
-        Ve = J(ve, z, De, Ve.value, ne), Ve !== null && (n && Ve.alternate !== null && ve.delete(Ve.key === null ? De : Ve.key), I = g(Ve, I, De), He === null ? ke = Ve : He.sibling = Ve, He = Ve);
-      return n && ve.forEach(function(t1) {
-        return r(z, t1);
-      }), Fe && Ri(z, De), ke;
+        Ve = J(ve, j, De, Ve.value, te), Ve !== null && (n && Ve.alternate !== null && ve.delete(Ve.key === null ? De : Ve.key), I = g(Ve, I, De), He === null ? ye = Ve : He.sibling = Ve, He = Ve);
+      return n && ve.forEach(function(tw) {
+        return r(j, tw);
+      }), Fe && Ri(j, De), ye;
     }
-    function We(z, I, q, ne) {
+    function We(j, I, q, te) {
       if (typeof q == "object" && q !== null && q.type === T && q.key === null && (q = q.props.children), typeof q == "object" && q !== null) {
         switch (q.$$typeof) {
           case k:
             e: {
-              for (var ke = q.key; I !== null; ) {
-                if (I.key === ke) {
-                  if (ke = q.type, ke === T) {
+              for (var ye = q.key; I !== null; ) {
+                if (I.key === ye) {
+                  if (ye = q.type, ye === T) {
                     if (I.tag === 7) {
                       o(
-                        z,
+                        j,
                         I.sibling
-                      ), ne = m(
+                      ), te = m(
                         I,
                         q.props.children
-                      ), ne.return = z, z = ne;
+                      ), te.return = j, j = te;
                       break e;
                     }
-                  } else if (I.elementType === ke || typeof ke == "object" && ke !== null && ke.$$typeof === V && Xa(ke) === I.type) {
+                  } else if (I.elementType === ye || typeof ye == "object" && ye !== null && ye.$$typeof === H && Xa(ye) === I.type) {
                     o(
-                      z,
+                      j,
                       I.sibling
-                    ), ne = m(I, q.props), no(ne, q), ne.return = z, z = ne;
+                    ), te = m(I, q.props), no(te, q), te.return = j, j = te;
                     break e;
                   }
-                  o(z, I);
+                  o(j, I);
                   break;
-                } else r(z, I);
+                } else r(j, I);
                 I = I.sibling;
               }
-              q.type === T ? (ne = Ga(
+              q.type === T ? (te = Ga(
                 q.props.children,
-                z.mode,
-                ne,
+                j.mode,
+                te,
                 q.key
-              ), ne.return = z, z = ne) : (ne = Oc(
+              ), te.return = j, j = te) : (te = Oc(
                 q.type,
                 q.key,
                 q.props,
                 null,
-                z.mode,
-                ne
-              ), no(ne, q), ne.return = z, z = ne);
+                j.mode,
+                te
+              ), no(te, q), te.return = j, j = te);
             }
-            return y(z);
-          case x:
+            return y(j);
+          case w:
             e: {
-              for (ke = q.key; I !== null; ) {
-                if (I.key === ke)
+              for (ye = q.key; I !== null; ) {
+                if (I.key === ye)
                   if (I.tag === 4 && I.stateNode.containerInfo === q.containerInfo && I.stateNode.implementation === q.implementation) {
                     o(
-                      z,
+                      j,
                       I.sibling
-                    ), ne = m(I, q.children || []), ne.return = z, z = ne;
+                    ), te = m(I, q.children || []), te.return = j, j = te;
                     break e;
                   } else {
-                    o(z, I);
+                    o(j, I);
                     break;
                   }
-                else r(z, I);
+                else r(j, I);
                 I = I.sibling;
               }
-              ne = Sd(q, z.mode, ne), ne.return = z, z = ne;
+              te = Sd(q, j.mode, te), te.return = j, j = te;
             }
-            return y(z);
-          case V:
+            return y(j);
+          case H:
             return q = Xa(q), We(
-              z,
+              j,
               I,
               q,
-              ne
+              te
             );
         }
-        if (oe(q))
-          return pe(
-            z,
+        if (pe(q))
+          return me(
+            j,
             I,
             q,
-            ne
+            te
           );
-        if (te(q)) {
-          if (ke = te(q), typeof ke != "function") throw Error(a(150));
-          return q = ke.call(q), Te(
-            z,
+        if (Z(q)) {
+          if (ye = Z(q), typeof ye != "function") throw Error(a(150));
+          return q = ye.call(q), Se(
+            j,
             I,
             q,
-            ne
+            te
           );
         }
         if (typeof q.then == "function")
           return We(
-            z,
+            j,
             I,
             jc(q),
-            ne
+            te
           );
-        if (q.$$typeof === B)
+        if (q.$$typeof === z)
           return We(
-            z,
+            j,
             I,
-            Nc(z, q),
-            ne
+            Nc(j, q),
+            te
           );
-        zc(z, q);
+        zc(j, q);
       }
-      return typeof q == "string" && q !== "" || typeof q == "number" || typeof q == "bigint" ? (q = "" + q, I !== null && I.tag === 6 ? (o(z, I.sibling), ne = m(I, q), ne.return = z, z = ne) : (o(z, I), ne = kd(q, z.mode, ne), ne.return = z, z = ne), y(z)) : o(z, I);
+      return typeof q == "string" && q !== "" || typeof q == "number" || typeof q == "bigint" ? (q = "" + q, I !== null && I.tag === 6 ? (o(j, I.sibling), te = m(I, q), te.return = j, j = te) : (o(j, I), te = kd(q, j.mode, te), te.return = j, j = te), y(j)) : o(j, I);
     }
-    return function(z, I, q, ne) {
+    return function(j, I, q, te) {
       try {
         to = 0;
-        var ke = We(
-          z,
+        var ye = We(
+          j,
           I,
           q,
-          ne
+          te
         );
-        return Vr = null, ke;
+        return Vr = null, ye;
       } catch (ve) {
         if (ve === Hr || ve === Ic) throw ve;
-        var He = yn(29, ve, null, z.mode);
-        return He.lanes = ne, He.return = z, He;
+        var He = yn(29, ve, null, j.mode);
+        return He.lanes = te, He.return = j, He;
       } finally {
       }
     };
@@ -3287,18 +3287,18 @@ Error generating stack: ` + l.message + `
     var g = m.firstBaseUpdate, y = m.lastBaseUpdate, E = m.shared.pending;
     if (E !== null) {
       m.shared.pending = null;
-      var N = E, H = N.next;
-      N.next = null, y === null ? g = H : y.next = H, y = N;
-      var W = n.alternate;
-      W !== null && (W = W.updateQueue, E = W.lastBaseUpdate, E !== y && (E === null ? W.firstBaseUpdate = H : E.next = H, W.lastBaseUpdate = N));
+      var N = E, V = N.next;
+      N.next = null, y === null ? g = V : y.next = V, y = N;
+      var $ = n.alternate;
+      $ !== null && ($ = $.updateQueue, E = $.lastBaseUpdate, E !== y && (E === null ? $.firstBaseUpdate = V : E.next = V, $.lastBaseUpdate = N));
     }
     if (g !== null) {
-      var ie = m.baseState;
-      y = 0, W = H = N = null, E = g;
+      var ne = m.baseState;
+      y = 0, $ = V = N = null, E = g;
       do {
         var K = E.lane & -536870913, J = K !== E.lane;
         if (J ? (je & K) === K : (l & K) === K) {
-          K !== 0 && K === Fr && (Id = !0), W !== null && (W = W.next = {
+          K !== 0 && K === Fr && (Id = !0), $ !== null && ($ = $.next = {
             lane: 0,
             tag: E.tag,
             payload: E.payload,
@@ -3306,22 +3306,22 @@ Error generating stack: ` + l.message + `
             next: null
           });
           e: {
-            var pe = n, Te = E;
+            var me = n, Se = E;
             K = r;
             var We = o;
-            switch (Te.tag) {
+            switch (Se.tag) {
               case 1:
-                if (pe = Te.payload, typeof pe == "function") {
-                  ie = pe.call(We, ie, K);
+                if (me = Se.payload, typeof me == "function") {
+                  ne = me.call(We, ne, K);
                   break e;
                 }
-                ie = pe;
+                ne = me;
                 break e;
               case 3:
-                pe.flags = pe.flags & -65537 | 128;
+                me.flags = me.flags & -65537 | 128;
               case 0:
-                if (pe = Te.payload, K = typeof pe == "function" ? pe.call(We, ie, K) : pe, K == null) break e;
-                ie = v({}, ie, K);
+                if (me = Se.payload, K = typeof me == "function" ? me.call(We, ne, K) : me, K == null) break e;
+                ne = v({}, ne, K);
                 break e;
               case 2:
                 aa = !0;
@@ -3335,14 +3335,14 @@ Error generating stack: ` + l.message + `
             payload: E.payload,
             callback: E.callback,
             next: null
-          }, W === null ? (H = W = J, N = ie) : W = W.next = J, y |= K;
+          }, $ === null ? (V = $ = J, N = ne) : $ = $.next = J, y |= K;
         if (E = E.next, E === null) {
           if (E = m.shared.pending, E === null)
             break;
           J = E, E = J.next, J.next = null, m.lastBaseUpdate = J, m.shared.pending = null;
         }
       } while (!0);
-      W === null && (N = ie), m.baseState = N, m.firstBaseUpdate = H, m.lastBaseUpdate = W, g === null && (m.shared.lanes = 0), da |= y, n.lanes = y, n.memoizedState = ie;
+      $ === null && (N = ne), m.baseState = N, m.firstBaseUpdate = V, m.lastBaseUpdate = $, g === null && (m.shared.lanes = 0), da |= y, n.lanes = y, n.memoizedState = ne;
     }
   }
   function Lg(n, r) {
@@ -3358,10 +3358,10 @@ Error generating stack: ` + l.message + `
   }
   var Gr = O(null), Bc = O(0);
   function Ug(n, r) {
-    n = ji, le(Bc, n), le(Gr, r), ji = n | r.baseLanes;
+    n = ji, oe(Bc, n), oe(Gr, r), ji = n | r.baseLanes;
   }
   function Ud() {
-    le(Bc, ji), le(Gr, Gr.current);
+    oe(Bc, ji), oe(Gr, Gr.current);
   }
   function jd() {
     ji = Bc.current, Q(Gr), Q(Bc);
@@ -3369,16 +3369,16 @@ Error generating stack: ` + l.message + `
   var kn = O(null), Ln = null;
   function oa(n) {
     var r = n.alternate;
-    le(gt, gt.current & 1), le(kn, n), Ln === null && (r === null || Gr.current !== null || r.memoizedState !== null) && (Ln = n);
+    oe(gt, gt.current & 1), oe(kn, n), Ln === null && (r === null || Gr.current !== null || r.memoizedState !== null) && (Ln = n);
   }
   function zd(n) {
-    le(gt, gt.current), le(kn, n), Ln === null && (Ln = n);
+    oe(gt, gt.current), oe(kn, n), Ln === null && (Ln = n);
   }
   function jg(n) {
-    n.tag === 22 ? (le(gt, gt.current), le(kn, n), Ln === null && (Ln = n)) : ca();
+    n.tag === 22 ? (oe(gt, gt.current), oe(kn, n), Ln === null && (Ln = n)) : ca();
   }
   function ca() {
-    le(gt, gt.current), le(kn, kn.current);
+    oe(gt, gt.current), oe(kn, kn.current);
   }
   function Sn(n) {
     Q(kn), Ln === n && (Ln = null), Q(gt);
@@ -3416,7 +3416,7 @@ Error generating stack: ` + l.message + `
     return !0;
   }
   function Fd(n, r, o, l, m, g) {
-    return Ai = g, Pe = r, r.memoizedState = null, r.updateQueue = null, r.lanes = 0, j.H = n === null || n.memoizedState === null ? Sv : nf, $a = !1, g = o(l, m), $a = !1, Kr && (g = Bg(
+    return Ai = g, Pe = r, r.memoizedState = null, r.updateQueue = null, r.lanes = 0, F.H = n === null || n.memoizedState === null ? Sv : nf, $a = !1, g = o(l, m), $a = !1, Kr && (g = Bg(
       r,
       o,
       l,
@@ -3424,7 +3424,7 @@ Error generating stack: ` + l.message + `
     )), zg(n), g;
   }
   function zg(n) {
-    j.H = lo;
+    F.H = lo;
     var r = Xe !== null && Xe.next !== null;
     if (Ai = 0, kt = Xe = Pe = null, qc = !1, so = 0, Yr = null, r) throw Error(a(300));
     n === null || St || (n = n.dependencies, n !== null && Dc(n) && (St = !0));
@@ -3438,12 +3438,12 @@ Error generating stack: ` + l.message + `
         var g = n.updateQueue;
         g.lastEffect = null, g.events = null, g.stores = null, g.memoCache != null && (g.memoCache.index = 0);
       }
-      j.H = Tv, g = r(o, l);
+      F.H = Tv, g = r(o, l);
     } while (Kr);
     return g;
   }
   function KE() {
-    var n = j.H, r = n.useState()[0];
+    var n = F.H, r = n.useState()[0];
     return r = typeof r.then == "function" ? oo(r) : r, n = n.useState()[0], (Xe !== null ? Xe.memoizedState : null) !== n && (Pe.flags |= 1024), r;
   }
   function qd() {
@@ -3499,12 +3499,12 @@ Error generating stack: ` + l.message + `
   }
   function oo(n) {
     var r = so;
-    return so += 1, Yr === null && (Yr = []), n = Ag(Yr, n, r), r = Pe, (kt === null ? r.memoizedState : kt.next) === null && (r = r.alternate, j.H = r === null || r.memoizedState === null ? Sv : nf), n;
+    return so += 1, Yr === null && (Yr = []), n = Ag(Yr, n, r), r = Pe, (kt === null ? r.memoizedState : kt.next) === null && (r = r.alternate, F.H = r === null || r.memoizedState === null ? Sv : nf), n;
   }
   function Gc(n) {
     if (n !== null && typeof n == "object") {
       if (typeof n.then == "function") return oo(n);
-      if (n.$$typeof === B) return Bt(n);
+      if (n.$$typeof === z) return Bt(n);
     }
     throw Error(a(438, String(n)));
   }
@@ -3521,7 +3521,7 @@ Error generating stack: ` + l.message + `
     }
     if (r == null && (r = { data: [], index: 0 }), o === null && (o = Vc(), Pe.updateQueue = o), o.memoCache = r, o = r.data[r.index], o === void 0)
       for (o = r.data[r.index] = Array(n), l = 0; l < n; l++)
-        o[l] = F;
+        o[l] = B;
     return r.index++, o;
   }
   function Oi(n, r) {
@@ -3546,48 +3546,48 @@ Error generating stack: ` + l.message + `
     if (g = n.baseState, m === null) n.memoizedState = g;
     else {
       r = m.next;
-      var E = y = null, N = null, H = r, W = !1;
+      var E = y = null, N = null, V = r, $ = !1;
       do {
-        var ie = H.lane & -536870913;
-        if (ie !== H.lane ? (je & ie) === ie : (Ai & ie) === ie) {
-          var K = H.revertLane;
+        var ne = V.lane & -536870913;
+        if (ne !== V.lane ? (je & ne) === ne : (Ai & ne) === ne) {
+          var K = V.revertLane;
           if (K === 0)
             N !== null && (N = N.next = {
               lane: 0,
               revertLane: 0,
               gesture: null,
-              action: H.action,
-              hasEagerState: H.hasEagerState,
-              eagerState: H.eagerState,
+              action: V.action,
+              hasEagerState: V.hasEagerState,
+              eagerState: V.eagerState,
               next: null
-            }), ie === Fr && (W = !0);
+            }), ne === Fr && ($ = !0);
           else if ((Ai & K) === K) {
-            H = H.next, K === Fr && (W = !0);
+            V = V.next, K === Fr && ($ = !0);
             continue;
           } else
-            ie = {
+            ne = {
               lane: 0,
-              revertLane: H.revertLane,
+              revertLane: V.revertLane,
               gesture: null,
-              action: H.action,
-              hasEagerState: H.hasEagerState,
-              eagerState: H.eagerState,
+              action: V.action,
+              hasEagerState: V.hasEagerState,
+              eagerState: V.eagerState,
               next: null
-            }, N === null ? (E = N = ie, y = g) : N = N.next = ie, Pe.lanes |= K, da |= K;
-          ie = H.action, $a && o(g, ie), g = H.hasEagerState ? H.eagerState : o(g, ie);
+            }, N === null ? (E = N = ne, y = g) : N = N.next = ne, Pe.lanes |= K, da |= K;
+          ne = V.action, $a && o(g, ne), g = V.hasEagerState ? V.eagerState : o(g, ne);
         } else
           K = {
-            lane: ie,
-            revertLane: H.revertLane,
-            gesture: H.gesture,
-            action: H.action,
-            hasEagerState: H.hasEagerState,
-            eagerState: H.eagerState,
+            lane: ne,
+            revertLane: V.revertLane,
+            gesture: V.gesture,
+            action: V.action,
+            hasEagerState: V.hasEagerState,
+            eagerState: V.eagerState,
             next: null
-          }, N === null ? (E = N = K, y = g) : N = N.next = K, Pe.lanes |= ie, da |= ie;
-        H = H.next;
-      } while (H !== null && H !== r);
-      if (N === null ? y = g : N.next = E, !bn(g, n.memoizedState) && (St = !0, W && (o = qr, o !== null)))
+          }, N === null ? (E = N = K, y = g) : N = N.next = K, Pe.lanes |= ne, da |= ne;
+        V = V.next;
+      } while (V !== null && V !== r);
+      if (N === null ? y = g : N.next = E, !bn(g, n.memoizedState) && (St = !0, $ && (o = qr, o !== null)))
         throw o;
       n.memoizedState = g, n.baseState = y, n.baseQueue = N, l.lastRenderedState = g;
     }
@@ -3706,27 +3706,27 @@ Error generating stack: ` + l.message + `
           g.listeners.push(y);
         }
       };
-      j.T !== null ? o(!0) : g.isTransition = !1, l(g), o = r.pending, o === null ? (g.next = r.pending = g, Qg(r, g)) : (g.next = o.next, r.pending = o.next = g);
+      F.T !== null ? o(!0) : g.isTransition = !1, l(g), o = r.pending, o === null ? (g.next = r.pending = g, Qg(r, g)) : (g.next = o.next, r.pending = o.next = g);
     }
   }
   function Qg(n, r) {
     var o = r.action, l = r.payload, m = n.state;
     if (r.isTransition) {
-      var g = j.T, y = {};
-      j.T = y;
+      var g = F.T, y = {};
+      F.T = y;
       try {
-        var E = o(m, l), N = j.S;
+        var E = o(m, l), N = F.S;
         N !== null && N(y, E), Jg(n, r, E);
-      } catch (H) {
-        Jd(n, r, H);
+      } catch (V) {
+        Jd(n, r, V);
       } finally {
-        g !== null && y.types !== null && (g.types = y.types), j.T = g;
+        g !== null && y.types !== null && (g.types = y.types), F.T = g;
       }
     } else
       try {
         g = o(m, l), Jg(n, r, g);
-      } catch (H) {
-        Jd(n, r, H);
+      } catch (V) {
+        Jd(n, r, V);
       }
   }
   function Jg(n, r, o) {
@@ -3962,21 +3962,21 @@ Error generating stack: ` + l.message + `
     return bn(o, r) ? o : Gr.current !== null ? (n = Wd(n, o, l), bn(n, r) || (St = !0), n) : (Ai & 42) === 0 || (Ai & 1073741824) !== 0 && (je & 261930) === 0 ? (St = !0, n.memoizedState = o) : (n = fb(), Pe.lanes |= n, da |= n, r);
   }
   function hv(n, r, o, l, m) {
-    var g = $.p;
-    $.p = g !== 0 && 8 > g ? g : 8;
-    var y = j.T, E = {};
-    j.T = E, tf(n, !1, r, o);
+    var g = ie.p;
+    ie.p = g !== 0 && 8 > g ? g : 8;
+    var y = F.T, E = {};
+    F.T = E, tf(n, !1, r, o);
     try {
-      var N = m(), H = j.S;
-      if (H !== null && H(E, N), N !== null && typeof N == "object" && typeof N.then == "function") {
-        var W = VE(
+      var N = m(), V = F.S;
+      if (V !== null && V(E, N), N !== null && typeof N == "object" && typeof N.then == "function") {
+        var $ = VE(
           N,
           l
         );
         co(
           n,
           r,
-          W,
+          $,
           En(n)
         );
       } else
@@ -3986,16 +3986,16 @@ Error generating stack: ` + l.message + `
           l,
           En(n)
         );
-    } catch (ie) {
+    } catch (ne) {
       co(
         n,
         r,
         { then: function() {
-        }, status: "rejected", reason: ie },
+        }, status: "rejected", reason: ne },
         En()
       );
     } finally {
-      $.p = g, y !== null && E.types !== null && (y.types = E.types), j.T = y;
+      ie.p = g, y !== null && E.types !== null && (y.types = E.types), F.T = y;
     }
   }
   function XE() {
@@ -4007,7 +4007,7 @@ Error generating stack: ` + l.message + `
       n,
       m,
       r,
-      re,
+      le,
       o === null ? XE : function() {
         return pv(n), o(l);
       }
@@ -4017,15 +4017,15 @@ Error generating stack: ` + l.message + `
     var r = n.memoizedState;
     if (r !== null) return r;
     r = {
-      memoizedState: re,
-      baseState: re,
+      memoizedState: le,
+      baseState: le,
       baseQueue: null,
       queue: {
         pending: null,
         lanes: 0,
         dispatch: null,
         lastRenderedReducer: Oi,
-        lastRenderedState: re
+        lastRenderedState: le
       },
       next: null
     };
@@ -4711,7 +4711,7 @@ Error generating stack: ` + l.message + `
   function Iv(n, r, o) {
     return Wa(r, n.child, null, o), n = Zc(r, r.pendingProps), n.flags |= 2, Sn(r), r.memoizedState = null, n;
   }
-  function ew(n, r, o) {
+  function e1(n, r, o) {
     var l = r.pendingProps, m = (r.flags & 128) !== 0;
     if (r.flags &= -129, n === null) {
       if (Fe) {
@@ -4801,56 +4801,56 @@ Error generating stack: ` + l.message + `
       g = r.stateNode;
       var E = r.memoizedProps, N = er(o, E);
       g.props = N;
-      var H = g.context, W = o.contextType;
-      y = Ir, typeof W == "object" && W !== null && (y = Bt(W));
-      var ie = o.getDerivedStateFromProps;
-      W = typeof ie == "function" || typeof g.getSnapshotBeforeUpdate == "function", E = r.pendingProps !== E, W || typeof g.UNSAFE_componentWillReceiveProps != "function" && typeof g.componentWillReceiveProps != "function" || (E || H !== y) && Ev(
+      var V = g.context, $ = o.contextType;
+      y = Ir, typeof $ == "object" && $ !== null && (y = Bt($));
+      var ne = o.getDerivedStateFromProps;
+      $ = typeof ne == "function" || typeof g.getSnapshotBeforeUpdate == "function", E = r.pendingProps !== E, $ || typeof g.UNSAFE_componentWillReceiveProps != "function" && typeof g.componentWillReceiveProps != "function" || (E || V !== y) && Ev(
         r,
         g,
         l,
         y
       ), aa = !1;
       var K = r.memoizedState;
-      g.state = K, ro(r, l, g, m), ao(), H = r.memoizedState, E || K !== H || aa ? (typeof ie == "function" && (af(
+      g.state = K, ro(r, l, g, m), ao(), V = r.memoizedState, E || K !== V || aa ? (typeof ne == "function" && (af(
         r,
         o,
-        ie,
+        ne,
         l
-      ), H = r.memoizedState), (N = aa || Cv(
+      ), V = r.memoizedState), (N = aa || Cv(
         r,
         o,
         N,
         l,
         K,
-        H,
+        V,
         y
-      )) ? (W || typeof g.UNSAFE_componentWillMount != "function" && typeof g.componentWillMount != "function" || (typeof g.componentWillMount == "function" && g.componentWillMount(), typeof g.UNSAFE_componentWillMount == "function" && g.UNSAFE_componentWillMount()), typeof g.componentDidMount == "function" && (r.flags |= 4194308)) : (typeof g.componentDidMount == "function" && (r.flags |= 4194308), r.memoizedProps = l, r.memoizedState = H), g.props = l, g.state = H, g.context = y, l = N) : (typeof g.componentDidMount == "function" && (r.flags |= 4194308), l = !1);
+      )) ? ($ || typeof g.UNSAFE_componentWillMount != "function" && typeof g.componentWillMount != "function" || (typeof g.componentWillMount == "function" && g.componentWillMount(), typeof g.UNSAFE_componentWillMount == "function" && g.UNSAFE_componentWillMount()), typeof g.componentDidMount == "function" && (r.flags |= 4194308)) : (typeof g.componentDidMount == "function" && (r.flags |= 4194308), r.memoizedProps = l, r.memoizedState = V), g.props = l, g.state = V, g.context = y, l = N) : (typeof g.componentDidMount == "function" && (r.flags |= 4194308), l = !1);
     } else {
-      g = r.stateNode, Nd(n, r), y = r.memoizedProps, W = er(o, y), g.props = W, ie = r.pendingProps, K = g.context, H = o.contextType, N = Ir, typeof H == "object" && H !== null && (N = Bt(H)), E = o.getDerivedStateFromProps, (H = typeof E == "function" || typeof g.getSnapshotBeforeUpdate == "function") || typeof g.UNSAFE_componentWillReceiveProps != "function" && typeof g.componentWillReceiveProps != "function" || (y !== ie || K !== N) && Ev(
+      g = r.stateNode, Nd(n, r), y = r.memoizedProps, $ = er(o, y), g.props = $, ne = r.pendingProps, K = g.context, V = o.contextType, N = Ir, typeof V == "object" && V !== null && (N = Bt(V)), E = o.getDerivedStateFromProps, (V = typeof E == "function" || typeof g.getSnapshotBeforeUpdate == "function") || typeof g.UNSAFE_componentWillReceiveProps != "function" && typeof g.componentWillReceiveProps != "function" || (y !== ne || K !== N) && Ev(
         r,
         g,
         l,
         N
       ), aa = !1, K = r.memoizedState, g.state = K, ro(r, l, g, m), ao();
       var J = r.memoizedState;
-      y !== ie || K !== J || aa || n !== null && n.dependencies !== null && Dc(n.dependencies) ? (typeof E == "function" && (af(
+      y !== ne || K !== J || aa || n !== null && n.dependencies !== null && Dc(n.dependencies) ? (typeof E == "function" && (af(
         r,
         o,
         E,
         l
-      ), J = r.memoizedState), (W = aa || Cv(
+      ), J = r.memoizedState), ($ = aa || Cv(
         r,
         o,
-        W,
+        $,
         l,
         K,
         J,
         N
-      ) || n !== null && n.dependencies !== null && Dc(n.dependencies)) ? (H || typeof g.UNSAFE_componentWillUpdate != "function" && typeof g.componentWillUpdate != "function" || (typeof g.componentWillUpdate == "function" && g.componentWillUpdate(l, J, N), typeof g.UNSAFE_componentWillUpdate == "function" && g.UNSAFE_componentWillUpdate(
+      ) || n !== null && n.dependencies !== null && Dc(n.dependencies)) ? (V || typeof g.UNSAFE_componentWillUpdate != "function" && typeof g.componentWillUpdate != "function" || (typeof g.componentWillUpdate == "function" && g.componentWillUpdate(l, J, N), typeof g.UNSAFE_componentWillUpdate == "function" && g.UNSAFE_componentWillUpdate(
         l,
         J,
         N
-      )), typeof g.componentDidUpdate == "function" && (r.flags |= 4), typeof g.getSnapshotBeforeUpdate == "function" && (r.flags |= 1024)) : (typeof g.componentDidUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 4), typeof g.getSnapshotBeforeUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 1024), r.memoizedProps = l, r.memoizedState = J), g.props = l, g.state = J, g.context = N, l = W) : (typeof g.componentDidUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 4), typeof g.getSnapshotBeforeUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 1024), l = !1);
+      )), typeof g.componentDidUpdate == "function" && (r.flags |= 4), typeof g.getSnapshotBeforeUpdate == "function" && (r.flags |= 1024)) : (typeof g.componentDidUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 4), typeof g.getSnapshotBeforeUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 1024), r.memoizedProps = l, r.memoizedState = J), g.props = l, g.state = J, g.context = N, l = $) : (typeof g.componentDidUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 4), typeof g.getSnapshotBeforeUpdate != "function" || y === n.memoizedProps && K === n.memoizedState || (r.flags |= 1024), l = !1);
     }
     return g = l, Wc(n, r), l = (r.flags & 128) !== 0, g || l ? (g = r.stateNode, o = l && typeof o.getDerivedStateFromError != "function" ? null : g.render(), r.flags |= 1, n !== null && l ? (r.child = Wa(
       r,
@@ -4939,8 +4939,8 @@ Error generating stack: ` + l.message + `
           o
         ), r.memoizedState = lf, r = uo(null, l));
       else if (oa(r), Yf(E)) {
-        if (y = E.nextSibling && E.nextSibling.dataset, y) var H = y.dgst;
-        y = H, l = Error(a(419)), l.stack = "", l.digest = y, Ws({ value: l, source: null, stack: null }), r = hf(
+        if (y = E.nextSibling && E.nextSibling.dataset, y) var V = y.dgst;
+        y = V, l = Error(a(419)), l.stack = "", l.digest = y, Ws({ value: l, source: null, stack: null }), r = hf(
           n,
           r,
           o
@@ -4962,11 +4962,11 @@ Error generating stack: ` + l.message + `
         ), r.flags |= 4096);
       return r;
     }
-    return m ? (ca(), E = l.fallback, m = r.mode, N = n.child, H = N.sibling, l = xi(N, {
+    return m ? (ca(), E = l.fallback, m = r.mode, N = n.child, V = N.sibling, l = xi(N, {
       mode: "hidden",
       children: l.children
-    }), l.subtreeFlags = N.subtreeFlags & 65011712, H !== null ? E = xi(
-      H,
+    }), l.subtreeFlags = N.subtreeFlags & 65011712, V !== null ? E = xi(
+      V,
       E
     ) : (E = Ga(
       E,
@@ -5021,7 +5021,7 @@ Error generating stack: ` + l.message + `
     var l = r.pendingProps, m = l.revealOrder, g = l.tail;
     l = l.children;
     var y = gt.current, E = (y & 2) !== 0;
-    if (E ? (y = y & 1 | 2, r.flags |= 128) : y &= 1, le(gt, y), Ft(n, r, l, o), l = Fe ? Zs : 0, !E && n !== null && (n.flags & 128) !== 0)
+    if (E ? (y = y & 1 | 2, r.flags |= 128) : y &= 1, oe(gt, y), Ft(n, r, l, o), l = Fe ? Zs : 0, !E && n !== null && (n.flags & 128) !== 0)
       e: for (n = r.child; n !== null; ) {
         if (n.tag === 13)
           n.memoizedState !== null && Fv(n, o, r);
@@ -5108,17 +5108,17 @@ Error generating stack: ` + l.message + `
   function pf(n, r) {
     return (n.lanes & r) !== 0 ? !0 : (n = n.dependencies, !!(n !== null && Dc(n)));
   }
-  function tw(n, r, o) {
+  function t1(n, r, o) {
     switch (r.tag) {
       case 3:
-        we(r, r.stateNode.containerInfo), ia(r, yt, n.memoizedState.cache), Ka();
+        Ce(r, r.stateNode.containerInfo), ia(r, yt, n.memoizedState.cache), Ka();
         break;
       case 27:
       case 5:
         xt(r);
         break;
       case 4:
-        we(r, r.stateNode.containerInfo);
+        Ce(r, r.stateNode.containerInfo);
         break;
       case 10:
         ia(
@@ -5157,7 +5157,7 @@ Error generating stack: ` + l.message + `
             );
           r.flags |= 128;
         }
-        if (m = r.memoizedState, m !== null && (m.rendering = null, m.tail = null, m.lastEffect = null), le(gt, gt.current), l) break;
+        if (m = r.memoizedState, m !== null && (m.rendering = null, m.tail = null, m.lastEffect = null), oe(gt, gt.current), l) break;
         return null;
       case 22:
         return r.lanes = 0, Nv(
@@ -5177,7 +5177,7 @@ Error generating stack: ` + l.message + `
         St = !0;
       else {
         if (!pf(n, o) && (r.flags & 128) === 0)
-          return St = !1, tw(
+          return St = !1, t1(
             n,
             r,
             o
@@ -5227,7 +5227,7 @@ Error generating stack: ` + l.message + `
                 break e;
               }
             }
-            throw r = me(n) || n, Error(a(306, r, ""));
+            throw r = he(n) || n, Error(a(306, r, ""));
           }
         }
         return r;
@@ -5252,7 +5252,7 @@ Error generating stack: ` + l.message + `
         );
       case 3:
         e: {
-          if (we(
+          if (Ce(
             r,
             r.stateNode.containerInfo
           ), n === null) throw Error(a(387));
@@ -5326,7 +5326,7 @@ Error generating stack: ` + l.message + `
           r.pendingProps,
           null
         )) ? r.memoizedState = o : Fe || (o = r.type, n = r.pendingProps, l = pl(
-          ce.current
+          se.current
         ).createElement(o), l[jt] = r, l[rn] = n, qt(l, o, n), Ot(l), r.stateNode = l) : r.memoizedState = ey(
           r.type,
           n.memoizedProps,
@@ -5337,7 +5337,7 @@ Error generating stack: ` + l.message + `
         return xt(r), n === null && Fe && (l = r.stateNode = Zb(
           r.type,
           r.pendingProps,
-          ce.current
+          se.current
         ), zt = r, Nn = !0, m = rt, ga(r.type) ? (Qf = m, rt = In(l.firstChild)) : rt = m), Ft(
           n,
           r,
@@ -5345,7 +5345,7 @@ Error generating stack: ` + l.message + `
           o
         ), Wc(n, r), n === null && (r.flags |= 4194304), r.child;
       case 5:
-        return n === null && Fe && ((m = l = rt) && (l = Ow(
+        return n === null && Fe && ((m = l = rt) && (l = O1(
           l,
           r.type,
           r.pendingProps,
@@ -5359,7 +5359,7 @@ Error generating stack: ` + l.message + `
           o
         ), xo._currentValue = m), Wc(n, r), Ft(n, r, l, o), r.child;
       case 6:
-        return n === null && Fe && ((n = o = rt) && (o = Pw(
+        return n === null && Fe && ((n = o = rt) && (o = P1(
           o,
           r.pendingProps,
           Nn
@@ -5367,7 +5367,7 @@ Error generating stack: ` + l.message + `
       case 13:
         return Bv(n, r, o);
       case 4:
-        return we(
+        return Ce(
           r,
           r.stateNode.containerInfo
         ), l = r.pendingProps, n === null ? r.child = Wa(
@@ -5428,7 +5428,7 @@ Error generating stack: ` + l.message + `
       case 19:
         return qv(n, r, o);
       case 31:
-        return ew(n, r, o);
+        return e1(n, r, o);
       case 22:
         return Nv(
           n,
@@ -5502,7 +5502,7 @@ Error generating stack: ` + l.message + `
         o |= m.lanes | m.childLanes, l |= m.subtreeFlags, l |= m.flags, m.return = n, m = m.sibling;
     return n.subtreeFlags |= l, n.childLanes = o, r;
   }
-  function nw(n, r, o) {
+  function n1(n, r, o) {
     var l = r.pendingProps;
     switch (Cd(r), r.tag) {
       case 16:
@@ -5535,7 +5535,7 @@ Error generating stack: ` + l.message + `
           o
         )), null;
       case 27:
-        if (At(r), o = ce.current, m = r.type, n !== null && r.stateNode != null)
+        if (At(r), o = se.current, m = r.type, n !== null && r.stateNode != null)
           n.memoizedProps !== l && Di(r);
         else {
           if (!l) {
@@ -5543,7 +5543,7 @@ Error generating stack: ` + l.message + `
               throw Error(a(166));
             return st(r), null;
           }
-          n = de.current, zr(r) ? Cg(r) : (n = Zb(m, l, o), r.stateNode = n, Di(r));
+          n = ue.current, zr(r) ? Cg(r) : (n = Zb(m, l, o), r.stateNode = n, Di(r));
         }
         return st(r), null;
       case 5:
@@ -5555,11 +5555,11 @@ Error generating stack: ` + l.message + `
               throw Error(a(166));
             return st(r), null;
           }
-          if (g = de.current, zr(r))
+          if (g = ue.current, zr(r))
             Cg(r);
           else {
             var y = pl(
-              ce.current
+              se.current
             );
             switch (g) {
               case 1:
@@ -5648,7 +5648,7 @@ Error generating stack: ` + l.message + `
         else {
           if (typeof l != "string" && r.stateNode === null)
             throw Error(a(166));
-          if (n = ce.current, zr(r)) {
+          if (n = se.current, zr(r)) {
             if (n = r.stateNode, o = r.memoizedProps, l = null, m = zt, m !== null)
               switch (m.tag) {
                 case 27:
@@ -5710,7 +5710,7 @@ Error generating stack: ` + l.message + `
                 if (g = Fc(n), g !== null) {
                   for (r.flags |= 128, fo(l, !1), n = g.updateQueue, r.updateQueue = n, el(r, n), r.subtreeFlags = 0, n = o, o = r.child; o !== null; )
                     bg(o, n), o = o.sibling;
-                  return le(
+                  return oe(
                     gt,
                     gt.current & 1 | 2
                   ), Fe && Ri(r, l.treeForkCount), r.child;
@@ -5728,7 +5728,7 @@ Error generating stack: ` + l.message + `
               2 * Xt() - l.renderingStartTime > rl && o !== 536870912 && (r.flags |= 128, m = !0, fo(l, !1), r.lanes = 4194304);
           l.isBackwards ? (g.sibling = r.child, r.child = g) : (n = l.last, n !== null ? n.sibling = g : r.child = g, l.last = g);
         }
-        return l.tail !== null ? (n = l.tail, l.rendering = n, l.tail = n.sibling, l.renderingStartTime = Xt(), n.sibling = null, o = gt.current, le(
+        return l.tail !== null ? (n = l.tail, l.rendering = n, l.tail = n.sibling, l.renderingStartTime = Xt(), n.sibling = null, o = gt.current, oe(
           gt,
           m ? o & 1 | 2 : o & 1
         ), Fe && Ri(r, l.treeForkCount), n) : (st(r), null);
@@ -5744,7 +5744,7 @@ Error generating stack: ` + l.message + `
     }
     throw Error(a(156, r.tag));
   }
-  function iw(n, r) {
+  function i1(n, r) {
     switch (Cd(r), r.tag) {
       case 1:
         return n = r.flags, n & 65536 ? (r.flags = n & -65537 | 128, r) : null;
@@ -5848,14 +5848,14 @@ Error generating stack: ` + l.message + `
             var y = l.inst, E = y.destroy;
             if (E !== void 0) {
               y.destroy = void 0, m = r;
-              var N = o, H = E;
+              var N = o, V = E;
               try {
-                H();
-              } catch (W) {
+                V();
+              } catch ($) {
                 Qe(
                   m,
                   N,
-                  W
+                  $
                 );
               }
             }
@@ -5863,8 +5863,8 @@ Error generating stack: ` + l.message + `
           l = l.next;
         } while (l !== g);
       }
-    } catch (W) {
-      Qe(r, r.return, W);
+    } catch ($) {
+      Qe(r, r.return, $);
     }
   }
   function Kv(n) {
@@ -5950,7 +5950,7 @@ Error generating stack: ` + l.message + `
   function vf(n, r, o) {
     try {
       var l = n.stateNode;
-      ww(l, n.type, o, r), l[rn] = r;
+      w1(l, n.type, o, r), l[rn] = r;
     } catch (m) {
       Qe(n, n.return, m);
     }
@@ -5998,7 +5998,7 @@ Error generating stack: ` + l.message + `
     }
   }
   var Ni = !1, Tt = !1, kf = !1, Zv = typeof WeakSet == "function" ? WeakSet : Set, Pt = null;
-  function aw(n, r) {
+  function a1(n, r) {
     if (n = n.containerInfo, Ff = Tl, n = lg(n), fd(n)) {
       if ("selectionStart" in n)
         var o = {
@@ -6019,16 +6019,16 @@ Error generating stack: ` + l.message + `
               o = null;
               break e;
             }
-            var y = 0, E = -1, N = -1, H = 0, W = 0, ie = n, K = null;
+            var y = 0, E = -1, N = -1, V = 0, $ = 0, ne = n, K = null;
             t: for (; ; ) {
-              for (var J; ie !== o || m !== 0 && ie.nodeType !== 3 || (E = y + m), ie !== g || l !== 0 && ie.nodeType !== 3 || (N = y + l), ie.nodeType === 3 && (y += ie.nodeValue.length), (J = ie.firstChild) !== null; )
-                K = ie, ie = J;
+              for (var J; ne !== o || m !== 0 && ne.nodeType !== 3 || (E = y + m), ne !== g || l !== 0 && ne.nodeType !== 3 || (N = y + l), ne.nodeType === 3 && (y += ne.nodeValue.length), (J = ne.firstChild) !== null; )
+                K = ne, ne = J;
               for (; ; ) {
-                if (ie === n) break t;
-                if (K === o && ++H === m && (E = y), K === g && ++W === l && (N = y), (J = ie.nextSibling) !== null) break;
-                ie = K, K = ie.parentNode;
+                if (ne === n) break t;
+                if (K === o && ++V === m && (E = y), K === g && ++$ === l && (N = y), (J = ne.nextSibling) !== null) break;
+                ne = K, K = ne.parentNode;
               }
-              ie = J;
+              ne = J;
             }
             o = E === -1 || N === -1 ? null : { start: E, end: N };
           } else o = null;
@@ -6053,19 +6053,19 @@ Error generating stack: ` + l.message + `
               if ((n & 1024) !== 0 && g !== null) {
                 n = void 0, o = r, m = g.memoizedProps, g = g.memoizedState, l = o.stateNode;
                 try {
-                  var pe = er(
+                  var me = er(
                     o.type,
                     m
                   );
                   n = l.getSnapshotBeforeUpdate(
-                    pe,
+                    me,
                     g
                   ), l.__reactInternalSnapshotBeforeUpdate = n;
-                } catch (Te) {
+                } catch (Se) {
                   Qe(
                     o,
                     o.return,
-                    Te
+                    Se
                   );
                 }
               }
@@ -6172,10 +6172,10 @@ Error generating stack: ` + l.message + `
         Ii(n, o), l & 4 && tb(n, o);
         break;
       case 13:
-        Ii(n, o), l & 4 && nb(n, o), l & 64 && (n = o.memoizedState, n !== null && (n = n.dehydrated, n !== null && (o = hw.bind(
+        Ii(n, o), l & 4 && nb(n, o), l & 64 && (n = o.memoizedState, n !== null && (n = n.dehydrated, n !== null && (o = h1.bind(
           null,
           o
-        ), Dw(n, o))));
+        ), D1(n, o))));
         break;
       case 22:
         if (l = o.memoizedState !== null || Ni, !l) {
@@ -6329,7 +6329,7 @@ Error generating stack: ` + l.message + `
         Qe(r, r.return, o);
       }
   }
-  function rw(n) {
+  function r1(n) {
     switch (n.tag) {
       case 31:
       case 13:
@@ -6343,11 +6343,11 @@ Error generating stack: ` + l.message + `
     }
   }
   function nl(n, r) {
-    var o = rw(n);
+    var o = r1(n);
     r.forEach(function(l) {
       if (!o.has(l)) {
         o.add(l);
-        var m = mw.bind(null, n, l);
+        var m = m1.bind(null, n, l);
         l.then(m, m);
       }
     });
@@ -6486,8 +6486,8 @@ Error generating stack: ` + l.message + `
           m = n.stateNode;
           try {
             Mr(m, "");
-          } catch (pe) {
-            Qe(n, n.return, pe);
+          } catch (me) {
+            Qe(n, n.return, me);
           }
         }
         l & 4 && n.stateNode != null && (m = n.memoizedProps, vf(
@@ -6503,8 +6503,8 @@ Error generating stack: ` + l.message + `
           l = n.memoizedProps, o = n.stateNode;
           try {
             o.nodeValue = l;
-          } catch (pe) {
-            Qe(n, n.return, pe);
+          } catch (me) {
+            Qe(n, n.return, me);
           }
         }
         break;
@@ -6512,8 +6512,8 @@ Error generating stack: ` + l.message + `
         if (bl = null, m = Gn, Gn = gl(r.containerInfo), cn(r, n), Gn = m, ln(n), l & 4 && o !== null && o.memoizedState.isDehydrated)
           try {
             ss(r.containerInfo);
-          } catch (pe) {
-            Qe(n, n.return, pe);
+          } catch (me) {
+            Qe(n, n.return, me);
           }
         kf && (kf = !1, ab(n));
         break;
@@ -6533,8 +6533,8 @@ Error generating stack: ` + l.message + `
         break;
       case 22:
         m = n.memoizedState !== null;
-        var N = o !== null && o.memoizedState !== null, H = Ni, W = Tt;
-        if (Ni = H || m, Tt = W || N, cn(r, n), Tt = W, Ni = H, ln(n), l & 8192)
+        var N = o !== null && o.memoizedState !== null, V = Ni, $ = Tt;
+        if (Ni = V || m, Tt = $ || N, cn(r, n), Tt = $, Ni = V, ln(n), l & 8192)
           e: for (r = n.stateNode, r._visibility = m ? r._visibility & -2 : r._visibility | 1, m && (o === null || N || Ni || Tt || tr(n)), o = null, r = n; ; ) {
             if (r.tag === 5 || r.tag === 26) {
               if (o === null) {
@@ -6544,11 +6544,11 @@ Error generating stack: ` + l.message + `
                     y = g.style, typeof y.setProperty == "function" ? y.setProperty("display", "none", "important") : y.display = "none";
                   else {
                     E = N.stateNode;
-                    var ie = N.memoizedProps.style, K = ie != null && ie.hasOwnProperty("display") ? ie.display : null;
+                    var ne = N.memoizedProps.style, K = ne != null && ne.hasOwnProperty("display") ? ne.display : null;
                     E.style.display = K == null || typeof K == "boolean" ? "" : ("" + K).trim();
                   }
-                } catch (pe) {
-                  Qe(N, N.return, pe);
+                } catch (me) {
+                  Qe(N, N.return, me);
                 }
               }
             } else if (r.tag === 6) {
@@ -6556,8 +6556,8 @@ Error generating stack: ` + l.message + `
                 N = r;
                 try {
                   N.stateNode.nodeValue = m ? "" : N.memoizedProps;
-                } catch (pe) {
-                  Qe(N, N.return, pe);
+                } catch (me) {
+                  Qe(N, N.return, me);
                 }
               }
             } else if (r.tag === 18) {
@@ -6566,8 +6566,8 @@ Error generating stack: ` + l.message + `
                 try {
                   var J = N.stateNode;
                   m ? Yb(J, !0) : Yb(N.stateNode, !1);
-                } catch (pe) {
-                  Qe(N, N.return, pe);
+                } catch (me) {
+                  Qe(N, N.return, me);
                 }
               }
             } else if ((r.tag !== 22 && r.tag !== 23 || r.memoizedState === null || r === n) && r.child !== null) {
@@ -6619,18 +6619,18 @@ Error generating stack: ` + l.message + `
             break;
           case 3:
           case 4:
-            var N = o.stateNode.containerInfo, H = bf(n);
+            var N = o.stateNode.containerInfo, V = bf(n);
             yf(
               n,
-              H,
+              V,
               N
             );
             break;
           default:
             throw Error(a(161));
         }
-      } catch (W) {
-        Qe(n, n.return, W);
+      } catch ($) {
+        Qe(n, n.return, $);
       }
       n.flags &= -3;
     }
@@ -6706,8 +6706,8 @@ Error generating stack: ` + l.message + `
           ), l = g, m = l.stateNode, typeof m.componentDidMount == "function")
             try {
               m.componentDidMount();
-            } catch (H) {
-              Qe(l, l.return, H);
+            } catch (V) {
+              Qe(l, l.return, V);
             }
           if (l = g, m = l.updateQueue, m !== null) {
             var E = l.stateNode;
@@ -6716,8 +6716,8 @@ Error generating stack: ` + l.message + `
               if (N !== null)
                 for (m.shared.hiddenCallbacks = null, m = 0; m < N.length; m++)
                   Lg(N[m], E);
-            } catch (H) {
-              Qe(l, l.return, H);
+            } catch (V) {
+              Qe(l, l.return, V);
             }
           }
           o && y & 64 && Kv(g), mo(g, g.return);
@@ -6901,7 +6901,7 @@ Error generating stack: ` + l.message + `
   }
   function Jr(n, r, o, l, m) {
     for (m = m && ((r.subtreeFlags & 10256) !== 0 || !1), r = r.child; r !== null; ) {
-      var g = n, y = r, E = o, N = l, H = y.flags;
+      var g = n, y = r, E = o, N = l, V = y.flags;
       switch (y.tag) {
         case 0:
         case 11:
@@ -6917,8 +6917,8 @@ Error generating stack: ` + l.message + `
         case 23:
           break;
         case 22:
-          var W = y.stateNode;
-          y.memoizedState !== null ? W._visibility & 2 ? Jr(
+          var $ = y.stateNode;
+          y.memoizedState !== null ? $._visibility & 2 ? Jr(
             g,
             y,
             E,
@@ -6927,13 +6927,13 @@ Error generating stack: ` + l.message + `
           ) : po(
             g,
             y
-          ) : (W._visibility |= 2, Jr(
+          ) : ($._visibility |= 2, Jr(
             g,
             y,
             E,
             N,
             m
-          )), m && H & 2048 && Sf(
+          )), m && V & 2048 && Sf(
             y.alternate,
             y
           );
@@ -6945,7 +6945,7 @@ Error generating stack: ` + l.message + `
             E,
             N,
             m
-          ), m && H & 2048 && Tf(y.alternate, y);
+          ), m && V & 2048 && Tf(y.alternate, y);
           break;
         default:
           Jr(
@@ -6996,7 +6996,7 @@ Error generating stack: ` + l.message + `
           n,
           r,
           o
-        ), n.flags & go && n.memoizedState !== null && Gw(
+        ), n.flags & go && n.memoizedState !== null && G1(
           o,
           Gn,
           n.memoizedState,
@@ -7150,7 +7150,7 @@ Error generating stack: ` + l.message + `
         }
     }
   }
-  var sw = {
+  var s1 = {
     getCacheForType: function(n) {
       var r = Bt(yt), o = r.data.get(n);
       return o === void 0 && (o = n(), r.data.set(n, o)), o;
@@ -7158,9 +7158,9 @@ Error generating stack: ` + l.message + `
     cacheSignal: function() {
       return Bt(yt).controller.signal;
     }
-  }, ow = typeof WeakMap == "function" ? WeakMap : Map, Ke = 0, et = null, Le = null, je = 0, Ye = 0, Tn = null, ua = !1, Zr = !1, Cf = !1, ji = 0, ht = 0, da = 0, nr = 0, Ef = 0, Cn = 0, Wr = 0, bo = null, un = null, wf = !1, al = 0, ub = 0, rl = 1 / 0, sl = null, fa = null, _t = 0, ha = null, $r = null, zi = 0, xf = 0, Rf = null, db = null, yo = 0, _f = null;
+  }, o1 = typeof WeakMap == "function" ? WeakMap : Map, Ke = 0, et = null, Le = null, je = 0, Ye = 0, Tn = null, ua = !1, Zr = !1, Cf = !1, ji = 0, ht = 0, da = 0, nr = 0, Ef = 0, Cn = 0, Wr = 0, bo = null, un = null, wf = !1, al = 0, ub = 0, rl = 1 / 0, sl = null, fa = null, _t = 0, ha = null, $r = null, zi = 0, xf = 0, Rf = null, db = null, yo = 0, _f = null;
   function En() {
-    return (Ke & 2) !== 0 && je !== 0 ? je & -je : j.T !== null ? Nf() : Rp();
+    return (Ke & 2) !== 0 && je !== 0 ? je & -je : F.T !== null ? Nf() : Rp();
   }
   function fb() {
     if (Cn === 0)
@@ -7185,13 +7185,13 @@ Error generating stack: ` + l.message + `
   }
   function hb(n, r, o) {
     if ((Ke & 6) !== 0) throw Error(a(327));
-    var l = !o && (r & 127) === 0 && (r & n.expiredLanes) === 0 || js(n, r), m = l ? uw(n, r) : Af(n, r, !0), g = l;
+    var l = !o && (r & 127) === 0 && (r & n.expiredLanes) === 0 || js(n, r), m = l ? u1(n, r) : Af(n, r, !0), g = l;
     do {
       if (m === 0) {
         Zr && !l && ma(n, r, 0, !1);
         break;
       } else {
-        if (o = n.current.alternate, g && !cw(o)) {
+        if (o = n.current.alternate, g && !c1(o)) {
           m = Af(n, r, !1), g = !1;
           continue;
         }
@@ -7304,9 +7304,9 @@ Error generating stack: ` + l.message + `
     } while (!0);
     pi(n);
   }
-  function mb(n, r, o, l, m, g, y, E, N, H, W, ie, K, J) {
-    if (n.timeoutHandle = -1, ie = r.subtreeFlags, ie & 8192 || (ie & 16785408) === 16785408) {
-      ie = {
+  function mb(n, r, o, l, m, g, y, E, N, V, $, ne, K, J) {
+    if (n.timeoutHandle = -1, ne = r.subtreeFlags, ne & 8192 || (ne & 16785408) === 16785408) {
+      ne = {
         stylesheets: null,
         count: 0,
         imgCount: 0,
@@ -7318,14 +7318,14 @@ Error generating stack: ` + l.message + `
       }, sb(
         r,
         g,
-        ie
+        ne
       );
-      var pe = (g & 62914560) === g ? al - Xt() : (g & 4194048) === g ? ub - Xt() : 0;
-      if (pe = Kw(
-        ie,
-        pe
-      ), pe !== null) {
-        zi = g, n.cancelPendingCommit = pe(
+      var me = (g & 62914560) === g ? al - Xt() : (g & 4194048) === g ? ub - Xt() : 0;
+      if (me = K1(
+        ne,
+        me
+      ), me !== null) {
+        zi = g, n.cancelPendingCommit = me(
           Tb.bind(
             null,
             n,
@@ -7337,13 +7337,13 @@ Error generating stack: ` + l.message + `
             y,
             E,
             N,
-            W,
-            ie,
+            $,
+            ne,
             null,
             K,
             J
           )
-        ), ma(n, g, y, !H);
+        ), ma(n, g, y, !V);
         return;
       }
     }
@@ -7359,7 +7359,7 @@ Error generating stack: ` + l.message + `
       N
     );
   }
-  function cw(n) {
+  function c1(n) {
     for (var r = n; ; ) {
       var o = r.tag;
       if ((o === 0 || o === 11 || o === 15) && r.flags & 16384 && (o = r.updateQueue, o !== null && (o = o.stores, o !== null)))
@@ -7409,7 +7409,7 @@ Error generating stack: ` + l.message + `
   }
   function es(n, r) {
     var o = n.timeoutHandle;
-    o !== -1 && (n.timeoutHandle = -1, _w(o)), o = n.cancelPendingCommit, o !== null && (n.cancelPendingCommit = null, o()), zi = 0, Mf(), et = n, Le = o = xi(n.current, null), je = r, Ye = 0, Tn = null, ua = !1, Zr = js(n, r), Cf = !1, Wr = Cn = Ef = nr = da = ht = 0, un = bo = null, wf = !1, (r & 8) !== 0 && (r |= r & 32);
+    o !== -1 && (n.timeoutHandle = -1, _1(o)), o = n.cancelPendingCommit, o !== null && (n.cancelPendingCommit = null, o()), zi = 0, Mf(), et = n, Le = o = xi(n.current, null), je = r, Ye = 0, Tn = null, ua = !1, Zr = js(n, r), Cf = !1, Wr = Cn = Ef = nr = da = ht = 0, un = bo = null, wf = !1, (r & 8) !== 0 && (r |= r & 32);
     var l = n.entangledLanes;
     if (l !== 0)
       for (n = n.entanglements, l &= r; 0 < l; ) {
@@ -7419,7 +7419,7 @@ Error generating stack: ` + l.message + `
     return ji = r, _c(), o;
   }
   function pb(n, r) {
-    Pe = null, j.H = lo, r === Hr || r === Ic ? (r = Og(), Ye = 3) : r === Pd ? (r = Og(), Ye = 4) : Ye = r === of ? 8 : r !== null && typeof r == "object" && typeof r.then == "function" ? 6 : 1, Tn = r, Le === null && (ht = 1, Xc(
+    Pe = null, F.H = lo, r === Hr || r === Ic ? (r = Og(), Ye = 3) : r === Pd ? (r = Og(), Ye = 4) : Ye = r === of ? 8 : r !== null && typeof r == "object" && typeof r.then == "function" ? 6 : 1, Tn = r, Le === null && (ht = 1, Xc(
       n,
       On(r, n.current)
     ));
@@ -7429,12 +7429,12 @@ Error generating stack: ` + l.message + `
     return n === null ? !0 : (je & 4194048) === je ? Ln === null : (je & 62914560) === je || (je & 536870912) !== 0 ? n === Ln : !1;
   }
   function vb() {
-    var n = j.H;
-    return j.H = lo, n === null ? lo : n;
+    var n = F.H;
+    return F.H = lo, n === null ? lo : n;
   }
   function bb() {
-    var n = j.A;
-    return j.A = sw, n;
+    var n = F.A;
+    return F.A = s1, n;
   }
   function cl() {
     ht = 4, ua || (je & 4194048) !== je && kn.current !== null || (Zr = !0), (da & 134217727) === 0 && (nr & 134217727) === 0 || et === null || ma(
@@ -7463,28 +7463,28 @@ Error generating stack: ` + l.message + `
             case 9:
             case 6:
               kn.current === null && (r = !0);
-              var H = Ye;
-              if (Ye = 0, Tn = null, ts(n, E, N, H), o && Zr) {
+              var V = Ye;
+              if (Ye = 0, Tn = null, ts(n, E, N, V), o && Zr) {
                 y = 0;
                 break e;
               }
               break;
             default:
-              H = Ye, Ye = 0, Tn = null, ts(n, E, N, H);
+              V = Ye, Ye = 0, Tn = null, ts(n, E, N, V);
           }
         }
-        lw(), y = ht;
+        l1(), y = ht;
         break;
-      } catch (W) {
-        pb(n, W);
+      } catch ($) {
+        pb(n, $);
       }
     while (!0);
-    return r && n.shellSuspendCounter++, _i = Ya = null, Ke = l, j.H = m, j.A = g, Le === null && (et = null, je = 0, _c()), y;
+    return r && n.shellSuspendCounter++, _i = Ya = null, Ke = l, F.H = m, F.A = g, Le === null && (et = null, je = 0, _c()), y;
   }
-  function lw() {
+  function l1() {
     for (; Le !== null; ) yb(Le);
   }
-  function uw(n, r) {
+  function u1(n, r) {
     var o = Ke;
     Ke |= 2;
     var l = vb(), m = bb();
@@ -7533,8 +7533,8 @@ Error generating stack: ` + l.message + `
                     var N = E.sibling;
                     if (N !== null) Le = N;
                     else {
-                      var H = E.return;
-                      H !== null ? (Le = H, ll(H)) : Le = null;
+                      var V = E.return;
+                      V !== null ? (Le = V, ll(V)) : Le = null;
                     }
                     break t;
                   }
@@ -7551,15 +7551,15 @@ Error generating stack: ` + l.message + `
               throw Error(a(462));
           }
         }
-        dw();
+        d1();
         break;
-      } catch (W) {
-        pb(n, W);
+      } catch ($) {
+        pb(n, $);
       }
     while (!0);
-    return _i = Ya = null, j.H = l, j.A = m, Ke = o, Le !== null ? 0 : (et = null, je = 0, _c(), ht);
+    return _i = Ya = null, F.H = l, F.A = m, Ke = o, Le !== null ? 0 : (et = null, je = 0, _c(), ht);
   }
-  function dw() {
+  function d1() {
     for (; Le !== null && !Sr(); )
       yb(Le);
   }
@@ -7636,7 +7636,7 @@ Error generating stack: ` + l.message + `
         return;
       }
       n = r.return;
-      var o = nw(
+      var o = n1(
         r.alternate,
         r,
         ji
@@ -7655,7 +7655,7 @@ Error generating stack: ` + l.message + `
   }
   function Sb(n, r) {
     do {
-      var o = iw(n.alternate, n);
+      var o = i1(n.alternate, n);
       if (o !== null) {
         o.flags &= 32767, Le = o;
         return;
@@ -7683,14 +7683,14 @@ Error generating stack: ` + l.message + `
         y,
         E,
         N
-      ), n === et && (Le = et = null, je = 0), $r = r, ha = n, zi = o, xf = g, Rf = m, db = l, (r.subtreeFlags & 10256) !== 0 || (r.flags & 10256) !== 0 ? (n.callbackNode = null, n.callbackPriority = 0, pw(Tr, function() {
+      ), n === et && (Le = et = null, je = 0), $r = r, ha = n, zi = o, xf = g, Rf = m, db = l, (r.subtreeFlags & 10256) !== 0 || (r.flags & 10256) !== 0 ? (n.callbackNode = null, n.callbackPriority = 0, p1(Tr, function() {
         return Rb(), null;
       })) : (n.callbackNode = null, n.callbackPriority = 0), l = (r.flags & 13878) !== 0, (r.subtreeFlags & 13878) !== 0 || l) {
-        l = j.T, j.T = null, m = $.p, $.p = 2, y = Ke, Ke |= 4;
+        l = F.T, F.T = null, m = ie.p, ie.p = 2, y = Ke, Ke |= 4;
         try {
-          aw(n, r, o);
+          a1(n, r, o);
         } finally {
-          Ke = y, $.p = m, j.T = l;
+          Ke = y, ie.p = m, F.T = l;
         }
       }
       _t = 1, Cb(), Eb(), wb();
@@ -7701,9 +7701,9 @@ Error generating stack: ` + l.message + `
       _t = 0;
       var n = ha, r = $r, o = (r.flags & 13878) !== 0;
       if ((r.subtreeFlags & 13878) !== 0 || o) {
-        o = j.T, j.T = null;
-        var l = $.p;
-        $.p = 2;
+        o = F.T, F.T = null;
+        var l = ie.p;
+        ie.p = 2;
         var m = Ke;
         Ke |= 4;
         try {
@@ -7714,45 +7714,45 @@ Error generating stack: ` + l.message + `
             E
           )) {
             if (N !== null && fd(E)) {
-              var H = N.start, W = N.end;
-              if (W === void 0 && (W = H), "selectionStart" in E)
-                E.selectionStart = H, E.selectionEnd = Math.min(
-                  W,
+              var V = N.start, $ = N.end;
+              if ($ === void 0 && ($ = V), "selectionStart" in E)
+                E.selectionStart = V, E.selectionEnd = Math.min(
+                  $,
                   E.value.length
                 );
               else {
-                var ie = E.ownerDocument || document, K = ie && ie.defaultView || window;
+                var ne = E.ownerDocument || document, K = ne && ne.defaultView || window;
                 if (K.getSelection) {
-                  var J = K.getSelection(), pe = E.textContent.length, Te = Math.min(N.start, pe), We = N.end === void 0 ? Te : Math.min(N.end, pe);
-                  !J.extend && Te > We && (y = We, We = Te, Te = y);
-                  var z = og(
+                  var J = K.getSelection(), me = E.textContent.length, Se = Math.min(N.start, me), We = N.end === void 0 ? Se : Math.min(N.end, me);
+                  !J.extend && Se > We && (y = We, We = Se, Se = y);
+                  var j = og(
                     E,
-                    Te
+                    Se
                   ), I = og(
                     E,
                     We
                   );
-                  if (z && I && (J.rangeCount !== 1 || J.anchorNode !== z.node || J.anchorOffset !== z.offset || J.focusNode !== I.node || J.focusOffset !== I.offset)) {
-                    var q = ie.createRange();
-                    q.setStart(z.node, z.offset), J.removeAllRanges(), Te > We ? (J.addRange(q), J.extend(I.node, I.offset)) : (q.setEnd(I.node, I.offset), J.addRange(q));
+                  if (j && I && (J.rangeCount !== 1 || J.anchorNode !== j.node || J.anchorOffset !== j.offset || J.focusNode !== I.node || J.focusOffset !== I.offset)) {
+                    var q = ne.createRange();
+                    q.setStart(j.node, j.offset), J.removeAllRanges(), Se > We ? (J.addRange(q), J.extend(I.node, I.offset)) : (q.setEnd(I.node, I.offset), J.addRange(q));
                   }
                 }
               }
             }
-            for (ie = [], J = E; J = J.parentNode; )
-              J.nodeType === 1 && ie.push({
+            for (ne = [], J = E; J = J.parentNode; )
+              J.nodeType === 1 && ne.push({
                 element: J,
                 left: J.scrollLeft,
                 top: J.scrollTop
               });
-            for (typeof E.focus == "function" && E.focus(), E = 0; E < ie.length; E++) {
-              var ne = ie[E];
-              ne.element.scrollLeft = ne.left, ne.element.scrollTop = ne.top;
+            for (typeof E.focus == "function" && E.focus(), E = 0; E < ne.length; E++) {
+              var te = ne[E];
+              te.element.scrollLeft = te.left, te.element.scrollTop = te.top;
             }
           }
           Tl = !!Ff, qf = Ff = null;
         } finally {
-          Ke = m, $.p = l, j.T = o;
+          Ke = m, ie.p = l, F.T = o;
         }
       }
       n.current = r, _t = 2;
@@ -7763,15 +7763,15 @@ Error generating stack: ` + l.message + `
       _t = 0;
       var n = ha, r = $r, o = (r.flags & 8772) !== 0;
       if ((r.subtreeFlags & 8772) !== 0 || o) {
-        o = j.T, j.T = null;
-        var l = $.p;
-        $.p = 2;
+        o = F.T, F.T = null;
+        var l = ie.p;
+        ie.p = 2;
         var m = Ke;
         Ke |= 4;
         try {
           Wv(n, r.alternate, r);
         } finally {
-          Ke = m, $.p = l, j.T = o;
+          Ke = m, ie.p = l, F.T = o;
         }
       }
       _t = 3;
@@ -7794,7 +7794,7 @@ Error generating stack: ` + l.message + `
         } catch {
         }
       if (l !== null) {
-        r = j.T, m = $.p, $.p = 2, j.T = null;
+        r = F.T, m = ie.p, ie.p = 2, F.T = null;
         try {
           for (var g = n.onRecoverableError, y = 0; y < l.length; y++) {
             var E = l[y];
@@ -7803,7 +7803,7 @@ Error generating stack: ` + l.message + `
             });
           }
         } finally {
-          j.T = r, $.p = m;
+          F.T = r, ie.p = m;
         }
       }
       (zi & 3) !== 0 && ul(), pi(n), m = n.pendingLanes, (o & 261930) !== 0 && (m & 42) !== 0 ? n === _f ? yo++ : (yo = 0, _f = n) : yo = 0, ko(0);
@@ -7819,9 +7819,9 @@ Error generating stack: ` + l.message + `
     if (_t !== 5) return !1;
     var n = ha, r = xf;
     xf = 0;
-    var o = Yu(zi), l = j.T, m = $.p;
+    var o = Yu(zi), l = F.T, m = ie.p;
     try {
-      $.p = 32 > o ? 32 : o, j.T = null, o = Rf, Rf = null;
+      ie.p = 32 > o ? 32 : o, F.T = null, o = Rf, Rf = null;
       var g = ha, y = zi;
       if (_t = 0, $r = ha = null, zi = 0, (Ke & 6) !== 0) throw Error(a(331));
       var E = Ke;
@@ -7837,7 +7837,7 @@ Error generating stack: ` + l.message + `
         }
       return !0;
     } finally {
-      $.p = m, j.T = l, xb(n, r);
+      ie.p = m, F.T = l, xb(n, r);
     }
   }
   function _b(n, r, o) {
@@ -7873,25 +7873,25 @@ Error generating stack: ` + l.message + `
   function Of(n, r, o) {
     var l = n.pingCache;
     if (l === null) {
-      l = n.pingCache = new ow();
+      l = n.pingCache = new o1();
       var m = /* @__PURE__ */ new Set();
       l.set(r, m);
     } else
       m = l.get(r), m === void 0 && (m = /* @__PURE__ */ new Set(), l.set(r, m));
-    m.has(o) || (Cf = !0, m.add(o), n = fw.bind(null, n, r, o), r.then(n, n));
+    m.has(o) || (Cf = !0, m.add(o), n = f1.bind(null, n, r, o), r.then(n, n));
   }
-  function fw(n, r, o) {
+  function f1(n, r, o) {
     var l = n.pingCache;
     l !== null && l.delete(r), n.pingedLanes |= n.suspendedLanes & o, n.warmLanes &= ~o, et === n && (je & o) === o && (ht === 4 || ht === 3 && (je & 62914560) === je && 300 > Xt() - al ? (Ke & 2) === 0 && es(n, 0) : Ef |= o, Wr === je && (Wr = 0)), pi(n);
   }
   function Mb(n, r) {
     r === 0 && (r = Cp()), n = Va(n, r), n !== null && (zs(n, r), pi(n));
   }
-  function hw(n) {
+  function h1(n) {
     var r = n.memoizedState, o = 0;
     r !== null && (o = r.retryLane), Mb(n, o);
   }
-  function mw(n, r) {
+  function m1(n, r) {
     var o = 0;
     switch (n.tag) {
       case 31:
@@ -7910,12 +7910,12 @@ Error generating stack: ` + l.message + `
     }
     l !== null && l.delete(r), Mb(n, o);
   }
-  function pw(n, r) {
+  function p1(n, r) {
     return Ti(n, r);
   }
   var dl = null, ns = null, Pf = !1, fl = !1, Df = !1, pa = 0;
   function pi(n) {
-    n !== ns && n.next === null && (ns === null ? dl = ns = n : ns = ns.next = n), fl = !0, Pf || (Pf = !0, vw());
+    n !== ns && n.next === null && (ns === null ? dl = ns = n : ns = ns.next = n), fl = !0, Pf || (Pf = !0, v1());
   }
   function ko(n, r) {
     if (!Df && fl) {
@@ -7942,13 +7942,13 @@ Error generating stack: ` + l.message + `
       Df = !1;
     }
   }
-  function gw() {
+  function g1() {
     Ab();
   }
   function Ab() {
     fl = Pf = !1;
     var n = 0;
-    pa !== 0 && Rw() && (n = pa);
+    pa !== 0 && R1() && (n = pa);
     for (var r = Xt(), o = null, l = dl; l !== null; ) {
       var m = l.next, g = Ob(l, r);
       g === 0 ? (l.next = null, o === null ? dl = m : o.next = m, m === null && (ns = o)) : (o = l, (n !== 0 || (g & 3) !== 0) && (fl = !0)), l = m;
@@ -8003,11 +8003,11 @@ Error generating stack: ` + l.message + `
     if (ul()) return null;
     hb(n, r, !0);
   }
-  function vw() {
-    Mw(function() {
+  function v1() {
+    M1(function() {
       (Ke & 6) !== 0 ? Ti(
         Us,
-        gw
+        g1
       ) : Ab();
     });
   }
@@ -8025,7 +8025,7 @@ Error generating stack: ` + l.message + `
     var o = r.ownerDocument.createElement("input");
     return o.name = r.name, o.value = r.value, n.id && o.setAttribute("form", n.id), r.parentNode.insertBefore(o, r), n = new FormData(n), o.parentNode.removeChild(o), n;
   }
-  function bw(n, r, o, l, m) {
+  function b1(n, r, o, l, m) {
     if (r === "submit" && o && o.stateNode === m) {
       var g = Nb(
         (m[rn] || null).action
@@ -8079,10 +8079,10 @@ Error generating stack: ` + l.message + `
     }
   }
   for (var Lf = 0; Lf < gd.length; Lf++) {
-    var If = gd[Lf], yw = If.toLowerCase(), kw = If[0].toUpperCase() + If.slice(1);
+    var If = gd[Lf], y1 = If.toLowerCase(), k1 = If[0].toUpperCase() + If.slice(1);
     Vn(
-      yw,
-      "on" + kw
+      y1,
+      "on" + k1
     );
   }
   Vn(fg, "onAnimationEnd"), Vn(hg, "onAnimationIteration"), Vn(mg, "onAnimationStart"), Vn("dblclick", "onDoubleClick"), Vn("focusin", "onFocus"), Vn("focusout", "onBlur"), Vn(IE, "onTransitionRun"), Vn(UE, "onTransitionStart"), Vn(jE, "onTransitionCancel"), Vn(pg, "onTransitionEnd"), Rr("onMouseEnter", ["mouseout", "mouseover"]), Rr("onMouseLeave", ["mouseout", "mouseover"]), Rr("onPointerEnter", ["pointerout", "pointerover"]), Rr("onPointerLeave", ["pointerout", "pointerover"]), Ba(
@@ -8110,7 +8110,7 @@ Error generating stack: ` + l.message + `
   );
   var So = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(
     " "
-  ), Sw = new Set(
+  ), S1 = new Set(
     "beforetoggle cancel close invalid load scroll scrollend toggle".split(" ").concat(So)
   );
   function Ib(n, r) {
@@ -8122,26 +8122,26 @@ Error generating stack: ` + l.message + `
         var g = void 0;
         if (r)
           for (var y = l.length - 1; 0 <= y; y--) {
-            var E = l[y], N = E.instance, H = E.currentTarget;
+            var E = l[y], N = E.instance, V = E.currentTarget;
             if (E = E.listener, N !== g && m.isPropagationStopped())
               break e;
-            g = E, m.currentTarget = H;
+            g = E, m.currentTarget = V;
             try {
               g(m);
-            } catch (W) {
-              Rc(W);
+            } catch ($) {
+              Rc($);
             }
             m.currentTarget = null, g = N;
           }
         else
           for (y = 0; y < l.length; y++) {
-            if (E = l[y], N = E.instance, H = E.currentTarget, E = E.listener, N !== g && m.isPropagationStopped())
+            if (E = l[y], N = E.instance, V = E.currentTarget, E = E.listener, N !== g && m.isPropagationStopped())
               break e;
-            g = E, m.currentTarget = H;
+            g = E, m.currentTarget = V;
             try {
               g(m);
-            } catch (W) {
-              Rc(W);
+            } catch ($) {
+              Rc($);
             }
             m.currentTarget = null, g = N;
           }
@@ -8167,7 +8167,7 @@ Error generating stack: ` + l.message + `
   function jf(n) {
     if (!n[hl]) {
       n[hl] = !0, Ap.forEach(function(o) {
-        o !== "selectionchange" && (Sw.has(o) || Uf(o, !1, n), Uf(o, !0, n));
+        o !== "selectionchange" && (S1.has(o) || Uf(o, !1, n), Uf(o, !0, n));
       });
       var r = n.nodeType === 9 ? n : n.ownerDocument;
       r === null || r[hl] || (r[hl] = !0, Uf("selectionchange", !1, r));
@@ -8176,10 +8176,10 @@ Error generating stack: ` + l.message + `
   function Ub(n, r, o, l) {
     switch (fy(r)) {
       case 2:
-        var m = Jw;
+        var m = J1;
         break;
       case 8:
-        m = Xw;
+        m = X1;
         break;
       default:
         m = $f;
@@ -8224,11 +8224,11 @@ Error generating stack: ` + l.message + `
         l = l.return;
       }
     qp(function() {
-      var H = g, W = td(o), ie = [];
+      var V = g, $ = td(o), ne = [];
       e: {
         var K = gg.get(n);
         if (K !== void 0) {
-          var J = Ec, pe = n;
+          var J = Ec, me = n;
           switch (n) {
             case "keypress":
               if (Tc(o) === 0) break e;
@@ -8237,10 +8237,10 @@ Error generating stack: ` + l.message + `
               J = mE;
               break;
             case "focusin":
-              pe = "focus", J = od;
+              me = "focus", J = od;
               break;
             case "focusout":
-              pe = "blur", J = od;
+              me = "blur", J = od;
               break;
             case "beforeblur":
             case "afterblur":
@@ -8308,79 +8308,79 @@ Error generating stack: ` + l.message + `
             case "beforetoggle":
               J = CE;
           }
-          var Te = (r & 4) !== 0, We = !Te && (n === "scroll" || n === "scrollend"), z = Te ? K !== null ? K + "Capture" : null : K;
-          Te = [];
-          for (var I = H, q; I !== null; ) {
-            var ne = I;
-            if (q = ne.stateNode, ne = ne.tag, ne !== 5 && ne !== 26 && ne !== 27 || q === null || z === null || (ne = qs(I, z), ne != null && Te.push(
-              To(I, ne, q)
+          var Se = (r & 4) !== 0, We = !Se && (n === "scroll" || n === "scrollend"), j = Se ? K !== null ? K + "Capture" : null : K;
+          Se = [];
+          for (var I = V, q; I !== null; ) {
+            var te = I;
+            if (q = te.stateNode, te = te.tag, te !== 5 && te !== 26 && te !== 27 || q === null || j === null || (te = qs(I, j), te != null && Se.push(
+              To(I, te, q)
             )), We) break;
             I = I.return;
           }
-          0 < Te.length && (K = new J(
+          0 < Se.length && (K = new J(
             K,
-            pe,
+            me,
             null,
             o,
-            W
-          ), ie.push({ event: K, listeners: Te }));
+            $
+          ), ne.push({ event: K, listeners: Se }));
         }
       }
       if ((r & 7) === 0) {
         e: {
-          if (K = n === "mouseover" || n === "pointerover", J = n === "mouseout" || n === "pointerout", K && o !== ed && (pe = o.relatedTarget || o.fromElement) && (Er(pe) || pe[Cr]))
+          if (K = n === "mouseover" || n === "pointerover", J = n === "mouseout" || n === "pointerout", K && o !== ed && (me = o.relatedTarget || o.fromElement) && (Er(me) || me[Cr]))
             break e;
-          if ((J || K) && (K = W.window === W ? W : (K = W.ownerDocument) ? K.defaultView || K.parentWindow : window, J ? (pe = o.relatedTarget || o.toElement, J = H, pe = pe ? Er(pe) : null, pe !== null && (We = c(pe), Te = pe.tag, pe !== We || Te !== 5 && Te !== 27 && Te !== 6) && (pe = null)) : (J = null, pe = H), J !== pe)) {
-            if (Te = Gp, ne = "onMouseLeave", z = "onMouseEnter", I = "mouse", (n === "pointerout" || n === "pointerover") && (Te = Yp, ne = "onPointerLeave", z = "onPointerEnter", I = "pointer"), We = J == null ? K : Fs(J), q = pe == null ? K : Fs(pe), K = new Te(
-              ne,
+          if ((J || K) && (K = $.window === $ ? $ : (K = $.ownerDocument) ? K.defaultView || K.parentWindow : window, J ? (me = o.relatedTarget || o.toElement, J = V, me = me ? Er(me) : null, me !== null && (We = c(me), Se = me.tag, me !== We || Se !== 5 && Se !== 27 && Se !== 6) && (me = null)) : (J = null, me = V), J !== me)) {
+            if (Se = Gp, te = "onMouseLeave", j = "onMouseEnter", I = "mouse", (n === "pointerout" || n === "pointerover") && (Se = Yp, te = "onPointerLeave", j = "onPointerEnter", I = "pointer"), We = J == null ? K : Fs(J), q = me == null ? K : Fs(me), K = new Se(
+              te,
               I + "leave",
               J,
               o,
-              W
-            ), K.target = We, K.relatedTarget = q, ne = null, Er(W) === H && (Te = new Te(
-              z,
+              $
+            ), K.target = We, K.relatedTarget = q, te = null, Er($) === V && (Se = new Se(
+              j,
               I + "enter",
-              pe,
+              me,
               o,
-              W
-            ), Te.target = q, Te.relatedTarget = We, ne = Te), We = ne, J && pe)
+              $
+            ), Se.target = q, Se.relatedTarget = We, te = Se), We = te, J && me)
               t: {
-                for (Te = Tw, z = J, I = pe, q = 0, ne = z; ne; ne = Te(ne))
+                for (Se = T1, j = J, I = me, q = 0, te = j; te; te = Se(te))
                   q++;
-                ne = 0;
-                for (var ke = I; ke; ke = Te(ke))
-                  ne++;
-                for (; 0 < q - ne; )
-                  z = Te(z), q--;
-                for (; 0 < ne - q; )
-                  I = Te(I), ne--;
+                te = 0;
+                for (var ye = I; ye; ye = Se(ye))
+                  te++;
+                for (; 0 < q - te; )
+                  j = Se(j), q--;
+                for (; 0 < te - q; )
+                  I = Se(I), te--;
                 for (; q--; ) {
-                  if (z === I || I !== null && z === I.alternate) {
-                    Te = z;
+                  if (j === I || I !== null && j === I.alternate) {
+                    Se = j;
                     break t;
                   }
-                  z = Te(z), I = Te(I);
+                  j = Se(j), I = Se(I);
                 }
-                Te = null;
+                Se = null;
               }
-            else Te = null;
+            else Se = null;
             J !== null && jb(
-              ie,
+              ne,
               K,
               J,
-              Te,
+              Se,
               !1
-            ), pe !== null && We !== null && jb(
-              ie,
+            ), me !== null && We !== null && jb(
+              ne,
               We,
-              pe,
-              Te,
+              me,
+              Se,
               !0
             );
           }
         }
         e: {
-          if (K = H ? Fs(H) : window, J = K.nodeName && K.nodeName.toLowerCase(), J === "select" || J === "input" && K.type === "file")
+          if (K = V ? Fs(V) : window, J = K.nodeName && K.nodeName.toLowerCase(), J === "select" || J === "input" && K.type === "file")
             var He = tg;
           else if ($p(K))
             if (ng)
@@ -8390,21 +8390,21 @@ Error generating stack: ` + l.message + `
               var ve = AE;
             }
           else
-            J = K.nodeName, !J || J.toLowerCase() !== "input" || K.type !== "checkbox" && K.type !== "radio" ? H && $u(H.elementType) && (He = tg) : He = PE;
-          if (He && (He = He(n, H))) {
+            J = K.nodeName, !J || J.toLowerCase() !== "input" || K.type !== "checkbox" && K.type !== "radio" ? V && $u(V.elementType) && (He = tg) : He = PE;
+          if (He && (He = He(n, V))) {
             eg(
-              ie,
+              ne,
               He,
               o,
-              W
+              $
             );
             break e;
           }
-          ve && ve(n, K, H), n === "focusout" && H && K.type === "number" && H.memoizedProps.value != null && Wu(K, "number", K.value);
+          ve && ve(n, K, V), n === "focusout" && V && K.type === "number" && V.memoizedProps.value != null && Wu(K, "number", K.value);
         }
-        switch (ve = H ? Fs(H) : window, n) {
+        switch (ve = V ? Fs(V) : window, n) {
           case "focusin":
-            ($p(ve) || ve.contentEditable === "true") && (Dr = ve, hd = H, Xs = null);
+            ($p(ve) || ve.contentEditable === "true") && (Dr = ve, hd = V, Xs = null);
             break;
           case "focusout":
             Xs = hd = Dr = null;
@@ -8415,13 +8415,13 @@ Error generating stack: ` + l.message + `
           case "contextmenu":
           case "mouseup":
           case "dragend":
-            md = !1, ug(ie, o, W);
+            md = !1, ug(ne, o, $);
             break;
           case "selectionchange":
             if (LE) break;
           case "keydown":
           case "keyup":
-            ug(ie, o, W);
+            ug(ne, o, $);
         }
         var De;
         if (ld)
@@ -8441,30 +8441,30 @@ Error generating stack: ` + l.message + `
           }
         else
           Pr ? Zp(n, o) && (ze = "onCompositionEnd") : n === "keydown" && o.keyCode === 229 && (ze = "onCompositionStart");
-        ze && (Qp && o.locale !== "ko" && (Pr || ze !== "onCompositionStart" ? ze === "onCompositionEnd" && Pr && (De = Hp()) : ($i = W, ad = "value" in $i ? $i.value : $i.textContent, Pr = !0)), ve = ml(H, ze), 0 < ve.length && (ze = new Kp(
+        ze && (Qp && o.locale !== "ko" && (Pr || ze !== "onCompositionStart" ? ze === "onCompositionEnd" && Pr && (De = Hp()) : ($i = $, ad = "value" in $i ? $i.value : $i.textContent, Pr = !0)), ve = ml(V, ze), 0 < ve.length && (ze = new Kp(
           ze,
           n,
           null,
           o,
-          W
-        ), ie.push({ event: ze, listeners: ve }), De ? ze.data = De : (De = Wp(o), De !== null && (ze.data = De)))), (De = wE ? xE(n, o) : RE(n, o)) && (ze = ml(H, "onBeforeInput"), 0 < ze.length && (ve = new Kp(
+          $
+        ), ne.push({ event: ze, listeners: ve }), De ? ze.data = De : (De = Wp(o), De !== null && (ze.data = De)))), (De = wE ? xE(n, o) : RE(n, o)) && (ze = ml(V, "onBeforeInput"), 0 < ze.length && (ve = new Kp(
           "onBeforeInput",
           "beforeinput",
           null,
           o,
-          W
-        ), ie.push({
+          $
+        ), ne.push({
           event: ve,
           listeners: ze
-        }), ve.data = De)), bw(
-          ie,
+        }), ve.data = De)), b1(
+          ne,
           n,
-          H,
+          V,
           o,
-          W
+          $
         );
       }
-      Ib(ie, r);
+      Ib(ne, r);
     });
   }
   function To(n, r, o) {
@@ -8486,7 +8486,7 @@ Error generating stack: ` + l.message + `
     }
     return [];
   }
-  function Tw(n) {
+  function T1(n) {
     if (n === null) return null;
     do
       n = n.return;
@@ -8495,20 +8495,20 @@ Error generating stack: ` + l.message + `
   }
   function jb(n, r, o, l, m) {
     for (var g = r._reactName, y = []; o !== null && o !== l; ) {
-      var E = o, N = E.alternate, H = E.stateNode;
+      var E = o, N = E.alternate, V = E.stateNode;
       if (E = E.tag, N !== null && N === l) break;
-      E !== 5 && E !== 26 && E !== 27 || H === null || (N = H, m ? (H = qs(o, g), H != null && y.unshift(
-        To(o, H, N)
-      )) : m || (H = qs(o, g), H != null && y.push(
-        To(o, H, N)
+      E !== 5 && E !== 26 && E !== 27 || V === null || (N = V, m ? (V = qs(o, g), V != null && y.unshift(
+        To(o, V, N)
+      )) : m || (V = qs(o, g), V != null && y.push(
+        To(o, V, N)
       ))), o = o.return;
     }
     y.length !== 0 && n.push({ event: r, listeners: y });
   }
-  var Cw = /\r\n?/g, Ew = /\u0000|\uFFFD/g;
+  var C1 = /\r\n?/g, E1 = /\u0000|\uFFFD/g;
   function zb(n) {
-    return (typeof n == "string" ? n : "" + n).replace(Cw, `
-`).replace(Ew, "");
+    return (typeof n == "string" ? n : "" + n).replace(C1, `
+`).replace(E1, "");
   }
   function Bb(n, r) {
     return r = zb(r), zb(n) === r;
@@ -8849,37 +8849,37 @@ Error generating stack: ` + l.message + `
         return;
       case "input":
         Ie("invalid", n);
-        var E = g = y = m = null, N = null, H = null;
+        var E = g = y = m = null, N = null, V = null;
         for (l in o)
           if (o.hasOwnProperty(l)) {
-            var W = o[l];
-            if (W != null)
+            var $ = o[l];
+            if ($ != null)
               switch (l) {
                 case "name":
-                  m = W;
+                  m = $;
                   break;
                 case "type":
-                  y = W;
+                  y = $;
                   break;
                 case "checked":
-                  N = W;
+                  N = $;
                   break;
                 case "defaultChecked":
-                  H = W;
+                  V = $;
                   break;
                 case "value":
-                  g = W;
+                  g = $;
                   break;
                 case "defaultValue":
-                  E = W;
+                  E = $;
                   break;
                 case "children":
                 case "dangerouslySetInnerHTML":
-                  if (W != null)
+                  if ($ != null)
                     throw Error(a(137, r));
                   break;
                 default:
-                  Ze(n, r, l, W, o, null);
+                  Ze(n, r, l, $, o, null);
               }
           }
         Ip(
@@ -8887,7 +8887,7 @@ Error generating stack: ` + l.message + `
           g,
           E,
           N,
-          H,
+          V,
           y,
           m,
           !1
@@ -8977,23 +8977,23 @@ Error generating stack: ` + l.message + `
       case "track":
       case "wbr":
       case "menuitem":
-        for (H in o)
-          if (o.hasOwnProperty(H) && (l = o[H], l != null))
-            switch (H) {
+        for (V in o)
+          if (o.hasOwnProperty(V) && (l = o[V], l != null))
+            switch (V) {
               case "children":
               case "dangerouslySetInnerHTML":
                 throw Error(a(137, r));
               default:
-                Ze(n, r, H, l, o, null);
+                Ze(n, r, V, l, o, null);
             }
         return;
       default:
         if ($u(r)) {
-          for (W in o)
-            o.hasOwnProperty(W) && (l = o[W], l !== void 0 && Bf(
+          for ($ in o)
+            o.hasOwnProperty($) && (l = o[$], l !== void 0 && Bf(
               n,
               r,
-              W,
+              $,
               l,
               o,
               void 0
@@ -9004,7 +9004,7 @@ Error generating stack: ` + l.message + `
     for (E in o)
       o.hasOwnProperty(E) && (l = o[E], l != null && Ze(n, r, E, l, o, null));
   }
-  function ww(n, r, o, l) {
+  function w1(n, r, o, l) {
     switch (r) {
       case "div":
       case "span":
@@ -9016,24 +9016,24 @@ Error generating stack: ` + l.message + `
       case "li":
         break;
       case "input":
-        var m = null, g = null, y = null, E = null, N = null, H = null, W = null;
+        var m = null, g = null, y = null, E = null, N = null, V = null, $ = null;
         for (J in o) {
-          var ie = o[J];
-          if (o.hasOwnProperty(J) && ie != null)
+          var ne = o[J];
+          if (o.hasOwnProperty(J) && ne != null)
             switch (J) {
               case "checked":
                 break;
               case "value":
                 break;
               case "defaultValue":
-                N = ie;
+                N = ne;
               default:
-                l.hasOwnProperty(J) || Ze(n, r, J, null, l, ie);
+                l.hasOwnProperty(J) || Ze(n, r, J, null, l, ne);
             }
         }
         for (var K in l) {
           var J = l[K];
-          if (ie = o[K], l.hasOwnProperty(K) && (J != null || ie != null))
+          if (ne = o[K], l.hasOwnProperty(K) && (J != null || ne != null))
             switch (K) {
               case "type":
                 g = J;
@@ -9042,10 +9042,10 @@ Error generating stack: ` + l.message + `
                 m = J;
                 break;
               case "checked":
-                H = J;
+                V = J;
                 break;
               case "defaultChecked":
-                W = J;
+                $ = J;
                 break;
               case "value":
                 y = J;
@@ -9059,13 +9059,13 @@ Error generating stack: ` + l.message + `
                   throw Error(a(137, r));
                 break;
               default:
-                J !== ie && Ze(
+                J !== ne && Ze(
                   n,
                   r,
                   K,
                   J,
                   l,
-                  ie
+                  ne
                 );
             }
         }
@@ -9074,8 +9074,8 @@ Error generating stack: ` + l.message + `
           y,
           E,
           N,
-          H,
-          W,
+          V,
+          $,
           g,
           m
         );
@@ -9154,9 +9154,9 @@ Error generating stack: ` + l.message + `
         Up(n, K, J);
         return;
       case "option":
-        for (var pe in o)
-          if (K = o[pe], o.hasOwnProperty(pe) && K != null && !l.hasOwnProperty(pe))
-            switch (pe) {
+        for (var me in o)
+          if (K = o[me], o.hasOwnProperty(me) && K != null && !l.hasOwnProperty(me))
+            switch (me) {
               case "selected":
                 n.selected = !1;
                 break;
@@ -9164,7 +9164,7 @@ Error generating stack: ` + l.message + `
                 Ze(
                   n,
                   r,
-                  pe,
+                  me,
                   null,
                   l,
                   K
@@ -9202,11 +9202,11 @@ Error generating stack: ` + l.message + `
       case "track":
       case "wbr":
       case "menuitem":
-        for (var Te in o)
-          K = o[Te], o.hasOwnProperty(Te) && K != null && !l.hasOwnProperty(Te) && Ze(n, r, Te, null, l, K);
-        for (H in l)
-          if (K = l[H], J = o[H], l.hasOwnProperty(H) && K !== J && (K != null || J != null))
-            switch (H) {
+        for (var Se in o)
+          K = o[Se], o.hasOwnProperty(Se) && K != null && !l.hasOwnProperty(Se) && Ze(n, r, Se, null, l, K);
+        for (V in l)
+          if (K = l[V], J = o[V], l.hasOwnProperty(V) && K !== J && (K != null || J != null))
+            switch (V) {
               case "children":
               case "dangerouslySetInnerHTML":
                 if (K != null)
@@ -9216,7 +9216,7 @@ Error generating stack: ` + l.message + `
                 Ze(
                   n,
                   r,
-                  H,
+                  V,
                   K,
                   l,
                   J
@@ -9234,11 +9234,11 @@ Error generating stack: ` + l.message + `
               l,
               K
             );
-          for (W in l)
-            K = l[W], J = o[W], !l.hasOwnProperty(W) || K === J || K === void 0 && J === void 0 || Bf(
+          for ($ in l)
+            K = l[$], J = o[$], !l.hasOwnProperty($) || K === J || K === void 0 && J === void 0 || Bf(
               n,
               r,
-              W,
+              $,
               K,
               l,
               J
@@ -9246,10 +9246,10 @@ Error generating stack: ` + l.message + `
           return;
         }
     }
-    for (var z in o)
-      K = o[z], o.hasOwnProperty(z) && K != null && !l.hasOwnProperty(z) && Ze(n, r, z, null, l, K);
-    for (ie in l)
-      K = l[ie], J = o[ie], !l.hasOwnProperty(ie) || K === J || K == null && J == null || Ze(n, r, ie, K, l, J);
+    for (var j in o)
+      K = o[j], o.hasOwnProperty(j) && K != null && !l.hasOwnProperty(j) && Ze(n, r, j, null, l, K);
+    for (ne in l)
+      K = l[ne], J = o[ne], !l.hasOwnProperty(ne) || K === J || K == null && J == null || Ze(n, r, ne, K, l, J);
   }
   function Fb(n) {
     switch (n) {
@@ -9265,16 +9265,16 @@ Error generating stack: ` + l.message + `
         return !1;
     }
   }
-  function xw() {
+  function x1() {
     if (typeof performance.getEntriesByType == "function") {
       for (var n = 0, r = 0, o = performance.getEntriesByType("resource"), l = 0; l < o.length; l++) {
         var m = o[l], g = m.transferSize, y = m.initiatorType, E = m.duration;
         if (g && E && Fb(y)) {
           for (y = 0, E = m.responseEnd, l += 1; l < o.length; l++) {
-            var N = o[l], H = N.startTime;
-            if (H > E) break;
-            var W = N.transferSize, ie = N.initiatorType;
-            W && Fb(ie) && (N = N.responseEnd, y += W * (N < E ? 1 : (E - H) / (N - H)));
+            var N = o[l], V = N.startTime;
+            if (V > E) break;
+            var $ = N.transferSize, ne = N.initiatorType;
+            $ && Fb(ne) && (N = N.responseEnd, y += $ * (N < E ? 1 : (E - V) / (N - V)));
           }
           if (--l, r += 8 * (g + y) / (m.duration / 1e3), n++, 10 < n) break;
         }
@@ -9313,14 +9313,14 @@ Error generating stack: ` + l.message + `
     return n === "textarea" || n === "noscript" || typeof r.children == "string" || typeof r.children == "number" || typeof r.children == "bigint" || typeof r.dangerouslySetInnerHTML == "object" && r.dangerouslySetInnerHTML !== null && r.dangerouslySetInnerHTML.__html != null;
   }
   var Vf = null;
-  function Rw() {
+  function R1() {
     var n = window.event;
     return n && n.type === "popstate" ? n === Vf ? !1 : (Vf = n, !0) : (Vf = null, !1);
   }
-  var Vb = typeof setTimeout == "function" ? setTimeout : void 0, _w = typeof clearTimeout == "function" ? clearTimeout : void 0, Gb = typeof Promise == "function" ? Promise : void 0, Mw = typeof queueMicrotask == "function" ? queueMicrotask : typeof Gb < "u" ? function(n) {
-    return Gb.resolve(null).then(n).catch(Aw);
+  var Vb = typeof setTimeout == "function" ? setTimeout : void 0, _1 = typeof clearTimeout == "function" ? clearTimeout : void 0, Gb = typeof Promise == "function" ? Promise : void 0, M1 = typeof queueMicrotask == "function" ? queueMicrotask : typeof Gb < "u" ? function(n) {
+    return Gb.resolve(null).then(n).catch(A1);
   } : Vb;
-  function Aw(n) {
+  function A1(n) {
     setTimeout(function() {
       throw n;
     });
@@ -9388,7 +9388,7 @@ Error generating stack: ` + l.message + `
       n.removeChild(o);
     }
   }
-  function Ow(n, r, o, l) {
+  function O1(n, r, o, l) {
     for (; n.nodeType === 1; ) {
       var m = o;
       if (n.nodeName.toLowerCase() !== r.toLowerCase()) {
@@ -9425,7 +9425,7 @@ Error generating stack: ` + l.message + `
     }
     return null;
   }
-  function Pw(n, r, o) {
+  function P1(n, r, o) {
     if (r === "") return null;
     for (; n.nodeType !== 3; )
       if ((n.nodeType !== 1 || n.nodeName !== "INPUT" || n.type !== "hidden") && !o || (n = In(n.nextSibling), n === null)) return null;
@@ -9442,7 +9442,7 @@ Error generating stack: ` + l.message + `
   function Yf(n) {
     return n.data === "$!" || n.data === "$?" && n.ownerDocument.readyState !== "loading";
   }
-  function Dw(n, r) {
+  function D1(n, r) {
     var o = n.ownerDocument;
     if (n.data === "$~") n._reactRetry = r;
     else if (n.data !== "$?" || o.readyState !== "loading")
@@ -9521,23 +9521,23 @@ Error generating stack: ` + l.message + `
   function gl(n) {
     return typeof n.getRootNode == "function" ? n.getRootNode() : n.nodeType === 9 ? n : n.ownerDocument;
   }
-  var Bi = $.d;
-  $.d = {
-    f: Nw,
-    r: Lw,
-    D: Iw,
-    C: Uw,
-    L: jw,
-    m: zw,
-    X: Fw,
-    S: Bw,
-    M: qw
+  var Bi = ie.d;
+  ie.d = {
+    f: N1,
+    r: L1,
+    D: I1,
+    C: U1,
+    L: j1,
+    m: z1,
+    X: F1,
+    S: B1,
+    M: q1
   };
-  function Nw() {
+  function N1() {
     var n = Bi.f(), r = ol();
     return n || r;
   }
-  function Lw(n) {
+  function L1(n) {
     var r = wr(n);
     r !== null && r.tag === 5 && r.type === "form" ? pv(r) : Bi.r(n);
   }
@@ -9549,13 +9549,13 @@ Error generating stack: ` + l.message + `
       m = 'link[rel="' + n + '"][href="' + m + '"]', typeof o == "string" && (m += '[crossorigin="' + o + '"]'), Wb.has(m) || (Wb.add(m), n = { rel: n, crossOrigin: o, href: r }, l.querySelector(m) === null && (r = l.createElement("link"), qt(r, "link", n), Ot(r), l.head.appendChild(r)));
     }
   }
-  function Iw(n) {
+  function I1(n) {
     Bi.D(n), $b("dns-prefetch", n, null);
   }
-  function Uw(n, r) {
+  function U1(n, r) {
     Bi.C(n, r), $b("preconnect", n, r);
   }
-  function jw(n, r, o) {
+  function j1(n, r, o) {
     Bi.L(n, r, o);
     var l = is;
     if (l && n && r) {
@@ -9583,7 +9583,7 @@ Error generating stack: ` + l.message + `
       ), Un.set(g, n), l.querySelector(m) !== null || r === "style" && l.querySelector(Eo(g)) || r === "script" && l.querySelector(wo(g)) || (r = l.createElement("link"), qt(r, "link", n), Ot(r), l.head.appendChild(r)));
     }
   }
-  function zw(n, r) {
+  function z1(n, r) {
     Bi.m(n, r);
     var o = is;
     if (o && n) {
@@ -9612,7 +9612,7 @@ Error generating stack: ` + l.message + `
       }
     }
   }
-  function Bw(n, r, o) {
+  function B1(n, r, o) {
     Bi.S(n, r, o);
     var l = is;
     if (l && n) {
@@ -9631,8 +9631,8 @@ Error generating stack: ` + l.message + `
             o
           ), (o = Un.get(g)) && Jf(n, o);
           var N = y = l.createElement("link");
-          Ot(N), qt(N, "link", n), N._p = new Promise(function(H, W) {
-            N.onload = H, N.onerror = W;
+          Ot(N), qt(N, "link", n), N._p = new Promise(function(V, $) {
+            N.onload = V, N.onerror = $;
           }), N.addEventListener("load", function() {
             E.loading |= 1;
           }), N.addEventListener("error", function() {
@@ -9648,7 +9648,7 @@ Error generating stack: ` + l.message + `
       }
     }
   }
-  function Fw(n, r) {
+  function F1(n, r) {
     Bi.X(n, r);
     var o = is;
     if (o && n) {
@@ -9661,7 +9661,7 @@ Error generating stack: ` + l.message + `
       }, l.set(m, g));
     }
   }
-  function qw(n, r) {
+  function q1(n, r) {
     Bi.M(n, r);
     var o = is;
     if (o && n) {
@@ -9675,7 +9675,7 @@ Error generating stack: ` + l.message + `
     }
   }
   function ey(n, r, o, l) {
-    var m = (m = ce.current) ? gl(m) : null;
+    var m = (m = se.current) ? gl(m) : null;
     if (!m) throw Error(a(446));
     switch (n) {
       case "meta":
@@ -9712,7 +9712,7 @@ Error generating stack: ` + l.message + `
             media: o.media,
             hrefLang: o.hrefLang,
             referrerPolicy: o.referrerPolicy
-          }, Un.set(n, o), g || Hw(
+          }, Un.set(n, o), g || H1(
             m,
             n,
             o,
@@ -9749,7 +9749,7 @@ Error generating stack: ` + l.message + `
       precedence: null
     });
   }
-  function Hw(n, r, o, l) {
+  function H1(n, r, o, l) {
     n.querySelector('link[rel="preload"][as="style"][' + r + "]") ? l.loading = 1 : (r = n.createElement("link"), l.preload = r, r.addEventListener("load", function() {
       return l.loading |= 1;
     }), r.addEventListener("error", function() {
@@ -9846,7 +9846,7 @@ Error generating stack: ` + l.message + `
       r === "title" ? n.querySelector("head > title") : null
     );
   }
-  function Vw(n, r, o) {
+  function V1(n, r, o) {
     if (o === 1 || r.itemProp != null) return !1;
     switch (n) {
       case "meta":
@@ -9874,7 +9874,7 @@ Error generating stack: ` + l.message + `
   function ry(n) {
     return !(n.type === "stylesheet" && (n.state.loading & 3) === 0);
   }
-  function Gw(n, r, o, l) {
+  function G1(n, r, o, l) {
     if (o.type === "stylesheet" && (typeof l.media != "string" || matchMedia(l.media).matches !== !1) && (o.state.loading & 4) === 0) {
       if (o.instance === null) {
         var m = as(l.href), g = r.querySelector(
@@ -9894,7 +9894,7 @@ Error generating stack: ` + l.message + `
     }
   }
   var Zf = 0;
-  function Kw(n, r) {
+  function K1(n, r) {
     return n.stylesheets && n.count === 0 && Sl(n, n.stylesheets), 0 < n.count || 0 < n.imgCount ? function(o) {
       var l = setTimeout(function() {
         if (n.stylesheets && Sl(n, n.stylesheets), n.unsuspend) {
@@ -9902,7 +9902,7 @@ Error generating stack: ` + l.message + `
           n.unsuspend = null, g();
         }
       }, 6e4 + r);
-      0 < n.imgBytes && Zf === 0 && (Zf = 62500 * xw());
+      0 < n.imgBytes && Zf === 0 && (Zf = 62500 * x1());
       var m = setTimeout(
         function() {
           if (n.waitingForImages = !1, n.count === 0 && (n.stylesheets && Sl(n, n.stylesheets), n.unsuspend)) {
@@ -9928,9 +9928,9 @@ Error generating stack: ` + l.message + `
   }
   var kl = null;
   function Sl(n, r) {
-    n.stylesheets = null, n.unsuspend !== null && (n.count++, kl = /* @__PURE__ */ new Map(), r.forEach(Yw, n), kl = null, yl.call(n));
+    n.stylesheets = null, n.unsuspend !== null && (n.count++, kl = /* @__PURE__ */ new Map(), r.forEach(Y1, n), kl = null, yl.call(n));
   }
-  function Yw(n, r) {
+  function Y1(n, r) {
     if (!(r.state.loading & 4)) {
       var o = kl.get(n);
       if (o) var l = o.get(null);
@@ -9948,26 +9948,26 @@ Error generating stack: ` + l.message + `
     }
   }
   var xo = {
-    $$typeof: B,
+    $$typeof: z,
     Provider: null,
     Consumer: null,
-    _currentValue: re,
-    _currentValue2: re,
+    _currentValue: le,
+    _currentValue2: le,
     _threadCount: 0
   };
-  function Qw(n, r, o, l, m, g, y, E, N) {
+  function Q1(n, r, o, l, m, g, y, E, N) {
     this.tag = 1, this.containerInfo = n, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = Gu(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = Gu(0), this.hiddenUpdates = Gu(null), this.identifierPrefix = l, this.onUncaughtError = m, this.onCaughtError = g, this.onRecoverableError = y, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = N, this.incompleteTransitions = /* @__PURE__ */ new Map();
   }
-  function sy(n, r, o, l, m, g, y, E, N, H, W, ie) {
-    return n = new Qw(
+  function sy(n, r, o, l, m, g, y, E, N, V, $, ne) {
+    return n = new Q1(
       n,
       r,
       o,
       y,
       N,
-      H,
-      W,
-      ie,
+      V,
+      $,
+      ne,
       E
     ), r = 1, g === !0 && (r |= 24), g = yn(3, null, null, r), n.current = g, g.stateNode = n, r = Md(), r.refCount++, n.pooledCache = r, r.refCount++, g.memoizedState = {
       element: l,
@@ -10005,24 +10005,24 @@ Error generating stack: ` + l.message + `
     }
   }
   var Tl = !0;
-  function Jw(n, r, o, l) {
-    var m = j.T;
-    j.T = null;
-    var g = $.p;
+  function J1(n, r, o, l) {
+    var m = F.T;
+    F.T = null;
+    var g = ie.p;
     try {
-      $.p = 2, $f(n, r, o, l);
+      ie.p = 2, $f(n, r, o, l);
     } finally {
-      $.p = g, j.T = m;
+      ie.p = g, F.T = m;
     }
   }
-  function Xw(n, r, o, l) {
-    var m = j.T;
-    j.T = null;
-    var g = $.p;
+  function X1(n, r, o, l) {
+    var m = F.T;
+    F.T = null;
+    var g = ie.p;
     try {
-      $.p = 8, $f(n, r, o, l);
+      ie.p = 8, $f(n, r, o, l);
     } finally {
-      $.p = g, j.T = m;
+      ie.p = g, F.T = m;
     }
   }
   function $f(n, r, o, l) {
@@ -10036,7 +10036,7 @@ Error generating stack: ` + l.message + `
           Cl,
           o
         ), hy(n, l);
-      else if (Ww(
+      else if (W1(
         m,
         n,
         r,
@@ -10044,7 +10044,7 @@ Error generating stack: ` + l.message + `
         l
       ))
         l.stopPropagation();
-      else if (hy(n, l), r & 4 && -1 < Zw.indexOf(n)) {
+      else if (hy(n, l), r & 4 && -1 < Z1.indexOf(n)) {
         for (; m !== null; ) {
           var g = wr(m);
           if (g !== null)
@@ -10204,7 +10204,7 @@ Error generating stack: ` + l.message + `
         return 32;
     }
   }
-  var nh = !1, va = null, ba = null, ya = null, Ro = /* @__PURE__ */ new Map(), _o = /* @__PURE__ */ new Map(), ka = [], Zw = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset".split(
+  var nh = !1, va = null, ba = null, ya = null, Ro = /* @__PURE__ */ new Map(), _o = /* @__PURE__ */ new Map(), ka = [], Z1 = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset".split(
     " "
   );
   function hy(n, r) {
@@ -10239,7 +10239,7 @@ Error generating stack: ` + l.message + `
       targetContainers: [m]
     }, r !== null && (r = wr(r), r !== null && uy(r)), n) : (n.eventSystemFlags |= l, r = n.targetContainers, m !== null && r.indexOf(m) === -1 && r.push(m), n);
   }
-  function Ww(n, r, o, l, m) {
+  function W1(n, r, o, l, m) {
     switch (r) {
       case "focusin":
         return va = Mo(
@@ -10343,13 +10343,13 @@ Error generating stack: ` + l.message + `
   function py(n, r, o) {
     El(n) && o.delete(r);
   }
-  function $w() {
+  function $1() {
     nh = !1, va !== null && El(va) && (va = null), ba !== null && El(ba) && (ba = null), ya !== null && El(ya) && (ya = null), Ro.forEach(py), _o.forEach(py);
   }
   function wl(n, r) {
     n.blockedOn === r && (n.blockedOn = null, nh || (nh = !0, i.unstable_scheduleCallback(
       i.unstable_NormalPriority,
-      $w
+      $1
     )));
   }
   var xl = null;
@@ -10476,17 +10476,17 @@ Error generating stack: ` + l.message + `
         "19.2.7"
       )
     );
-  $.findDOMNode = function(n) {
+  ie.findDOMNode = function(n) {
     var r = n._reactInternals;
     if (r === void 0)
       throw typeof n.render == "function" ? Error(a(188)) : (n = Object.keys(n).join(","), Error(a(268, n)));
     return n = f(r), n = n !== null ? p(n) : null, n = n === null ? null : n.stateNode, n;
   };
-  var e1 = {
+  var ew = {
     bundleType: 0,
     version: "19.2.7",
     rendererPackageName: "react-dom",
-    currentDispatcherRef: j,
+    currentDispatcherRef: F,
     reconcilerVersion: "19.2.7"
   };
   if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
@@ -10494,7 +10494,7 @@ Error generating stack: ` + l.message + `
     if (!_l.isDisabled && _l.supportsFiber)
       try {
         di = _l.inject(
-          e1
+          ew
         ), Zt = _l;
       } catch {
       }
@@ -10536,7 +10536,7 @@ Error generating stack: ` + l.message + `
   }, Oo.version = "19.2.7", Oo;
 }
 var _y;
-function u1() {
+function uw() {
   if (_y) return rh.exports;
   _y = 1;
   function i() {
@@ -10547,10 +10547,10 @@ function u1() {
         console.error(e);
       }
   }
-  return i(), rh.exports = l1(), rh.exports;
+  return i(), rh.exports = lw(), rh.exports;
 }
-var d1 = u1(), R = Mm();
-function f1(i, e) {
+var dw = uw(), R = Mm();
+function fw(i, e) {
   return e.forEach(function(t) {
     t && typeof t != "string" && !Array.isArray(t) && Object.keys(t).forEach(function(a) {
       if (a !== "default" && !(a in i)) {
@@ -10562,12 +10562,12 @@ function f1(i, e) {
     });
   }), Object.freeze(i);
 }
-var h1 = Object.defineProperty, m1 = (i, e, t) => e in i ? h1(i, e, {
+var hw = Object.defineProperty, mw = (i, e, t) => e in i ? hw(i, e, {
   enumerable: !0,
   configurable: !0,
   writable: !0,
   value: t
-}) : i[e] = t, My = (i, e, t) => m1(i, typeof e != "symbol" ? e + "" : e, t);
+}) : i[e] = t, My = (i, e, t) => mw(i, typeof e != "symbol" ? e + "" : e, t);
 let Gt = class {
   constructor() {
     My(this, "_locking"), My(this, "_locks"), this._locking = Promise.resolve(), this._locks = 0;
@@ -10588,22 +10588,22 @@ function mt(i, e) {
   if (!i)
     throw new Error(e);
 }
-const p1 = 34028234663852886e22, g1 = -34028234663852886e22, v1 = 4294967295, b1 = 2147483647, y1 = -2147483648;
+const pw = 34028234663852886e22, gw = -34028234663852886e22, vw = 4294967295, bw = 2147483647, yw = -2147483648;
 function Fl(i) {
   if (typeof i != "number") throw new Error("invalid int 32: " + typeof i);
-  if (!Number.isInteger(i) || i > b1 || i < y1) throw new Error("invalid int 32: " + i);
+  if (!Number.isInteger(i) || i > bw || i < yw) throw new Error("invalid int 32: " + i);
 }
 function qh(i) {
   if (typeof i != "number") throw new Error("invalid uint 32: " + typeof i);
-  if (!Number.isInteger(i) || i > v1 || i < 0) throw new Error("invalid uint 32: " + i);
+  if (!Number.isInteger(i) || i > vw || i < 0) throw new Error("invalid uint 32: " + i);
 }
 function Pk(i) {
   if (typeof i != "number") throw new Error("invalid float 32: " + typeof i);
-  if (Number.isFinite(i) && (i > p1 || i < g1))
+  if (Number.isFinite(i) && (i > pw || i < gw))
     throw new Error("invalid float 32: " + i);
 }
 const Dk = Symbol("@bufbuild/protobuf/enum-type");
-function k1(i) {
+function kw(i) {
   const e = i[Dk];
   return mt(e, "missing enum type on enum object"), e;
 }
@@ -10633,7 +10633,7 @@ function Lk(i, e, t) {
     }
   };
 }
-function S1(i, e, t) {
+function Sw(i, e, t) {
   const a = {};
   for (const s of e) {
     const c = Ik(s);
@@ -10744,7 +10744,7 @@ class Am {
     return Object.getPrototypeOf(this).constructor;
   }
 }
-function T1(i, e, t, a) {
+function Tw(i, e, t, a) {
   var s;
   const c = (s = a?.localName) !== null && s !== void 0 ? s : e.substring(e.lastIndexOf(".") + 1), u = {
     [c]: function(d) {
@@ -10769,7 +10769,7 @@ function T1(i, e, t, a) {
     }
   }), u;
 }
-function C1() {
+function Cw() {
   let i = 0, e = 0;
   for (let a = 0; a < 28; a += 7) {
     let s = this.buf[this.pos++];
@@ -10814,7 +10814,7 @@ function Ay(i) {
   }
   return c(-24, -18), c(-18, -12), c(-12, -6), c(-6), e ? jk(a, s) : Om(a, s);
 }
-function E1(i, e) {
+function Ew(i, e) {
   let t = Om(i, e);
   const a = t.hi & 2147483648;
   a && (t = jk(t.lo, t.hi));
@@ -10822,7 +10822,7 @@ function E1(i, e) {
   return a ? "-" + s : s;
 }
 function Uk(i, e) {
-  var t = w1(i, e);
+  var t = ww(i, e);
   if (i = t.lo, e = t.hi, e <= 2097151)
     return String(ql * e + i);
   const a = i & 16777215, s = (i >>> 24 | e << 8) & 16777215, c = e >> 16 & 65535;
@@ -10830,7 +10830,7 @@ function Uk(i, e) {
   const f = 1e7;
   return u >= f && (d += Math.floor(u / f), u %= f), d >= f && (h += Math.floor(d / f), d %= f), h.toString() + Oy(d) + Oy(u);
 }
-function w1(i, e) {
+function ww(i, e) {
   return {
     lo: i >>> 0,
     hi: e >>> 0
@@ -10860,7 +10860,7 @@ function Py(i, e) {
     e.push(1);
   }
 }
-function x1() {
+function xw() {
   let i = this.buf[this.pos++], e = i & 127;
   if ((i & 128) == 0)
     return this.assertBounds(), e;
@@ -10875,7 +10875,7 @@ function x1() {
   if ((i & 128) != 0) throw new Error("invalid varint");
   return this.assertBounds(), e >>> 0;
 }
-function R1() {
+function Rw() {
   const i = new DataView(new ArrayBuffer(8));
   if (typeof BigInt == "function" && typeof i.getBigInt64 == "function" && typeof i.getBigUint64 == "function" && typeof i.setBigInt64 == "function" && typeof i.setBigUint64 == "function" && (typeof process != "object" || typeof process.env != "object" || process.env.BUF_BIGINT_DISABLE !== "1")) {
     const s = BigInt("-9223372036854775808"), c = BigInt("9223372036854775807"), u = BigInt("0"), d = BigInt("18446744073709551615");
@@ -10931,14 +10931,14 @@ function R1() {
       return typeof s != "string" && (s = s.toString()), a(s), Ay(s);
     },
     dec(s, c) {
-      return E1(s, c);
+      return Ew(s, c);
     },
     uDec(s, c) {
       return Uk(s, c);
     }
   };
 }
-const lt = R1();
+const lt = Rw();
 var ae;
 (function(i) {
   i[i.DOUBLE = 1] = "DOUBLE", i[i.FLOAT = 2] = "FLOAT", i[i.INT64 = 3] = "INT64", i[i.UINT64 = 4] = "UINT64", i[i.INT32 = 5] = "INT32", i[i.FIXED64 = 6] = "FIXED64", i[i.FIXED32 = 7] = "FIXED32", i[i.BOOL = 8] = "BOOL", i[i.STRING = 9] = "STRING", i[i.BYTES = 12] = "BYTES", i[i.UINT32 = 13] = "UINT32", i[i.SFIXED32 = 15] = "SFIXED32", i[i.SFIXED64 = 16] = "SFIXED64", i[i.SINT32 = 17] = "SINT32", i[i.SINT64 = 18] = "SINT64";
@@ -11006,18 +11006,18 @@ function Dy(i, e) {
   for (var t = 0, a = Array(e); t < e; t++) a[t] = i[t];
   return a;
 }
-function _1(i) {
+function _w(i) {
   if (Array.isArray(i)) return i;
 }
 function Ue(i, e, t) {
-  return (e = P1(e)) in i ? Object.defineProperty(i, e, {
+  return (e = Pw(e)) in i ? Object.defineProperty(i, e, {
     value: t,
     enumerable: !0,
     configurable: !0,
     writable: !0
   }) : i[e] = t, i;
 }
-function M1(i, e) {
+function Mw(i, e) {
   var t = i == null ? null : typeof Symbol < "u" && i[Symbol.iterator] || i["@@iterator"];
   if (t != null) {
     var a, s, c, u, d = [], h = !0, f = !1;
@@ -11038,14 +11038,14 @@ function M1(i, e) {
     return d;
   }
 }
-function A1() {
+function Aw() {
   throw new TypeError(`Invalid attempt to destructure non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`);
 }
-function ye(i, e) {
-  return _1(i) || M1(i, e) || D1(i, e) || A1();
+function be(i, e) {
+  return _w(i) || Mw(i, e) || Dw(i, e) || Aw();
 }
-function O1(i, e) {
+function Ow(i, e) {
   if (typeof i != "object" || !i) return i;
   var t = i[Symbol.toPrimitive];
   if (t !== void 0) {
@@ -11055,11 +11055,11 @@ function O1(i, e) {
   }
   return (e === "string" ? String : Number)(i);
 }
-function P1(i) {
-  var e = O1(i, "string");
+function Pw(i) {
+  var e = Ow(i, "string");
   return typeof e == "symbol" ? e : e + "";
 }
-function D1(i, e) {
+function Dw(i, e) {
   if (i) {
     if (typeof i == "string") return Dy(i, e);
     var t = {}.toString.call(i).slice(8, -1);
@@ -11070,7 +11070,7 @@ var bt;
 (function(i) {
   i[i.Varint = 0] = "Varint", i[i.Bit64 = 1] = "Bit64", i[i.LengthDelimited = 2] = "LengthDelimited", i[i.StartGroup = 3] = "StartGroup", i[i.EndGroup = 4] = "EndGroup", i[i.Bit32 = 5] = "Bit32";
 })(bt || (bt = {}));
-class N1 {
+class Nw {
   constructor(e) {
     this.stack = [], this.textEncoder = e ?? new TextEncoder(), this.chunks = [], this.buf = [];
   }
@@ -11229,9 +11229,9 @@ class N1 {
     return uh(t.lo, t.hi, this.buf), this;
   }
 }
-class L1 {
+class Lw {
   constructor(e, t) {
-    this.varint64 = C1, this.uint32 = x1, this.buf = e, this.len = e.length, this.pos = 0, this.view = new DataView(e.buffer, e.byteOffset, e.byteLength), this.textDecoder = t ?? new TextDecoder();
+    this.varint64 = Cw, this.uint32 = xw, this.buf = e, this.len = e.length, this.pos = 0, this.view = new DataView(e.buffer, e.byteOffset, e.byteLength), this.textDecoder = t ?? new TextDecoder();
   }
   /**
    * Reads a tag - field number and wire type.
@@ -11269,7 +11269,7 @@ class L1 {
         break;
       case bt.StartGroup:
         for (; ; ) {
-          const c = this.tag(), u = ye(c, 2), d = u[0], h = u[1];
+          const c = this.tag(), u = be(c, 2), d = u[0], h = u[1];
           if (h === bt.EndGroup) {
             if (t !== void 0 && d !== t)
               throw new Error("invalid end group tag");
@@ -11318,14 +11318,14 @@ class L1 {
    * Read a `sint64` field, a signed, zig-zag-encoded 64-bit varint.
    */
   sint64() {
-    let e = this.varint64(), t = ye(e, 2), a = t[0], s = t[1], c = -(a & 1);
+    let e = this.varint64(), t = be(e, 2), a = t[0], s = t[1], c = -(a & 1);
     return a = (a >>> 1 | (s & 1) << 31) ^ c, s = s >>> 1 ^ c, lt.dec(a, s);
   }
   /**
    * Read a `bool` field, a variant.
    */
   bool() {
-    let e = this.varint64(), t = ye(e, 2), a = t[0], s = t[1];
+    let e = this.varint64(), t = be(e, 2), a = t[0], s = t[1];
     return a !== 0 || s !== 0;
   }
   /**
@@ -11378,7 +11378,7 @@ class L1 {
     return this.textDecoder.decode(this.bytes());
   }
 }
-function I1(i, e, t, a) {
+function Iw(i, e, t, a) {
   let s;
   return {
     typeName: e,
@@ -11395,9 +11395,9 @@ function I1(i, e, t, a) {
 }
 function Bk(i) {
   const e = i.field.localName, t = /* @__PURE__ */ Object.create(null);
-  return t[e] = U1(i), [t, () => t[e]];
+  return t[e] = Uw(i), [t, () => t[e]];
 }
-function U1(i) {
+function Uw(i) {
   const e = i.field;
   if (e.repeated)
     return [];
@@ -11415,7 +11415,7 @@ function U1(i) {
       throw "map fields are not allowed to be extensions";
   }
 }
-function j1(i, e) {
+function jw(i, e) {
   if (!e.repeated && (e.kind == "enum" || e.kind == "scalar")) {
     for (let t = i.length - 1; t >= 0; --t)
       if (i[t].no == e.no)
@@ -11500,14 +11500,14 @@ const Fk = {
     return t && (e += Gi[s], e += "=", t == 1 && (e += "=")), e;
   }
 };
-function z1(i, e, t) {
+function zw(i, e, t) {
   Hk(e, i);
-  const a = e.runtime.bin.makeReadOptions(t), s = j1(i.getType().runtime.bin.listUnknownFields(i), e.field), c = Bk(e), u = ye(c, 2), d = u[0], h = u[1];
+  const a = e.runtime.bin.makeReadOptions(t), s = jw(i.getType().runtime.bin.listUnknownFields(i), e.field), c = Bk(e), u = be(c, 2), d = u[0], h = u[1];
   for (const f of s)
     e.runtime.bin.readField(d, a.readerFactory(f.data), e.field, f.wireType, a);
   return h();
 }
-function B1(i, e, t, a) {
+function Bw(i, e, t, a) {
   Hk(e, i);
   const s = e.runtime.bin.makeReadOptions(a), c = e.runtime.bin.makeWriteOptions(a);
   if (qk(i, e)) {
@@ -11523,7 +11523,7 @@ function B1(i, e, t, a) {
   })), e.runtime.bin.writeField(d, t, u, c);
   const h = s.readerFactory(u.finish());
   for (; h.pos < h.len; ) {
-    const f = h.tag(), p = ye(f, 2), v = p[0], b = p[1], k = h.skip(b, v);
+    const f = h.tag(), p = be(f, 2), v = p[0], b = p[1], k = h.skip(b, v);
     i.getType().runtime.bin.onUnknownField(i, v, b, k);
   }
 }
@@ -11592,24 +11592,24 @@ const Ly = {
   useProtoFieldName: !1,
   prettySpaces: 0
 };
-function F1(i) {
+function Fw(i) {
   return i ? Object.assign(Object.assign({}, Ly), i) : Ly;
 }
-function q1(i) {
+function qw(i) {
   return i ? Object.assign(Object.assign({}, Iy), i) : Iy;
 }
 const iu = Symbol(), Hl = Symbol();
-function H1() {
+function Hw() {
   return {
-    makeReadOptions: F1,
-    makeWriteOptions: q1,
+    makeReadOptions: Fw,
+    makeWriteOptions: qw,
     readMessage(i, e, t, a) {
       if (e == null || Array.isArray(e) || typeof e != "object")
         throw new Error("cannot decode message ".concat(i.typeName, " from JSON: ").concat(yi(e)));
       a = a ?? new i();
       const s = /* @__PURE__ */ new Map(), c = t.typeRegistry;
       for (const d of Object.entries(e)) {
-        var u = ye(d, 2);
+        var u = be(d, 2);
         const h = u[0], f = u[1], p = i.fields.findJsonName(h);
         if (p) {
           if (p.oneof) {
@@ -11627,8 +11627,8 @@ function H1() {
             const b = c.findExtension(h.substring(1, h.length - 1));
             if (b && b.extendee.typeName == i.typeName) {
               v = !0;
-              const k = Bk(b), x = ye(k, 2), T = x[0], P = x[1];
-              Uy(T, f, b.field, t, b), B1(a, b, P(), t);
+              const k = Bk(b), w = be(k, 2), T = w[0], P = w[1];
+              Uy(T, f, b.field, t, b), Bw(a, b, P(), t);
             }
           }
           if (!v && !t.ignoreUnknownFields)
@@ -11645,7 +11645,7 @@ function H1() {
           if (!Vk(s, i)) {
             if (s.req)
               throw "required field not set";
-            if (!e.emitDefaultValues || !G1(s))
+            if (!e.emitDefaultValues || !Gw(s))
               continue;
           }
           const u = s.oneof ? i[s.oneof.localName].value : i[s.localName], d = jy(s, u, e);
@@ -11656,7 +11656,7 @@ function H1() {
           for (const u of t.runtime.bin.listUnknownFields(i)) {
             const d = c.findExtensionFor(t.typeName, u.no);
             if (d && qk(i, d)) {
-              const h = z1(i, d, e), f = jy(d.field, h, e);
+              const h = zw(i, d, e), f = jy(d.field, h, e);
               f !== void 0 && (a[d.field.jsonName] = f);
             }
           }
@@ -11724,13 +11724,13 @@ function Uy(i, e, t, a, s) {
       throw new Error("cannot decode field ".concat(s.typeName, ".").concat(t.name, " from JSON: ").concat(yi(e)));
     const d = i[c];
     for (const h of Object.entries(e)) {
-      var u = ye(h, 2);
+      var u = be(h, 2);
       const f = u[0], p = u[1];
       if (p === null)
         throw new Error("cannot decode field ".concat(s.typeName, ".").concat(t.name, " from JSON: map value null"));
       let v;
       try {
-        v = V1(t.K, f);
+        v = Vw(t.K, f);
       } catch (b) {
         let k = "cannot decode map key for field ".concat(s.typeName, ".").concat(t.name, " from JSON: ").concat(yi(e));
         throw b instanceof Error && b.message.length > 0 && (k += ": ".concat(b.message)), new Error(k);
@@ -11747,8 +11747,8 @@ function Uy(i, e, t, a, s) {
           try {
             d[v] = Ho(t.V.T, p, Pa.BIGINT, !0);
           } catch (k) {
-            let x = "cannot decode map value for field ".concat(s.typeName, ".").concat(t.name, " from JSON: ").concat(yi(e));
-            throw k instanceof Error && k.message.length > 0 && (x += ": ".concat(k.message)), new Error(x);
+            let w = "cannot decode map value for field ".concat(s.typeName, ".").concat(t.name, " from JSON: ").concat(yi(e));
+            throw k instanceof Error && k.message.length > 0 && (w += ": ".concat(k.message)), new Error(w);
           }
           break;
       }
@@ -11795,7 +11795,7 @@ function Uy(i, e, t, a, s) {
         break;
     }
 }
-function V1(i, e) {
+function Vw(i, e) {
   if (i === ae.BOOL)
     switch (e) {
       case "true":
@@ -11886,7 +11886,7 @@ function dh(i, e, t, a) {
   }
   throw new Error("cannot decode enum ".concat(i.typeName, " from JSON: ").concat(yi(e)));
 }
-function G1(i) {
+function Gw(i) {
   return i.repeated || i.kind == "map" ? !0 : !(i.oneof || i.kind == "message" || i.opt || i.req);
 }
 function jy(i, e, t) {
@@ -11896,14 +11896,14 @@ function jy(i, e, t) {
     switch (i.V.kind) {
       case "scalar":
         for (const f of d) {
-          var a = ye(f, 2);
+          var a = be(f, 2);
           const p = a[0], v = a[1];
           u[p.toString()] = Vl(i.V.T, v);
         }
         break;
       case "message":
         for (const f of d) {
-          var s = ye(f, 2);
+          var s = be(f, 2);
           const p = s[0], v = s[1];
           u[p.toString()] = v.toJson(t);
         }
@@ -11911,7 +11911,7 @@ function jy(i, e, t) {
       case "enum":
         const h = i.V.T;
         for (const f of d) {
-          var c = ye(f, 2);
+          var c = be(f, 2);
           const p = c[0], v = c[1];
           u[p.toString()] = fh(h, v, t.enumAsInteger);
         }
@@ -11992,21 +11992,21 @@ function Vl(i, e) {
 }
 const os = Symbol("@bufbuild/protobuf/unknown-fields"), zy = {
   readUnknownFields: !0,
-  readerFactory: (i) => new L1(i)
+  readerFactory: (i) => new Lw(i)
 }, By = {
   writeUnknownFields: !0,
-  writerFactory: () => new N1()
+  writerFactory: () => new Nw()
 };
-function K1(i) {
+function Kw(i) {
   return i ? Object.assign(Object.assign({}, zy), i) : zy;
 }
-function Y1(i) {
+function Yw(i) {
   return i ? Object.assign(Object.assign({}, By), i) : By;
 }
-function Q1() {
+function Qw() {
   return {
-    makeReadOptions: K1,
-    makeWriteOptions: Y1,
+    makeReadOptions: Kw,
+    makeWriteOptions: Yw,
     listUnknownFields(i) {
       var e;
       return (e = i[os]) !== null && e !== void 0 ? e : [];
@@ -12032,7 +12032,7 @@ function Q1() {
       const c = i.getType(), u = s ? e.len : e.pos + t;
       let d, h;
       for (; e.pos < u; ) {
-        var f = e.tag(), p = ye(f, 2);
+        var f = e.tag(), p = be(f, 2);
         if (d = p[0], h = p[1], s === !0 && h == bt.EndGroup)
           break;
         const v = c.fields.find(d);
@@ -12073,14 +12073,14 @@ function Fy(i, e, t, a, s) {
     case "enum":
       const d = t.kind == "enum" ? ae.INT32 : t.T;
       let h = au;
-      if (t.kind == "scalar" && t.L > 0 && (h = X1), c) {
-        let x = i[u];
+      if (t.kind == "scalar" && t.L > 0 && (h = Xw), c) {
+        let w = i[u];
         if (a == bt.LengthDelimited && d != ae.STRING && d != ae.BYTES) {
           let P = e.uint32() + e.pos;
           for (; e.pos < P; )
-            x.push(h(e, d));
+            w.push(h(e, d));
         } else
-          x.push(h(e, d));
+          w.push(h(e, d));
       } else
         i[u] = h(e, d);
       break;
@@ -12089,7 +12089,7 @@ function Fy(i, e, t, a, s) {
       c ? i[u].push(Gl(e, new f(), s, t)) : Ki(i[u]) ? Gl(e, i[u], s, t) : (i[u] = Gl(e, new f(), s, t), f.fieldWrapper && !t.oneof && !t.repeated && (i[u] = f.fieldWrapper.unwrapField(i[u])));
       break;
     case "map":
-      let p = J1(t, e, s), v = ye(p, 2), b = v[0], k = v[1];
+      let p = Jw(t, e, s), v = be(p, 2), b = v[0], k = v[1];
       i[u][b] = k;
       break;
   }
@@ -12105,12 +12105,12 @@ function Gl(i, e, t, a) {
     c
   ), e;
 }
-function J1(i, e, t) {
+function Jw(i, e, t) {
   const a = e.uint32(), s = e.pos + a;
   let c, u;
   for (; e.pos < s; ) {
     const d = e.tag();
-    switch (ye(d, 1)[0]) {
+    switch (be(d, 1)[0]) {
       case 1:
         c = au(e, i.K);
         break;
@@ -12143,7 +12143,7 @@ function J1(i, e, t) {
     }
   return [c, u];
 }
-function X1(i, e) {
+function Xw(i, e) {
   const t = au(i, e);
   return typeof t == "bigint" ? t.toString() : t;
 }
@@ -12190,7 +12190,7 @@ function qy(i, e, t, a) {
       let u = i.kind == "enum" ? ae.INT32 : i.T;
       if (s)
         if (mt(Array.isArray(e)), i.packed)
-          W1(t, u, i.no, e);
+          Ww(t, u, i.no, e);
         else
           for (const d of e)
             Vo(t, u, i.no, d);
@@ -12208,14 +12208,14 @@ function qy(i, e, t, a) {
     case "map":
       mt(typeof e == "object" && e != null);
       for (const d of Object.entries(e)) {
-        var c = ye(d, 2);
+        var c = be(d, 2);
         const h = c[0], f = c[1];
-        Z1(t, a, i, h, f);
+        Zw(t, a, i, h, f);
       }
       break;
   }
 }
-function Z1(i, e, t, a, s) {
+function Zw(i, e, t, a, s) {
   i.tag(t.no, bt.LengthDelimited), i.fork();
   let c = a;
   switch (t.K) {
@@ -12249,14 +12249,14 @@ function Hy(i, e, t, a) {
 }
 function Vo(i, e, t, a) {
   mt(a !== void 0);
-  let s = Kk(e), c = ye(s, 2), u = c[0], d = c[1];
+  let s = Kk(e), c = be(s, 2), u = c[0], d = c[1];
   i.tag(t, u)[d](a);
 }
-function W1(i, e, t, a) {
+function Ww(i, e, t, a) {
   if (!a.length)
     return;
   i.tag(t, bt.LengthDelimited).fork();
-  let s = Kk(e), c = ye(s, 2), u = c[1];
+  let s = Kk(e), c = be(s, 2), u = c[1];
   for (let d = 0; d < a.length; d++)
     i[u](a[d]);
   i.join();
@@ -12282,7 +12282,7 @@ function Kk(i) {
   const t = ae[i].toLowerCase();
   return [e, t];
 }
-function $1() {
+function $w() {
   return {
     setEnumType: Nk,
     initPartial(i, e) {
@@ -12314,8 +12314,8 @@ function $1() {
                 case "scalar":
                 case "enum":
                   if (s.V.T === ae.BYTES)
-                    for (const x of Object.entries(d[c])) {
-                      var a = ye(x, 2);
+                    for (const w of Object.entries(d[c])) {
+                      var a = be(w, 2);
                       const T = a[0], P = a[1];
                       u[c][T] = Po(P);
                     }
@@ -12324,9 +12324,9 @@ function $1() {
                   break;
                 case "message":
                   const k = s.V.T;
-                  for (const x of Object.keys(d[c])) {
-                    let T = d[c][x];
-                    k.fieldWrapper || (T = new k(T)), u[c][x] = T;
+                  for (const w of Object.keys(d[c])) {
+                    let T = d[c][w];
+                    k.fieldWrapper || (T = new k(T)), u[c][w] = T;
                   }
                   break;
               }
@@ -12410,7 +12410,7 @@ function $1() {
         else if (c.kind == "map") {
           d = a[c.localName];
           for (const h of Object.entries(u)) {
-            var s = ye(h, 2);
+            var s = be(h, 2);
             const f = s[0], p = s[1];
             d[f] = Ml(p);
           }
@@ -12445,20 +12445,20 @@ function Po(i) {
 function ex(i, e, t) {
   return {
     syntax: i,
-    json: H1(),
-    bin: Q1(),
-    util: Object.assign(Object.assign({}, $1()), {
+    json: Hw(),
+    bin: Qw(),
+    util: Object.assign(Object.assign({}, $w()), {
       newFieldList: e,
       initFields: t
     }),
     makeMessageType(a, s, c) {
-      return T1(this, a, s, c);
+      return Tw(this, a, s, c);
     },
-    makeEnum: S1,
+    makeEnum: Sw,
     makeEnumType: Lk,
-    getEnumType: k1,
+    getEnumType: kw,
     makeExtension(a, s, c) {
-      return I1(this, a, s, c);
+      return Iw(this, a, s, c);
     }
   };
 }
@@ -16776,18 +16776,18 @@ function kR() {
         return f(T) || v.apply(this, arguments);
       }
       function k(T, P) {
-        var _ = this, U, B, S, C = "loglevel";
+        var _ = this, U, z, S, C = "loglevel";
         typeof T == "string" ? C += ":" + T : typeof T == "symbol" && (C = void 0);
         function M(G) {
-          var te = (s[G] || "silent").toUpperCase();
+          var Z = (s[G] || "silent").toUpperCase();
           if (!(typeof window === t || !C)) {
             try {
-              window.localStorage[C] = te;
+              window.localStorage[C] = Z;
               return;
             } catch {
             }
             try {
-              window.document.cookie = encodeURIComponent(C) + "=" + te + ";";
+              window.document.cookie = encodeURIComponent(C) + "=" + Z + ";";
             } catch {
             }
           }
@@ -16801,14 +16801,14 @@ function kR() {
             }
             if (typeof G === t)
               try {
-                var te = window.document.cookie, he = encodeURIComponent(C), me = te.indexOf(he + "=");
-                me !== -1 && (G = /^([^;]+)/.exec(te.slice(me + he.length + 1))[1]);
+                var Z = window.document.cookie, fe = encodeURIComponent(C), he = Z.indexOf(fe + "=");
+                he !== -1 && (G = /^([^;]+)/.exec(Z.slice(he + fe.length + 1))[1]);
               } catch {
               }
             return _.levels[G] === void 0 && (G = void 0), G;
           }
         }
-        function V() {
+        function H() {
           if (!(typeof window === t || !C)) {
             try {
               window.localStorage.removeItem(C);
@@ -16820,10 +16820,10 @@ function kR() {
             }
           }
         }
-        function Z(G) {
-          var te = G;
-          if (typeof te == "string" && _.levels[te.toUpperCase()] !== void 0 && (te = _.levels[te.toUpperCase()]), typeof te == "number" && te >= 0 && te <= _.levels.SILENT)
-            return te;
+        function W(G) {
+          var Z = G;
+          if (typeof Z == "string" && _.levels[Z.toUpperCase()] !== void 0 && (Z = _.levels[Z.toUpperCase()]), typeof Z == "number" && Z >= 0 && Z <= _.levels.SILENT)
+            return Z;
           throw new TypeError("log.setLevel() called with invalid level: " + G);
         }
         _.name = T, _.levels = {
@@ -16834,24 +16834,24 @@ function kR() {
           ERROR: 4,
           SILENT: 5
         }, _.methodFactory = P || b, _.getLevel = function() {
-          return S ?? B ?? U;
-        }, _.setLevel = function(G, te) {
-          return S = Z(G), te !== !1 && M(S), p.call(_);
+          return S ?? z ?? U;
+        }, _.setLevel = function(G, Z) {
+          return S = W(G), Z !== !1 && M(S), p.call(_);
         }, _.setDefaultLevel = function(G) {
-          B = Z(G), D() || _.setLevel(G, !1);
+          z = W(G), D() || _.setLevel(G, !1);
         }, _.resetLevel = function() {
-          S = null, V(), p.call(_);
+          S = null, H(), p.call(_);
         }, _.enableAll = function(G) {
           _.setLevel(_.levels.TRACE, G);
         }, _.disableAll = function(G) {
           _.setLevel(_.levels.SILENT, G);
         }, _.rebuild = function() {
-          if (u !== _ && (U = Z(u.getLevel())), p.call(_), u === _)
+          if (u !== _ && (U = W(u.getLevel())), p.call(_), u === _)
             for (var G in c)
               c[G].rebuild();
-        }, U = Z(u ? u.getLevel() : "WARN");
-        var F = D();
-        F != null && (S = Z(F)), p.call(_);
+        }, U = W(u ? u.getLevel() : "WARN");
+        var B = D();
+        B != null && (S = W(B)), p.call(_);
       }
       u = new k(), u.getLogger = function(P) {
         if (typeof P != "symbol" && typeof P != "string" || P === "")
@@ -16859,9 +16859,9 @@ function kR() {
         var _ = c[P];
         return _ || (_ = c[P] = new k(P, u.methodFactory)), _;
       };
-      var x = typeof window !== t ? window.log : void 0;
+      var w = typeof window !== t ? window.log : void 0;
       return u.noConflict = function() {
-        return typeof window !== t && window.log === u && (window.log = x), u;
+        return typeof window !== t && window.log === u && (window.log = w), u;
       }, u.getLoggers = function() {
         return c;
       }, u.default = u, u;
@@ -16956,20 +16956,20 @@ function wR(i, e, t) {
     return this;
   }, s;
   function u(k) {
-    return function(x) {
-      return Promise.resolve(x).then(k, v);
+    return function(w) {
+      return Promise.resolve(w).then(k, v);
     };
   }
-  function d(k, x) {
+  function d(k, w) {
     a[k] && (s[k] = function(T) {
       return new Promise(function(P, _) {
         c.push([k, T, P, _]) > 1 || h(k, T);
       });
-    }, x && (s[k] = x(s[k])));
+    }, w && (s[k] = w(s[k])));
   }
-  function h(k, x) {
+  function h(k, w) {
     try {
-      f(a[k](x));
+      f(a[k](w));
     } catch (T) {
       b(c[0][3], T);
     }
@@ -16983,8 +16983,8 @@ function wR(i, e, t) {
   function v(k) {
     h("throw", k);
   }
-  function b(k, x) {
-    k(x), c.shift(), c.length && h(c[0][0], c[0][1]);
+  function b(k, w) {
+    k(w), c.shift(), c.length && h(c[0][0], c[0][1]);
   }
 }
 function xR(i) {
@@ -17070,32 +17070,32 @@ function RR() {
     return h(this);
   }, c.prototype.emit = function(C) {
     for (var M = [], D = 1; D < arguments.length; D++) M.push(arguments[D]);
-    var V = C === "error", Z = this._events;
-    if (Z !== void 0) V = V && Z.error === void 0;
-    else if (!V) return !1;
-    if (V) {
-      var F;
-      if (M.length > 0 && (F = M[0]), F instanceof Error)
-        throw F;
-      var G = new Error("Unhandled error." + (F ? " (" + F.message + ")" : ""));
-      throw G.context = F, G;
+    var H = C === "error", W = this._events;
+    if (W !== void 0) H = H && W.error === void 0;
+    else if (!H) return !1;
+    if (H) {
+      var B;
+      if (M.length > 0 && (B = M[0]), B instanceof Error)
+        throw B;
+      var G = new Error("Unhandled error." + (B ? " (" + B.message + ")" : ""));
+      throw G.context = B, G;
     }
-    var te = Z[C];
-    if (te === void 0) return !1;
-    if (typeof te == "function")
-      e(te, this, M);
+    var Z = W[C];
+    if (Z === void 0) return !1;
+    if (typeof Z == "function")
+      e(Z, this, M);
     else
-      for (var he = te.length, me = x(te, he), D = 0; D < he; ++D) e(me[D], this, M);
+      for (var fe = Z.length, he = w(Z, fe), D = 0; D < fe; ++D) e(he[D], this, M);
     return !0;
   };
   function f(S, C, M, D) {
-    var V, Z, F;
-    if (d(M), Z = S._events, Z === void 0 ? (Z = S._events = /* @__PURE__ */ Object.create(null), S._eventsCount = 0) : (Z.newListener !== void 0 && (S.emit("newListener", C, M.listener ? M.listener : M), Z = S._events), F = Z[C]), F === void 0)
-      F = Z[C] = M, ++S._eventsCount;
-    else if (typeof F == "function" ? F = Z[C] = D ? [M, F] : [F, M] : D ? F.unshift(M) : F.push(M), V = h(S), V > 0 && F.length > V && !F.warned) {
-      F.warned = !0;
-      var G = new Error("Possible EventEmitter memory leak detected. " + F.length + " " + String(C) + " listeners added. Use emitter.setMaxListeners() to increase limit");
-      G.name = "MaxListenersExceededWarning", G.emitter = S, G.type = C, G.count = F.length, a(G);
+    var H, W, B;
+    if (d(M), W = S._events, W === void 0 ? (W = S._events = /* @__PURE__ */ Object.create(null), S._eventsCount = 0) : (W.newListener !== void 0 && (S.emit("newListener", C, M.listener ? M.listener : M), W = S._events), B = W[C]), B === void 0)
+      B = W[C] = M, ++S._eventsCount;
+    else if (typeof B == "function" ? B = W[C] = D ? [M, B] : [B, M] : D ? B.unshift(M) : B.push(M), H = h(S), H > 0 && B.length > H && !B.warned) {
+      B.warned = !0;
+      var G = new Error("Possible EventEmitter memory leak detected. " + B.length + " " + String(C) + " listeners added. Use emitter.setMaxListeners() to increase limit");
+      G.name = "MaxListenersExceededWarning", G.emitter = S, G.type = C, G.count = B.length, a(G);
     }
     return S;
   }
@@ -17115,52 +17115,52 @@ function RR() {
       target: S,
       type: C,
       listener: M
-    }, V = p.bind(D);
-    return V.listener = M, D.wrapFn = V, V;
+    }, H = p.bind(D);
+    return H.listener = M, D.wrapFn = H, H;
   }
   c.prototype.once = function(C, M) {
     return d(M), this.on(C, v(this, C, M)), this;
   }, c.prototype.prependOnceListener = function(C, M) {
     return d(M), this.prependListener(C, v(this, C, M)), this;
   }, c.prototype.removeListener = function(C, M) {
-    var D, V, Z, F, G;
-    if (d(M), V = this._events, V === void 0) return this;
-    if (D = V[C], D === void 0) return this;
+    var D, H, W, B, G;
+    if (d(M), H = this._events, H === void 0) return this;
+    if (D = H[C], D === void 0) return this;
     if (D === M || D.listener === M)
-      --this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : (delete V[C], V.removeListener && this.emit("removeListener", C, D.listener || M));
+      --this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : (delete H[C], H.removeListener && this.emit("removeListener", C, D.listener || M));
     else if (typeof D != "function") {
-      for (Z = -1, F = D.length - 1; F >= 0; F--)
-        if (D[F] === M || D[F].listener === M) {
-          G = D[F].listener, Z = F;
+      for (W = -1, B = D.length - 1; B >= 0; B--)
+        if (D[B] === M || D[B].listener === M) {
+          G = D[B].listener, W = B;
           break;
         }
-      if (Z < 0) return this;
-      Z === 0 ? D.shift() : T(D, Z), D.length === 1 && (V[C] = D[0]), V.removeListener !== void 0 && this.emit("removeListener", C, G || M);
+      if (W < 0) return this;
+      W === 0 ? D.shift() : T(D, W), D.length === 1 && (H[C] = D[0]), H.removeListener !== void 0 && this.emit("removeListener", C, G || M);
     }
     return this;
   }, c.prototype.off = c.prototype.removeListener, c.prototype.removeAllListeners = function(C) {
-    var M, D, V;
+    var M, D, H;
     if (D = this._events, D === void 0) return this;
     if (D.removeListener === void 0)
       return arguments.length === 0 ? (this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0) : D[C] !== void 0 && (--this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : delete D[C]), this;
     if (arguments.length === 0) {
-      var Z = Object.keys(D), F;
-      for (V = 0; V < Z.length; ++V)
-        F = Z[V], F !== "removeListener" && this.removeAllListeners(F);
+      var W = Object.keys(D), B;
+      for (H = 0; H < W.length; ++H)
+        B = W[H], B !== "removeListener" && this.removeAllListeners(B);
       return this.removeAllListeners("removeListener"), this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0, this;
     }
     if (M = D[C], typeof M == "function")
       this.removeListener(C, M);
     else if (M !== void 0)
-      for (V = M.length - 1; V >= 0; V--)
-        this.removeListener(C, M[V]);
+      for (H = M.length - 1; H >= 0; H--)
+        this.removeListener(C, M[H]);
     return this;
   };
   function b(S, C, M) {
     var D = S._events;
     if (D === void 0) return [];
-    var V = D[C];
-    return V === void 0 ? [] : typeof V == "function" ? M ? [V.listener || V] : [V] : M ? P(V) : x(V, V.length);
+    var H = D[C];
+    return H === void 0 ? [] : typeof H == "function" ? M ? [H.listener || H] : [H] : M ? P(H) : w(H, H.length);
   }
   c.prototype.listeners = function(C) {
     return b(this, C, !0);
@@ -17183,7 +17183,7 @@ function RR() {
   c.prototype.eventNames = function() {
     return this._eventsCount > 0 ? t(this._events) : [];
   };
-  function x(S, C) {
+  function w(S, C) {
     for (var M = new Array(C), D = 0; D < C; ++D) M[D] = S[D];
     return M;
   }
@@ -17198,28 +17198,28 @@ function RR() {
   }
   function _(S, C) {
     return new Promise(function(M, D) {
-      function V(F) {
-        S.removeListener(C, Z), D(F);
+      function H(B) {
+        S.removeListener(C, W), D(B);
       }
-      function Z() {
-        typeof S.removeListener == "function" && S.removeListener("error", V), M([].slice.call(arguments));
+      function W() {
+        typeof S.removeListener == "function" && S.removeListener("error", H), M([].slice.call(arguments));
       }
-      B(S, C, Z, {
+      z(S, C, W, {
         once: !0
-      }), C !== "error" && U(S, V, {
+      }), C !== "error" && U(S, H, {
         once: !0
       });
     });
   }
   function U(S, C, M) {
-    typeof S.on == "function" && B(S, "error", C, M);
+    typeof S.on == "function" && z(S, "error", C, M);
   }
-  function B(S, C, M, D) {
+  function z(S, C, M, D) {
     if (typeof S.on == "function")
       D.once ? S.once(C, M) : S.on(C, M);
     else if (typeof S.addEventListener == "function")
-      S.addEventListener(C, function V(Z) {
-        D.once && S.removeEventListener(C, V), M(Z);
+      S.addEventListener(C, function H(W) {
+        D.once && S.removeEventListener(C, H), M(W);
       });
     else
       throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof S);
@@ -17394,8 +17394,8 @@ function PS(i, e) {
         let v;
         if (f.exact === "environment" || f.ideal === "environment" ? v = ["back", "rear"] : (f.exact === "user" || f.ideal === "user") && (v = ["front"]), v)
           return t.mediaDevices.enumerateDevices().then((b) => {
-            b = b.filter((x) => x.kind === "videoinput");
-            let k = b.find((x) => v.some((T) => x.label.toLowerCase().includes(T)));
+            b = b.filter((w) => w.kind === "videoinput");
+            let k = b.find((w) => v.some((T) => w.label.toLowerCase().includes(T)));
             return !k && b.length && v.includes("back") && (k = b[b.length - 1]), k && (d.video.deviceId = f.exact ? {
               exact: k.deviceId
             } : {
@@ -17662,9 +17662,9 @@ function jS(i, e) {
     if (this.getSenders().find((T) => T.track === p))
       throw new DOMException("Track already exists.", "InvalidAccessError");
     this._streams = this._streams || {}, this._reverseStreams = this._reverseStreams || {};
-    const x = this._streams[v.id];
-    if (x)
-      x.addTrack(p), Promise.resolve().then(() => {
+    const w = this._streams[v.id];
+    if (w)
+      w.addTrack(p), Promise.resolve().then(() => {
         this.dispatchEvent(new Event("negotiationneeded"));
       });
     else {
@@ -17676,8 +17676,8 @@ function jS(i, e) {
   function c(f, p) {
     let v = p.sdp;
     return Object.keys(f._reverseStreams || []).forEach((b) => {
-      const k = f._reverseStreams[b], x = f._streams[k.id];
-      v = v.replace(new RegExp(x.id, "g"), k.id);
+      const k = f._reverseStreams[b], w = f._streams[k.id];
+      v = v.replace(new RegExp(w.id, "g"), k.id);
     }), new RTCSessionDescription({
       type: p.type,
       sdp: v
@@ -17686,8 +17686,8 @@ function jS(i, e) {
   function u(f, p) {
     let v = p.sdp;
     return Object.keys(f._reverseStreams || []).forEach((b) => {
-      const k = f._reverseStreams[b], x = f._streams[k.id];
-      v = v.replace(new RegExp(k.id, "g"), x.id);
+      const k = f._reverseStreams[b], w = f._streams[k.id];
+      v = v.replace(new RegExp(k.id, "g"), w.id);
     }), new RTCSessionDescription({
       type: p.type,
       sdp: v
@@ -17697,12 +17697,12 @@ function jS(i, e) {
     const p = i.RTCPeerConnection.prototype[f], v = {
       [f]() {
         const b = arguments;
-        return arguments.length && typeof arguments[0] == "function" ? p.apply(this, [(x) => {
-          const T = c(this, x);
+        return arguments.length && typeof arguments[0] == "function" ? p.apply(this, [(w) => {
+          const T = c(this, w);
           b[0].apply(null, [T]);
-        }, (x) => {
-          b[1] && b[1].apply(null, x);
-        }, arguments[2]]) : p.apply(this, arguments).then((x) => c(this, x));
+        }, (w) => {
+          b[1] && b[1].apply(null, w);
+        }, arguments[2]]) : p.apply(this, arguments).then((w) => c(this, w));
       }
     };
     i.RTCPeerConnection.prototype[f] = v[f];
@@ -18326,7 +18326,7 @@ a=ice-pwd:` + t.password + `\r
     }, e.parseRtpEncodingParameters = function(t) {
       const a = [], s = e.parseRtpParameters(t), c = s.fecMechanisms.indexOf("RED") !== -1, u = s.fecMechanisms.indexOf("ULPFEC") !== -1, d = e.matchPrefix(t, "a=ssrc:").map((b) => e.parseSsrcMedia(b)).filter((b) => b.attribute === "cname"), h = d.length > 0 && d[0].ssrc;
       let f;
-      const p = e.matchPrefix(t, "a=ssrc-group:FID").map((b) => b.substring(17).split(" ").map((x) => parseInt(x, 10)));
+      const p = e.matchPrefix(t, "a=ssrc-group:FID").map((b) => b.substring(17).split(" ").map((w) => parseInt(w, 10)));
       p.length > 0 && p[0].length > 1 && p[0][0] === h && (f = p[0][1]), s.codecs.forEach((b) => {
         if (b.name.toUpperCase() === "RTX" && b.parameters.apt) {
           let k = {
@@ -18458,7 +18458,7 @@ t=0 0\r
     }, i.exports = e;
   })(hh)), hh.exports;
 }
-var sT = PR(), ps = /* @__PURE__ */ bR(sT), DR = /* @__PURE__ */ f1({ __proto__: null, default: ps }, [sT]);
+var sT = PR(), ps = /* @__PURE__ */ bR(sT), DR = /* @__PURE__ */ fw({ __proto__: null, default: ps }, [sT]);
 function Yl(i) {
   if (!i.RTCIceCandidate || i.RTCIceCandidate && "foundation" in i.RTCIceCandidate.prototype)
     return;
@@ -18790,33 +18790,33 @@ var nt;
 (function(i) {
   i[i.NotAllowed = 0] = "NotAllowed", i[i.ServerUnreachable = 1] = "ServerUnreachable", i[i.InternalError = 2] = "InternalError", i[i.Cancelled = 3] = "Cancelled", i[i.LeaveRequest = 4] = "LeaveRequest", i[i.Timeout = 5] = "Timeout", i[i.WebSocket = 6] = "WebSocket", i[i.ServiceNotFound = 7] = "ServiceNotFound";
 })(nt || (nt = {}));
-class Se extends Fn {
+class ke extends Fn {
   constructor(e, t, a, s) {
     super(1, e), this.name = "ConnectionError", this.status = a, this.reason = t, this.context = s, this.reasonName = nt[t];
   }
   static notAllowed(e, t, a) {
-    return new Se(e, nt.NotAllowed, t, a);
+    return new ke(e, nt.NotAllowed, t, a);
   }
   static timeout(e) {
-    return new Se(e, nt.Timeout);
+    return new ke(e, nt.Timeout);
   }
   static leaveRequest(e, t) {
-    return new Se(e, nt.LeaveRequest, void 0, t);
+    return new ke(e, nt.LeaveRequest, void 0, t);
   }
   static internal(e, t) {
-    return new Se(e, nt.InternalError, void 0, t);
+    return new ke(e, nt.InternalError, void 0, t);
   }
   static cancelled(e) {
-    return new Se(e, nt.Cancelled);
+    return new ke(e, nt.Cancelled);
   }
   static serverUnreachable(e, t) {
-    return new Se(e, nt.ServerUnreachable, t);
+    return new ke(e, nt.ServerUnreachable, t);
   }
   static websocket(e, t, a) {
-    return new Se(e, nt.WebSocket, t, a);
+    return new ke(e, nt.WebSocket, t, a);
   }
   static serviceNotFound(e, t) {
-    return new Se(e, nt.ServiceNotFound, void 0, t);
+    return new ke(e, nt.ServiceNotFound, void 0, t);
   }
 }
 class Km extends Ji {
@@ -18907,14 +18907,14 @@ var ee;
 (function(i) {
   i.TrackPublished = "trackPublished", i.TrackSubscribed = "trackSubscribed", i.TrackSubscriptionFailed = "trackSubscriptionFailed", i.TrackUnpublished = "trackUnpublished", i.TrackUnsubscribed = "trackUnsubscribed", i.TrackMuted = "trackMuted", i.TrackUnmuted = "trackUnmuted", i.LocalTrackPublished = "localTrackPublished", i.LocalTrackUnpublished = "localTrackUnpublished", i.LocalTrackCpuConstrained = "localTrackCpuConstrained", i.LocalSenderCreated = "localSenderCreated", i.ParticipantMetadataChanged = "participantMetadataChanged", i.ParticipantNameChanged = "participantNameChanged", i.DataReceived = "dataReceived", i.SipDTMFReceived = "sipDTMFReceived", i.TranscriptionReceived = "transcriptionReceived", i.IsSpeakingChanged = "isSpeakingChanged", i.ConnectionQualityChanged = "connectionQualityChanged", i.TrackStreamStateChanged = "trackStreamStateChanged", i.TrackSubscriptionPermissionChanged = "trackSubscriptionPermissionChanged", i.TrackSubscriptionStatusChanged = "trackSubscriptionStatusChanged", i.TrackCpuConstrained = "trackCpuConstrained", i.MediaDevicesError = "mediaDevicesError", i.AudioStreamAcquired = "audioStreamAcquired", i.ParticipantPermissionsChanged = "participantPermissionsChanged", i.PCTrackAdded = "pcTrackAdded", i.AttributesChanged = "attributesChanged", i.LocalTrackSubscribed = "localTrackSubscribed", i.ChatMessage = "chatMessage", i.Active = "active";
 })(ee || (ee = {}));
-var se;
+var re;
 (function(i) {
   i.TransportsCreated = "transportsCreated", i.Connected = "connected", i.Disconnected = "disconnected", i.Resuming = "resuming", i.Resumed = "resumed", i.Restarting = "restarting", i.Restarted = "restarted", i.SignalResumed = "signalResumed", i.SignalRestarted = "signalRestarted", i.Closing = "closing", i.MediaTrackAdded = "mediaTrackAdded", i.ActiveSpeakersUpdate = "activeSpeakersUpdate", i.DataPacketReceived = "dataPacketReceived", i.RTPVideoMapUpdate = "rtpVideoMapUpdate", i.DCBufferStatusChanged = "dcBufferStatusChanged", i.ParticipantUpdate = "participantUpdate", i.RoomUpdate = "roomUpdate", i.SpeakersChanged = "speakersChanged", i.StreamStateChanged = "streamStateChanged", i.ConnectionQualityUpdate = "connectionQualityUpdate", i.SubscriptionError = "subscriptionError", i.SubscriptionPermissionUpdate = "subscriptionPermissionUpdate", i.RemoteMute = "remoteMute", i.SubscribedQualityUpdate = "subscribedQualityUpdate", i.LocalTrackUnpublished = "localTrackUnpublished", i.LocalTrackSubscribed = "localTrackSubscribed", i.Offline = "offline", i.SignalRequestResponse = "signalRequestResponse", i.SignalConnected = "signalConnected", i.RoomMoved = "roomMoved", i.PublishDataTrackResponse = "publishDataTrackResponse", i.UnPublishDataTrackResponse = "unPublishDataTrackResponse", i.DataTrackSubscriberHandles = "dataTrackSubscriberHandles", i.DataTrackPacketReceived = "dataTrackPacketReceived", i.Joined = "joined", i.TokenRefreshed = "tokenRefreshed", i.ServerRegionsReported = "serverRegionsReported";
-})(se || (se = {}));
-var ue;
+})(re || (re = {}));
+var ce;
 (function(i) {
   i.Message = "message", i.Muted = "muted", i.Unmuted = "unmuted", i.Restarted = "restarted", i.Ended = "ended", i.Subscribed = "subscribed", i.Unsubscribed = "unsubscribed", i.CpuConstrained = "cpuConstrained", i.UpdateSettings = "updateSettings", i.UpdateSubscription = "updateSubscription", i.AudioPlaybackStarted = "audioPlaybackStarted", i.AudioPlaybackFailed = "audioPlaybackFailed", i.AudioSilenceDetected = "audioSilenceDetected", i.VisibilityChanged = "visibilityChanged", i.VideoDimensionsChanged = "videoDimensionsChanged", i.VideoPlaybackStarted = "videoPlaybackStarted", i.VideoPlaybackFailed = "videoPlaybackFailed", i.ElementAttached = "elementAttached", i.ElementDetached = "elementDetached", i.UpstreamPaused = "upstreamPaused", i.UpstreamResumed = "upstreamResumed", i.SubscriptionPermissionChanged = "subscriptionPermissionChanged", i.SubscriptionStatusChanged = "subscriptionStatusChanged", i.SubscriptionFailed = "subscriptionFailed", i.TrackProcessorUpdate = "trackProcessorUpdate", i.AudioTrackFeatureUpdate = "audioTrackFeatureUpdate", i.TranscriptionReceived = "transcriptionReceived", i.TimeSyncUpdate = "timeSyncUpdate", i.PreConnectBufferFlushed = "preConnectBufferFlushed";
-})(ue || (ue = {}));
+})(ce || (ce = {}));
 function VR(i) {
   return typeof i > "u" ? i : typeof structuredClone == "function" ? typeof i == "object" && i !== null ? structuredClone(Object.assign({}, i)) : structuredClone(i) : JSON.parse(JSON.stringify(i));
 }
@@ -19258,22 +19258,22 @@ class X extends gn.EventEmitter {
     }), e && No.splice(No.indexOf(e), 1)), e || (e = document.createElement(t))), this.attachedElements.includes(e) || this.attachedElements.push(e), ds(this.mediaStreamTrack, e);
     const a = e.srcObject.getTracks(), s = a.some((c) => c.kind === "audio");
     return e.play().then(() => {
-      this.emit(s ? ue.AudioPlaybackStarted : ue.VideoPlaybackStarted);
+      this.emit(s ? ce.AudioPlaybackStarted : ce.VideoPlaybackStarted);
     }).catch((c) => {
-      c.name === "NotAllowedError" ? this.emit(s ? ue.AudioPlaybackFailed : ue.VideoPlaybackFailed, c) : c.name === "AbortError" ? _e.debug("".concat(s ? "audio" : "video", " playback aborted, likely due to new play request")) : _e.warn("could not playback ".concat(s ? "audio" : "video"), c), s && e && a.some((u) => u.kind === "video") && c.name === "NotAllowedError" && (e.muted = !0, e.play().catch(() => {
+      c.name === "NotAllowedError" ? this.emit(s ? ce.AudioPlaybackFailed : ce.VideoPlaybackFailed, c) : c.name === "AbortError" ? _e.debug("".concat(s ? "audio" : "video", " playback aborted, likely due to new play request")) : _e.warn("could not playback ".concat(s ? "audio" : "video"), c), s && e && a.some((u) => u.kind === "video") && c.name === "NotAllowedError" && (e.muted = !0, e.play().catch(() => {
       }));
-    }), this.emit(ue.ElementAttached, e), e;
+    }), this.emit(ce.ElementAttached, e), e;
   }
   detach(e) {
     try {
       if (e) {
         gs(this.mediaStreamTrack, e);
         const a = this.attachedElements.indexOf(e);
-        return a >= 0 && (this.attachedElements.splice(a, 1), this.recycleElement(e), this.emit(ue.ElementDetached, e)), e;
+        return a >= 0 && (this.attachedElements.splice(a, 1), this.recycleElement(e), this.emit(ce.ElementDetached, e)), e;
       }
       const t = [];
       return this.attachedElements.forEach((a) => {
-        gs(this.mediaStreamTrack, a), t.push(a), this.recycleElement(a), this.emit(ue.ElementDetached, a);
+        gs(this.mediaStreamTrack, a), t.push(a), this.recycleElement(a), this.emit(ce.ElementDetached, a);
       }), this.attachedElements = [], t;
     } finally {
       this.attachedElements.length === 0 && this.removeAppVisibilityListener();
@@ -19581,7 +19581,7 @@ function d0() {
   s.width = i, s.height = e;
   const c = s.getContext("2d");
   c?.fillRect(0, 0, s.width, s.height), a && c && (c.beginPath(), c.arc(i / 2, e / 2, 50, 0, Math.PI * 2, !0), c.closePath(), c.fillStyle = "grey", c.fill());
-  const d = s.captureStream().getTracks(), h = ye(d, 1), f = h[0];
+  const d = s.captureStream().getTracks(), h = be(d, 1), f = h[0];
   if (!f)
     throw Error("Could not get empty media stream video track");
   return f.enabled = t, f;
@@ -19593,7 +19593,7 @@ function yh() {
     s.gain.setValueAtTime(0, 0);
     const c = t.createMediaStreamDestination();
     a.connect(s), s.connect(c), a.start();
-    var i = c.stream.getAudioTracks(), e = ye(i, 1);
+    var i = c.stream.getAudioTracks(), e = be(i, 1);
     if (Lo = e[0], !Lo)
       throw Error("Could not get empty media stream audio track");
     Lo.enabled = !1;
@@ -19940,21 +19940,21 @@ function Zm(i) {
     return e;
   }
   const b = function() {
-    for (var k = arguments.length, x = new Array(k), T = 0; T < k; T++)
-      x[T] = arguments[T];
+    for (var k = arguments.length, w = new Array(k), T = 0; T < k; T++)
+      w[T] = arguments[T];
     const P = this;
     return new Promise((_, U) => {
-      const B = function() {
+      const z = function() {
         if (c = void 0, f = Date.now(), !u) {
-          const C = i.apply(P, x);
+          const C = i.apply(P, w);
           d && d(C), p.forEach((M) => {
             let D = M.resolve;
             return D(C);
           }), p = [];
         }
       }, S = u && c === void 0;
-      if (c !== void 0 && Et.clearTimeout(c), c = Et.setTimeout(B, v()), S) {
-        const C = i.apply(P, x);
+      if (c !== void 0 && Et.clearTimeout(c), c = Et.setTimeout(z, v()), S) {
+        const C = i.apply(P, w);
         return d && d(C), _(C);
       }
       p.push({
@@ -19964,8 +19964,8 @@ function Zm(i) {
     });
   };
   return b.cancel = function(k) {
-    c !== void 0 && Et.clearTimeout(c), p.forEach((x) => {
-      let T = x.reject;
+    c !== void 0 && Et.clearTimeout(c), p.forEach((w) => {
+      let T = w.reject;
       return T(k);
     }), p = [];
   }, b;
@@ -19986,13 +19986,13 @@ class yT extends X {
   }
   /** @internal */
   setMuted(e) {
-    this.isMuted !== e && (this.isMuted = e, this._mediaStreamTrack.enabled = !e, this.emit(e ? ue.Muted : ue.Unmuted, this));
+    this.isMuted !== e && (this.isMuted = e, this._mediaStreamTrack.enabled = !e, this.emit(e ? ce.Muted : ce.Unmuted, this));
   }
   /** @internal */
   setMediaStream(e) {
     this.mediaStream = e;
     const t = (a) => {
-      a.track === this._mediaStreamTrack && (e.removeEventListener("removetrack", t), this.receiver && "playoutDelayHint" in this.receiver && (this.receiver.playoutDelayHint = void 0), this.receiver = void 0, this._currentBitrate = 0, this.emit(ue.Ended, this));
+      a.track === this._mediaStreamTrack && (e.removeEventListener("removetrack", t), this.receiver && "playoutDelayHint" in this.receiver && (this.receiver.playoutDelayHint = void 0), this.receiver = void 0, this._currentBitrate = 0, this.emit(ce.Ended, this));
     };
     e.addEventListener("removetrack", t);
   }
@@ -20045,7 +20045,7 @@ class yT extends X {
       const a = (t = this.receiver) === null || t === void 0 ? void 0 : t.getSynchronizationSources()[0];
       if (a) {
         const s = a.timestamp, c = a.rtpTimestamp;
-        c && this.rtpTimestamp !== c && (this.emit(ue.TimeSyncUpdate, {
+        c && this.rtpTimestamp !== c && (this.emit(ce.TimeSyncUpdate, {
           timestamp: s,
           rtpTimestamp: c
         }), this.rtpTimestamp = c);
@@ -20200,7 +20200,7 @@ class $m extends yT {
         }, Sh);
         return;
       }
-      this.lastVisible = d, this.emit(ue.VisibilityChanged, d, this);
+      this.lastVisible = d, this.emit(ce.VisibilityChanged, d, this);
     }
   }
   updateDimensions() {
@@ -20214,7 +20214,7 @@ class $m extends yT {
     ((e = this.lastDimensions) === null || e === void 0 ? void 0 : e.width) === a && ((t = this.lastDimensions) === null || t === void 0 ? void 0 : t.height) === s || (this.lastDimensions = {
       width: a,
       height: s
-    }, this.emit(ue.VideoDimensionsChanged, this.lastDimensions, this));
+    }, this.emit(ce.VideoDimensionsChanged, this.lastDimensions, this));
   }
   getPixelDensity() {
     var e;
@@ -20385,13 +20385,13 @@ class B_ extends gn.EventEmitter {
     }
   }
   setupEngine(e) {
-    e.on(se.RTPVideoMapUpdate, (t) => {
+    e.on(re.RTPVideoMapUpdate, (t) => {
       this.postRTPMap(t);
     });
   }
   setupEventListeners(e, t) {
     e.on(Y.TrackPublished, (a, s) => this.setParticipantCryptorEnabled(a.trackInfo.encryption !== it.NONE, s.identity)), e.on(Y.ConnectionStateChanged, (a) => {
-      a === Ee.Connected && e.remoteParticipants.forEach((s) => {
+      a === Te.Connected && e.remoteParticipants.forEach((s) => {
         s.trackPublications.forEach((c) => {
           this.setParticipantCryptorEnabled(c.trackInfo.encryption !== it.NONE, s.identity);
         });
@@ -21108,7 +21108,7 @@ class J_ {
     };
     this.opened = new tn((d, h) => {
       const f = () => {
-        h(Se.websocket("Encountered websocket error during connection establishment"));
+        h(ke.websocket("Encountered websocket error during connection establishment"));
       };
       c.onopen = () => {
         d({
@@ -21143,7 +21143,7 @@ class J_ {
             once: !0
           });
         }), v = yield tn.race([Qt(250), p]);
-        v ? d(v) : h(Se.websocket("Encountered unspecified websocket error without a timely close event"));
+        v ? d(v) : h(ke.websocket("Encountered unspecified websocket error without a timely close event"));
       });
       c.onclose = (p) => {
         let v = p.code, b = p.reason;
@@ -21221,75 +21221,75 @@ class np {
       return (function* () {
         const b = yield f.connectionLock.lock();
         f.connectOptions = d, f.useV0SignalPath = p;
-        const k = h_(d.clientInfoCapabilities), x = p ? $_(u, k, d) : yield eM(u, k, d, v), T = C_(c, x, p).toString(), P = w_(T).toString();
+        const k = h_(d.clientInfoCapabilities), w = p ? $_(u, k, d) : yield eM(u, k, d, v), T = C_(c, w, p).toString(), P = w_(T).toString();
         return new Promise((_, U) => A(f, void 0, void 0, function* () {
-          var B, S;
+          var z, S;
           try {
             let C = !1;
             const M = (G) => A(this, void 0, void 0, function* () {
               if (C)
                 return;
               C = !0;
-              const te = G instanceof Event ? G.currentTarget : G, he = x_(te, "Abort handler called");
-              this.streamWriter && !this.isDisconnected ? this.sendLeave().then(() => this.close(he)).catch((me) => {
-                this.log.error(me), this.close();
-              }) : this.close(), D(), U(Se.cancelled(he));
+              const Z = G instanceof Event ? G.currentTarget : G, fe = x_(Z, "Abort handler called");
+              this.streamWriter && !this.isDisconnected ? this.sendLeave().then(() => this.close(fe)).catch((he) => {
+                this.log.error(he), this.close();
+              }) : this.close(), D(), U(ke.cancelled(fe));
             });
             h?.addEventListener("abort", M);
             const D = () => {
-              clearTimeout(V), h?.removeEventListener("abort", M);
-            }, V = setTimeout(() => {
-              M(Se.timeout("room connection has timed out (signal)"));
-            }, d.websocketTimeout), Z = (G, te) => {
-              this.handleSignalConnected(G, V, te);
-            }, F = new URL(T);
-            if (F.searchParams.has("access_token") && F.searchParams.set("access_token", "<redacted>"), this.ws) {
+              clearTimeout(H), h?.removeEventListener("abort", M);
+            }, H = setTimeout(() => {
+              M(ke.timeout("room connection has timed out (signal)"));
+            }, d.websocketTimeout), W = (G, Z) => {
+              this.handleSignalConnected(G, H, Z);
+            }, B = new URL(T);
+            if (B.searchParams.has("access_token") && B.searchParams.set("access_token", "<redacted>"), this.ws) {
               const G = performance.now();
               yield this.close(!1), this.log.debug("closed previous ws connection in ".concat(performance.now() - G, "ms"));
             }
-            this.log.info("signal connecting to ".concat(F), {
+            this.log.info("signal connecting to ".concat(B), {
               reconnect: d.reconnect,
               reconnectReason: d.reconnectReason
             }), this.ws = new J_(T);
             try {
-              this.ws.closed.then(($) => {
-                var re;
-                this.isEstablishingConnection && U(Se.internal("Websocket got closed during a (re)connection attempt: ".concat($.reason))), $.closeCode !== 1e3 && (this.log.warn("websocket closed", {
-                  reason: $.reason,
-                  code: $.closeCode,
-                  wasClean: $.closeCode === 1e3,
+              this.ws.closed.then((ie) => {
+                var le;
+                this.isEstablishingConnection && U(ke.internal("Websocket got closed during a (re)connection attempt: ".concat(ie.reason))), ie.closeCode !== 1e3 && (this.log.warn("websocket closed", {
+                  reason: ie.reason,
+                  code: ie.closeCode,
+                  wasClean: ie.closeCode === 1e3,
                   state: this.state
-                }), this.state === tt.CONNECTED && this.handleOnClose((re = $.reason) !== null && re !== void 0 ? re : "Unexpected WS error"));
-              }).catch(($) => {
-                this.isEstablishingConnection && U(Se.internal("Websocket error during a (re)connection attempt: ".concat($)));
+                }), this.state === tt.CONNECTED && this.handleOnClose((le = ie.reason) !== null && le !== void 0 ? le : "Unexpected WS error"));
+              }).catch((ie) => {
+                this.isEstablishingConnection && U(ke.internal("Websocket error during a (re)connection attempt: ".concat(ie)));
               });
-              const G = yield this.ws.opened.catch(($) => A(this, void 0, void 0, function* () {
+              const G = yield this.ws.opened.catch((ie) => A(this, void 0, void 0, function* () {
                 if (this.state !== tt.CONNECTED) {
-                  this.state = tt.DISCONNECTED, clearTimeout(V);
-                  const re = yield this.handleConnectionError($, P);
-                  U(re);
+                  this.state = tt.DISCONNECTED, clearTimeout(H);
+                  const le = yield this.handleConnectionError(ie, P);
+                  U(le);
                   return;
                 }
-                this.handleWSError($), U($);
+                this.handleWSError(ie), U(ie);
               }));
-              if (clearTimeout(V), !G)
+              if (clearTimeout(H), !G)
                 return;
-              const te = G.readable.getReader();
+              const Z = G.readable.getReader();
               this.streamWriter = G.writable.getWriter();
-              const he = yield te.read();
-              if (te.releaseLock(), !he.value)
-                throw Se.internal("no message received as first message");
-              const me = h0(he.value), oe = this.validateFirstMessage(me, (B = d.reconnect) !== null && B !== void 0 ? B : !1);
-              if (!oe.isValid) {
-                U(oe.error);
+              const fe = yield Z.read();
+              if (Z.releaseLock(), !fe.value)
+                throw ke.internal("no message received as first message");
+              const he = h0(fe.value), pe = this.validateFirstMessage(he, (z = d.reconnect) !== null && z !== void 0 ? z : !1);
+              if (!pe.isValid) {
+                U(pe.error);
                 return;
               }
-              ((S = me.message) === null || S === void 0 ? void 0 : S.case) === "join" && (this.pingTimeoutDuration = me.message.value.pingTimeout, this.pingIntervalDuration = me.message.value.pingInterval, this.pingTimeoutDuration && this.pingTimeoutDuration > 0 && this.log.debug("ping config", {
+              ((S = he.message) === null || S === void 0 ? void 0 : S.case) === "join" && (this.pingTimeoutDuration = he.message.value.pingTimeout, this.pingIntervalDuration = he.message.value.pingInterval, this.pingTimeoutDuration && this.pingTimeoutDuration > 0 && this.log.debug("ping config", {
                 timeout: this.pingTimeoutDuration,
                 interval: this.pingIntervalDuration
-              }), this.onJoined && this.onJoined(me.message.value));
-              const j = oe.shouldProcessFirstMessage ? me : void 0;
-              Z(G, j), _(oe.response);
+              }), this.onJoined && this.onJoined(he.message.value));
+              const F = pe.shouldProcessFirstMessage ? he : void 0;
+              W(G, F), _(pe.response);
             } catch (G) {
               U(G);
             } finally {
@@ -21644,13 +21644,13 @@ class np {
       shouldProcessFirstMessage: !0
     }) : this.isEstablishingConnection && ((u = e.message) === null || u === void 0 ? void 0 : u.case) === "leave" ? {
       isValid: !1,
-      error: Se.leaveRequest("Received leave request while trying to (re)connect", e.message.value.reason)
+      error: ke.leaveRequest("Received leave request while trying to (re)connect", e.message.value.reason)
     } : t ? {
       isValid: !1,
-      error: Se.internal("Unexpected first message")
+      error: ke.internal("Unexpected first message")
     } : {
       isValid: !1,
-      error: Se.internal("did not receive join response, got ".concat((d = e.message) === null || d === void 0 ? void 0 : d.case, " instead"))
+      error: ke.internal("did not receive join response, got ".concat((d = e.message) === null || d === void 0 ? void 0 : d.case, " instead"))
     };
   }
   /**
@@ -21667,20 +21667,20 @@ class np {
         switch (a.status) {
           case 404:
             const s = yield a.text();
-            return s.includes("requested room does not exist") ? Se.notAllowed(s, a.status) : Se.serviceNotFound("v1 RTC path not found. Consider upgrading your LiveKit server version", "v0-rtc");
+            return s.includes("requested room does not exist") ? ke.notAllowed(s, a.status) : ke.serviceNotFound("v1 RTC path not found. Consider upgrading your LiveKit server version", "v0-rtc");
           case 401:
           case 403:
             const c = yield a.text();
-            return Se.notAllowed(c, a.status);
+            return ke.notAllowed(c, a.status);
           default:
             break;
         }
-        return e instanceof Se ? e : Se.internal("Encountered unknown websocket error during connection: ".concat(e), {
+        return e instanceof ke ? e : ke.internal("Encountered unknown websocket error during connection: ".concat(e), {
           status: a.status,
           statusText: a.statusText
         });
       } catch (a) {
-        return a instanceof Se ? a : Se.serverUnreachable(a instanceof Error ? a.message : "server was not reachable");
+        return a instanceof ke ? a : ke.serverUnreachable(a instanceof Error ? a.message : "server was not reachable");
       }
     });
   }
@@ -21732,16 +21732,16 @@ function eM(i, e, t, a) {
     if (vT()) {
       const b = new CompressionStream("gzip"), k = b.writable.getWriter();
       k.write(new Uint8Array(u)), k.close();
-      const x = [], T = b.readable.getReader();
+      const w = [], T = b.readable.getReader();
       for (; ; ) {
-        const B = yield T.read(), S = B.done, C = B.value;
+        const z = yield T.read(), S = z.done, C = z.value;
         if (S) break;
-        x.push(C);
+        w.push(C);
       }
-      const P = x.reduce((B, S) => B + S.length, 0), _ = new Uint8Array(P);
+      const P = w.reduce((z, S) => z + S.length, 0), _ = new Uint8Array(P);
       let U = 0;
-      for (const B of x)
-        _.set(B, U), U += B.length;
+      for (const z of w)
+        _.set(z, U), U += z.length;
       d = _, h = Qh.GZIP;
     } else
       d = u, h = Qh.NONE;
@@ -21749,7 +21749,7 @@ function eM(i, e, t, a) {
       joinRequest: d,
       compression: h
     }).toBinary(), v = (b) => {
-      const k = Array.from(b, (x) => String.fromCodePoint(x)).join("");
+      const k = Array.from(b, (w) => String.fromCodePoint(w)).join("");
       return btoa(k);
     };
     return s.set("join_request", v(p).replace(/\+/g, "-").replace(/\//g, "_")), s;
@@ -21824,7 +21824,7 @@ class tM {
   cleanup() {
     const e = Date.now();
     for (const a of this._map.entries()) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[0];
       t[1].expiresAt < e && this._map.delete(s);
     }
@@ -21836,7 +21836,7 @@ class tM {
   forEach(e) {
     this.cleanup();
     for (const a of this._map.entries()) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[0], c = t[1];
       c.expiresAt >= Date.now() && e(c.value, s, this.asValueMap());
     }
@@ -21845,7 +21845,7 @@ class tM {
     this.cleanup();
     const t = [], a = this.asValueMap();
     for (const c of a.entries()) {
-      var s = ye(c, 2);
+      var s = be(c, 2);
       const u = s[0], d = s[1];
       t.push(e(d, u, a));
     }
@@ -21854,7 +21854,7 @@ class tM {
   asValueMap() {
     const e = /* @__PURE__ */ new Map();
     for (const a of this._map.entries()) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[0], c = t[1];
       c.expiresAt >= Date.now() && e.set(s, c.value);
     }
@@ -22348,8 +22348,8 @@ function nM() {
           rtp: [],
           fmtp: []
         }), p = f[f.length - 1]);
-        for (var x = 0; x < (s[b] || []).length; x += 1) {
-          var T = s[b][x];
+        for (var w = 0; w < (s[b] || []).length; w += 1) {
+          var T = s[b][w];
           if (T.reg.test(k))
             return a(T, p, k);
         }
@@ -22434,8 +22434,8 @@ function iM() {
     }), u.media.forEach(function(v) {
       p.push(a("m", i.m[0], v)), f.forEach(function(b) {
         i[b].forEach(function(k) {
-          k.name in v && v[k.name] != null ? p.push(a(b, k, v)) : k.push in v && v[k.push] != null && v[k.push].forEach(function(x) {
-            p.push(a(b, k, x));
+          k.name in v && v[k.name] != null ? p.push(a(b, k, v)) : k.push in v && v[k.push] != null && v[k.push].forEach(function(w) {
+            p.push(a(b, k, w));
           });
         });
       });
@@ -22555,7 +22555,7 @@ class C0 extends gn.EventEmitter {
             let b = !1;
             for (const k of h.fmtp)
               if (k.payload === v) {
-                k.config = k.config.split(";").filter((x) => !x.includes("maxaveragebitrate")).join(";"), p.maxbr > 0 && (k.config += ";maxaveragebitrate=".concat(p.maxbr * 1e3)), b = !0;
+                k.config = k.config.split(";").filter((w) => !w.includes("maxaveragebitrate")).join(";"), p.maxbr > 0 && (k.config += ";maxaveragebitrate=".concat(p.maxbr * 1e3)), b = !0;
                 break;
               }
             return b || p.maxbr > 0 && h.fmtp.push({
@@ -23095,15 +23095,15 @@ class x0 {
         if (a.getConnectionState() !== "connected")
           return new Promise((h, f) => A(c, void 0, void 0, function* () {
             const p = () => {
-              this.log.warn("abort transport connection", this.logContext), Et.clearTimeout(v), f(Se.cancelled("room connection has been cancelled"));
+              this.log.warn("abort transport connection", this.logContext), Et.clearTimeout(v), f(ke.cancelled("room connection has been cancelled"));
             };
             s?.signal.aborted && p(), s?.signal.addEventListener("abort", p);
             const v = Et.setTimeout(() => {
-              s?.signal.removeEventListener("abort", p), f(Se.internal("could not establish pc connection"));
+              s?.signal.removeEventListener("abort", p), f(ke.internal("could not establish pc connection"));
             }, u);
             for (; this.state !== dt.CONNECTED; )
               if (yield Qt(50), s?.signal.aborted) {
-                f(Se.cancelled("room connection has been cancelled"));
+                f(ke.cancelled("room connection has been cancelled"));
                 return;
               }
             Et.clearTimeout(v), s?.signal.removeEventListener("abort", p), h();
@@ -23183,7 +23183,7 @@ class CT extends X {
     }), 5e3), this.handleTrackUnmuteEvent = () => A(this, void 0, void 0, function* () {
       this.debouncedTrackMuteHandler.cancel("unmute"), yield this.resumeUpstream();
     }), this.handleEnded = () => {
-      this.isInBackground && (this.reacquireTrack = !0), this._mediaStreamTrack.removeEventListener("mute", this.handleTrackMuteEvent), this._mediaStreamTrack.removeEventListener("unmute", this.handleTrackUnmuteEvent), this.emit(ue.Ended, this);
+      this.isInBackground && (this.reacquireTrack = !0), this._mediaStreamTrack.removeEventListener("mute", this.handleTrackMuteEvent), this._mediaStreamTrack.removeEventListener("unmute", this.handleTrackUnmuteEvent), this.emit(ce.Ended, this);
     }, this.reacquireTrack = !1, this.providedByUser = s, this.muteLock = new Gt(), this.pauseUpstreamLock = new Gt(), this.trackChangeLock = new Gt(), this.trackChangeLock.lock().then((u) => A(this, void 0, void 0, function* () {
       try {
         yield this.setMediaStreamTrack(e, !0);
@@ -23346,14 +23346,14 @@ class CT extends X {
           gs(this.mediaStreamTrack, v);
         }), this._mediaStreamTrack.removeEventListener("ended", this.handleEnded), this._mediaStreamTrack.stop();
         const p = (yield navigator.mediaDevices.getUserMedia(h)).getTracks()[0];
-        return this.kind === X.Kind.Video && (yield p.applyConstraints(d)), p.addEventListener("ended", this.handleEnded), this.log.debug("re-acquired MediaStreamTrack", this.logContext), yield this.setMediaStreamTrack(p, !1, t), this._constraints = e, this.pendingDeviceChange = !1, this.emit(ue.Restarted, this), this.manuallyStopped && (this.log.warn("track was stopped during a restart, stopping restarted track", this.logContext), this.stop()), this;
+        return this.kind === X.Kind.Video && (yield p.applyConstraints(d)), p.addEventListener("ended", this.handleEnded), this.log.debug("re-acquired MediaStreamTrack", this.logContext), yield this.setMediaStreamTrack(p, !1, t), this._constraints = e, this.pendingDeviceChange = !1, this.emit(ce.Restarted, this), this.manuallyStopped && (this.log.warn("track was stopped during a restart, stopping restarted track", this.logContext), this.stop()), this;
       } finally {
         a();
       }
     });
   }
   setTrackMuted(e) {
-    this.log.debug("setting ".concat(this.kind, " track ").concat(e ? "muted" : "unmuted"), this.logContext), !(this.isMuted === e && this._mediaStreamTrack.enabled !== e) && (this.isMuted = e, this._mediaStreamTrack.enabled = !e, this.emit(e ? ue.Muted : ue.Unmuted, this));
+    this.log.debug("setting ".concat(this.kind, " track ").concat(e ? "muted" : "unmuted"), this.logContext), !(this.isMuted === e && this._mediaStreamTrack.enabled !== e) && (this.isMuted = e, this._mediaStreamTrack.enabled = !e, this.emit(e ? ce.Muted : ce.Unmuted, this));
   }
   get needsReAcquisition() {
     return this._mediaStreamTrack.readyState !== "live" || this._mediaStreamTrack.muted || !this._mediaStreamTrack.enabled || this.reacquireTrack;
@@ -23389,7 +23389,7 @@ class CT extends X {
           this.log.warn("unable to pause upstream for an unpublished track", this.logContext);
           return;
         }
-        this._isUpstreamPaused = !0, this.emit(ue.UpstreamPaused, this);
+        this._isUpstreamPaused = !0, this.emit(ce.UpstreamPaused, this);
         const a = nn();
         if (a?.name === "Safari" && si(a.version, "12.0") < 0)
           throw new Km("pauseUpstream is not supported on Safari < 12.");
@@ -23410,7 +23410,7 @@ class CT extends X {
           this.log.warn("unable to resume upstream for an unpublished track", this.logContext);
           return;
         }
-        this._isUpstreamPaused = !1, this.emit(ue.UpstreamResumed, this), ((e = this.sender.transport) === null || e === void 0 ? void 0 : e.state) !== "closed" && (yield this.sender.replaceTrack(this.mediaStreamTrack));
+        this._isUpstreamPaused = !1, this.emit(ce.UpstreamResumed, this), ((e = this.sender.transport) === null || e === void 0 ? void 0 : e.state) !== "closed" && (yield this.sender.replaceTrack(this.mediaStreamTrack));
       } finally {
         t();
       }
@@ -23471,7 +23471,7 @@ class CT extends X {
               f !== a.processorElement && s && (gs(a._mediaStreamTrack, f), ds(a.processor.processedTrack, f));
             yield (c = a.sender) === null || c === void 0 ? void 0 : c.replaceTrack(a.processor.processedTrack);
           }
-          a.emit(ue.TrackProcessorUpdate, a.processor);
+          a.emit(ce.TrackProcessorUpdate, a.processor);
         } finally {
           u();
         }
@@ -23513,7 +23513,7 @@ class CT extends X {
       let t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : !0;
       return (function* () {
         var a, s;
-        e.processor && (e.log.debug("stopping processor", e.logContext), (a = e.processor.processedTrack) === null || a === void 0 || a.stop(), yield e.processor.destroy(), e.processor = void 0, t || ((s = e.processorElement) === null || s === void 0 || s.remove(), e.processorElement = void 0), yield e._mediaStreamTrack.applyConstraints(e._constraints), yield e.setMediaStreamTrack(e._mediaStreamTrack, !0), e.emit(ue.TrackProcessorUpdate));
+        e.processor && (e.log.debug("stopping processor", e.logContext), (a = e.processor.processedTrack) === null || a === void 0 || a.stop(), yield e.processor.destroy(), e.processor = void 0, t || ((s = e.processorElement) === null || s === void 0 || s.remove(), e.processorElement = void 0), yield e._mediaStreamTrack.applyConstraints(e._constraints), yield e.setMediaStreamTrack(e._mediaStreamTrack, !0), e.emit(ce.TrackProcessorUpdate));
       })();
     });
   }
@@ -23582,9 +23582,9 @@ class mu extends CT {
       }
       u && this.prevStats && (this._currentBitrate = Nu(u, this.prevStats)), this.prevStats = u;
     }), this.handleKrispNoiseFilterEnable = () => {
-      this.isKrispNoiseFilterEnabled = !0, this.log.debug("Krisp noise filter enabled", this.logContext), this.emit(ue.AudioTrackFeatureUpdate, this, Dt.TF_ENHANCED_NOISE_CANCELLATION, !0);
+      this.isKrispNoiseFilterEnabled = !0, this.log.debug("Krisp noise filter enabled", this.logContext), this.emit(ce.AudioTrackFeatureUpdate, this, Dt.TF_ENHANCED_NOISE_CANCELLATION, !0);
     }, this.handleKrispNoiseFilterDisable = () => {
-      this.isKrispNoiseFilterEnabled = !1, this.log.debug("Krisp noise filter disabled", this.logContext), this.emit(ue.AudioTrackFeatureUpdate, this, Dt.TF_ENHANCED_NOISE_CANCELLATION, !1);
+      this.isKrispNoiseFilterEnabled = !1, this.log.debug("Krisp noise filter disabled", this.logContext), this.emit(ce.AudioTrackFeatureUpdate, this, Dt.TF_ENHANCED_NOISE_CANCELLATION, !1);
     }, this.audioContext = s, this.checkForSilence();
   }
   mute() {
@@ -23661,7 +23661,7 @@ class mu extends CT {
           audioContext: this.audioContext,
           localTrack: this
         };
-        this.log.debug("setting up audio processor ".concat(e.name), this.logContext), yield e.init(s), this.processor = e, this.processor.processedTrack && (yield (t = this.sender) === null || t === void 0 ? void 0 : t.replaceTrack(this.processor.processedTrack), this.processor.processedTrack.addEventListener("enable-lk-krisp-noise-filter", this.handleKrispNoiseFilterEnable), this.processor.processedTrack.addEventListener("disable-lk-krisp-noise-filter", this.handleKrispNoiseFilterDisable)), this.emit(ue.TrackProcessorUpdate, this.processor);
+        this.log.debug("setting up audio processor ".concat(e.name), this.logContext), yield e.init(s), this.processor = e, this.processor.processedTrack && (yield (t = this.sender) === null || t === void 0 ? void 0 : t.replaceTrack(this.processor.processedTrack), this.processor.processedTrack.addEventListener("enable-lk-krisp-noise-filter", this.handleKrispNoiseFilterEnable), this.processor.processedTrack.addEventListener("disable-lk-krisp-noise-filter", this.handleKrispNoiseFilterDisable)), this.emit(ce.TrackProcessorUpdate, this.processor);
       } finally {
         a();
       }
@@ -23698,7 +23698,7 @@ class mu extends CT {
   checkForSilence() {
     return A(this, void 0, void 0, function* () {
       const e = yield dT(this);
-      return e && (this.isMuted || this.log.debug("silence detected on local audio track", this.logContext), this.emit(ue.AudioSilenceDetected)), e;
+      return e && (this.isMuted || this.log.debug("silence detected on local audio track", this.logContext), this.emit(ce.AudioSilenceDetected)), e;
     });
   }
 }
@@ -23737,11 +23737,11 @@ function pu(i, e, t, a) {
     // is provided. So we'll use the legacy SVC specification for now.
     // TODO: when we upstream libwebrtc, this will need additional verification
     ri() || U?.name === "Chrome" && si(U?.version, "113") < 0) {
-      const B = P.suffix == "h" ? 2 : 3, S = l_(U);
+      const z = P.suffix == "h" ? 2 : 3, S = l_(U);
       for (let C = 0; C < P.spatial; C += 1)
         _.push({
           rid: mm[2 - C],
-          maxBitrate: u.maxBitrate / Math.pow(B, C),
+          maxBitrate: u.maxBitrate / Math.pow(z, C),
           maxFramerate: v.encoding.maxFramerate,
           scaleResolutionDownBy: S ? Math.pow(2, C) : void 0
         });
@@ -23765,7 +23765,7 @@ function pu(i, e, t, a) {
   if (b.length > 0) {
     const P = b[0];
     if (b.length > 1) {
-      var x = b, T = ye(x, 2);
+      var w = b, T = be(w, 2);
       k = T[1];
     }
     const _ = Math.max(e, t);
@@ -23905,7 +23905,7 @@ class gu extends CT {
         return;
       }
       const u = new Map(c.map((h) => [h.rid, h])), d = c.some((h) => h.qualityLimitationReason === "cpu");
-      if (d !== this.isCpuConstrained && (this.isCpuConstrained = d, this.isCpuConstrained && this.emit(ue.CpuConstrained)), this.prevStats) {
+      if (d !== this.isCpuConstrained && (this.isCpuConstrained = d, this.isCpuConstrained && this.emit(ce.CpuConstrained)), this.prevStats) {
         let h = 0;
         u.forEach((f, p) => {
           var v;
@@ -24131,7 +24131,7 @@ class gu extends CT {
         const c = this.source === X.Source.ScreenShare, u = pu(c, s.width, s.height, Object.assign({}, this.publishOptions));
         yield this.applyEncodingsToSender(this.sender, u), this.encodings = u, this.lastEncodedDimensions = s;
         for (const d of this.simulcastCodecs) {
-          var a = ye(d, 2);
+          var a = be(d, 2);
           const h = a[0], f = a[1];
           if (!f.sender || ((e = f.sender.transport) === null || e === void 0 ? void 0 : e.state) === "closed" || !lT(h))
             continue;
@@ -24173,8 +24173,8 @@ class gu extends CT {
         var u, d, h, f, p, v;
         if (yield t.setProcessor.call(s, a, c), !((p = s.processor) === null || p === void 0) && p.processedTrack)
           try {
-            for (var b = !0, k = Wn(s.simulcastCodecs.values()), x; x = yield k.next(), u = x.done, !u; b = !0)
-              f = x.value, b = !1, yield (v = f.sender) === null || v === void 0 ? void 0 : v.replaceTrack(s.processor.processedTrack);
+            for (var b = !0, k = Wn(s.simulcastCodecs.values()), w; w = yield k.next(), u = w.done, !u; b = !0)
+              f = w.value, b = !1, yield (v = f.sender) === null || v === void 0 ? void 0 : v.replaceTrack(s.processor.processedTrack);
           } catch (T) {
             d = {
               error: T
@@ -24352,8 +24352,8 @@ function M0(i, e, t, a, s, c, u) {
       }
       let p = !1;
       !1 && f[0].scalabilityMode || (s && t.some((k) => k.enabled) && t.forEach((k) => k.enabled = !0), f.forEach((b, k) => {
-        var x;
-        let T = (x = b.rid) !== null && x !== void 0 ? x : "";
+        var w;
+        let T = (w = b.rid) !== null && w !== void 0 ? w : "";
         T === "" && (T = "q");
         const P = xT(T), _ = t.find((U) => U.quality === P);
         _ && b.active !== _.enabled && (p = !0, b.active = _.enabled, c.debug("setting layer ".concat(_.quality, " to ").concat(b.active ? "enabled" : "disabled"), u), vr() && (_.enabled ? (b.scaleResolutionDownBy = e[k].scaleResolutionDownBy, b.maxBitrate = e[k].maxBitrate, b.maxFrameRate = e[k].maxFrameRate) : (b.scaleResolutionDownBy = 4, b.maxBitrate = 10, b.maxFrameRate = 2)));
@@ -24473,20 +24473,20 @@ class NM extends gn.EventEmitter {
           this.reliableReceivedState.set(v.participantSid, v.sequence);
         }
         if (((s = v.value) === null || s === void 0 ? void 0 : s.case) === "speaker")
-          this.emit(se.ActiveSpeakersUpdate, v.value.value.speakers);
+          this.emit(re.ActiveSpeakersUpdate, v.value.value.speakers);
         else if (((c = v.value) === null || c === void 0 ? void 0 : c.case) === "encryptedPacket") {
           if (!this.e2eeManager) {
             this.log.error("Received encrypted packet but E2EE not set up");
             return;
           }
-          const b = yield (u = this.e2eeManager) === null || u === void 0 ? void 0 : u.handleEncryptedData(v.value.value.encryptedValue, v.value.value.iv, v.participantIdentity, v.value.value.keyIndex), k = $k.fromBinary(b.payload), x = new Yt({
+          const b = yield (u = this.e2eeManager) === null || u === void 0 ? void 0 : u.handleEncryptedData(v.value.value.encryptedValue, v.value.value.iv, v.participantIdentity, v.value.value.keyIndex), k = $k.fromBinary(b.payload), w = new Yt({
             value: k.value,
             participantIdentity: v.participantIdentity,
             participantSid: v.participantSid
           });
-          ((d = x.value) === null || d === void 0 ? void 0 : d.case) === "user" && L0(x, x.value.value), this.emit(se.DataPacketReceived, x, v.value.value.encryptionType);
+          ((d = w.value) === null || d === void 0 ? void 0 : d.case) === "user" && L0(w, w.value.value), this.emit(re.DataPacketReceived, w, v.value.value.encryptionType);
         } else
-          ((h = v.value) === null || h === void 0 ? void 0 : h.case) === "user" && L0(v, v.value.value), this.emit(se.DataPacketReceived, v, it.NONE);
+          ((h = v.value) === null || h === void 0 ? void 0 : h.case) === "user" && L0(v, v.value.value), this.emit(re.DataPacketReceived, v, it.NONE);
       } finally {
         f();
       }
@@ -24528,7 +24528,7 @@ class NM extends gn.EventEmitter {
         return;
       this.log.warn("".concat(a, " disconnected")), this.reconnectAttempts === 0 && (this.reconnectStart = Date.now());
       const c = (h) => {
-        this.log.warn("could not recover connection after ".concat(this.reconnectAttempts, " attempts, ").concat(h, "ms. giving up")), this.emit(se.Disconnected), this.close();
+        this.log.warn("could not recover connection after ".concat(this.reconnectAttempts, " attempts, ").concat(h, "ms. giving up")), this.emit(re.Disconnected), this.close();
       }, u = Date.now() - this.reconnectStart;
       let d = this.getNextRetryDelay({
         elapsedMs: u,
@@ -24538,22 +24538,22 @@ class NM extends gn.EventEmitter {
         c(u);
         return;
       }
-      a === Rh && (d = 0), this.log.debug("reconnecting in ".concat(d, "ms")), this.clearReconnectTimeout(), this.token && this.emit(se.TokenRefreshed, this.token), this.reconnectTimeout = Et.setTimeout(() => this.attemptReconnect(s).finally(() => this.reconnectTimeout = void 0), d);
+      a === Rh && (d = 0), this.log.debug("reconnecting in ".concat(d, "ms")), this.clearReconnectTimeout(), this.token && this.emit(re.TokenRefreshed, this.token), this.reconnectTimeout = Et.setTimeout(() => this.attemptReconnect(s).finally(() => this.reconnectTimeout = void 0), d);
     }, this.waitForRestarted = () => new Promise((a, s) => {
       this.pcState === zn.Connected && a();
       const c = () => {
-        this.off(se.Disconnected, u), a();
+        this.off(re.Disconnected, u), a();
       }, u = () => {
-        this.off(se.Restarted, c), s();
+        this.off(re.Restarted, c), s();
       };
-      this.once(se.Restarted, c), this.once(se.Disconnected, u);
+      this.once(re.Restarted, c), this.once(re.Disconnected, u);
     }), this.updateAndEmitDCBufferStatus = (a) => {
       if (a === Oe.RELIABLE) {
         const c = this.dataChannelForKind(a);
         c && this.reliableMessageBuffer.alignBufferedAmount(c.bufferedAmount);
       }
       const s = this.isBufferStatusLow(a);
-      typeof s < "u" && s !== this.dcBufferStatus.get(a) && (this.dcBufferStatus.set(a, s), this.emit(se.DCBufferStatusChanged, s, a));
+      typeof s < "u" && s !== this.dcBufferStatus.get(a) && (this.dcBufferStatus.set(a, s), this.emit(re.DCBufferStatusChanged, s, a));
     }, this.isBufferStatusLow = (a) => {
       const s = this.dataChannelForKind(a);
       if (s)
@@ -24563,7 +24563,7 @@ class NM extends gn.EventEmitter {
       a.forEach((c) => {
         const u = c.codec.toLowerCase();
         m_(u) && s.set(c.payload, u);
-      }), this.emit(se.RTPVideoMapUpdate, s);
+      }), this.emit(re.RTPVideoMapUpdate, s);
     }, this.handleBrowserOnLine = () => A(this, void 0, void 0, function* () {
       !this.url || !(yield fetch(tc(this.url), {
         method: "HEAD"
@@ -24586,7 +24586,7 @@ class NM extends gn.EventEmitter {
     }), this.log = pn((t = e.loggerName) !== null && t !== void 0 ? t : It.Engine, () => this.logContext), this.loggerOptions = {
       loggerName: e.loggerName,
       loggerContextCb: () => this.logContext
-    }, this.client = new np(void 0, this.loggerOptions), this.client.signalLatency = this.options.expSignalLatency, this.reconnectPolicy = this.options.reconnectPolicy, this.closingLock = new Gt(), this.dataProcessLock = new Gt(), this.dcBufferStatus = /* @__PURE__ */ new Map([[Oe.RELIABLE, !0], [Oe.LOSSY, !0], [Oe.DATA_TRACK_LOSSY, !0]]), this.client.onParticipantUpdate = (a) => this.emit(se.ParticipantUpdate, a), this.client.onConnectionQuality = (a) => this.emit(se.ConnectionQualityUpdate, a), this.client.onRoomUpdate = (a) => this.emit(se.RoomUpdate, a), this.client.onSubscriptionError = (a) => this.emit(se.SubscriptionError, a), this.client.onSubscriptionPermissionUpdate = (a) => this.emit(se.SubscriptionPermissionUpdate, a), this.client.onSpeakersChanged = (a) => this.emit(se.SpeakersChanged, a), this.client.onStreamStateUpdate = (a) => this.emit(se.StreamStateChanged, a), this.client.onRequestResponse = (a) => this.emit(se.SignalRequestResponse, a), this.client.onParticipantUpdate = (a) => this.emit(se.ParticipantUpdate, a), this.client.onJoined = (a) => this.emit(se.Joined, a), this.on(se.Closing, () => {
+    }, this.client = new np(void 0, this.loggerOptions), this.client.signalLatency = this.options.expSignalLatency, this.reconnectPolicy = this.options.reconnectPolicy, this.closingLock = new Gt(), this.dataProcessLock = new Gt(), this.dcBufferStatus = /* @__PURE__ */ new Map([[Oe.RELIABLE, !0], [Oe.LOSSY, !0], [Oe.DATA_TRACK_LOSSY, !0]]), this.client.onParticipantUpdate = (a) => this.emit(re.ParticipantUpdate, a), this.client.onConnectionQuality = (a) => this.emit(re.ConnectionQualityUpdate, a), this.client.onRoomUpdate = (a) => this.emit(re.RoomUpdate, a), this.client.onSubscriptionError = (a) => this.emit(re.SubscriptionError, a), this.client.onSubscriptionPermissionUpdate = (a) => this.emit(re.SubscriptionPermissionUpdate, a), this.client.onSpeakersChanged = (a) => this.emit(re.SpeakersChanged, a), this.client.onStreamStateUpdate = (a) => this.emit(re.StreamStateChanged, a), this.client.onRequestResponse = (a) => this.emit(re.SignalRequestResponse, a), this.client.onParticipantUpdate = (a) => this.emit(re.ParticipantUpdate, a), this.client.onJoined = (a) => this.emit(re.Joined, a), this.on(re.Closing, () => {
       var a, s;
       (s = (a = this.bufferStatusLowClosingFuture).reject) === null || s === void 0 || s.call(a, new ut("engine closed"));
     }), this.bufferStatusLowClosingFuture.promise.catch(() => {
@@ -24611,41 +24611,41 @@ class NM extends gn.EventEmitter {
         f._isNewlyCreated = !1, f.url = c, f.token = u, f.signalOpts = d, f.maxJoinAttempts = d.maxRetries;
         try {
           f.joinAttempts += 1, f.setupSignalClientCallbacks();
-          const x = !p && T_();
+          const w = !p && T_();
           let T;
-          if (x) {
+          if (w) {
             f.pcManager || (yield f.configure(), f.applyInitialPublisherLayout());
             const U = yield (v = f.pcManager) === null || v === void 0 ? void 0 : v.publisher.createInitialOffer();
             U && (T = or(U.offer, U.offerId));
           }
           if (h?.aborted)
-            throw Se.cancelled("Connection aborted");
+            throw ke.cancelled("Connection aborted");
           if (!p && f.shouldFailOnV1Path)
-            throw f.shouldFailOnV1Path = !1, Se.serviceNotFound("Simulated v1 path failure", "v0-rtc");
+            throw f.shouldFailOnV1Path = !1, ke.serviceNotFound("Simulated v1 path failure", "v0-rtc");
           const P = yield f.client.join(c, u, d, h, p, T);
-          f._isClosed = !1, f.latestJoinResponse = P, f.participantSid = (b = P.participant) === null || b === void 0 ? void 0 : b.sid, f.subscriberPrimary = P.subscriberPrimary, x ? (k = f.pcManager) === null || k === void 0 || k.updateConfiguration(f.makeRTCConfiguration(P)) : (f.pcManager || (yield f.configure(P, !p), p || f.applyInitialPublisherLayout()), (!f.subscriberPrimary || P.fastPublish) && f.negotiate().catch((U) => {
+          f._isClosed = !1, f.latestJoinResponse = P, f.participantSid = (b = P.participant) === null || b === void 0 ? void 0 : b.sid, f.subscriberPrimary = P.subscriberPrimary, w ? (k = f.pcManager) === null || k === void 0 || k.updateConfiguration(f.makeRTCConfiguration(P)) : (f.pcManager || (yield f.configure(P, !p), p || f.applyInitialPublisherLayout()), (!f.subscriberPrimary || P.fastPublish) && f.negotiate().catch((U) => {
             f.log.error(U);
-          })), f.registerOnLineListener(), f.clientConfiguration = P.clientConfiguration, f.emit(se.SignalConnected, P);
+          })), f.registerOnLineListener(), f.clientConfiguration = P.clientConfiguration, f.emit(re.SignalConnected, P);
           let _ = P.serverInfo;
           return _ || (_ = {
             version: P.serverVersion,
             region: P.serverRegion
           }), f.log.info("connected to Livekit Server ".concat(Object.entries(_).map((U) => {
-            let B = ye(U, 2), S = B[0], C = B[1];
+            let z = be(U, 2), S = z[0], C = z[1];
             return "".concat(S, ": ").concat(C);
           }).join(", "))), {
             joinResponse: P,
             serverInfo: _
           };
-        } catch (x) {
-          if (x instanceof Se) {
-            if (x.reason === nt.ServerUnreachable) {
+        } catch (w) {
+          if (w instanceof ke) {
+            if (w.reason === nt.ServerUnreachable) {
               if (f.log.warn("Couldn't connect to server, attempt ".concat(f.joinAttempts, " of ").concat(f.maxJoinAttempts)), f.joinAttempts < f.maxJoinAttempts)
                 return f.join(c, u, d, h, p);
-            } else if (x.reason === nt.ServiceNotFound)
-              return f.log.warn("Initial connection failed: ".concat(x.message, " – Retrying")), f.pcManager && (f.pcManager.onStateChange = void 0, yield f.cleanupPeerConnections()), f.join(c, u, d, h, !0);
+            } else if (w.reason === nt.ServiceNotFound)
+              return f.log.warn("Initial connection failed: ".concat(w.message, " – Retrying")), f.pcManager && (f.pcManager.onStateChange = void 0, yield f.cleanupPeerConnections()), f.join(c, u, d, h, !0);
           }
-          throw x;
+          throw w;
         }
       })();
     });
@@ -24658,7 +24658,7 @@ class NM extends gn.EventEmitter {
         return;
       }
       try {
-        this._isClosed = !0, this.joinAttempts = 0, this.emit(se.Closing), this.removeAllListeners(), this.deregisterOnLineListener(), this.clearPendingReconnect(), this.cleanupLossyDataStats(), yield this.cleanupPeerConnections(), yield this.cleanupClient();
+        this._isClosed = !0, this.joinAttempts = 0, this.emit(re.Closing), this.removeAllListeners(), this.deregisterOnLineListener(), this.clearPendingReconnect(), this.cleanupLossyDataStats(), yield this.cleanupPeerConnections(), yield this.cleanupClient();
       } finally {
         e();
       }
@@ -24689,7 +24689,7 @@ class NM extends gn.EventEmitter {
       throw new Yi("a track with the same ID has already been published");
     return new Promise((t, a) => {
       const s = setTimeout(() => {
-        delete this.pendingTrackResolvers[e.cid], a(Se.timeout("publication of local track timed out, no response from server"));
+        delete this.pendingTrackResolvers[e.cid], a(ke.timeout("publication of local track timed out, no response from server"));
       }, 1e4);
       this.pendingTrackResolvers[e.cid] = {
         resolve: (c) => {
@@ -24750,19 +24750,19 @@ class NM extends gn.EventEmitter {
           const s = this.makeRTCConfiguration();
           this.pcManager = new x0("publisher-only", this.loggerOptions, s);
         }
-        this.emit(se.TransportsCreated, this.pcManager.publisher, this.pcManager.subscriber), this.pcManager.onIceCandidate = (s, c) => {
+        this.emit(re.TransportsCreated, this.pcManager.publisher, this.pcManager.subscriber), this.pcManager.onIceCandidate = (s, c) => {
           this.client.sendIceCandidate(s, c);
         }, this.pcManager.onPublisherOffer = (s, c) => {
           this.client.sendOffer(s, c);
         }, this.pcManager.onDataChannel = this.handleDataChannel, this.pcManager.onStateChange = (s, c, u) => A(this, void 0, void 0, function* () {
           if (this.log.debug("primary PC state changed ".concat(s)), ["closed", "disconnected", "failed"].includes(c) && (this.publisherConnectionPromise = void 0), s === dt.CONNECTED) {
             const f = this.pcState === zn.New;
-            this.pcState = zn.Connected, f && this.emit(se.Connected, this.latestJoinResponse);
+            this.pcState = zn.Connected, f && this.emit(re.Connected, this.latestJoinResponse);
           } else s === dt.FAILED && (this.pcState === zn.Connected || this.pcState === zn.Reconnecting) && (this.pcState = zn.Disconnected, this.handleDisconnect("peerconnection failed", u === "failed" ? ir.RR_SUBSCRIBER_FAILED : ir.RR_PUBLISHER_FAILED));
           const d = this.client.isDisconnected || this.client.currentState === tt.RECONNECTING, h = [dt.FAILED, dt.CLOSING, dt.CLOSED].includes(s);
-          d && h && !this._isClosed && this.emit(se.Offline);
+          d && h && !this._isClosed && this.emit(re.Offline);
         }), this.pcManager.onTrack = (s) => {
-          s.streams.length !== 0 && this.emit(se.MediaTrackAdded, s.track, s.streams[0], s.receiver);
+          s.streams.length !== 0 && this.emit(re.MediaTrackAdded, s.track, s.streams[0], s.receiver);
         };
       }
     });
@@ -24799,34 +24799,34 @@ class NM extends gn.EventEmitter {
       const a = this.pendingTrackResolvers[e.cid].resolve;
       delete this.pendingTrackResolvers[e.cid], a(e.track);
     }, this.client.onLocalTrackUnpublished = (e) => {
-      this.emit(se.LocalTrackUnpublished, e);
+      this.emit(re.LocalTrackUnpublished, e);
     }, this.client.onLocalTrackSubscribed = (e) => {
-      this.emit(se.LocalTrackSubscribed, e);
+      this.emit(re.LocalTrackSubscribed, e);
     }, this.client.onTokenRefresh = (e) => {
-      this.token = e, this.emit(se.TokenRefreshed, e);
+      this.token = e, this.emit(re.TokenRefreshed, e);
     }, this.client.onRemoteMuteChanged = (e, t) => {
-      this.emit(se.RemoteMute, e, t);
+      this.emit(re.RemoteMute, e, t);
     }, this.client.onSubscribedQualityUpdate = (e) => {
-      this.emit(se.SubscribedQualityUpdate, e);
+      this.emit(re.SubscribedQualityUpdate, e);
     }, this.client.onRoomMoved = (e) => {
       var t;
-      this.participantSid = (t = e.participant) === null || t === void 0 ? void 0 : t.sid, this.latestJoinResponse && (this.latestJoinResponse.room = e.room), this.emit(se.RoomMoved, e);
+      this.participantSid = (t = e.participant) === null || t === void 0 ? void 0 : t.sid, this.latestJoinResponse && (this.latestJoinResponse.room = e.room), this.emit(re.RoomMoved, e);
     }, this.client.onMediaSectionsRequirement = (e) => {
       this.addMediaSections(e.numAudios, e.numVideos), this.negotiate();
     }, this.client.onPublishDataTrackResponse = (e) => {
-      this.emit(se.PublishDataTrackResponse, e);
+      this.emit(re.PublishDataTrackResponse, e);
     }, this.client.onUnPublishDataTrackResponse = (e) => {
-      this.emit(se.UnPublishDataTrackResponse, e);
+      this.emit(re.UnPublishDataTrackResponse, e);
     }, this.client.onDataTrackSubscriberHandles = (e) => {
-      this.emit(se.DataTrackSubscriberHandles, e);
+      this.emit(re.DataTrackSubscriberHandles, e);
     }, this.client.onClose = () => {
       this.handleDisconnect("signal", ir.RR_SIGNAL_DISCONNECTED);
     }, this.client.onLeave = (e) => {
       switch (this.log.info("client leave request received (action=".concat(e?.action, ")"), {
         reason: e?.reason
-      }), e.regions && (this.log.debug("updating regions"), this.emit(se.ServerRegionsReported, e.regions)), e.action) {
+      }), e.regions && (this.log.debug("updating regions"), this.emit(re.ServerRegionsReported, e.regions)), e.action) {
         case ms.DISCONNECT:
-          this.emit(se.Disconnected, e?.reason), this.close();
+          this.emit(re.Disconnected, e?.reason), this.close();
           break;
         case ms.RECONNECT:
           this.fullReconnectOnNext = !0, this.handleDisconnect(Rh);
@@ -24996,7 +24996,7 @@ class NM extends gn.EventEmitter {
           let u = !0;
           c instanceof ut ? (this.log.debug("received unrecoverable error", {
             error: c
-          }), u = !1) : c instanceof cs || (this.fullReconnectOnNext = !0), u ? this.handleDisconnect("reconnect", ir.RR_UNKNOWN) : (this.log.info("could not recover connection after ".concat(this.reconnectAttempts, " attempts, ").concat(Date.now() - this.reconnectStart, "ms. giving up")), this.emit(se.Disconnected), yield this.close());
+          }), u = !1) : c instanceof cs || (this.fullReconnectOnNext = !0), u ? this.handleDisconnect("reconnect", ir.RR_UNKNOWN) : (this.log.info("could not recover connection after ".concat(this.reconnectAttempts, " attempts, ").concat(Date.now() - this.reconnectStart, "ms. giving up")), this.emit(re.Disconnected), yield this.close());
         } finally {
           this.attemptingReconnect = !1;
         }
@@ -25019,20 +25019,20 @@ class NM extends gn.EventEmitter {
       try {
         if (!this.url || !this.token)
           throw new ut("could not reconnect, url or token not saved");
-        this.log.info("reconnecting, attempt: ".concat(this.reconnectAttempts)), this.emit(se.Restarting), this.client.isDisconnected || (yield this.client.sendLeave()), yield this.cleanupPeerConnections(), yield this.cleanupClient();
+        this.log.info("reconnecting, attempt: ".concat(this.reconnectAttempts)), this.emit(re.Restarting), this.client.isDisconnected || (yield this.client.sendLeave()), yield this.cleanupPeerConnections(), yield this.cleanupClient();
         let c;
         try {
           if (!this.signalOpts)
             throw this.log.warn("attempted connection restart, without signal options present"), new cs();
           c = (yield this.join(e ?? this.url, this.token, this.signalOpts, void 0, !this.options.singlePeerConnection)).joinResponse;
         } catch (u) {
-          throw u instanceof Se && u.reason === nt.NotAllowed ? new ut("could not reconnect, token might be expired") : new cs();
+          throw u instanceof ke && u.reason === nt.NotAllowed ? new ut("could not reconnect, token might be expired") : new cs();
         }
         if (this.shouldFailNext)
           throw this.shouldFailNext = !1, new Error("simulated failure");
-        if (this.client.setReconnected(), this.emit(se.SignalRestarted, c), yield this.waitForPCReconnected(), this.client.currentState !== tt.CONNECTED)
+        if (this.client.setReconnected(), this.emit(re.SignalRestarted, c), yield this.waitForPCReconnected(), this.client.currentState !== tt.CONNECTED)
           throw new cs("Signal connection got severed during reconnect");
-        (t = this.regionStrategy) === null || t === void 0 || t.resetAttempts(), this.emit(se.Restarted);
+        (t = this.regionStrategy) === null || t === void 0 || t.resetAttempts(), this.emit(re.Restarted);
       } catch (c) {
         const u = yield (a = this.regionStrategy) === null || a === void 0 ? void 0 : a.getNextUrl();
         if (u) {
@@ -25050,7 +25050,7 @@ class NM extends gn.EventEmitter {
         throw new ut("could not reconnect, url or token not saved");
       if (!this.pcManager)
         throw new ut("publisher and subscriber connections unset");
-      this.log.info("resuming signal connection, attempt ".concat(this.reconnectAttempts)), this.emit(se.Resuming);
+      this.log.info("resuming signal connection, attempt ".concat(this.reconnectAttempts)), this.emit(re.Resuming);
       let a;
       try {
         this.setupSignalClientCallbacks(), a = yield this.client.reconnect(this.url, this.token, this.participantSid, e);
@@ -25058,9 +25058,9 @@ class NM extends gn.EventEmitter {
         let c = "";
         throw s instanceof Error && (c = s.message, this.log.error(s.message, {
           error: s
-        })), s instanceof Se && s.reason === nt.NotAllowed ? new ut("could not reconnect, token might be expired") : s instanceof Se && s.reason === nt.LeaveRequest ? s : new cs(c);
+        })), s instanceof ke && s.reason === nt.NotAllowed ? new ut("could not reconnect, token might be expired") : s instanceof ke && s.reason === nt.LeaveRequest ? s : new cs(c);
       }
-      if (this.emit(se.SignalResumed), a) {
+      if (this.emit(re.SignalResumed), a) {
         const s = this.makeRTCConfiguration(a);
         this.pcManager.updateConfiguration(s), this.latestJoinResponse && (this.latestJoinResponse.serverInfo = a.serverInfo);
       } else
@@ -25069,7 +25069,7 @@ class NM extends gn.EventEmitter {
         throw this.shouldFailNext = !1, new Error("simulated failure");
       if (yield this.pcManager.triggerIceRestart(), yield this.waitForPCReconnected(), this.client.currentState !== tt.CONNECTED)
         throw new cs("Signal connection got severed during reconnect");
-      this.client.setReconnected(), ((t = this.reliableDC) === null || t === void 0 ? void 0 : t.readyState) === "open" && this.reliableDC.id === null && this.createDataChannels(), a?.lastMessageSeq && this.resendReliableMessagesForResume(a.lastMessageSeq), this.emit(se.Resumed);
+      this.client.setReconnected(), ((t = this.reliableDC) === null || t === void 0 ? void 0 : t.readyState) === "open" && this.reliableDC.id === null && this.createDataChannels(), a?.lastMessageSeq && this.resendReliableMessagesForResume(a.lastMessageSeq), this.emit(re.Resumed);
     });
   }
   waitForPCInitialConnection(e, t) {
@@ -25087,7 +25087,7 @@ class NM extends gn.EventEmitter {
           throw new ut("PC manager is closed");
         yield this.pcManager.ensurePCTransportConnection(void 0, this.peerConnectionTimeout), this.pcState = zn.Connected;
       } catch (e) {
-        throw this.pcState = zn.Disconnected, Se.internal("could not establish PC connection, ".concat(e.message));
+        throw this.pcState = zn.Disconnected, ke.internal("could not establish PC connection, ".concat(e.message));
       }
     });
   }
@@ -25214,7 +25214,7 @@ class NM extends gn.EventEmitter {
           throw new ut("PC manager is closed");
         const u = s ? a.pcManager.subscriber : a.pcManager.publisher, d = s ? "Subscriber" : "Publisher";
         if (!u)
-          throw Se.internal("".concat(d, " connection not set"));
+          throw ke.internal("".concat(d, " connection not set"));
         let h = !1;
         !s && !a.dataChannelForKind(t, s) && (a.createDataChannels(), h = !0), !h && !s && !a.pcManager.publisher.isICEConnected && a.pcManager.publisher.getICEConnectionState() !== "checking" && (h = !0), h && a.negotiate().catch((v) => {
           a.log.error(v);
@@ -25228,7 +25228,7 @@ class NM extends gn.EventEmitter {
             return;
           yield Qt(50);
         }
-        throw Se.internal("could not establish ".concat(d, " connection, state: ").concat(u.getICEConnectionState()));
+        throw ke.internal("could not establish ".concat(d, " connection, state: ").concat(u.getICEConnectionState()));
       })();
     });
   }
@@ -25253,7 +25253,7 @@ class NM extends gn.EventEmitter {
         const a = new AbortController(), s = () => {
           a.abort(), this.log.debug("engine disconnected while negotiation was ongoing"), e();
         };
-        this.isClosed && t(new dr("cannot negotiate on closed engine")), this.on(se.Closing, s), this.on(se.Restarting, s), this.pcManager.publisher.off(xa.RTPVideoPayloadTypes, this.onRtpMapAvailable), this.pcManager.publisher.once(xa.RTPVideoPayloadTypes, this.onRtpMapAvailable);
+        this.isClosed && t(new dr("cannot negotiate on closed engine")), this.on(re.Closing, s), this.on(re.Restarting, s), this.pcManager.publisher.off(xa.RTPVideoPayloadTypes, this.onRtpMapAvailable), this.pcManager.publisher.once(xa.RTPVideoPayloadTypes, this.onRtpMapAvailable);
         try {
           yield this.pcManager.negotiate(a), e();
         } catch (c) {
@@ -25263,7 +25263,7 @@ class NM extends gn.EventEmitter {
           }
           c instanceof dr && (this.fullReconnectOnNext = !0), this.handleDisconnect("negotiation", ir.RR_UNKNOWN), c instanceof Error ? t(c) : t(new Error(String(c)));
         } finally {
-          this.off(se.Closing, s), this.off(se.Restarting, s);
+          this.off(re.Closing, s), this.off(re.Restarting, s);
         }
       }));
     });
@@ -25285,9 +25285,9 @@ class NM extends gn.EventEmitter {
       this.log.warn("sync state cannot be sent without peer connection setup");
       return;
     }
-    const h = this.pcManager.publisher.getLocalDescription(), f = this.pcManager.publisher.getRemoteDescription(), p = (s = this.pcManager.subscriber) === null || s === void 0 ? void 0 : s.getRemoteDescription(), v = (c = this.pcManager.subscriber) === null || c === void 0 ? void 0 : c.getLocalDescription(), b = (d = (u = this.signalOpts) === null || u === void 0 ? void 0 : u.autoSubscribe) !== null && d !== void 0 ? d : !0, k = new Array(), x = new Array();
+    const h = this.pcManager.publisher.getLocalDescription(), f = this.pcManager.publisher.getRemoteDescription(), p = (s = this.pcManager.subscriber) === null || s === void 0 ? void 0 : s.getRemoteDescription(), v = (c = this.pcManager.subscriber) === null || c === void 0 ? void 0 : c.getLocalDescription(), b = (d = (u = this.signalOpts) === null || u === void 0 ? void 0 : u.autoSubscribe) !== null && d !== void 0 ? d : !0, k = new Array(), w = new Array();
     e.forEach((T) => {
-      T.isDesired !== b && k.push(T.trackSid), T.isEnabled || x.push(T.trackSid);
+      T.isDesired !== b && k.push(T.trackSid), T.isEnabled || w.push(T.trackSid);
     }), this.client.sendSyncState(new Hm({
       answer: this.pcManager.mode === "publisher-only" ? f ? or({
         sdp: f.sdp,
@@ -25310,7 +25310,7 @@ class NM extends gn.EventEmitter {
       }),
       publishTracks: XR(t),
       dataChannels: this.dataChannelsInfo(),
-      trackSidsDisabled: x,
+      trackSidsDisabled: w,
       datachannelReceiveStates: this.reliableReceivedState.map((T, P) => new ES({
         publisherSid: P,
         lastSeq: T
@@ -25354,7 +25354,7 @@ class NM extends gn.EventEmitter {
     var t;
     const a = (t = this.pcManager) === null || t === void 0 ? void 0 : t.getMidForReceiver(e);
     if (a) {
-      const s = Object.entries(this.midToTrackId).find((c) => ye(c, 1)[0] === a);
+      const s = Object.entries(this.midToTrackId).find((c) => be(c, 1)[0] === a);
       if (s)
         return s[1];
     }
@@ -25386,9 +25386,9 @@ class qe {
             maxAgeInMs: d
           };
         } else
-          throw c.status === 401 ? Se.notAllowed("Could not fetch region settings: ".concat(c.statusText), c.status) : Se.internal("Could not fetch region settings: ".concat(c.statusText));
+          throw c.status === 401 ? ke.notAllowed("Could not fetch region settings: ".concat(c.statusText), c.status) : ke.internal("Could not fetch region settings: ".concat(c.statusText));
       } catch (c) {
-        throw c instanceof Se ? c : a?.aborted ? Se.cancelled("Region fetching was aborted") : Se.serverUnreachable("Could not fetch region settings, ".concat(c instanceof Error ? "".concat(c.name, ": ").concat(c.message) : c));
+        throw c instanceof ke ? c : a?.aborted ? ke.cancelled("Region fetching was aborted") : ke.serverUnreachable("Could not fetch region settings, ".concat(c instanceof Error ? "".concat(c.name, ": ").concat(c.message) : c));
       } finally {
         s();
       }
@@ -25402,7 +25402,7 @@ class qe {
           const c = yield qe.fetchRegionSettings(e, t);
           qe.updateCachedRegionSettings(e, t, c);
         } catch (c) {
-          if (c instanceof Se && c.reason === nt.NotAllowed) {
+          if (c instanceof ke && c.reason === nt.NotAllowed) {
             _e.debug("token is not valid, cancelling auto region refresh");
             return;
           }
@@ -25762,12 +25762,12 @@ class zM {
     if (t.length > 0 || a.length > 0) {
       const u = new Bn("Participant ".concat(e, " unexpectedly disconnected in the middle of sending data"), $t.AbnormalEnd);
       for (const d of a) {
-        var s = ye(d, 2);
+        var s = be(d, 2);
         const h = s[0];
         s[1].controller.error(u), this.byteStreamControllers.delete(h);
       }
       for (const d of t) {
-        var c = ye(d, 2);
+        var c = be(d, 2);
         const h = c[0];
         c[1].controller.error(u), this.textStreamControllers.delete(h);
       }
@@ -25904,8 +25904,8 @@ class qM {
       const s = crypto.randomUUID(), u = new TextEncoder().encode(e).byteLength, d = (a = t?.attachments) === null || a === void 0 ? void 0 : a.map(() => crypto.randomUUID()), h = new Array(d ? d.length + 1 : 1).fill(0), f = (v, b) => {
         var k;
         h[b] = v;
-        const x = h.reduce((T, P) => T + P, 0);
-        (k = t?.onProgress) === null || k === void 0 || k.call(t, x);
+        const w = h.reduce((T, P) => T + P, 0);
+        (k = t?.onProgress) === null || k === void 0 || k.call(t, w);
       }, p = yield this.streamText({
         streamId: s,
         totalSize: u,
@@ -26004,11 +26004,11 @@ class qM {
         }
       });
       let k = () => A(this, void 0, void 0, function* () {
-        yield x.close();
+        yield w.close();
       });
-      v.once(se.Closing, k);
-      const x = new BM(b, u, () => this.engine.off(se.Closing, k));
-      return x;
+      v.once(re.Closing, k);
+      const w = new BM(b, u, () => this.engine.off(re.Closing, k));
+      return w;
     });
   }
   sendFile(e, t) {
@@ -26073,10 +26073,10 @@ class qM {
       });
       yield this.engine.sendDataPacket(v, Oe.RELIABLE);
       let b = 0;
-      const k = new Gt(), x = this.engine, T = this.log, P = new WritableStream({
+      const k = new Gt(), w = this.engine, T = this.log, P = new WritableStream({
         write(U) {
           return A(this, void 0, void 0, function* () {
-            const B = yield k.lock();
+            const z = yield k.lock();
             let S = 0;
             try {
               for (; S < U.byteLength; ) {
@@ -26091,10 +26091,10 @@ class qM {
                     })
                   }
                 });
-                yield x.sendDataPacket(M, Oe.RELIABLE), b += 1, S += C.byteLength;
+                yield w.sendDataPacket(M, Oe.RELIABLE), b += 1, S += C.byteLength;
               }
             } finally {
-              B();
+              z();
             }
           });
         },
@@ -26102,14 +26102,14 @@ class qM {
           return A(this, void 0, void 0, function* () {
             const U = new lu({
               streamId: d
-            }), B = new Yt({
+            }), z = new Yt({
               destinationIdentities: h,
               value: {
                 case: "streamTrailer",
                 value: U
               }
             });
-            yield x.sendDataPacket(B, Oe.RELIABLE);
+            yield w.sendDataPacket(z, Oe.RELIABLE);
           });
         },
         abort(U) {
@@ -26371,7 +26371,7 @@ class LT {
    */
   subscribe(e) {
     try {
-      const t = this.manager.openSubscriptionStream(this.info.sid, e?.signal, e?.bufferSize), a = ye(t, 2), s = a[0];
+      const t = this.manager.openSubscriptionStream(this.info.sid, e?.signal, e?.bufferSize), a = be(t, 2), s = a[0];
       return a[1].catch(() => {
       }), s;
     } catch (t) {
@@ -26489,8 +26489,8 @@ class rc extends Lu {
       if (a + T > t.byteLength)
         throw en.headerOverrun();
       let P = new DataView(t.buffer, t.byteOffset + a, T);
-      const _ = ks.fromBinary(P), U = ye(_, 2), B = U[0], S = U[1];
-      b = B, a += S;
+      const _ = ks.fromBinary(P), U = be(_, 2), z = U[0], S = U[1];
+      b = z, a += S;
     }
     return [new rc({
       marker: u,
@@ -26536,7 +26536,7 @@ class Iu extends Lu {
     return s;
   }
   static fromBinary(e) {
-    const t = tp(e), a = rc.fromBinary(t), s = ye(a, 2), c = s[0], u = s[1], d = t.buffer.slice(t.byteOffset + u, t.byteOffset + t.byteLength);
+    const t = tp(e), a = rc.fromBinary(t), s = be(a, 2), c = s[0], u = s[1], d = t.buffer.slice(t.byteOffset + u, t.byteOffset + t.byteLength);
     return [new Iu(c, new Uint8Array(d)), t.byteLength];
   }
   toJSON() {
@@ -26819,14 +26819,14 @@ class ZM extends gn.EventEmitter {
       start: (p) => {
         s = p, this.subscribeRequest(e, t).then(() => A(this, void 0, void 0, function* () {
           var v, b, k;
-          const x = this.descriptors.get(e);
-          if (!x) {
+          const w = this.descriptors.get(e);
+          if (!w) {
             Ht.error("Unknown track ".concat(e));
             const T = fn.disconnected();
             p.error(T), (v = c.reject) === null || v === void 0 || v.call(c, T);
             return;
           }
-          if (x.subscription.type !== "active") {
+          if (w.subscription.type !== "active") {
             Ht.error("Subscription for track ".concat(e, " is not active"));
             const T = fn.disconnected();
             p.error(T), (b = c.reject) === null || b === void 0 || b.call(c, T);
@@ -26836,7 +26836,7 @@ class ZM extends gn.EventEmitter {
             h();
             return;
           }
-          t?.addEventListener("abort", h), x.subscription.streamControllers.set(p, u), (k = c.resolve) === null || k === void 0 || k.call(c);
+          t?.addEventListener("abort", h), w.subscription.streamControllers.set(p, u), (k = c.resolve) === null || k === void 0 || k.call(c);
         })).catch((v) => {
           var b;
           p.error(v), (b = c.reject) === null || b === void 0 || b.call(c, v);
@@ -26959,7 +26959,7 @@ class ZM extends gn.EventEmitter {
    * unpublish, or shutdown). */
   closeStreamControllers(e, t) {
     for (const s of e) {
-      var a = ye(s, 2);
+      var a = be(s, 2);
       const c = a[0], u = a[1];
       u();
       try {
@@ -26984,19 +26984,19 @@ class ZM extends gn.EventEmitter {
         return;
       const t = /* @__PURE__ */ new Map();
       for (const c of e.entries()) {
-        var a = ye(c, 2);
+        var a = be(c, 2);
         const u = a[0], d = a[1], h = /* @__PURE__ */ new Set();
         for (const f of d)
           h.add(f.sid), !this.descriptors.has(f.sid) && (yield this.handleTrackPublished(u, f));
         t.set(u, h);
       }
       for (const c of t.entries()) {
-        var s = ye(c, 2);
+        var s = be(c, 2);
         const u = s[0], d = s[1];
         let f = Array.from(this.descriptors.entries()).filter((p) => {
-          let v = ye(p, 2);
+          let v = be(p, 2);
           return v[0], v[1].publisherIdentity === u;
-        }).map((p) => ye(p, 1)[0]).filter((p) => !d.has(p));
+        }).map((p) => be(p, 1)[0]).filter((p) => !d.has(p));
         for (const p of f)
           this.handleTrackUnpublished(p);
       }
@@ -27047,7 +27047,7 @@ class ZM extends gn.EventEmitter {
   /** SFU notification that handles have been assigned for requested subscriptions. */
   receivedSfuSubscriberHandles(e) {
     for (const a of e.entries()) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[0], c = t[1];
       this.registerSubscriberHandle(s, c);
     }
@@ -27089,7 +27089,7 @@ class ZM extends gn.EventEmitter {
     return A(this, void 0, void 0, function* () {
       let t;
       try {
-        var a = Iu.fromBinary(e), s = ye(a, 1);
+        var a = Iu.fromBinary(e), s = be(a, 1);
         t = s[0];
       } catch (h) {
         Ht.error("Failed to deserialize packet: ".concat(h));
@@ -27128,7 +27128,7 @@ class ZM extends gn.EventEmitter {
    */
   resendSubscriptionUpdates() {
     for (const t of this.descriptors) {
-      var e = ye(t, 2);
+      var e = be(t, 2);
       const a = e[0];
       e[1].subscription.type !== "none" && this.emit("sfuUpdateSubscription", {
         sid: a,
@@ -27208,12 +27208,12 @@ class sp {
       const b = this.sequence.getThenIncrement(), k = new rc(Object.assign(Object.assign({}, c), {
         marker: sp.computeFrameMarker(p, h),
         sequence: b
-      })), x = Math.min(
+      })), w = Math.min(
         // All but the last packet will be max length ...
         d,
         // ... and the last packet will be as long as it needs to be to finish out the buffer.
         e.payload.byteLength - v
-      ), T = new Uint8Array(e.payload.buffer, e.payload.byteOffset + v, x);
+      ), T = new Uint8Array(e.payload.buffer, e.payload.byteOffset + v, w);
       yield new Iu(k, T);
     }
   }
@@ -27665,7 +27665,7 @@ class op extends gn.EventEmitter {
   sfuWillRepublishTracks() {
     var e, t;
     for (const s of this.descriptors.entries()) {
-      var a = ye(s, 2);
+      var a = be(s, 2);
       const c = a[0], u = a[1];
       switch (u.type) {
         case "pending":
@@ -27801,7 +27801,7 @@ class eA extends gn.EventEmitter {
         const k = a.getServerVersion();
         if (k && si(k, "1.8.0") < 0)
           throw Je.builtIn("UNSUPPORTED_SERVER");
-        const x = Math.max(h, 8e3), T = crypto.randomUUID(), P = new Lt();
+        const w = Math.max(h, 8e3), T = crypto.randomUUID(), P = new Lt();
         let _ = null;
         const U = setTimeout(() => {
           var S;
@@ -27815,14 +27815,14 @@ class eA extends gn.EventEmitter {
         }), a.pendingResponses.set(T, {
           completionFuture: P,
           participantIdentity: s
-        }), yield a.publishRpcRequest(s, T, c, u, x, v), _ = setTimeout(() => {
+        }), yield a.publishRpcRequest(s, T, c, u, w, v), _ = setTimeout(() => {
           var S;
           a.pendingResponses.delete(T), (S = P.reject) === null || S === void 0 || S.call(P, Je.builtIn("RESPONSE_TIMEOUT"));
         }, h);
-        const B = P.promise.finally(() => {
+        const z = P.promise.finally(() => {
           clearTimeout(_), a.pendingAcks.has(T) && (a.log.warn("RPC response received before ack", T), a.pendingAcks.delete(T), clearTimeout(U));
         });
-        return [T, B];
+        return [T, z];
       })();
     });
   }
@@ -27909,12 +27909,12 @@ class eA extends gn.EventEmitter {
   handleParticipantDisconnected(e) {
     var t;
     for (const u of this.pendingAcks) {
-      var a = ye(u, 2);
+      var a = be(u, 2);
       const d = a[0];
       a[1].participantIdentity === e && this.pendingAcks.delete(d);
     }
     for (const u of this.pendingResponses) {
-      var s = ye(u, 2);
+      var s = be(u, 2);
       const d = s[0];
       var c = s[1];
       const h = c.participantIdentity, f = c.completionFuture;
@@ -28151,9 +28151,9 @@ class BT extends yT {
     this.webAudioPluginNodes.forEach((s) => {
       a.connect(s), a = s;
     }), this.gainNode = e.createGain(), a.connect(this.gainNode), this.gainNode.connect(e.destination), this.elementVolume && this.gainNode.gain.setTargetAtTime(this.elementVolume, 0, 0.1), e.state !== "running" && e.resume().then(() => {
-      e.state !== "running" && this.emit(ue.AudioPlaybackFailed, new Error("Audio Context couldn't be started automatically"));
+      e.state !== "running" && this.emit(ce.AudioPlaybackFailed, new Error("Audio Context couldn't be started automatically"));
     }).catch((s) => {
-      this.emit(ue.AudioPlaybackFailed, s);
+      this.emit(ce.AudioPlaybackFailed, s);
     });
   }
   disconnectWebAudio() {
@@ -28188,14 +28188,14 @@ class Vi extends gn.EventEmitter {
   constructor(e, t, a, s) {
     var c;
     super(), this.metadataMuted = !1, this.encryption = it.NONE, this.log = _e, this.handleMuted = () => {
-      this.emit(ue.Muted);
+      this.emit(ce.Muted);
     }, this.handleUnmuted = () => {
-      this.emit(ue.Unmuted);
+      this.emit(ce.Unmuted);
     }, this.log = pn((c = s?.loggerName) !== null && c !== void 0 ? c : It.Publication), this.loggerContextCb = this.loggerContextCb, this.setMaxListeners(100), this.kind = e, this.trackSid = t, this.trackName = a, this.source = X.Source.Unknown;
   }
   /** @internal */
   setTrack(e) {
-    this.track && (this.track.off(ue.Muted, this.handleMuted), this.track.off(ue.Unmuted, this.handleUnmuted)), this.track = e, e && (e.on(ue.Muted, this.handleMuted), e.on(ue.Unmuted, this.handleUnmuted));
+    this.track && (this.track.off(ce.Muted, this.handleMuted), this.track.off(ce.Unmuted, this.handleUnmuted)), this.track = e, e && (e.on(ce.Muted, this.handleMuted), e.on(ce.Unmuted, this.handleUnmuted));
   }
   get logContext() {
     var e;
@@ -28251,13 +28251,13 @@ class gm extends Vi {
   }
   constructor(e, t, a, s) {
     super(e, t.sid, t.name, s), this.track = void 0, this.handleTrackEnded = () => {
-      this.emit(ue.Ended);
+      this.emit(ce.Ended);
     }, this.handleCpuConstrained = () => {
-      this.track && Qi(this.track) && this.emit(ue.CpuConstrained, this.track);
+      this.track && Qi(this.track) && this.emit(ce.CpuConstrained, this.track);
     }, this.updateInfo(t), this.setTrack(a);
   }
   setTrack(e) {
-    this.track && (this.track.off(ue.Ended, this.handleTrackEnded), this.track.off(ue.CpuConstrained, this.handleCpuConstrained)), super.setTrack(e), e && (e.on(ue.Ended, this.handleTrackEnded), e.on(ue.CpuConstrained, this.handleCpuConstrained));
+    this.track && (this.track.off(ce.Ended, this.handleTrackEnded), this.track.off(ce.CpuConstrained, this.handleCpuConstrained)), super.setTrack(e), e && (e.on(ce.Ended, this.handleTrackEnded), e.on(ce.CpuConstrained, this.handleCpuConstrained));
   }
   get isMuted() {
     return this.track ? this.track.isMuted : super.isMuted;
@@ -28356,9 +28356,9 @@ function Fu(i, e) {
     try {
       const b = yield v;
       return yield Promise.all(b.getTracks().map((k) => A(this, void 0, void 0, function* () {
-        const x = k.kind === "audio";
+        const w = k.kind === "audio";
         let T;
-        const P = x ? p.audio : p.video;
+        const P = w ? p.audio : p.video;
         typeof P != "boolean" && (T = P);
         const _ = k.getSettings().deviceId;
         T?.deviceId && fr(T.deviceId) !== _ ? T.deviceId = _ : T || (T = {
@@ -28449,7 +28449,7 @@ class FT extends gn.EventEmitter {
    */
   getTrackPublication(e) {
     for (const a of this.trackPublications) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[1];
       if (s.source === e)
         return s;
@@ -28460,7 +28460,7 @@ class FT extends gn.EventEmitter {
    */
   getTrackPublicationByName(e) {
     for (const a of this.trackPublications) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[1];
       if (s.trackName === e)
         return s;
@@ -28554,9 +28554,9 @@ class FT extends gn.EventEmitter {
     this.audioContext = e, this.audioTrackPublications.forEach((t) => Si(t.track) && t.track.setAudioContext(e));
   }
   addTrackPublication(e) {
-    e.on(ue.Muted, () => {
+    e.on(ce.Muted, () => {
       this.emit(ee.TrackMuted, e);
-    }), e.on(ue.Unmuted, () => {
+    }), e.on(ce.Unmuted, () => {
       this.emit(ee.TrackUnmuted, e);
     });
     const t = e;
@@ -28593,8 +28593,8 @@ class sA extends FT {
       var f, p;
       (p = (f = this.reconnectFuture) === null || f === void 0 ? void 0 : f.resolve) === null || p === void 0 || p.call(f), this.reconnectFuture = void 0, this.updateTrackSubscriptionPermissions();
     }, this.handleClosing = () => {
-      var f, p, v, b, k, x;
-      this.reconnectFuture && (this.reconnectFuture.promise.catch((T) => this.log.warn(T.message)), (p = (f = this.reconnectFuture) === null || f === void 0 ? void 0 : f.reject) === null || p === void 0 || p.call(f, new Error("Got disconnected during reconnection attempt")), this.reconnectFuture = void 0), this.signalConnectedFuture && ((b = (v = this.signalConnectedFuture).reject) === null || b === void 0 || b.call(v, new Error("Got disconnected without signal connected")), this.signalConnectedFuture = void 0), (x = (k = this.activeAgentFuture) === null || k === void 0 ? void 0 : k.reject) === null || x === void 0 || x.call(k, new Error("Got disconnected without active agent present")), this.activeAgentFuture = void 0, this.firstActiveAgent = void 0;
+      var f, p, v, b, k, w;
+      this.reconnectFuture && (this.reconnectFuture.promise.catch((T) => this.log.warn(T.message)), (p = (f = this.reconnectFuture) === null || f === void 0 ? void 0 : f.reject) === null || p === void 0 || p.call(f, new Error("Got disconnected during reconnection attempt")), this.reconnectFuture = void 0), this.signalConnectedFuture && ((b = (v = this.signalConnectedFuture).reject) === null || b === void 0 || b.call(v, new Error("Got disconnected without signal connected")), this.signalConnectedFuture = void 0), (w = (k = this.activeAgentFuture) === null || k === void 0 ? void 0 : k.reject) === null || w === void 0 || w.call(k, new Error("Got disconnected without active agent present")), this.activeAgentFuture = void 0, this.firstActiveAgent = void 0;
     }, this.handleSignalConnected = (f) => {
       var p, v;
       f.participant && this.updateInfo(f.participant), this.signalConnectedFuture || (this.signalConnectedFuture = new Lt()), (v = (p = this.signalConnectedFuture).resolve) === null || v === void 0 || v.call(p);
@@ -28602,27 +28602,27 @@ class sA extends FT {
       const p = f.requestId, v = f.reason, b = f.message, k = this.pendingSignalRequests.get(p);
       switch (k && (v !== rr.OK && k.reject(new a0(b, v)), this.pendingSignalRequests.delete(p)), f.request.case) {
         case "publishDataTrack": {
-          let x;
+          let w;
           switch (f.reason) {
             case rr.NOT_ALLOWED:
-              x = Mt.notAllowed(f.message);
+              w = Mt.notAllowed(f.message);
               break;
             case rr.DUPLICATE_NAME:
-              x = Mt.duplicateName(f.message);
+              w = Mt.duplicateName(f.message);
               break;
             case rr.INVALID_NAME:
-              x = Mt.invalidName(f.message);
+              w = Mt.invalidName(f.message);
               break;
             case rr.LIMIT_EXCEEDED:
-              x = Mt.limitReached(f.message);
+              w = Mt.limitReached(f.message);
               break;
             default:
-              x = Mt.unknown(f.reason, f.message);
+              w = Mt.unknown(f.reason, f.message);
               break;
           }
           this.roomOutgoingDataTrackManager.receivedSfuPublishResponse(f.request.value.pubHandle, {
             type: "error",
-            error: x
+            error: w
           });
           break;
         }
@@ -28654,8 +28654,8 @@ class sA extends FT {
     }, this.onTrackCpuConstrained = (f, p) => {
       this.log.debug("track cpu constrained", Ne(p)), this.emit(ee.LocalTrackCpuConstrained, f, p);
     }, this.handleSubscribedQualityUpdate = (f) => A(this, void 0, void 0, function* () {
-      var p, v, b, k, x;
-      if (!(!((x = this.roomOptions) === null || x === void 0) && x.dynacast))
+      var p, v, b, k, w;
+      if (!(!((w = this.roomOptions) === null || w === void 0) && w.dynacast))
         return;
       const T = this.videoTrackPublications.get(f.trackSid);
       if (!T) {
@@ -28668,8 +28668,8 @@ class sA extends FT {
         return;
       const P = yield T.videoTrack.setPublishingCodecs(f.subscribedCodecs);
       try {
-        for (var _ = !0, U = Wn(P), B; B = yield U.next(), p = B.done, !p; _ = !0) {
-          k = B.value, _ = !1;
+        for (var _ = !0, U = Wn(P), z; z = yield U.next(), p = z.done, !p; _ = !0) {
+          k = z.value, _ = !1;
           const S = k;
           YR(S) && (this.log.debug("publish ".concat(S, " for ").concat(T.videoTrack.sid), Ne(T)), yield this.publishAdditionalCodecForTrack(T.videoTrack, S, T.options));
         }
@@ -28745,10 +28745,10 @@ class sA extends FT {
    */
   setupEngine(e) {
     var t;
-    this.engine = e, this.engine.on(se.RemoteMute, (a, s) => {
+    this.engine = e, this.engine.on(re.RemoteMute, (a, s) => {
       const c = this.trackPublications.get(a);
       !c || !c.track || (s ? c.mute() : c.unmute());
-    }), !((t = this.signalConnectedFuture) === null || t === void 0) && t.isResolved && (this.signalConnectedFuture = void 0), this.engine.on(se.Connected, this.handleReconnected).on(se.SignalConnected, this.handleSignalConnected).on(se.SignalRestarted, this.handleReconnected).on(se.SignalResumed, this.handleReconnected).on(se.Restarting, this.handleReconnecting).on(se.Resuming, this.handleReconnecting).on(se.LocalTrackUnpublished, this.handleLocalTrackUnpublished).on(se.SubscribedQualityUpdate, this.handleSubscribedQualityUpdate).on(se.Closing, this.handleClosing).on(se.SignalRequestResponse, this.handleSignalRequestResponse);
+    }), !((t = this.signalConnectedFuture) === null || t === void 0) && t.isResolved && (this.signalConnectedFuture = void 0), this.engine.on(re.Connected, this.handleReconnected).on(re.SignalConnected, this.handleSignalConnected).on(re.SignalRestarted, this.handleReconnected).on(re.SignalResumed, this.handleReconnected).on(re.Restarting, this.handleReconnecting).on(re.Resuming, this.handleReconnecting).on(re.LocalTrackUnpublished, this.handleLocalTrackUnpublished).on(re.SubscribedQualityUpdate, this.handleSubscribedQualityUpdate).on(re.Closing, this.handleClosing).on(re.SignalRequestResponse, this.handleSignalRequestResponse);
   }
   /**
    * Sets and updates the metadata of the local participant.
@@ -28801,8 +28801,8 @@ class sA extends FT {
             const b = yield this.engine.client.sendUpdateLocalMetadata((f = s ?? this.metadata) !== null && f !== void 0 ? f : "", (p = c ?? this.name) !== null && p !== void 0 ? p : "", u), k = performance.now();
             for (this.pendingSignalRequests.set(b, {
               resolve: d,
-              reject: (x) => {
-                h(x), v = !0;
+              reject: (w) => {
+                h(w), v = !0;
               },
               values: {
                 name: c,
@@ -28810,8 +28810,8 @@ class sA extends FT {
                 attributes: u
               }
             }); performance.now() - k < 5e3 && !v; ) {
-              if ((!c || this.name === c) && (!s || this.metadata === s) && (!u || Object.entries(u).every((x) => {
-                let T = ye(x, 2), P = T[0], _ = T[1];
+              if ((!c || this.name === c) && (!s || this.metadata === s) && (!u || Object.entries(u).every((w) => {
+                let T = be(w, 2), P = T[0], _ = T[1];
                 return this.attributes[P] === _ || _ === "" && !this.attributes[P];
               }))) {
                 this.pendingSignalRequests.delete(b), d();
@@ -28914,10 +28914,10 @@ class sA extends FT {
           }
           try {
             const b = [];
-            for (const x of v)
-              this.log.info("publishing track", Ne(x)), b.push(this.publishTrack(x, s));
+            for (const w of v)
+              this.log.info("publishing track", Ne(w)), b.push(this.publishTrack(w, s));
             const k = yield Promise.all(b);
-            var h = ye(k, 1);
+            var h = be(k, 1);
             d = h[0];
           } catch (b) {
             throw v?.forEach((k) => {
@@ -28933,7 +28933,7 @@ class sA extends FT {
         if (e === X.Source.ScreenShare) {
           const v = [this.unpublishTrack(d.track)], b = this.getTrackPublication(X.Source.ScreenShareAudio);
           b && b.track && v.push(this.unpublishTrack(b.track));
-          var f = yield Promise.all(v), p = ye(f, 1);
+          var f = yield Promise.all(v), p = be(f, 1);
           d = p[0];
         } else
           yield d.mute();
@@ -29031,7 +29031,7 @@ class sA extends FT {
     let e = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 15e3;
     return new Promise((t, a) => {
       const s = () => {
-        clearTimeout(d), this.engine.off(se.Restarted, c), this.engine.off(se.Closing, u);
+        clearTimeout(d), this.engine.off(re.Restarted, c), this.engine.off(re.Closing, u);
       }, c = () => {
         s(), t();
       }, u = () => {
@@ -29039,7 +29039,7 @@ class sA extends FT {
       }, d = setTimeout(() => {
         s(), a(new Error("timed out waiting for engine restart"));
       }, e);
-      this.engine.once(se.Restarted, c), this.engine.once(se.Closing, u);
+      this.engine.once(re.Restarted, c), this.engine.once(re.Closing, u);
     });
   }
   publishOrRepublishTrack(e, t) {
@@ -29093,10 +29093,10 @@ class sA extends FT {
           U.track && U.track === a && (k = U);
         }), k)
           return c.log.warn("track has already been published, skipping", Ne(k)), k;
-        const x = Object.assign(Object.assign({}, c.roomOptions.publishDefaults), s), T = "channelCount" in a.mediaStreamTrack.getSettings() && // @ts-ignore `channelCount` on getSettings() is currently only available for Safari, but is generally the best way to determine a stereo track https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/channelCount
-        a.mediaStreamTrack.getSettings().channelCount === 2 || a.mediaStreamTrack.getConstraints().channelCount === 2, P = (f = x.forceStereo) !== null && f !== void 0 ? f : T;
-        P && (x.dtx === void 0 && c.log.debug("Opus DTX will be disabled for stereo tracks by default. Enable them explicitly to make it work.", Ne(a)), x.red === void 0 && c.log.debug("Opus RED will be disabled for stereo tracks by default. Enable them explicitly to make it work."), (p = x.dtx) !== null && p !== void 0 || (x.dtx = !1), (v = x.red) !== null && v !== void 0 || (x.red = !1)), !u_() && c.roomOptions.e2ee && (c.log.info("End-to-end encryption is set up, simulcast publishing will be disabled on Safari versions and iOS browsers running iOS < v17.2"), x.simulcast = !1), x.source && (a.source = x.source);
-        const _ = new Promise((U, B) => A(c, void 0, void 0, function* () {
+        const w = Object.assign(Object.assign({}, c.roomOptions.publishDefaults), s), T = "channelCount" in a.mediaStreamTrack.getSettings() && // @ts-ignore `channelCount` on getSettings() is currently only available for Safari, but is generally the best way to determine a stereo track https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/channelCount
+        a.mediaStreamTrack.getSettings().channelCount === 2 || a.mediaStreamTrack.getConstraints().channelCount === 2, P = (f = w.forceStereo) !== null && f !== void 0 ? f : T;
+        P && (w.dtx === void 0 && c.log.debug("Opus DTX will be disabled for stereo tracks by default. Enable them explicitly to make it work.", Ne(a)), w.red === void 0 && c.log.debug("Opus RED will be disabled for stereo tracks by default. Enable them explicitly to make it work."), (p = w.dtx) !== null && p !== void 0 || (w.dtx = !1), (v = w.red) !== null && v !== void 0 || (w.red = !1)), !u_() && c.roomOptions.e2ee && (c.log.info("End-to-end encryption is set up, simulcast publishing will be disabled on Safari versions and iOS browsers running iOS < v17.2"), w.simulcast = !1), w.source && (a.source = w.source);
+        const _ = new Promise((U, z) => A(c, void 0, void 0, function* () {
           try {
             if (this.engine.client.currentState !== tt.CONNECTED) {
               this.log.debug("deferring track publication until signal is connected", {
@@ -29104,21 +29104,21 @@ class sA extends FT {
               });
               let S = !1;
               const C = setTimeout(() => {
-                S = !0, a.stop(), B(new i0("publishing rejected as engine not connected within timeout", 408));
+                S = !0, a.stop(), z(new i0("publishing rejected as engine not connected within timeout", 408));
               }, 15e3);
               if (yield this.waitUntilEngineConnected(), clearTimeout(C), S)
                 return;
-              const M = yield this.publish(a, x, P);
+              const M = yield this.publish(a, w, P);
               U(M);
             } else
               try {
-                const S = yield this.publish(a, x, P);
+                const S = yield this.publish(a, w, P);
                 U(S);
               } catch (S) {
-                B(S);
+                z(S);
               }
           } catch (S) {
-            B(S);
+            z(S);
           }
         }));
         c.pendingPublishPromises.set(a, _);
@@ -29150,12 +29150,12 @@ class sA extends FT {
       var s, c, u, d, h, f, p, v, b, k;
       if (!this.hasPermissionsToPublish(e))
         throw new i0("failed to publish track, insufficient permissions", 403);
-      Array.from(this.trackPublications.values()).find((F) => vs(e) && F.source === e.source) && e.source !== X.Source.Unknown && this.log.info("publishing a second track with the same source: ".concat(e.source), Ne(e)), t.stopMicTrackOnMute && Si(e) && (e.stopOnMute = !0), e.source === X.Source.ScreenShare && vr() && (t.simulcast = !1), t.videoCodec === "av1" && !a_() && (t.videoCodec = void 0), t.videoCodec === "vp9" && !r_() && (t.videoCodec = void 0), t.videoCodec === void 0 && (t.videoCodec = hm), this.enabledPublishVideoCodecs.length > 0 && (this.enabledPublishVideoCodecs.some((F) => t.videoCodec === Go(F.mime)) || (t.videoCodec = Go(this.enabledPublishVideoCodecs[0].mime)));
+      Array.from(this.trackPublications.values()).find((B) => vs(e) && B.source === e.source) && e.source !== X.Source.Unknown && this.log.info("publishing a second track with the same source: ".concat(e.source), Ne(e)), t.stopMicTrackOnMute && Si(e) && (e.stopOnMute = !0), e.source === X.Source.ScreenShare && vr() && (t.simulcast = !1), t.videoCodec === "av1" && !a_() && (t.videoCodec = void 0), t.videoCodec === "vp9" && !r_() && (t.videoCodec = void 0), t.videoCodec === void 0 && (t.videoCodec = hm), this.enabledPublishVideoCodecs.length > 0 && (this.enabledPublishVideoCodecs.some((B) => t.videoCodec === Go(B.mime)) || (t.videoCodec = Go(this.enabledPublishVideoCodecs[0].mime)));
       const T = t.videoCodec;
-      e.on(ue.Muted, this.onTrackMuted), e.on(ue.Unmuted, this.onTrackUnmuted), e.on(ue.Ended, this.handleTrackEnded), e.on(ue.UpstreamPaused, this.onTrackUpstreamPaused), e.on(ue.UpstreamResumed, this.onTrackUpstreamResumed), e.on(ue.AudioTrackFeatureUpdate, this.onTrackFeatureUpdate);
+      e.on(ce.Muted, this.onTrackMuted), e.on(ce.Unmuted, this.onTrackUnmuted), e.on(ce.Ended, this.handleTrackEnded), e.on(ce.UpstreamPaused, this.onTrackUpstreamPaused), e.on(ce.UpstreamResumed, this.onTrackUpstreamResumed), e.on(ce.AudioTrackFeatureUpdate, this.onTrackFeatureUpdate);
       const P = [], _ = !(!((s = t.dtx) !== null && s !== void 0) || s), U = e.getSourceTrackSettings();
       U.autoGainControl && P.push(Dt.TF_AUTO_GAIN_CONTROL), U.echoCancellation && P.push(Dt.TF_ECHO_CANCELLATION), U.noiseSuppression && P.push(Dt.TF_NOISE_SUPPRESSION), U.channelCount && U.channelCount > 1 && P.push(Dt.TF_STEREO), _ && P.push(Dt.TF_NO_DTX), qi(e) && e.hasPreConnectBuffer && P.push(Dt.TF_PRECONNECT_BUFFER);
-      const B = this.normalizeRequestedFrameMetadataOptions(e, t), S = new Wo({
+      const z = this.normalizeRequestedFrameMetadataOptions(e, t), S = new Wo({
         // get local track id for use during publishing
         cid: e.mediaStreamTrack.id,
         name: t.name,
@@ -29169,23 +29169,23 @@ class sA extends FT {
         stream: t?.stream,
         backupCodecPolicy: t?.backupCodecPolicy,
         audioFeatures: P,
-        packetTrailerFeatures: B
+        packetTrailerFeatures: z
       });
       let C;
       if (e.kind === X.Kind.Video) {
-        let F;
+        let B;
         try {
-          F = yield e.waitForDimensions();
+          B = yield e.waitForDimensions();
         } catch {
-          const te = (d = (u = this.roomOptions.videoCaptureDefaults) === null || u === void 0 ? void 0 : u.resolution) !== null && d !== void 0 ? d : $o.h720.resolution;
-          F = {
-            width: te.width,
-            height: te.height
+          const Z = (d = (u = this.roomOptions.videoCaptureDefaults) === null || u === void 0 ? void 0 : u.resolution) !== null && d !== void 0 ? d : $o.h720.resolution;
+          B = {
+            width: Z.width,
+            height: Z.height
           }, this.log.error("could not determine track dimensions, using defaults", Object.assign(Object.assign({}, Ne(e)), {
-            dims: F
+            dims: B
           }));
         }
-        S.width = F.width, S.height = F.height, gi(e) && ($n(T) && (e.source === X.Source.ScreenShare && (t.scalabilityMode = "L1T3", "contentHint" in e.mediaStreamTrack && (e.mediaStreamTrack.contentHint = "motion", this.log.debug("forcing contentHint to motion for screenshare with SVC codecs", Ne(e)))), t.scalabilityMode = (h = t.scalabilityMode) !== null && h !== void 0 ? h : "L3T3_KEY"), S.simulcastCodecs = [new Yh({
+        S.width = B.width, S.height = B.height, gi(e) && ($n(T) && (e.source === X.Source.ScreenShare && (t.scalabilityMode = "L1T3", "contentHint" in e.mediaStreamTrack && (e.mediaStreamTrack.contentHint = "motion", this.log.debug("forcing contentHint to motion for screenshare with SVC codecs", Ne(e)))), t.scalabilityMode = (h = t.scalabilityMode) !== null && h !== void 0 ? h : "L3T3_KEY"), S.simulcastCodecs = [new Yh({
           codec: T,
           cid: e.mediaStreamTrack.id
         })], t.backupCodec === !0 && (t.backupCodec = {
@@ -29203,23 +29203,23 @@ class sA extends FT {
       if (!this.engine || this.engine.isClosed)
         throw new ut("cannot publish track when not connected");
       const M = () => A(this, void 0, void 0, function* () {
-        var F, G, te;
+        var B, G, Z;
         if (!this.engine.pcManager)
           throw new ut("pcManager is not ready");
-        if (e.sender = yield this.engine.createSender(e, t, C), gi(e) && (e.publishOptions = t), this.emit(ee.LocalSenderCreated, e.sender, e), gi(e) && ((F = t.degradationPreference) !== null && F !== void 0 || (t.degradationPreference = xM(e)), e.setDegradationPreference(t.degradationPreference)), C)
+        if (e.sender = yield this.engine.createSender(e, t, C), gi(e) && (e.publishOptions = t), this.emit(ee.LocalSenderCreated, e.sender, e), gi(e) && ((B = t.degradationPreference) !== null && B !== void 0 || (t.degradationPreference = xM(e)), e.setDegradationPreference(t.degradationPreference)), C)
           if (vr() && e.kind === X.Kind.Audio) {
-            let he;
-            for (const me of this.engine.pcManager.publisher.getTransceivers())
-              if (me.sender === e.sender) {
-                he = me;
+            let fe;
+            for (const he of this.engine.pcManager.publisher.getTransceivers())
+              if (he.sender === e.sender) {
+                fe = he;
                 break;
               }
-            he && this.engine.pcManager.publisher.setTrackCodecBitrate({
-              transceiver: he,
+            fe && this.engine.pcManager.publisher.setTrackCodecBitrate({
+              transceiver: fe,
               codec: "opus",
               maxbr: !((G = C[0]) === null || G === void 0) && G.maxBitrate ? C[0].maxBitrate / 1e3 : 0
             });
-          } else e.codec && $n(e.codec) && (!((te = C[0]) === null || te === void 0) && te.maxBitrate) && this.engine.pcManager.publisher.setTrackCodecBitrate({
+          } else e.codec && $n(e.codec) && (!((Z = C[0]) === null || Z === void 0) && Z.maxBitrate) && this.engine.pcManager.publisher.setTrackCodecBitrate({
             cid: S.cid,
             codec: e.codec,
             maxbr: C[0].maxBitrate / 1e3
@@ -29227,110 +29227,110 @@ class sA extends FT {
         yield this.engine.negotiate();
       });
       let D;
-      const V = new Promise((F, G) => A(this, void 0, void 0, function* () {
-        var te;
+      const H = new Promise((B, G) => A(this, void 0, void 0, function* () {
+        var Z;
         try {
-          D = yield this.engine.addTrack(S), F(D);
-        } catch (he) {
-          if (e.sender && (!((te = this.engine.pcManager) === null || te === void 0) && te.publisher)) {
+          D = yield this.engine.addTrack(S), B(D);
+        } catch (fe) {
+          if (e.sender && (!((Z = this.engine.pcManager) === null || Z === void 0) && Z.publisher)) {
             try {
               this.engine.pcManager.publisher.removeTrack(e.sender);
-            } catch (me) {
-              this.log.error(me);
+            } catch (he) {
+              this.log.error(he);
             }
-            yield this.engine.negotiate().catch((me) => {
+            yield this.engine.negotiate().catch((he) => {
               this.log.error("failed to negotiate after removing track due to failed add track request", Object.assign(Object.assign({}, Ne(e)), {
-                error: me
+                error: he
               }));
             });
           }
-          G(he);
+          G(fe);
         }
       }));
-      if (this.enabledPublishVideoCodecs.length > 0 && B.length === 0)
-        D = (yield Promise.all([V, M()]))[0];
+      if (this.enabledPublishVideoCodecs.length > 0 && z.length === 0)
+        D = (yield Promise.all([H, M()]))[0];
       else {
-        D = yield V;
-        let F;
+        D = yield H;
+        let B;
         if (D.codecs.forEach((G) => {
-          F === void 0 && (F = G.mimeType);
-        }), F && e.kind === X.Kind.Video) {
-          const G = Go(F);
+          B === void 0 && (B = G.mimeType);
+        }), B && e.kind === X.Kind.Video) {
+          const G = Go(B);
           G !== T && (this.log.debug("falling back to server selected codec", Object.assign(Object.assign({}, Ne(e)), {
             codec: G
           })), t.videoCodec = G, C = pu(e.source === X.Source.ScreenShare, S.width, S.height, t));
         }
         yield M();
       }
-      const Z = new gm(e.kind, D, e, {
+      const W = new gm(e.kind, D, e, {
         loggerName: this.roomOptions.loggerName,
         loggerContextCb: () => this.logContext
       });
-      if (Z.on(ue.CpuConstrained, (F) => this.onTrackCpuConstrained(F, Z)), Z.options = t, e.sid = D.sid, gi(e) && (e.publishOptions = t, S.width && S.height && (e.lastEncodedDimensions = {
+      if (W.on(ce.CpuConstrained, (B) => this.onTrackCpuConstrained(B, W)), W.options = t, e.sid = D.sid, gi(e) && (e.publishOptions = t, S.width && S.height && (e.lastEncodedDimensions = {
         width: S.width,
         height: S.height
       })), this.log.debug("publishing ".concat(e.kind, " with encodings"), {
         encodings: C,
         trackInfo: D
-      }), gi(e) ? e.startMonitor(this.engine.client) : qi(e) && e.startMonitor(), this.addTrackPublication(Z), this.emit(ee.LocalTrackPublished, Z), qi(e) && D.audioFeatures.includes(Dt.TF_PRECONNECT_BUFFER)) {
-        const F = e.getPreConnectBuffer(), G = e.getPreConnectBufferMimeType();
-        this.on(ee.LocalTrackSubscribed, (te) => {
-          if (te.trackSid === D.sid) {
+      }), gi(e) ? e.startMonitor(this.engine.client) : qi(e) && e.startMonitor(), this.addTrackPublication(W), this.emit(ee.LocalTrackPublished, W), qi(e) && D.audioFeatures.includes(Dt.TF_PRECONNECT_BUFFER)) {
+        const B = e.getPreConnectBuffer(), G = e.getPreConnectBufferMimeType();
+        this.on(ee.LocalTrackSubscribed, (Z) => {
+          if (Z.trackSid === D.sid) {
             if (!e.hasPreConnectBuffer) {
               this.log.warn("subscribe event came to late, buffer already closed");
               return;
             }
             this.log.debug("finished recording preconnect buffer", Ne(e)), e.stopPreConnectBuffer();
           }
-        }), F && new Promise((he, me) => A(this, void 0, void 0, function* () {
-          var oe, j, $, re, be, Ce;
+        }), B && new Promise((fe, he) => A(this, void 0, void 0, function* () {
+          var pe, F, ie, le, we, xe;
           try {
             this.log.debug("waiting for agent", Ne(e));
-            const de = setTimeout(() => {
-              me(new Error("agent not active within 10 seconds"));
+            const ue = setTimeout(() => {
+              he(new Error("agent not active within 10 seconds"));
             }, 1e4), ge = yield this.waitUntilActiveAgentPresent();
-            clearTimeout(de), this.log.debug("sending preconnect buffer", Ne(e));
-            const ce = yield this.streamBytes({
+            clearTimeout(ue), this.log.debug("sending preconnect buffer", Ne(e));
+            const se = yield this.streamBytes({
               name: "preconnect-buffer",
               mimeType: G,
               topic: "lk.agent.pre-connect-audio-buffer",
               destinationIdentities: [ge.identity],
               attributes: {
-                trackId: Z.trackSid,
-                sampleRate: String((be = U.sampleRate) !== null && be !== void 0 ? be : "48000"),
-                channels: String((Ce = U.channelCount) !== null && Ce !== void 0 ? Ce : "1")
+                trackId: W.trackSid,
+                sampleRate: String((we = U.sampleRate) !== null && we !== void 0 ? we : "48000"),
+                channels: String((xe = U.channelCount) !== null && xe !== void 0 ? xe : "1")
               }
             });
             try {
-              for (var O = !0, Q = Wn(F), le; le = yield Q.next(), oe = le.done, !oe; O = !0) {
-                re = le.value, O = !1;
-                const fe = re;
-                yield ce.write(fe);
+              for (var O = !0, Q = Wn(B), oe; oe = yield Q.next(), pe = oe.done, !pe; O = !0) {
+                le = oe.value, O = !1;
+                const de = le;
+                yield se.write(de);
               }
-            } catch (fe) {
-              j = {
-                error: fe
+            } catch (de) {
+              F = {
+                error: de
               };
             } finally {
               try {
-                !O && !oe && ($ = Q.return) && (yield $.call(Q));
+                !O && !pe && (ie = Q.return) && (yield ie.call(Q));
               } finally {
-                if (j) throw j.error;
+                if (F) throw F.error;
               }
             }
-            yield ce.close(), he();
-          } catch (de) {
-            me(de);
+            yield se.close(), fe();
+          } catch (ue) {
+            he(ue);
           }
         })).then(() => {
           this.log.debug("preconnect buffer sent successfully", Ne(e));
-        }).catch((he) => {
+        }).catch((fe) => {
           this.log.error("error sending preconnect buffer", Object.assign(Object.assign({}, Ne(e)), {
-            error: he
+            error: fe
           }));
         });
       }
-      return Z;
+      return W;
     });
   }
   canPublishFrameMetadata() {
@@ -29359,8 +29359,8 @@ class sA extends FT {
       if (this.encryptionType !== it.NONE)
         return;
       let c;
-      if (this.trackPublications.forEach((x) => {
-        x.track && x.track === e && (c = x);
+      if (this.trackPublications.forEach((w) => {
+        w.track && w.track === e && (c = w);
       }), !c)
         throw new Yi("track is not published");
       if (!gi(e))
@@ -29408,7 +29408,7 @@ class sA extends FT {
         this.log.warn("track was not unpublished because no publication was found", u);
         return;
       }
-      e = c.track, e.off(ue.Muted, this.onTrackMuted), e.off(ue.Unmuted, this.onTrackUnmuted), e.off(ue.Ended, this.handleTrackEnded), e.off(ue.UpstreamPaused, this.onTrackUpstreamPaused), e.off(ue.UpstreamResumed, this.onTrackUpstreamResumed), e.off(ue.AudioTrackFeatureUpdate, this.onTrackFeatureUpdate), t === void 0 && (t = (s = (a = this.roomOptions) === null || a === void 0 ? void 0 : a.stopLocalTrackOnUnpublish) !== null && s !== void 0 ? s : !0), t ? e.stop() : e.stopMonitor();
+      e = c.track, e.off(ce.Muted, this.onTrackMuted), e.off(ce.Unmuted, this.onTrackUnmuted), e.off(ce.Ended, this.handleTrackEnded), e.off(ce.UpstreamPaused, this.onTrackUpstreamPaused), e.off(ce.UpstreamResumed, this.onTrackUpstreamResumed), e.off(ce.AudioTrackFeatureUpdate, this.onTrackFeatureUpdate), t === void 0 && (t = (s = (a = this.roomOptions) === null || a === void 0 ? void 0 : a.stopLocalTrackOnUnpublish) !== null && s !== void 0 ? s : !0), t ? e.stop() : e.stopMonitor();
       let d = !1;
       const h = e.sender;
       if (e.sender = void 0, this.engine.pcManager && this.engine.pcManager.currentState < dt.FAILED && h)
@@ -29422,7 +29422,7 @@ class sA extends FT {
           }
           if (gi(e)) {
             for (const p of e.simulcastCodecs) {
-              var f = ye(p, 2);
+              var f = be(p, 2);
               const v = f[1];
               if (v.sender) {
                 try {
@@ -29624,7 +29624,7 @@ class sA extends FT {
    */
   performRpc(e) {
     return this.rpcClientManager.performRpc(e).then((t) => {
-      let a = ye(t, 2);
+      let a = be(t, 2);
       return a[0], a[1];
     });
   }
@@ -29697,7 +29697,7 @@ class sA extends FT {
     return A(this, void 0, void 0, function* () {
       const a = Date.now();
       for (; Date.now() < a + 1e4; ) {
-        const s = Array.from(this.pendingPublishPromises.entries()).find((c) => ye(c, 1)[0].source === e);
+        const s = Array.from(this.pendingPublishPromises.entries()).find((c) => be(c, 1)[0].source === e);
         if (s)
           return s[1];
         yield Qt(20);
@@ -29771,7 +29771,7 @@ class oA extends Map {
 class qT extends Vi {
   constructor(e, t, a, s) {
     super(e, t.sid, t.name, s), this.track = void 0, this.allowed = !0, this.requestedDisabled = void 0, this.visible = !0, this.handleEnded = (c) => {
-      this.setTrack(void 0), this.emit(ue.Ended, c);
+      this.setTrack(void 0), this.emit(ce.Ended, c);
     }, this.handleVisibilityChange = (c) => {
       this.log.debug("adaptivestream video visibility ".concat(this.trackSid, ", visible=").concat(c), this.logContext), this.visible = c, this.emitTrackUpdate();
     }, this.handleVideoDimensionsChange = (c) => {
@@ -29795,7 +29795,7 @@ class qT extends Vi {
         trackSids: [this.trackSid]
       })]
     });
-    this.emit(ue.UpdateSubscription, s), this.emitSubscriptionUpdateIfChanged(t), this.emitPermissionUpdateIfChanged(a);
+    this.emit(ce.UpdateSubscription, s), this.emitSubscriptionUpdateIfChanged(t), this.emitPermissionUpdateIfChanged(a);
   }
   get subscriptionStatus() {
     return this.subscribed === !1 ? Vi.SubscriptionStatus.Unsubscribed : super.isSubscribed ? Vi.SubscriptionStatus.Subscribed : Vi.SubscriptionStatus.Desired;
@@ -29859,7 +29859,7 @@ class qT extends Vi {
   /** @internal */
   setTrack(e) {
     const t = this.subscriptionStatus, a = this.permissionStatus, s = this.track;
-    s !== e && (s && (s.off(ue.VideoDimensionsChanged, this.handleVideoDimensionsChange), s.off(ue.VisibilityChanged, this.handleVisibilityChange), s.off(ue.Ended, this.handleEnded), s.detach(), s.stopMonitor(), this.emit(ue.Unsubscribed, s)), super.setTrack(e), e && (e.sid = this.trackSid, e.on(ue.VideoDimensionsChanged, this.handleVideoDimensionsChange), e.on(ue.VisibilityChanged, this.handleVisibilityChange), e.on(ue.Ended, this.handleEnded), this.emit(ue.Subscribed, e)), this.emitPermissionUpdateIfChanged(a), this.emitSubscriptionUpdateIfChanged(t));
+    s !== e && (s && (s.off(ce.VideoDimensionsChanged, this.handleVideoDimensionsChange), s.off(ce.VisibilityChanged, this.handleVisibilityChange), s.off(ce.Ended, this.handleEnded), s.detach(), s.stopMonitor(), this.emit(ce.Unsubscribed, s)), super.setTrack(e), e && (e.sid = this.trackSid, e.on(ce.VideoDimensionsChanged, this.handleVideoDimensionsChange), e.on(ce.VisibilityChanged, this.handleVisibilityChange), e.on(ce.Ended, this.handleEnded), this.emit(ce.Subscribed, e)), this.emitPermissionUpdateIfChanged(a), this.emitSubscriptionUpdateIfChanged(t));
   }
   /** @internal */
   setAllowed(e) {
@@ -29868,20 +29868,20 @@ class qT extends Vi {
   }
   /** @internal */
   setSubscriptionError(e) {
-    this.emit(ue.SubscriptionFailed, e);
+    this.emit(ce.SubscriptionFailed, e);
   }
   /** @internal */
   updateInfo(e) {
     super.updateInfo(e);
     const t = this.metadataMuted;
-    this.metadataMuted = e.muted, this.track ? this.track.setMuted(e.muted) : t !== e.muted && this.emit(e.muted ? ue.Muted : ue.Unmuted);
+    this.metadataMuted = e.muted, this.track ? this.track.setMuted(e.muted) : t !== e.muted && this.emit(e.muted ? ce.Muted : ce.Unmuted);
   }
   emitSubscriptionUpdateIfChanged(e) {
     const t = this.subscriptionStatus;
-    e !== t && this.emit(ue.SubscriptionStatusChanged, t, e);
+    e !== t && this.emit(ce.SubscriptionStatusChanged, t, e);
   }
   emitPermissionUpdateIfChanged(e) {
-    this.permissionStatus !== e && this.emit(ue.SubscriptionPermissionChanged, this.permissionStatus, e);
+    this.permissionStatus !== e && this.emit(ce.SubscriptionPermissionChanged, this.permissionStatus, e);
   }
   isManualOperationAllowed() {
     return this.isDesired ? !0 : (this.log.warn("cannot update track settings when not subscribed", this.logContext), !1);
@@ -29912,7 +29912,7 @@ class qT extends Vi {
         quality: xn.HIGH
       })), e.quality = xn.HIGH);
     }
-    this.emit(ue.UpdateSettings, e);
+    this.emit(ce.UpdateSettings, e);
   }
 }
 class bu extends FT {
@@ -29937,23 +29937,23 @@ class bu extends FT {
     super(t, a || "", s, c, u, d, h), this.signalClient = e, this.trackPublications = /* @__PURE__ */ new Map(), this.audioTrackPublications = /* @__PURE__ */ new Map(), this.videoTrackPublications = /* @__PURE__ */ new Map(), this.dataTracks = new oA(f.map((v) => [v.info.name, v])), this.volumeMap = /* @__PURE__ */ new Map(), this.clientProtocol = p;
   }
   addTrackPublication(e) {
-    super.addTrackPublication(e), e.on(ue.UpdateSettings, (t) => {
+    super.addTrackPublication(e), e.on(ce.UpdateSettings, (t) => {
       this.log.debug("send update settings", Object.assign(Object.assign(Object.assign({}, this.logContext), Ne(e)), {
         settings: t
       })), this.signalClient.sendUpdateTrackSettings(t);
-    }), e.on(ue.UpdateSubscription, (t) => {
+    }), e.on(ce.UpdateSubscription, (t) => {
       t.participantTracks.forEach((a) => {
         a.participantSid = this.sid;
       }), this.signalClient.sendUpdateSubscription(t);
-    }), e.on(ue.SubscriptionPermissionChanged, (t) => {
+    }), e.on(ce.SubscriptionPermissionChanged, (t) => {
       this.emit(ee.TrackSubscriptionPermissionChanged, e, t);
-    }), e.on(ue.SubscriptionStatusChanged, (t) => {
+    }), e.on(ce.SubscriptionStatusChanged, (t) => {
       this.emit(ee.TrackSubscriptionStatusChanged, e, t);
-    }), e.on(ue.Subscribed, (t) => {
+    }), e.on(ce.Subscribed, (t) => {
       this.emit(ee.TrackSubscribed, t, e);
-    }), e.on(ue.Unsubscribed, (t) => {
+    }), e.on(ce.Unsubscribed, (t) => {
       this.emit(ee.TrackUnsubscribed, t, e);
-    }), e.on(ue.SubscriptionFailed, (t) => {
+    }), e.on(ce.SubscriptionFailed, (t) => {
       this.emit(ee.TrackSubscriptionFailed, e.trackSid, t);
     });
   }
@@ -30089,7 +30089,7 @@ class bu extends FT {
   /** @internal */
   removeRemoteDataTrack(e) {
     for (const a of this.dataTracks.entries()) {
-      var t = ye(a, 2);
+      var t = be(a, 2);
       const s = t[0], c = t[1];
       e === c.info.sid && this.dataTracks.delete(s);
     }
@@ -30104,10 +30104,10 @@ class bu extends FT {
     })), super.emit(e, ...a);
   }
 }
-var Ee;
+var Te;
 (function(i) {
   i.Disconnected = "disconnected", i.Connecting = "connecting", i.Connected = "connected", i.Reconnecting = "reconnecting", i.SignalReconnecting = "signalReconnecting";
-})(Ee || (Ee = {}));
+})(Te || (Te = {}));
 const cA = 4 * 1e3;
 class yr extends gn.EventEmitter {
   get hasE2EESetup() {
@@ -30119,16 +30119,16 @@ class yr extends gn.EventEmitter {
    */
   constructor(e) {
     var t, a, s, c, u, d, h;
-    if (super(), t = this, this.state = Ee.Disconnected, this.activeSpeakers = [], this.isE2EEEnabled = !1, this.audioEnabled = !0, this.e2eeStateMutex = new Gt(), this.isVideoPlaybackBlocked = !1, this.log = _e, this.bufferedEvents = [], this.isResuming = !1, this.connect = (f, p, v) => A(this, void 0, void 0, function* () {
+    if (super(), t = this, this.state = Te.Disconnected, this.activeSpeakers = [], this.isE2EEEnabled = !1, this.audioEnabled = !0, this.e2eeStateMutex = new Gt(), this.isVideoPlaybackBlocked = !1, this.log = _e, this.bufferedEvents = [], this.isResuming = !1, this.connect = (f, p, v) => A(this, void 0, void 0, function* () {
       var b;
       if (!s_())
         throw ri() ? Error("WebRTC isn't detected, have you called registerGlobals?") : Error("LiveKit doesn't seem to be supported on this browser. Try to update your browser and make sure no browser extensions are disabling webRTC.");
       const k = yield this.disconnectLock.lock();
-      if (this.state === Ee.Connected)
+      if (this.state === Te.Connected)
         return this.log.info("already connected to room ".concat(this.name)), k(), Promise.resolve();
       if (this.connectFuture)
         return k(), this.connectFuture.promise;
-      this.setAndEmitConnectionState(Ee.Connecting), ((b = this.regionUrlProvider) === null || b === void 0 ? void 0 : b.getServerUrl().toString()) !== bT(f) && (this.regionUrl = void 0, this.regionUrlProvider = void 0), xs(new URL(f)) && (this.regionUrlProvider === void 0 ? this.regionUrlProvider = new qe(f, p) : this.regionUrlProvider.updateToken(p), this.regionUrlProvider.fetchRegionSettings().then((P) => {
+      this.setAndEmitConnectionState(Te.Connecting), ((b = this.regionUrlProvider) === null || b === void 0 ? void 0 : b.getServerUrl().toString()) !== bT(f) && (this.regionUrl = void 0, this.regionUrlProvider = void 0), xs(new URL(f)) && (this.regionUrlProvider === void 0 ? this.regionUrlProvider = new qe(f, p) : this.regionUrlProvider.updateToken(p), this.regionUrlProvider.fetchRegionSettings().then((P) => {
         var _;
         (_ = this.regionUrlProvider) === null || _ === void 0 || _.setServerReportedRegions(P);
       }).catch((P) => {
@@ -30136,40 +30136,40 @@ class yr extends gn.EventEmitter {
           error: P
         });
       }));
-      const x = (P, _, U) => A(this, void 0, void 0, function* () {
-        var B, S;
+      const w = (P, _, U) => A(this, void 0, void 0, function* () {
+        var z, S;
         this.abortController && this.abortController.abort();
         const C = new AbortController();
         this.abortController = C, k?.();
         try {
           if (yield bs.getInstance().getBackOffPromise(f), C.signal.aborted)
-            throw Se.cancelled("Connection attempt aborted");
+            throw ke.cancelled("Connection attempt aborted");
           yield this.attemptConnection(U ?? f, p, v, C), this.abortController = void 0, P();
         } catch (M) {
-          if (this.regionUrlProvider && M instanceof Se && M.reason !== nt.Cancelled && M.reason !== nt.NotAllowed) {
+          if (this.regionUrlProvider && M instanceof ke && M.reason !== nt.Cancelled && M.reason !== nt.NotAllowed) {
             let D = null;
             try {
-              this.log.debug("Fetching next region"), D = yield this.regionUrlProvider.getNextBestRegionUrl((B = this.abortController) === null || B === void 0 ? void 0 : B.signal);
-            } catch (V) {
-              if (V instanceof Se && (V.status === 401 || V.reason === nt.Cancelled)) {
-                this.handleDisconnect(this.options.stopLocalTrackOnUnpublish), _(V);
+              this.log.debug("Fetching next region"), D = yield this.regionUrlProvider.getNextBestRegionUrl((z = this.abortController) === null || z === void 0 ? void 0 : z.signal);
+            } catch (H) {
+              if (H instanceof ke && (H.status === 401 || H.reason === nt.Cancelled)) {
+                this.handleDisconnect(this.options.stopLocalTrackOnUnpublish), _(H);
                 return;
               }
             }
             // making sure we only register failed attempts on things we actually care about
-            [nt.InternalError, nt.ServerUnreachable, nt.Timeout].includes(M.reason) && (this.log.debug("Adding failed connection attempt to back off"), bs.getInstance().addFailedConnectionAttempt(f)), D && !(!((S = this.abortController) === null || S === void 0) && S.signal.aborted) ? (this.log.info("Initial connection failed with ConnectionError: ".concat(M.message, ". Retrying with another region: ").concat(D)), this.recreateEngine(!0), yield x(P, _, D)) : (this.handleDisconnect(this.options.stopLocalTrackOnUnpublish, f0(M)), _(M));
+            [nt.InternalError, nt.ServerUnreachable, nt.Timeout].includes(M.reason) && (this.log.debug("Adding failed connection attempt to back off"), bs.getInstance().addFailedConnectionAttempt(f)), D && !(!((S = this.abortController) === null || S === void 0) && S.signal.aborted) ? (this.log.info("Initial connection failed with ConnectionError: ".concat(M.message, ". Retrying with another region: ").concat(D)), this.recreateEngine(!0), yield w(P, _, D)) : (this.handleDisconnect(this.options.stopLocalTrackOnUnpublish, f0(M)), _(M));
           } else {
             let D = ni.UNKNOWN_REASON;
-            M instanceof Se && (D = f0(M)), this.handleDisconnect(this.options.stopLocalTrackOnUnpublish, D), _(M);
+            M instanceof ke && (D = f0(M)), this.handleDisconnect(this.options.stopLocalTrackOnUnpublish, D), _(M);
           }
         }
       }), T = this.regionUrl;
       return this.regionUrl = void 0, this.connectFuture = new Lt((P, _) => {
-        x(P, _, T);
+        w(P, _, T);
       }, () => {
         this.clearConnectionFutures();
       }), this.connectFuture.promise;
-    }), this.connectSignal = (f, p, v, b, k, x) => A(this, void 0, void 0, function* () {
+    }), this.connectSignal = (f, p, v, b, k, w) => A(this, void 0, void 0, function* () {
       var T;
       const P = yield v.join(f, p, {
         autoSubscribe: b.autoSubscribe,
@@ -30178,7 +30178,7 @@ class yr extends gn.EventEmitter {
         maxRetries: b.maxRetries,
         e2eeEnabled: !!this.e2eeManager,
         websocketTimeout: b.websocketTimeout
-      }, x.signal, !k.singlePeerConnection), _ = P.joinResponse, U = P.serverInfo;
+      }, w.signal, !k.singlePeerConnection), _ = P.joinResponse, U = P.serverInfo;
       if (this.serverInfo = U, !U.version)
         throw new qR("unknown server version");
       return U.version === "0.15.1" && this.options.dynacast && (this.log.debug("disabling dynacast due to server version"), k.dynacast = !1), _;
@@ -30194,26 +30194,26 @@ class yr extends gn.EventEmitter {
         }
       this.handleParticipantUpdates([p, ...f.otherParticipants]), f.room && this.handleRoomUpdate(f.room);
     }, this.attemptConnection = (f, p, v, b) => A(this, void 0, void 0, function* () {
-      var k, x;
-      this.state === Ee.Reconnecting || this.isResuming || !((k = this.engine) === null || k === void 0) && k.pendingReconnect ? (this.log.info("Reconnection attempt replaced by new connection attempt"), this.recreateEngine(!0)) : this.maybeCreateEngine(), !((x = this.regionUrlProvider) === null || x === void 0) && x.isCloud() && this.engine.setRegionStrategy(this.createRegionStrategy()), this.acquireAudioContext(), this.connOptions = Object.assign(Object.assign({}, ap), v), this.connOptions.rtcConfig && (this.engine.rtcConfig = this.connOptions.rtcConfig), this.connOptions.peerConnectionTimeout && (this.engine.peerConnectionTimeout = this.connOptions.peerConnectionTimeout);
+      var k, w;
+      this.state === Te.Reconnecting || this.isResuming || !((k = this.engine) === null || k === void 0) && k.pendingReconnect ? (this.log.info("Reconnection attempt replaced by new connection attempt"), this.recreateEngine(!0)) : this.maybeCreateEngine(), !((w = this.regionUrlProvider) === null || w === void 0) && w.isCloud() && this.engine.setRegionStrategy(this.createRegionStrategy()), this.acquireAudioContext(), this.connOptions = Object.assign(Object.assign({}, ap), v), this.connOptions.rtcConfig && (this.engine.rtcConfig = this.connOptions.rtcConfig), this.connOptions.peerConnectionTimeout && (this.engine.peerConnectionTimeout = this.connOptions.peerConnectionTimeout);
       try {
         const T = yield this.connectSignal(f, p, this.engine, this.connOptions, this.options, b);
         this.applyJoinResponse(T), this.setupLocalParticipantEvents(), this.emit(Y.SignalConnected);
       } catch (T) {
         yield this.engine.close(), this.recreateEngine();
-        const P = b.signal.aborted ? Se.cancelled("Signal connection aborted") : Se.serverUnreachable("could not establish signal connection");
-        throw T instanceof Error && (P.message = "".concat(P.message, ": ").concat(T.message)), T instanceof Se && (P.reason = T.reason, P.status = T.status), this.log.debug("error trying to establish signal connection", {
+        const P = b.signal.aborted ? ke.cancelled("Signal connection aborted") : ke.serverUnreachable("could not establish signal connection");
+        throw T instanceof Error && (P.message = "".concat(P.message, ": ").concat(T.message)), T instanceof ke && (P.reason = T.reason, P.status = T.status), this.log.debug("error trying to establish signal connection", {
           error: T
         }), P;
       }
       if (b.signal.aborted)
-        throw yield this.engine.close(), this.recreateEngine(), Se.cancelled("Connection attempt aborted");
+        throw yield this.engine.close(), this.recreateEngine(), ke.cancelled("Connection attempt aborted");
       try {
         yield this.engine.waitForPCInitialConnection(this.connOptions.peerConnectionTimeout, b);
       } catch (T) {
         throw yield this.engine.close(), this.recreateEngine(), T;
       }
-      mn() && this.options.disconnectOnPageLeave && (window.addEventListener("pagehide", this.onPageLeave), window.addEventListener("beforeunload", this.onPageLeave)), mn() && window.addEventListener("freeze", this.onPageLeave), this.setAndEmitConnectionState(Ee.Connected), this.emit(Y.Connected), bs.getInstance().resetFailedConnectionAttempts(f), this.registerConnectionReconcile(), this.regionUrlProvider && this.regionUrlProvider.notifyConnected();
+      mn() && this.options.disconnectOnPageLeave && (window.addEventListener("pagehide", this.onPageLeave), window.addEventListener("beforeunload", this.onPageLeave)), mn() && window.addEventListener("freeze", this.onPageLeave), this.setAndEmitConnectionState(Te.Connected), this.emit(Y.Connected), bs.getInstance().resetFailedConnectionAttempts(f), this.registerConnectionReconcile(), this.regionUrlProvider && this.regionUrlProvider.notifyConnected();
     }), this.disconnect = function() {
       for (var f = arguments.length, p = new Array(f), v = 0; v < f; v++)
         p[v] = arguments[v];
@@ -30221,16 +30221,16 @@ class yr extends gn.EventEmitter {
         var b = this;
         let k = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : !0;
         return (function* () {
-          var x, T, P;
+          var w, T, P;
           const _ = yield b.disconnectLock.lock();
           try {
-            if (b.state === Ee.Disconnected) {
+            if (b.state === Te.Disconnected) {
               b.log.debug("already disconnected");
               return;
             }
-            if (b.log.info("disconnect from room"), b.state === Ee.Connecting || b.state === Ee.Reconnecting || b.isResuming) {
+            if (b.log.info("disconnect from room"), b.state === Te.Connecting || b.state === Te.Reconnecting || b.isResuming) {
               const U = "Abort connection attempt due to user initiated disconnect";
-              b.log.warn(U), (x = b.abortController) === null || x === void 0 || x.abort(U), (P = (T = b.connectFuture) === null || T === void 0 ? void 0 : T.reject) === null || P === void 0 || P.call(T, Se.cancelled("Client initiated disconnect")), b.connectFuture = void 0;
+              b.log.warn(U), (w = b.abortController) === null || w === void 0 || w.abort(U), (P = (T = b.connectFuture) === null || T === void 0 ? void 0 : T.reject) === null || P === void 0 || P.call(T, ke.cancelled("Client initiated disconnect")), b.connectFuture = void 0;
             }
             b.engine && (b.engine.client.isDisconnected || (yield b.engine.client.sendLeave()), yield b.engine.close()), b.handleDisconnect(k, ni.CLIENT_INITIATED), b.engine = void 0;
           } finally {
@@ -30249,9 +30249,9 @@ class yr extends gn.EventEmitter {
           b = document.createElement("audio"), b.id = v, b.autoplay = !0, b.hidden = !0;
           const k = yh();
           k.enabled = !0;
-          const x = new MediaStream([k]);
-          b.srcObject = x, document.addEventListener("visibilitychange", () => {
-            b && (b.srcObject = document.hidden ? null : x, document.hidden || (this.log.debug("page visible again, triggering startAudio to resume playback and update playback status"), this.startAudio()));
+          const w = new MediaStream([k]);
+          b.srcObject = w, document.addEventListener("visibilitychange", () => {
+            b && (b.srcObject = document.hidden ? null : w, document.hidden || (this.log.debug("page visible again, triggering startAudio to resume playback and update playback status"), this.startAudio()));
           }), document.body.append(b), this.once(Y.Disconnected, () => {
             b?.remove(), b = null;
           });
@@ -30288,7 +30288,7 @@ class yr extends gn.EventEmitter {
       this.clearConnectionReconcile(), this.isResuming = !1;
       for (const f of this.remoteParticipants.values())
         this.handleParticipantDisconnected(f.identity, f);
-      this.setAndEmitConnectionState(Ee.Reconnecting) && this.emit(Y.Reconnecting);
+      this.setAndEmitConnectionState(Te.Reconnecting) && this.emit(Y.Reconnecting);
     }, this.handleRestarted = () => {
       this.outgoingDataTrackManager.sfuWillRepublishTracks(), this.incomingDataTrackManager.resendSubscriptionUpdates();
     }, this.handleSignalRestarted = (f) => A(this, void 0, void 0, function* () {
@@ -30309,7 +30309,7 @@ class yr extends gn.EventEmitter {
       } catch {
         return;
       }
-      this.setAndEmitConnectionState(Ee.Connected), this.emit(Y.Reconnected), this.registerConnectionReconcile(), this.emitBufferedEvents();
+      this.setAndEmitConnectionState(Te.Connected), this.emit(Y.Reconnected), this.registerConnectionReconcile(), this.emitBufferedEvents();
     }), this.handleParticipantUpdates = (f) => {
       var p;
       for (const b of f) {
@@ -30406,7 +30406,7 @@ class yr extends gn.EventEmitter {
       this.emit(Y.SipDTMFReceived, p, f), f?.emit(ee.SipDTMFReceived, p);
     }, this.handleTranscription = (f, p) => {
       const v = p.transcribedParticipantIdentity === this.localParticipant.identity ? this.localParticipant : this.getParticipantByIdentity(p.transcribedParticipantIdentity), b = v?.trackPublications.get(p.trackId), k = g_(p, this.transcriptionReceivedTimes);
-      b?.emit(ue.TranscriptionReceived, k), v?.emit(ee.TranscriptionReceived, k, b), this.emit(Y.TranscriptionReceived, k, v, b);
+      b?.emit(ce.TranscriptionReceived, k), v?.emit(ee.TranscriptionReceived, k, b), this.emit(Y.TranscriptionReceived, k, v, b);
     }, this.handleChatMessage = (f, p) => {
       const v = v_(p);
       this.emit(Y.ChatMessage, v, f);
@@ -30456,13 +30456,13 @@ class yr extends gn.EventEmitter {
       var p;
       (p = f?.onPublish) === null || p === void 0 || p.call(f, this);
     }, this.onLocalTrackPublished = (f) => A(this, void 0, void 0, function* () {
-      var p, v, b, k, x, T;
-      (p = f.track) === null || p === void 0 || p.on(ue.TrackProcessorUpdate, this.onTrackProcessorUpdate), (v = f.track) === null || v === void 0 || v.on(ue.Restarted, this.onLocalTrackRestarted), (x = (k = (b = f.track) === null || b === void 0 ? void 0 : b.getProcessor()) === null || k === void 0 ? void 0 : k.onPublish) === null || x === void 0 || x.call(k, this), this.emit(Y.LocalTrackPublished, f, this.localParticipant), qi(f.track) && (yield f.track.checkForSilence()) && this.emit(Y.LocalAudioSilenceDetected, f);
+      var p, v, b, k, w, T;
+      (p = f.track) === null || p === void 0 || p.on(ce.TrackProcessorUpdate, this.onTrackProcessorUpdate), (v = f.track) === null || v === void 0 || v.on(ce.Restarted, this.onLocalTrackRestarted), (w = (k = (b = f.track) === null || b === void 0 ? void 0 : b.getProcessor()) === null || k === void 0 ? void 0 : k.onPublish) === null || w === void 0 || w.call(k, this), this.emit(Y.LocalTrackPublished, f, this.localParticipant), qi(f.track) && (yield f.track.checkForSilence()) && this.emit(Y.LocalAudioSilenceDetected, f);
       const P = yield (T = f.track) === null || T === void 0 ? void 0 : T.getDeviceId(!1), _ = sm(f.source);
       _ && P && P !== this.localParticipant.activeDeviceMap.get(_) && (this.localParticipant.activeDeviceMap.set(_, P), this.emit(Y.ActiveDeviceChanged, _, P));
     }), this.onLocalTrackUnpublished = (f) => {
       var p, v;
-      (p = f.track) === null || p === void 0 || p.off(ue.TrackProcessorUpdate, this.onTrackProcessorUpdate), (v = f.track) === null || v === void 0 || v.off(ue.Restarted, this.onLocalTrackRestarted), this.emit(Y.LocalTrackUnpublished, f, this.localParticipant);
+      (p = f.track) === null || p === void 0 || p.off(ce.TrackProcessorUpdate, this.onTrackProcessorUpdate), (v = f.track) === null || v === void 0 || v.off(ce.Restarted, this.onLocalTrackRestarted), this.emit(Y.LocalTrackUnpublished, f, this.localParticipant);
     }, this.onLocalTrackRestarted = (f) => A(this, void 0, void 0, function* () {
       const p = yield f.getDeviceId(!1), v = sm(f.source);
       v && p && p !== this.localParticipant.activeDeviceMap.get(v) && (this.log.debug("local track restarted, setting ".concat(v, " ").concat(p, " active")), this.localParticipant.activeDeviceMap.set(v, p), this.emit(Y.ActiveDeviceChanged, v, p));
@@ -30627,12 +30627,12 @@ class yr extends gn.EventEmitter {
    * returns once a sid has been issued by the server.
    */
   getSid() {
-    return this.state === Ee.Disconnected ? tn.resolve("") : this.roomInfo && this.roomInfo.sid !== "" ? tn.resolve(this.roomInfo.sid) : new tn((e, t) => {
+    return this.state === Te.Disconnected ? tn.resolve("") : this.roomInfo && this.roomInfo.sid !== "" ? tn.resolve(this.roomInfo.sid) : new tn((e, t) => {
       const a = (s) => {
-        s.sid !== "" && (this.engine.off(se.RoomUpdate, a), e(s.sid));
+        s.sid !== "" && (this.engine.off(re.RoomUpdate, a), e(s.sid));
       };
-      this.engine.on(se.RoomUpdate, a), this.once(Y.Disconnected, () => {
-        this.engine.off(se.RoomUpdate, a), t(new ut("Room disconnected before room server id was available"));
+      this.engine.on(re.RoomUpdate, a), this.once(Y.Disconnected, () => {
+        this.engine.off(re.RoomUpdate, a), t(new ut("Room disconnected before room server id was available"));
       });
     });
   }
@@ -30655,27 +30655,27 @@ class yr extends gn.EventEmitter {
     return (t = (e = this.roomInfo) === null || e === void 0 ? void 0 : e.numPublishers) !== null && t !== void 0 ? t : 0;
   }
   maybeCreateEngine() {
-    this.engine && (this.engine.isNewlyCreated || !this.engine.isClosed) || (this.engine = new NM(this.options), this.engine.e2eeManager = this.e2eeManager, this.engine.on(se.ParticipantUpdate, this.handleParticipantUpdates).on(se.RoomUpdate, this.handleRoomUpdate).on(se.SpeakersChanged, this.handleSpeakersChanged).on(se.StreamStateChanged, this.handleStreamStateUpdate).on(se.ConnectionQualityUpdate, this.handleConnectionQualityUpdate).on(se.SubscriptionError, this.handleSubscriptionError).on(se.SubscriptionPermissionUpdate, this.handleSubscriptionPermissionUpdate).on(se.MediaTrackAdded, (e, t, a) => {
+    this.engine && (this.engine.isNewlyCreated || !this.engine.isClosed) || (this.engine = new NM(this.options), this.engine.e2eeManager = this.e2eeManager, this.engine.on(re.ParticipantUpdate, this.handleParticipantUpdates).on(re.RoomUpdate, this.handleRoomUpdate).on(re.SpeakersChanged, this.handleSpeakersChanged).on(re.StreamStateChanged, this.handleStreamStateUpdate).on(re.ConnectionQualityUpdate, this.handleConnectionQualityUpdate).on(re.SubscriptionError, this.handleSubscriptionError).on(re.SubscriptionPermissionUpdate, this.handleSubscriptionPermissionUpdate).on(re.MediaTrackAdded, (e, t, a) => {
       this.onTrackAdded(e, t, a);
-    }).on(se.Disconnected, (e) => {
+    }).on(re.Disconnected, (e) => {
       this.handleDisconnect(this.options.stopLocalTrackOnUnpublish, e);
-    }).on(se.ActiveSpeakersUpdate, this.handleActiveSpeakersUpdate).on(se.DataPacketReceived, this.handleDataPacket).on(se.Resuming, () => {
-      this.clearConnectionReconcile(), this.isResuming = !0, this.log.debug("Resuming signal connection"), this.setAndEmitConnectionState(Ee.SignalReconnecting) && this.emit(Y.SignalReconnecting);
-    }).on(se.Resumed, () => {
-      this.registerConnectionReconcile(), this.isResuming = !1, this.log.debug("Resumed signal connection"), this.updateSubscriptions(), this.emitBufferedEvents(), this.setAndEmitConnectionState(Ee.Connected) && this.emit(Y.Reconnected);
-    }).on(se.SignalResumed, () => {
-      this.bufferedEvents = [], (this.state === Ee.Reconnecting || this.isResuming) && this.sendSyncState();
-    }).on(se.Restarting, this.handleRestarting).on(se.Restarted, this.handleRestarted).on(se.SignalRestarted, this.handleSignalRestarted).on(se.Offline, () => {
-      this.setAndEmitConnectionState(Ee.Reconnecting) && this.emit(Y.Reconnecting);
-    }).on(se.DCBufferStatusChanged, (e, t) => {
+    }).on(re.ActiveSpeakersUpdate, this.handleActiveSpeakersUpdate).on(re.DataPacketReceived, this.handleDataPacket).on(re.Resuming, () => {
+      this.clearConnectionReconcile(), this.isResuming = !0, this.log.debug("Resuming signal connection"), this.setAndEmitConnectionState(Te.SignalReconnecting) && this.emit(Y.SignalReconnecting);
+    }).on(re.Resumed, () => {
+      this.registerConnectionReconcile(), this.isResuming = !1, this.log.debug("Resumed signal connection"), this.updateSubscriptions(), this.emitBufferedEvents(), this.setAndEmitConnectionState(Te.Connected) && this.emit(Y.Reconnected);
+    }).on(re.SignalResumed, () => {
+      this.bufferedEvents = [], (this.state === Te.Reconnecting || this.isResuming) && this.sendSyncState();
+    }).on(re.Restarting, this.handleRestarting).on(re.Restarted, this.handleRestarted).on(re.SignalRestarted, this.handleSignalRestarted).on(re.Offline, () => {
+      this.setAndEmitConnectionState(Te.Reconnecting) && this.emit(Y.Reconnecting);
+    }).on(re.DCBufferStatusChanged, (e, t) => {
       this.emit(Y.DCBufferStatusChanged, e, t);
-    }).on(se.LocalTrackSubscribed, (e) => {
+    }).on(re.LocalTrackSubscribed, (e) => {
       this.handleLocalTrackSubscribed(e);
-    }).on(se.RoomMoved, (e) => {
+    }).on(re.RoomMoved, (e) => {
       this.log.debug("room moved", e), e.room && this.handleRoomUpdate(e.room), this.remoteParticipants.forEach((t, a) => {
         this.handleParticipantDisconnected(a, t);
       }), this.emit(Y.Moved, e.room.name), e.participant ? this.handleParticipantUpdates([e.participant, ...e.otherParticipants]) : this.handleParticipantUpdates(e.otherParticipants);
-    }).on(se.PublishDataTrackResponse, (e) => {
+    }).on(re.PublishDataTrackResponse, (e) => {
       if (!e.info) {
         this.log.warn("received PublishDataTrackResponse, but event.info was ".concat(e.info, ", so skipping."));
         return;
@@ -30689,31 +30689,31 @@ class yr extends gn.EventEmitter {
           usesE2ee: e.info.encryption !== it.NONE
         }
       });
-    }).on(se.UnPublishDataTrackResponse, (e) => {
+    }).on(re.UnPublishDataTrackResponse, (e) => {
       if (!e.info) {
         this.log.warn("received UnPublishDataTrackResponse, but event.info was ".concat(e.info, ", so skipping."));
         return;
       }
       this.outgoingDataTrackManager.receivedSfuUnpublishResponse(e.info.pubHandle);
-    }).on(se.DataTrackSubscriberHandles, (e) => {
+    }).on(re.DataTrackSubscriberHandles, (e) => {
       const t = new Map(Object.entries(e.subHandles).map((a) => {
-        let s = ye(a, 2), c = s[0], u = s[1];
+        let s = be(a, 2), c = s[0], u = s[1];
         return [parseInt(c, 10), u.trackSid];
       }));
       this.incomingDataTrackManager.receivedSfuSubscriberHandles(t);
-    }).on(se.DataTrackPacketReceived, (e) => {
+    }).on(re.DataTrackPacketReceived, (e) => {
       try {
         this.incomingDataTrackManager.packetReceived(e);
       } catch (t) {
         throw t;
       }
-    }).on(se.Joined, (e) => {
+    }).on(re.Joined, (e) => {
       const t = new Map(e.otherParticipants.map((a) => [a.identity, a.dataTracks.map((s) => hu.from(s))]));
       this.incomingDataTrackManager.receiveSfuPublicationUpdates(t);
-    }).on(se.TokenRefreshed, (e) => {
+    }).on(re.TokenRefreshed, (e) => {
       var t;
       (t = this.regionUrlProvider) === null || t === void 0 || t.updateToken(e);
-    }).on(se.ServerRegionsReported, (e) => {
+    }).on(re.ServerRegionsReported, (e) => {
       var t;
       (t = this.regionUrlProvider) === null || t === void 0 || t.setServerReportedRegions({
         regionSettings: e,
@@ -30755,13 +30755,13 @@ class yr extends gn.EventEmitter {
    */
   prepareConnection(e, t) {
     return A(this, void 0, void 0, function* () {
-      if (this.state === Ee.Disconnected) {
+      if (this.state === Te.Disconnected) {
         this.log.debug("prepareConnection to ".concat(e));
         try {
           if (xs(new URL(e)) && t) {
             this.regionUrlProvider = new qe(e, t);
             const a = yield this.regionUrlProvider.getNextBestRegionUrl();
-            a && this.state === Ee.Disconnected && (this.regionUrl = a, yield fetch(tc(a), {
+            a && this.state === Te.Disconnected && (this.regionUrl = a, yield fetch(tc(a), {
               method: "HEAD"
             }), this.log.debug("prepared connection to ".concat(a)));
           } else
@@ -30926,7 +30926,7 @@ class yr extends gn.EventEmitter {
       let u = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : !0;
       return (function* () {
         var d, h, f, p, v, b, k;
-        let x = !0, T = !1;
+        let w = !0, T = !1;
         const P = u ? {
           exact: s
         } : s;
@@ -30936,36 +30936,36 @@ class yr extends gn.EventEmitter {
           c.options.audioCaptureDefaults.deviceId = P;
           const U = Array.from(c.localParticipant.audioTrackPublications.values()).filter((S) => S.source === X.Source.Microphone);
           try {
-            x = (yield Promise.all(U.map((S) => {
+            w = (yield Promise.all(U.map((S) => {
               var C;
               return (C = S.audioTrack) === null || C === void 0 ? void 0 : C.setDeviceId(P);
             }))).every((S) => S === !0);
           } catch (S) {
             throw c.options.audioCaptureDefaults.deviceId = _, S;
           }
-          const B = U.some((S) => {
+          const z = U.some((S) => {
             var C, M;
             return (M = (C = S.track) === null || C === void 0 ? void 0 : C.isMuted) !== null && M !== void 0 ? M : !1;
           });
-          x && B && (T = !0);
+          w && z && (T = !0);
         } else if (a === "videoinput") {
           T = c.localParticipant.videoTrackPublications.size === 0;
           const _ = (h = c.getActiveDevice(a)) !== null && h !== void 0 ? h : c.options.videoCaptureDefaults.deviceId;
           c.options.videoCaptureDefaults.deviceId = P;
           const U = Array.from(c.localParticipant.videoTrackPublications.values()).filter((S) => S.source === X.Source.Camera);
           try {
-            x = (yield Promise.all(U.map((S) => {
+            w = (yield Promise.all(U.map((S) => {
               var C;
               return (C = S.videoTrack) === null || C === void 0 ? void 0 : C.setDeviceId(P);
             }))).every((S) => S === !0);
           } catch (S) {
             throw c.options.videoCaptureDefaults.deviceId = _, S;
           }
-          const B = U.some((S) => {
+          const z = U.some((S) => {
             var C, M;
             return (M = (C = S.track) === null || C === void 0 ? void 0 : C.isMuted) !== null && M !== void 0 ? M : !1;
           });
-          x && B && (T = !0);
+          w && z && (T = !0);
         } else if (a === "audiooutput") {
           if (T = !0, !lm() && !c.options.webAudioMix || c.options.webAudioMix && c.audioContext && !("setSinkId" in c.audioContext))
             throw new Error("cannot switch audio output, the current browser does not support it");
@@ -30980,7 +30980,7 @@ class yr extends gn.EventEmitter {
             throw c.options.audioOutput.deviceId = _, U;
           }
         }
-        return T && (c.localParticipant.activeDeviceMap.set(a, s), c.emit(Y.ActiveDeviceChanged, a, s)), x;
+        return T && (c.localParticipant.activeDeviceMap.set(a, s), c.emit(Y.ActiveDeviceChanged, a, s)), w;
       })();
     });
   }
@@ -30992,7 +30992,7 @@ class yr extends gn.EventEmitter {
     e && t && !t.client.isDisconnected ? t.client.sendLeave().finally(() => t.close()) : t?.close(), this.engine = void 0, this.isResuming = !1, this.remoteParticipants.clear(), this.sidToIdentity.clear(), this.bufferedEvents = [], this.maybeCreateEngine();
   }
   onTrackAdded(e, t, a) {
-    if (this.state === Ee.Connecting || this.state === Ee.Reconnecting) {
+    if (this.state === Te.Connecting || this.state === Te.Reconnecting) {
       const v = () => {
         this.log.debug("deferring on track for later", {
           mediaTrackId: e.id,
@@ -31005,7 +31005,7 @@ class yr extends gn.EventEmitter {
       this.once(Y.Reconnected, v), this.once(Y.Connected, v), this.once(Y.Disconnected, b);
       return;
     }
-    if (this.state === Ee.Disconnected) {
+    if (this.state === Te.Disconnected) {
       this.log.warn("skipping incoming track after Room disconnected");
       return;
     }
@@ -31072,7 +31072,7 @@ class yr extends gn.EventEmitter {
   handleDisconnect() {
     let e = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : !0, t = arguments.length > 1 ? arguments[1] : void 0;
     var a, s;
-    if (this.clearConnectionReconcile(), this.isResuming = !1, this.bufferedEvents = [], this.transcriptionReceivedTimes.clear(), this.incomingDataStreamManager.clearControllers(), this.incomingDataTrackManager.reset(), this.outgoingDataTrackManager.reset(), this.state !== Ee.Disconnected) {
+    if (this.clearConnectionReconcile(), this.isResuming = !1, this.bufferedEvents = [], this.transcriptionReceivedTimes.clear(), this.incomingDataStreamManager.clearControllers(), this.incomingDataTrackManager.reset(), this.outgoingDataTrackManager.reset(), this.state !== Te.Disconnected) {
       this.regionUrl = void 0, this.regionUrlProvider && this.regionUrlProvider.notifyDisconnected();
       try {
         this.remoteParticipants.forEach((c) => {
@@ -31084,7 +31084,7 @@ class yr extends gn.EventEmitter {
           c.track && this.localParticipant.unpublishTrack(c.track, e), e ? ((u = c.track) === null || u === void 0 || u.detach(), (d = c.track) === null || d === void 0 || d.stop()) : (h = c.track) === null || h === void 0 || h.stopMonitor();
         }), this.localParticipant.off(ee.ParticipantMetadataChanged, this.onLocalParticipantMetadataChanged).off(ee.ParticipantNameChanged, this.onLocalParticipantNameChanged).off(ee.AttributesChanged, this.onLocalAttributesChanged).off(ee.TrackMuted, this.onLocalTrackMuted).off(ee.TrackUnmuted, this.onLocalTrackUnmuted).off(ee.LocalTrackPublished, this.onLocalTrackPublished).off(ee.LocalTrackUnpublished, this.onLocalTrackUnpublished).off(ee.ConnectionQualityChanged, this.onLocalConnectionQualityChanged).off(ee.MediaDevicesError, this.onMediaDevicesError).off(ee.AudioStreamAcquired, this.startAudio).off(ee.ChatMessage, this.onLocalChatMessageSent).off(ee.ParticipantPermissionsChanged, this.onLocalParticipantPermissionsChanged), this.localParticipant.trackPublications.clear(), this.localParticipant.videoTrackPublications.clear(), this.localParticipant.audioTrackPublications.clear(), this.remoteParticipants.clear(), this.sidToIdentity.clear(), this.activeSpeakers = [], this.audioContext && typeof this.options.webAudioMix == "boolean" && (this.audioContext.close(), this.audioContext = void 0), mn() && (window.removeEventListener("beforeunload", this.onPageLeave), window.removeEventListener("pagehide", this.onPageLeave), window.removeEventListener("freeze", this.onPageLeave), (s = (a = navigator.mediaDevices) === null || a === void 0 ? void 0 : a.removeEventListener) === null || s === void 0 || s.call(a, "devicechange", this.handleDeviceChange));
       } finally {
-        this.setAndEmitConnectionState(Ee.Disconnected), this.emit(Y.Disconnected, t);
+        this.setAndEmitConnectionState(Te.Disconnected), this.emit(Y.Disconnected, t);
       }
     }
   }
@@ -31155,7 +31155,7 @@ class yr extends gn.EventEmitter {
     return this.remoteParticipants.set(e, a), this.sidToIdentity.set(t.sid, t.identity), this.emitWhenConnected(Y.ParticipantConnected, a), a.on(ee.TrackPublished, (s) => {
       this.emitWhenConnected(Y.TrackPublished, s, a);
     }).on(ee.TrackSubscribed, (s, c) => {
-      s.kind === X.Kind.Audio ? (s.on(ue.AudioPlaybackStarted, this.handleAudioPlaybackStarted), s.on(ue.AudioPlaybackFailed, this.handleAudioPlaybackFailed)) : s.kind === X.Kind.Video && (s.on(ue.VideoPlaybackFailed, this.handleVideoPlaybackFailed), s.on(ue.VideoPlaybackStarted, this.handleVideoPlaybackStarted)), this.emitWhenConnected(Y.TrackSubscribed, s, c, a);
+      s.kind === X.Kind.Audio ? (s.on(ce.AudioPlaybackStarted, this.handleAudioPlaybackStarted), s.on(ce.AudioPlaybackFailed, this.handleAudioPlaybackFailed)) : s.kind === X.Kind.Video && (s.on(ce.VideoPlaybackFailed, this.handleVideoPlaybackFailed), s.on(ce.VideoPlaybackStarted, this.handleVideoPlaybackStarted)), this.emitWhenConnected(Y.TrackSubscribed, s, c, a);
     }).on(ee.TrackUnpublished, (s) => {
       this.emit(Y.TrackUnpublished, s, a);
     }).on(ee.TrackUnsubscribed, (s, c) => {
@@ -31241,20 +31241,20 @@ class yr extends gn.EventEmitter {
     this.connectionReconcileInterval && Et.clearInterval(this.connectionReconcileInterval);
   }
   setAndEmitConnectionState(e) {
-    return e === this.state ? !1 : (this.log.info("connection state changed: ".concat(this.state, " -> ").concat(e)), this.state = e, this.incomingDataStreamManager.setConnected(e === Ee.Connected), this.emit(Y.ConnectionStateChanged, this.state), !0);
+    return e === this.state ? !1 : (this.log.info("connection state changed: ".concat(this.state, " -> ").concat(e)), this.state = e, this.incomingDataStreamManager.setConnected(e === Te.Connected), this.emit(Y.ConnectionStateChanged, this.state), !0);
   }
   emitBufferedEvents() {
     this.bufferedEvents.forEach((e) => {
-      let t = ye(e, 2), a = t[0], s = t[1];
+      let t = be(e, 2), a = t[0], s = t[1];
       this.emit(a, ...s);
     }), this.bufferedEvents = [];
   }
   emitWhenConnected(e) {
     for (var t = arguments.length, a = new Array(t > 1 ? t - 1 : 0), s = 1; s < t; s++)
       a[s - 1] = arguments[s];
-    if (this.state === Ee.Reconnecting || this.isResuming || !this.engine || this.engine.pendingReconnect)
+    if (this.state === Te.Reconnecting || this.isResuming || !this.engine || this.engine.pendingReconnect)
       this.bufferedEvents.push([e, a]);
-    else if (this.state === Ee.Connected)
+    else if (this.state === Te.Connected)
       return this.emit(e, ...a);
     return !1;
   }
@@ -31291,7 +31291,7 @@ class yr extends gn.EventEmitter {
       }), this.localParticipant.updateInfo(new gr({
         identity: "simulated-local",
         name: "local-name"
-      })), this.setupLocalParticipantEvents(), this.emit(Y.SignalConnected), this.emit(Y.Connected), this.setAndEmitConnectionState(Ee.Connected), u.video) {
+      })), this.setupLocalParticipantEvents(), this.emit(Y.SignalConnected), this.emit(Y.Connected), this.setAndEmitConnectionState(Te.Connected), u.video) {
         const h = new gm(X.Kind.Video, new us({
           source: Ct.CAMERA,
           sid: Math.floor(Math.random() * 1e4).toString(),
@@ -31406,12 +31406,12 @@ class Ia extends gn.EventEmitter {
   }
   connect(e) {
     return A(this, void 0, void 0, function* () {
-      return this.room.state === Ee.Connected ? this.room : (e || (e = this.url), yield this.room.connect(e, this.token, this.connectOptions), this.room);
+      return this.room.state === Te.Connected ? this.room : (e || (e = this.url), yield this.room.connect(e, this.token, this.connectOptions), this.room);
     });
   }
   disconnect() {
     return A(this, void 0, void 0, function* () {
-      this.room && this.room.state !== Ee.Disconnected && (yield this.room.disconnect(), yield new Promise((e) => setTimeout(e, 500)));
+      this.room && this.room.state !== Te.Disconnected && (yield this.room.disconnect(), yield new Promise((e) => setTimeout(e, 500)));
     });
   }
   skip() {
@@ -31510,7 +31510,7 @@ class lA extends Ia {
       const c = yield this.room.localParticipant.streamText({
         topic: "test"
       }), u = 1e3, h = 1e6 / u, f = "A".repeat(u), p = Date.now();
-      for (let x = 0; x < h; x++)
+      for (let w = 0; w < h; w++)
         yield c.write(f);
       yield c.close();
       const v = Date.now(), b = yield (a = this.room.engine.pcManager) === null || a === void 0 ? void 0 : a.publisher.getStats(), k = {
@@ -31518,8 +31518,8 @@ class lA extends Ia {
         rtt: 1e4,
         duration: v - p
       };
-      return b?.forEach((x) => {
-        x.type === "candidate-pair" && x.nominated && (k.rtt = x.currentRoundTripTime * 1e3);
+      return b?.forEach((w) => {
+        w.type === "candidate-pair" && w.nominated && (k.rtt = w.currentRoundTripTime * 1e3);
       }), yield this.disconnect(), k;
     });
   }
@@ -31668,7 +31668,7 @@ class hA extends Ia {
       }), (e = t.engine.client.ws) === null || e === void 0 || e.close();
       const h = t.engine.client.onClose;
       if (h && h(""), yield u, a) {
-        if (!s || t.state !== Ee.Connected)
+        if (!s || t.state !== Te.Connected)
           throw this.appendWarning("reconnection is only possible in Redis-based configurations"), new Error("Not able to reconnect");
       } else throw new Error("Did not attempt to reconnect");
     });
@@ -31777,7 +31777,7 @@ class vA extends Ia {
     });
   }
 }
-class _N extends gn.EventEmitter {
+class _2 extends gn.EventEmitter {
   constructor(e, t) {
     let a = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
     super(), this.options = {}, this.checkResults = /* @__PURE__ */ new Map(), this.url = e, this.token = t, this.options = a;
@@ -32086,18 +32086,18 @@ function zA() {
         return f(T) || v.apply(this, arguments);
       }
       function k(T, P) {
-        var _ = this, U, B, S, C = "loglevel";
+        var _ = this, U, z, S, C = "loglevel";
         typeof T == "string" ? C += ":" + T : typeof T == "symbol" && (C = void 0);
         function M(G) {
-          var te = (s[G] || "silent").toUpperCase();
+          var Z = (s[G] || "silent").toUpperCase();
           if (!(typeof window === t || !C)) {
             try {
-              window.localStorage[C] = te;
+              window.localStorage[C] = Z;
               return;
             } catch {
             }
             try {
-              window.document.cookie = encodeURIComponent(C) + "=" + te + ";";
+              window.document.cookie = encodeURIComponent(C) + "=" + Z + ";";
             } catch {
             }
           }
@@ -32111,16 +32111,16 @@ function zA() {
             }
             if (typeof G === t)
               try {
-                var te = window.document.cookie, he = encodeURIComponent(C), me = te.indexOf(he + "=");
-                me !== -1 && (G = /^([^;]+)/.exec(
-                  te.slice(me + he.length + 1)
+                var Z = window.document.cookie, fe = encodeURIComponent(C), he = Z.indexOf(fe + "=");
+                he !== -1 && (G = /^([^;]+)/.exec(
+                  Z.slice(he + fe.length + 1)
                 )[1]);
               } catch {
               }
             return _.levels[G] === void 0 && (G = void 0), G;
           }
         }
-        function V() {
+        function H() {
           if (!(typeof window === t || !C)) {
             try {
               window.localStorage.removeItem(C);
@@ -32132,10 +32132,10 @@ function zA() {
             }
           }
         }
-        function Z(G) {
-          var te = G;
-          if (typeof te == "string" && _.levels[te.toUpperCase()] !== void 0 && (te = _.levels[te.toUpperCase()]), typeof te == "number" && te >= 0 && te <= _.levels.SILENT)
-            return te;
+        function W(G) {
+          var Z = G;
+          if (typeof Z == "string" && _.levels[Z.toUpperCase()] !== void 0 && (Z = _.levels[Z.toUpperCase()]), typeof Z == "number" && Z >= 0 && Z <= _.levels.SILENT)
+            return Z;
           throw new TypeError("log.setLevel() called with invalid level: " + G);
         }
         _.name = T, _.levels = {
@@ -32146,26 +32146,26 @@ function zA() {
           ERROR: 4,
           SILENT: 5
         }, _.methodFactory = P || b, _.getLevel = function() {
-          return S ?? B ?? U;
-        }, _.setLevel = function(G, te) {
-          return S = Z(G), te !== !1 && M(S), p.call(_);
+          return S ?? z ?? U;
+        }, _.setLevel = function(G, Z) {
+          return S = W(G), Z !== !1 && M(S), p.call(_);
         }, _.setDefaultLevel = function(G) {
-          B = Z(G), D() || _.setLevel(G, !1);
+          z = W(G), D() || _.setLevel(G, !1);
         }, _.resetLevel = function() {
-          S = null, V(), p.call(_);
+          S = null, H(), p.call(_);
         }, _.enableAll = function(G) {
           _.setLevel(_.levels.TRACE, G);
         }, _.disableAll = function(G) {
           _.setLevel(_.levels.SILENT, G);
         }, _.rebuild = function() {
-          if (u !== _ && (U = Z(u.getLevel())), p.call(_), u === _)
+          if (u !== _ && (U = W(u.getLevel())), p.call(_), u === _)
             for (var G in c)
               c[G].rebuild();
-        }, U = Z(
+        }, U = W(
           u ? u.getLevel() : "WARN"
         );
-        var F = D();
-        F != null && (S = Z(F)), p.call(_);
+        var B = D();
+        B != null && (S = W(B)), p.call(_);
       }
       u = new k(), u.getLogger = function(T) {
         if (typeof T != "symbol" && typeof T != "string" || T === "")
@@ -32176,9 +32176,9 @@ function zA() {
           u.methodFactory
         )), P;
       };
-      var x = typeof window !== t ? window.log : void 0;
+      var w = typeof window !== t ? window.log : void 0;
       return u.noConflict = function() {
-        return typeof window !== t && window.log === u && (window.log = x), u;
+        return typeof window !== t && window.log === u && (window.log = w), u;
       }, u.getLoggers = function() {
         return c;
       }, u.default = u, u;
@@ -32332,20 +32332,20 @@ function HA(i, e, t) {
     return this;
   }, s;
   function u(k) {
-    return function(x) {
-      return Promise.resolve(x).then(k, v);
+    return function(w) {
+      return Promise.resolve(w).then(k, v);
     };
   }
-  function d(k, x) {
+  function d(k, w) {
     a[k] && (s[k] = function(T) {
       return new Promise(function(P, _) {
         c.push([k, T, P, _]) > 1 || h(k, T);
       });
-    }, x && (s[k] = x(s[k])));
+    }, w && (s[k] = w(s[k])));
   }
-  function h(k, x) {
+  function h(k, w) {
     try {
-      f(a[k](x));
+      f(a[k](w));
     } catch (T) {
       b(c[0][3], T);
     }
@@ -32359,8 +32359,8 @@ function HA(i, e, t) {
   function v(k) {
     h("throw", k);
   }
-  function b(k, x) {
-    k(x), c.shift(), c.length && h(c[0][0], c[0][1]);
+  function b(k, w) {
+    k(w), c.shift(), c.length && h(c[0][0], c[0][1]);
   }
 }
 function VA(i) {
@@ -32445,9 +32445,9 @@ var uc = (function() {
         this._finalizers = null;
         try {
           for (var b = Ms(v), k = b.next(); !k.done; k = b.next()) {
-            var x = k.value;
+            var w = k.value;
             try {
-              Z0(x);
+              Z0(w);
             } catch (T) {
               c = c ?? [], T instanceof Oh ? c = cc(cc([], oc(c)), oc(T.errors)) : c.push(T);
             }
@@ -33271,8 +33271,8 @@ function CO(i, e, t, a, s, c, u, d) {
   var h = [], f = 0, p = 0, v = !1, b = function() {
     v && !h.length && !f && e.complete();
   }, k = function(T) {
-    return f < a ? x(T) : h.push(T);
-  }, x = function(T) {
+    return f < a ? w(T) : h.push(T);
+  }, w = function(T) {
     f++;
     var P = !1;
     Ua(t(T, p++)).subscribe(La(e, function(_) {
@@ -33285,7 +33285,7 @@ function CO(i, e, t, a, s, c, u, d) {
           f--;
           for (var _ = function() {
             var U = h.shift();
-            u || x(U);
+            u || w(U);
           }; h.length && f < a; )
             _();
           b();
@@ -33354,19 +33354,19 @@ function _O(i) {
     return new As();
   } : e, a = i.resetOnError, s = a === void 0 ? !0 : a, c = i.resetOnComplete, u = c === void 0 ? !0 : c, d = i.resetOnRefCountZero, h = d === void 0 ? !0 : d;
   return function(f) {
-    var p, v, b, k = 0, x = !1, T = !1, P = function() {
+    var p, v, b, k = 0, w = !1, T = !1, P = function() {
       v?.unsubscribe(), v = void 0;
     }, _ = function() {
-      P(), p = b = void 0, x = T = !1;
+      P(), p = b = void 0, w = T = !1;
     }, U = function() {
-      var B = p;
-      _(), B?.unsubscribe();
+      var z = p;
+      _(), z?.unsubscribe();
     };
-    return ci(function(B, S) {
-      k++, !T && !x && P();
+    return ci(function(z, S) {
+      k++, !T && !w && P();
       var C = b = b ?? t();
       S.add(function() {
-        k--, k === 0 && !T && !x && (v = Ph(U, h));
+        k--, k === 0 && !T && !w && (v = Ph(U, h));
       }), C.subscribe(S), !p && k > 0 && (p = new lc({
         next: function(M) {
           return C.next(M);
@@ -33375,9 +33375,9 @@ function _O(i) {
           T = !0, P(), v = Ph(_, s, M), C.error(M);
         },
         complete: function() {
-          x = !0, P(), v = Ph(_, u), C.complete();
+          w = !0, P(), v = Ph(_, u), C.complete();
         }
-      }), Ua(B).subscribe(p));
+      }), Ua(z).subscribe(p));
     })(f);
   };
 }
@@ -33740,68 +33740,68 @@ function nP(i, e) {
   }, f = new As(), p = (t = e?.channelTopic) != null ? t : pC.CHAT, v = (a = e?.channelTopic) != null ? a : XO.CHAT;
   let b = !1;
   Ll.has(i) || (b = !0);
-  const k = (s = Ll.get(i)) != null ? s : /* @__PURE__ */ new Map(), x = (c = k.get(p)) != null ? c : new As();
-  k.set(p, x), Ll.set(i, k);
+  const k = (s = Ll.get(i)) != null ? s : /* @__PURE__ */ new Map(), w = (c = k.get(p)) != null ? c : new As();
+  k.set(p, w), Ll.set(i, k);
   const T = (u = e?.messageDecoder) != null ? u : eP;
   if (b) {
     i.registerTextStreamHandler(p, (M, D) => pr(null, null, function* () {
-      const { id: V, timestamp: Z, attributes: F, attachedStreamIds: G } = M.info, te = new Map(
-        (G ?? []).map((he) => [
-          he,
+      const { id: H, timestamp: W, attributes: B, attachedStreamIds: G } = M.info, Z = new Map(
+        (G ?? []).map((fe) => [
+          fe,
           new WO()
         ])
       );
-      Il.set(V, te), Ts(M).pipe(
-        tu((he, me) => he + me),
-        ku((he) => te.size === 0 ? TO({ chunk: he, attachedFiles: [] }) : Ts(te.values()).pipe(
-          ku((me) => Ts(me.promise)),
+      Il.set(H, Z), Ts(M).pipe(
+        tu((fe, he) => fe + he),
+        ku((fe) => Z.size === 0 ? TO({ chunk: fe, attachedFiles: [] }) : Ts(Z.values()).pipe(
+          ku((he) => Ts(he.promise)),
           tu(
-            (me, oe) => [...me, new File(oe.buffer, oe.fileName)],
+            (he, pe) => [...he, new File(pe.buffer, pe.fileName)],
             []
           ),
-          ai((me) => ({ chunk: he, attachedFiles: me }))
+          ai((he) => ({ chunk: fe, attachedFiles: he }))
         )),
-        ai(({ chunk: he, attachedFiles: me }) => ({
-          id: V,
-          timestamp: Z,
-          message: he,
+        ai(({ chunk: fe, attachedFiles: he }) => ({
+          id: H,
+          timestamp: W,
+          message: fe,
           from: i.getParticipantByIdentity(D.identity),
           type: "chatMessage",
-          attributes: F,
-          attachedFiles: me
+          attributes: B,
+          attachedFiles: he
           // editTimestamp: type === 'update' ? timestamp : undefined,
         })),
-        RO(() => Il.delete(V))
+        RO(() => Il.delete(H))
       ).subscribe({
-        next: (he) => x.next(he)
+        next: (fe) => w.next(fe)
       });
     })), i.registerByteStreamHandler(p, (M) => pr(null, null, function* () {
-      var D, V;
-      const { id: Z } = M.info, F = Array.from(Il).find(
-        ([, re]) => re.has(Z)
+      var D, H;
+      const { id: W } = M.info, B = Array.from(Il).find(
+        ([, le]) => le.has(W)
       );
-      if (!F)
+      if (!B)
         return;
-      const G = F[0], te = [];
+      const G = B[0], Z = [];
       try {
-        for (var he = LO(M), me, oe, j; me = !(oe = yield he.next()).done; me = !1) {
-          const re = oe.value;
-          te.push(re);
+        for (var fe = LO(M), he, pe, F; he = !(pe = yield fe.next()).done; he = !1) {
+          const le = pe.value;
+          Z.push(le);
         }
-      } catch (re) {
-        j = [re];
+      } catch (le) {
+        F = [le];
       } finally {
         try {
-          me && (oe = he.return) && (yield oe.call(he));
+          he && (pe = fe.return) && (yield pe.call(fe));
         } finally {
-          if (j)
-            throw j[0];
+          if (F)
+            throw F[0];
         }
       }
-      const $ = (D = Il.get(G)) == null ? void 0 : D.get(Z);
-      $ && ((V = $.resolve) == null || V.call($, {
+      const ie = (D = Il.get(G)) == null ? void 0 : D.get(W);
+      ie && ((H = ie.resolve) == null || H.call(ie, {
         fileName: M.info.name,
-        buffer: te
+        buffer: Z
       }));
     }));
     const { messageObservable: C } = ZO(i, [v]);
@@ -33815,19 +33815,19 @@ function nP(i, e) {
       }),
       cC((M) => !!M),
       ik(f)
-    ).subscribe(x);
+    ).subscribe(w);
   }
-  const P = x.pipe(
+  const P = w.pipe(
     tu((C, M) => {
       if ("id" in M && C.find((D) => {
-        var V, Z;
-        return ((V = D.from) == null ? void 0 : V.identity) === ((Z = M.from) == null ? void 0 : Z.identity) && D.id === M.id;
+        var H, W;
+        return ((H = D.from) == null ? void 0 : H.identity) === ((W = M.from) == null ? void 0 : W.identity) && D.id === M.id;
       })) {
-        const D = C.findIndex((V) => V.id === M.id);
+        const D = C.findIndex((H) => H.id === M.id);
         if (D > -1) {
-          const V = C[D];
+          const H = C[D];
           C[D] = ls(ur({}, M), {
-            timestamp: V.timestamp,
+            timestamp: H.timestamp,
             editTimestamp: M.timestamp
           });
         }
@@ -33836,44 +33836,44 @@ function nP(i, e) {
       return [...C, M];
     }, []),
     ik(f)
-  ), _ = new nO(!1), U = (d = e?.messageEncoder) != null ? d : tP, B = (C, M) => pr(null, null, function* () {
+  ), _ = new nO(!1), U = (d = e?.messageEncoder) != null ? d : tP, z = (C, M) => pr(null, null, function* () {
     M || (M = {}), M.topic != null || (M.topic = p), _.next(!0);
     try {
       const D = {
         id: (yield i.localParticipant.sendText(C, M)).id,
         timestamp: Date.now(),
         message: C
-      }, V = ls(ur({}, D), {
+      }, H = ls(ur({}, D), {
         attachedFiles: M.attachments
-      }), Z = ls(ur({}, V), {
+      }), W = ls(ur({}, H), {
         type: "chatMessage",
         from: i.localParticipant,
         attributes: M.attributes
       });
-      x.next(Z);
-      const F = U(ls(ur({}, D), {
+      w.next(W);
+      const B = U(ls(ur({}, D), {
         ignoreLegacy: h()
       }));
       try {
-        yield gC(i.localParticipant, F, {
+        yield gC(i.localParticipant, B, {
           reliable: !0,
           topic: v
         });
       } catch (G) {
         oi.info("could not send message in legacy chat format", G);
       }
-      return Z;
+      return W;
     } finally {
       _.next(!1);
     }
   });
   function S() {
-    f.next(), f.complete(), x.complete(), Ll.delete(i), i.unregisterTextStreamHandler(p), i.unregisterByteStreamHandler(p);
+    f.next(), f.complete(), w.complete(), Ll.delete(i), i.unregisterTextStreamHandler(p), i.unregisterByteStreamHandler(p);
   }
   return i.once(Y.Disconnected, S), {
     messageObservable: P,
     isSendingObservable: _,
-    send: B
+    send: z
   };
 }
 function ok(i, e, t = !0) {
@@ -33961,9 +33961,9 @@ function cP(i, e) {
         i.registerTextStreamHandler(e, (f, p) => pr(null, null, function* () {
           var v;
           const b = Ts(f).pipe(
-            tu((x, T) => x + T, "")
+            tu((w, T) => w + T, "")
           ), k = !!((v = f.info.attributes) != null && v[d]);
-          b.subscribe((x) => {
+          b.subscribe((w) => {
             const T = u.findIndex(
               (P) => {
                 var _, U;
@@ -33971,7 +33971,7 @@ function cP(i, e) {
               }
             );
             T !== -1 ? (u[T] = ls(ur({}, u[T]), {
-              text: x,
+              text: w,
               // Carry the latest streamInfo forward. Transcription updates for a
               // segment arrive as separate streams sharing the same lk.segment_id;
               // keeping the original streamInfo would freeze attributes that change
@@ -33979,7 +33979,7 @@ function cP(i, e) {
               // "false" -> "true" on the final user STT result.
               streamInfo: f.info
             }), c.next([...u])) : (u.push({
-              text: x,
+              text: w,
               participantInfo: p,
               streamInfo: f.info
             }), c.next([...u]));
@@ -34101,19 +34101,19 @@ function TC(i = {}) {
     t.isScreenShareEnabled
   ), [p, v] = R.useState(
     t.lastMicrophoneError
-  ), [b, k] = R.useState(t.lastCameraError), [x, T] = R.useState(
+  ), [b, k] = R.useState(t.lastCameraError), [w, T] = R.useState(
     void 0
-  ), [P, _] = R.useState(void 0), U = (B) => {
-    d(B.isCameraEnabled), c(B.isMicrophoneEnabled), f(B.isScreenShareEnabled), _(B.cameraTrack), T(B.microphoneTrack), v(B.participant.lastMicrophoneError), k(B.participant.lastCameraError), a(B.participant);
+  ), [P, _] = R.useState(void 0), U = (z) => {
+    d(z.isCameraEnabled), c(z.isMicrophoneEnabled), f(z.isScreenShareEnabled), _(z.cameraTrack), T(z.microphoneTrack), v(z.participant.lastMicrophoneError), k(z.participant.lastCameraError), a(z.participant);
   };
   return R.useEffect(() => {
-    const B = mC(e.localParticipant).subscribe(U);
-    return () => B.unsubscribe();
+    const z = mC(e.localParticipant).subscribe(U);
+    return () => z.unsubscribe();
   }, [e]), {
     isMicrophoneEnabled: s,
     isScreenShareEnabled: h,
     isCameraEnabled: u,
-    microphoneTrack: x,
+    microphoneTrack: w,
     cameraTrack: P,
     lastMicrophoneError: p,
     lastCameraError: b,
@@ -34173,7 +34173,7 @@ function SP(i = [
       return c.forEach((p) => {
         h.has(p.identity) && (h.get(p.identity) ?? []).forEach((v) => {
           if (a.find(
-            ({ participant: k, publication: x }) => p.identity === k.identity && x.source === v
+            ({ participant: k, publication: w }) => p.identity === k.identity && w.source === v
           ))
             return;
           oi.debug(
@@ -34211,7 +34211,7 @@ function CP(i, e) {
 }
 function EP(i) {
   const e = Ns(i?.room), t = SC(e), a = R.useMemo(
-    () => t === Ee.Disconnected,
+    () => t === Te.Disconnected,
     [t]
   ), s = R.useMemo(
     () => nP(e, i),
@@ -34229,7 +34229,7 @@ function uk(i, e = {}) {
   return Os(d, []);
 }
 function wP(i, e) {
-  const t = Ns(e?.room), a = SC(t) === Ee.Disconnected, s = R.useMemo(() => cP(t, i), [t, i]);
+  const t = Ns(e?.room), a = SC(t) === Te.Disconnected, s = R.useMemo(() => cP(t, i), [t, i]);
   return { textStreams: Os(a ? void 0 : s, []) };
 }
 function xP(i) {
@@ -34296,40 +34296,40 @@ function RP() {
     return h(this);
   }, c.prototype.emit = function(S) {
     for (var C = [], M = 1; M < arguments.length; M++) C.push(arguments[M]);
-    var D = S === "error", V = this._events;
-    if (V !== void 0)
-      D = D && V.error === void 0;
+    var D = S === "error", H = this._events;
+    if (H !== void 0)
+      D = D && H.error === void 0;
     else if (!D)
       return !1;
     if (D) {
-      var Z;
-      if (C.length > 0 && (Z = C[0]), Z instanceof Error)
-        throw Z;
-      var F = new Error("Unhandled error." + (Z ? " (" + Z.message + ")" : ""));
-      throw F.context = Z, F;
+      var W;
+      if (C.length > 0 && (W = C[0]), W instanceof Error)
+        throw W;
+      var B = new Error("Unhandled error." + (W ? " (" + W.message + ")" : ""));
+      throw B.context = W, B;
     }
-    var G = V[S];
+    var G = H[S];
     if (G === void 0)
       return !1;
     if (typeof G == "function")
       e(G, this, C);
     else
-      for (var te = G.length, he = x(G, te), M = 0; M < te; ++M)
-        e(he[M], this, C);
+      for (var Z = G.length, fe = w(G, Z), M = 0; M < Z; ++M)
+        e(fe[M], this, C);
     return !0;
   };
   function f(S, C, M, D) {
-    var V, Z, F;
-    if (d(M), Z = S._events, Z === void 0 ? (Z = S._events = /* @__PURE__ */ Object.create(null), S._eventsCount = 0) : (Z.newListener !== void 0 && (S.emit(
+    var H, W, B;
+    if (d(M), W = S._events, W === void 0 ? (W = S._events = /* @__PURE__ */ Object.create(null), S._eventsCount = 0) : (W.newListener !== void 0 && (S.emit(
       "newListener",
       C,
       M.listener ? M.listener : M
-    ), Z = S._events), F = Z[C]), F === void 0)
-      F = Z[C] = M, ++S._eventsCount;
-    else if (typeof F == "function" ? F = Z[C] = D ? [M, F] : [F, M] : D ? F.unshift(M) : F.push(M), V = h(S), V > 0 && F.length > V && !F.warned) {
-      F.warned = !0;
-      var G = new Error("Possible EventEmitter memory leak detected. " + F.length + " " + String(C) + " listeners added. Use emitter.setMaxListeners() to increase limit");
-      G.name = "MaxListenersExceededWarning", G.emitter = S, G.type = C, G.count = F.length, a(G);
+    ), W = S._events), B = W[C]), B === void 0)
+      B = W[C] = M, ++S._eventsCount;
+    else if (typeof B == "function" ? B = W[C] = D ? [M, B] : [B, M] : D ? B.unshift(M) : B.push(M), H = h(S), H > 0 && B.length > H && !B.warned) {
+      B.warned = !0;
+      var G = new Error("Possible EventEmitter memory leak detected. " + B.length + " " + String(C) + " listeners added. Use emitter.setMaxListeners() to increase limit");
+      G.name = "MaxListenersExceededWarning", G.emitter = S, G.type = C, G.count = B.length, a(G);
     }
     return S;
   }
@@ -34343,15 +34343,15 @@ function RP() {
       return this.target.removeListener(this.type, this.wrapFn), this.fired = !0, arguments.length === 0 ? this.listener.call(this.target) : this.listener.apply(this.target, arguments);
   }
   function v(S, C, M) {
-    var D = { fired: !1, wrapFn: void 0, target: S, type: C, listener: M }, V = p.bind(D);
-    return V.listener = M, D.wrapFn = V, V;
+    var D = { fired: !1, wrapFn: void 0, target: S, type: C, listener: M }, H = p.bind(D);
+    return H.listener = M, D.wrapFn = H, H;
   }
   c.prototype.once = function(S, C) {
     return d(C), this.on(S, v(this, S, C)), this;
   }, c.prototype.prependOnceListener = function(S, C) {
     return d(C), this.prependListener(S, v(this, S, C)), this;
   }, c.prototype.removeListener = function(S, C) {
-    var M, D, V, Z, F;
+    var M, D, H, W, B;
     if (d(C), D = this._events, D === void 0)
       return this;
     if (M = D[S], M === void 0)
@@ -34359,14 +34359,14 @@ function RP() {
     if (M === C || M.listener === C)
       --this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : (delete D[S], D.removeListener && this.emit("removeListener", S, M.listener || C));
     else if (typeof M != "function") {
-      for (V = -1, Z = M.length - 1; Z >= 0; Z--)
-        if (M[Z] === C || M[Z].listener === C) {
-          F = M[Z].listener, V = Z;
+      for (H = -1, W = M.length - 1; W >= 0; W--)
+        if (M[W] === C || M[W].listener === C) {
+          B = M[W].listener, H = W;
           break;
         }
-      if (V < 0)
+      if (H < 0)
         return this;
-      V === 0 ? M.shift() : T(M, V), M.length === 1 && (D[S] = M[0]), D.removeListener !== void 0 && this.emit("removeListener", S, F || C);
+      H === 0 ? M.shift() : T(M, H), M.length === 1 && (D[S] = M[0]), D.removeListener !== void 0 && this.emit("removeListener", S, B || C);
     }
     return this;
   }, c.prototype.off = c.prototype.removeListener, c.prototype.removeAllListeners = function(S) {
@@ -34376,9 +34376,9 @@ function RP() {
     if (M.removeListener === void 0)
       return arguments.length === 0 ? (this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0) : M[S] !== void 0 && (--this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : delete M[S]), this;
     if (arguments.length === 0) {
-      var V = Object.keys(M), Z;
-      for (D = 0; D < V.length; ++D)
-        Z = V[D], Z !== "removeListener" && this.removeAllListeners(Z);
+      var H = Object.keys(M), W;
+      for (D = 0; D < H.length; ++D)
+        W = H[D], W !== "removeListener" && this.removeAllListeners(W);
       return this.removeAllListeners("removeListener"), this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0, this;
     }
     if (C = M[S], typeof C == "function")
@@ -34392,8 +34392,8 @@ function RP() {
     var D = S._events;
     if (D === void 0)
       return [];
-    var V = D[C];
-    return V === void 0 ? [] : typeof V == "function" ? M ? [V.listener || V] : [V] : M ? P(V) : x(V, V.length);
+    var H = D[C];
+    return H === void 0 ? [] : typeof H == "function" ? M ? [H.listener || H] : [H] : M ? P(H) : w(H, H.length);
   }
   c.prototype.listeners = function(S) {
     return b(this, S, !0);
@@ -34416,7 +34416,7 @@ function RP() {
   c.prototype.eventNames = function() {
     return this._eventsCount > 0 ? t(this._events) : [];
   };
-  function x(S, C) {
+  function w(S, C) {
     for (var M = new Array(C), D = 0; D < C; ++D)
       M[D] = S[D];
     return M;
@@ -34433,24 +34433,24 @@ function RP() {
   }
   function _(S, C) {
     return new Promise(function(M, D) {
-      function V(F) {
-        S.removeListener(C, Z), D(F);
+      function H(B) {
+        S.removeListener(C, W), D(B);
       }
-      function Z() {
-        typeof S.removeListener == "function" && S.removeListener("error", V), M([].slice.call(arguments));
+      function W() {
+        typeof S.removeListener == "function" && S.removeListener("error", H), M([].slice.call(arguments));
       }
-      B(S, C, Z, { once: !0 }), C !== "error" && U(S, V, { once: !0 });
+      z(S, C, W, { once: !0 }), C !== "error" && U(S, H, { once: !0 });
     });
   }
   function U(S, C, M) {
-    typeof S.on == "function" && B(S, "error", C, M);
+    typeof S.on == "function" && z(S, "error", C, M);
   }
-  function B(S, C, M, D) {
+  function z(S, C, M, D) {
     if (typeof S.on == "function")
       D.once ? S.once(C, M) : S.on(C, M);
     else if (typeof S.addEventListener == "function")
-      S.addEventListener(C, function V(Z) {
-        D.once && S.removeEventListener(C, V), M(Z);
+      S.addEventListener(C, function H(W) {
+        D.once && S.removeEventListener(C, H), M(W);
       });
     else
       throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof S);
@@ -34512,8 +34512,8 @@ function AP(i, e) {
       if (!d)
         return new Promise((h, f) => {
           const p = (k) => {
-            const { isConnected: x } = wn(k);
-            x && (b(), h());
+            const { isConnected: w } = wn(k);
+            w && (b(), h());
           }, v = () => {
             b(), f(new Error("useAgent(/* ... */).waitUntilConnected - signal aborted"));
           }, b = () => {
@@ -34529,8 +34529,8 @@ function AP(i, e) {
       if (!d)
         return new Promise((h, f) => {
           const p = (k) => {
-            const { canListen: x } = wn(k);
-            x && (b(), h());
+            const { canListen: w } = wn(k);
+            w && (b(), h());
           }, v = () => {
             b(), f(new Error("useAgent(/* ... */).waitUntilCouldBeListening - signal aborted"));
           }, b = () => {
@@ -34546,8 +34546,8 @@ function AP(i, e) {
       if (!d)
         return new Promise((h, f) => {
           const p = (k) => {
-            const { isFinished: x } = wn(k);
-            x && (b(), h());
+            const { isFinished: w } = wn(k);
+            w && (b(), h());
           }, v = () => {
             b(), f(new Error("useAgent(/* ... */).waitUntilFinished - signal aborted"));
           }, b = () => {
@@ -34581,7 +34581,7 @@ function wC(i) {
     (O) => O.kind === Da.AGENT && !(fs.PublishOnBehalf in O.attributes)
   ) ?? null, [v]), k = R.useMemo(() => b ? v.find(
     (O) => O.kind === Da.AGENT && O.attributes[fs.PublishOnBehalf] === b.identity
-  ) ?? null : null, [b, v]), x = b?.attributes ?? {}, T = uk([X.Source.Camera, X.Source.Microphone], {
+  ) ?? null : null, [b, v]), w = b?.attributes ?? {}, T = uk([X.Source.Camera, X.Source.Microphone], {
     room: t,
     participantIdentity: b?.identity
   }), P = uk([X.Source.Camera, X.Source.Microphone], {
@@ -34601,7 +34601,7 @@ function wC(i) {
   R.useEffect(() => {
     p.emit("microphoneChanged", U);
   }, [p, U]);
-  const [B, S] = R.useState(t.state);
+  const [z, S] = R.useState(t.state);
   R.useEffect(() => {
     const O = (Q) => {
       S(Q);
@@ -34623,16 +34623,16 @@ function wC(i) {
       t.off(Y.ParticipantDisconnected, O);
     };
   }, [b, t]), R.useEffect(() => {
-    B === Ee.Disconnected && M(null);
-  }, [B]);
-  const [D, V] = R.useState(
+    z === Te.Disconnected && M(null);
+  }, [z]);
+  const [D, H] = R.useState(
     () => t.localParticipant.getTrackPublication(X.Source.Microphone) ?? null
   );
   R.useEffect(() => {
     const O = () => {
-      V(t.localParticipant.getTrackPublication(X.Source.Microphone) ?? null);
+      H(t.localParticipant.getTrackPublication(X.Source.Microphone) ?? null);
     }, Q = () => {
-      V(null);
+      H(null);
     };
     return t.localParticipant.on(
       ee.LocalTrackPublished,
@@ -34650,24 +34650,24 @@ function wC(i) {
       );
     };
   }, [t.localParticipant]);
-  const Z = R.useMemo(() => {
+  const W = R.useMemo(() => {
     const O = [];
     return s && O.push(s), C && O.push(C), O;
-  }, [s, C]), F = R.useMemo(() => {
-    if (Z.length > 0)
+  }, [s, C]), B = R.useMemo(() => {
+    if (W.length > 0)
       return "failed";
     let O = "disconnected";
-    return B !== Ee.Disconnected && (O = "connecting"), D && (O = "pre-connect-buffering"), b && x[fs.AgentState] && (O = x[fs.AgentState]), O;
+    return z !== Te.Disconnected && (O = "connecting"), D && (O = "pre-connect-buffering"), b && w[fs.AgentState] && (O = w[fs.AgentState]), O;
   }, [
-    Z,
-    B,
+    W,
+    z,
     D,
     b,
-    x
+    w
   ]);
   R.useEffect(() => {
-    p.emit("stateChanged", F), h(F);
-  }, [p, F]), R.useEffect(() => {
+    p.emit("stateChanged", B), h(B);
+  }, [p, B]), R.useEffect(() => {
     f(b !== null);
   }, [b]);
   const G = i.connectionState === "disconnected";
@@ -34678,27 +34678,27 @@ function wC(i) {
       };
   }, [G, a]);
   const {
-    identity: te,
-    name: he,
-    metadata: me
-  } = yP({ participant: b ?? void 0 }), oe = R.useMemo(() => {
+    identity: Z,
+    name: fe,
+    metadata: he
+  } = yP({ participant: b ?? void 0 }), pe = R.useMemo(() => {
     const O = {
-      attributes: x,
+      attributes: w,
       internal: {
         agentParticipant: b,
         workerParticipant: k,
         emitter: p
       }
     };
-    switch (F) {
+    switch (B) {
       case "disconnected":
         return {
           ...O,
           identity: void 0,
           name: void 0,
           metadata: void 0,
-          state: F,
-          ...wn(F),
+          state: B,
+          ...wn(B),
           failureReasons: null,
           // Clear inner values if no longer connected
           cameraTrack: void 0,
@@ -34710,8 +34710,8 @@ function wC(i) {
           identity: void 0,
           name: void 0,
           metadata: void 0,
-          state: F,
-          ...wn(F),
+          state: B,
+          ...wn(B),
           failureReasons: null,
           // Clear inner values if no longer connected
           cameraTrack: void 0,
@@ -34721,11 +34721,11 @@ function wC(i) {
       case "idle":
         return {
           ...O,
-          identity: te,
-          name: he,
-          metadata: me,
-          state: F,
-          ...wn(F),
+          identity: Z,
+          name: fe,
+          metadata: he,
+          state: B,
+          ...wn(B),
           failureReasons: null,
           cameraTrack: _,
           microphoneTrack: U
@@ -34733,11 +34733,11 @@ function wC(i) {
       case "pre-connect-buffering":
         return {
           ...O,
-          identity: te,
-          name: he,
-          metadata: me,
-          state: F,
-          ...wn(F),
+          identity: Z,
+          name: fe,
+          metadata: he,
+          state: B,
+          ...wn(B),
           failureReasons: null,
           cameraTrack: _,
           microphoneTrack: U
@@ -34747,11 +34747,11 @@ function wC(i) {
       case "speaking":
         return {
           ...O,
-          identity: te,
-          name: he,
-          metadata: me,
-          state: F,
-          ...wn(F),
+          identity: Z,
+          name: fe,
+          metadata: he,
+          state: B,
+          ...wn(B),
           failureReasons: null,
           cameraTrack: _,
           microphoneTrack: U
@@ -34764,61 +34764,61 @@ function wC(i) {
           metadata: void 0,
           state: "failed",
           ...wn("failed"),
-          failureReasons: Z,
+          failureReasons: W,
           // Clear inner values if no longer connected
           cameraTrack: void 0,
           microphoneTrack: void 0
         };
     }
   }, [
-    te,
+    Z,
+    fe,
     he,
-    me,
-    x,
+    w,
     p,
     b,
-    F,
+    B,
     _,
     U
-  ]), { waitUntilConnected: j, waitUntilCouldBeListening: $, waitUntilFinished: re } = AP(p, F), be = R.useCallback(
-    (O) => new Promise((Q, le) => {
-      const de = (fe) => {
-        fe && (ce(), Q(fe));
+  ]), { waitUntilConnected: F, waitUntilCouldBeListening: ie, waitUntilFinished: le } = AP(p, B), we = R.useCallback(
+    (O) => new Promise((Q, oe) => {
+      const ue = (de) => {
+        de && (se(), Q(de));
       }, ge = () => {
-        ce(), le(new Error("useAgent(/* ... */).waitUntilCamera - signal aborted"));
-      }, ce = () => {
-        p.off("cameraChanged", de), O?.removeEventListener("abort", ge);
+        se(), oe(new Error("useAgent(/* ... */).waitUntilCamera - signal aborted"));
+      }, se = () => {
+        p.off("cameraChanged", ue), O?.removeEventListener("abort", ge);
       };
-      p.on("cameraChanged", de), O?.addEventListener("abort", ge);
+      p.on("cameraChanged", ue), O?.addEventListener("abort", ge);
     }),
     [p]
-  ), Ce = R.useCallback(
-    (O) => new Promise((Q, le) => {
-      const de = (fe) => {
-        fe && (ce(), Q(fe));
+  ), xe = R.useCallback(
+    (O) => new Promise((Q, oe) => {
+      const ue = (de) => {
+        de && (se(), Q(de));
       }, ge = () => {
-        ce(), le(new Error("useAgent(/* ... */).waitUntilMicrophone - signal aborted"));
-      }, ce = () => {
-        p.off("microphoneChanged", de), O?.removeEventListener("abort", ge);
+        se(), oe(new Error("useAgent(/* ... */).waitUntilMicrophone - signal aborted"));
+      }, se = () => {
+        p.off("microphoneChanged", ue), O?.removeEventListener("abort", ge);
       };
-      p.on("microphoneChanged", de), O?.addEventListener("abort", ge);
+      p.on("microphoneChanged", ue), O?.addEventListener("abort", ge);
     }),
     [p]
   );
   return R.useMemo(() => ({
-    ...oe,
-    waitUntilConnected: j,
-    waitUntilCouldBeListening: $,
-    waitUntilFinished: re,
-    waitUntilCamera: be,
-    waitUntilMicrophone: Ce
+    ...pe,
+    waitUntilConnected: F,
+    waitUntilCouldBeListening: ie,
+    waitUntilFinished: le,
+    waitUntilCamera: we,
+    waitUntilMicrophone: xe
   }), [
-    oe,
-    j,
-    $,
-    re,
-    be,
-    Ce
+    pe,
+    F,
+    ie,
+    le,
+    we,
+    xe
   ]);
 }
 function OP(i, e) {
@@ -34896,15 +34896,15 @@ function NP(i, e = {}) {
     agentConnectTimeoutMilliseconds: a,
     encryption: s,
     ...c
-  } = e, u = s && "e2eeManager" in s ? s.e2eeManager : null, d = s && !("e2eeManager" in s) ? s.key ?? null : null, h = s && !("e2eeManager" in s) ? s.worker ?? null : null, f = yC(), p = R.useRef(null), v = R.useMemo(() => typeof d == "string" || d instanceof ArrayBuffer ? (p.current === null && (p.current = new I_()), p.current.setKey(d).catch((ce) => oi.error(ce)), p.current) : d, [d]), b = R.useMemo(() => {
-    const ce = f ?? t;
-    if (ce)
-      return ce;
-    const fe = !!(v && h), we = !!u, Be = fe || we, xt = {};
-    fe ? xt.encryption = {
+  } = e, u = s && "e2eeManager" in s ? s.e2eeManager : null, d = s && !("e2eeManager" in s) ? s.key ?? null : null, h = s && !("e2eeManager" in s) ? s.worker ?? null : null, f = yC(), p = R.useRef(null), v = R.useMemo(() => typeof d == "string" || d instanceof ArrayBuffer ? (p.current === null && (p.current = new I_()), p.current.setKey(d).catch((se) => oi.error(se)), p.current) : d, [d]), b = R.useMemo(() => {
+    const se = f ?? t;
+    if (se)
+      return se;
+    const de = !!(v && h), Ce = !!u, Be = de || Ce, xt = {};
+    de ? xt.encryption = {
       keyProvider: v,
       worker: h
-    } : we ? xt.encryption = {
+    } : Ce ? xt.encryption = {
       e2eeManager: u
     } : s !== void 0 && oi.warn(
       "useSession options encryption was set, but neither encryption.key with encryption.worker nor encryption.e2eeManager was provided."
@@ -34918,35 +34918,35 @@ function NP(i, e = {}) {
   const k = R.useMemo(
     () => new EC.EventEmitter(),
     []
-  ), x = R.useCallback(
-    (ce) => ({
-      isConnected: ce === Ee.Connected || ce === Ee.Reconnecting || ce === Ee.SignalReconnecting
+  ), w = R.useCallback(
+    (se) => ({
+      isConnected: se === Te.Connected || se === Te.Reconnecting || se === Te.SignalReconnecting
     }),
     []
   ), [T, P] = R.useState(b.state);
   R.useEffect(() => {
-    const ce = (fe) => {
-      P(fe);
+    const se = (de) => {
+      P(de);
     };
-    return b.on(Y.ConnectionStateChanged, ce), () => {
-      b.off(Y.ConnectionStateChanged, ce);
+    return b.on(Y.ConnectionStateChanged, se), () => {
+      b.off(Y.ConnectionStateChanged, se);
     };
   }, [b]), R.useEffect(() => {
-    const ce = async (fe) => {
-      k.emit("mediaDevicesError", fe);
+    const se = async (de) => {
+      k.emit("mediaDevicesError", de);
     };
-    return b.on(Y.MediaDevicesError, ce), () => {
-      b.off(Y.MediaDevicesError, ce);
+    return b.on(Y.MediaDevicesError, se), () => {
+      b.off(Y.MediaDevicesError, se);
     };
   }, [b, k]), R.useEffect(() => {
-    const ce = async (fe) => {
-      k.emit("encryptionError", fe);
+    const se = async (de) => {
+      k.emit("encryptionError", de);
     };
-    return b.on(Y.EncryptionError, ce), () => {
-      b.off(Y.EncryptionError, ce);
+    return b.on(Y.EncryptionError, se), () => {
+      b.off(Y.EncryptionError, se);
     };
   }, [b, k]);
-  const { localParticipant: _ } = TC({ room: b }), U = _.getTrackPublication(X.Source.Camera), B = R.useMemo(() => {
+  const { localParticipant: _ } = TC({ room: b }), U = _.getTrackPublication(X.Source.Camera), z = R.useMemo(() => {
     if (U)
       return {
         source: X.Source.Camera,
@@ -34968,70 +34968,70 @@ function NP(i, e = {}) {
         publication: M
       };
   }, [_, M]), {
-    agentTimeoutFailureReason: V,
-    startAgentTimeout: Z,
-    clearAgentTimeout: F,
+    agentTimeoutFailureReason: H,
+    startAgentTimeout: W,
+    clearAgentTimeout: B,
     clearAgentTimeoutFailureReason: G,
-    updateAgentTimeoutState: te,
-    updateAgentTimeoutParticipantExists: he
-  } = MP(), me = R.useMemo(
+    updateAgentTimeoutState: Z,
+    updateAgentTimeoutParticipantExists: fe
+  } = MP(), he = R.useMemo(
     () => ({
       emitter: k,
       tokenSource: i,
       agentConnectTimeoutMilliseconds: a,
-      agentTimeoutFailureReason: V,
-      startAgentTimeout: Z,
-      clearAgentTimeout: F,
+      agentTimeoutFailureReason: H,
+      startAgentTimeout: W,
+      clearAgentTimeout: B,
       clearAgentTimeoutFailureReason: G,
-      updateAgentTimeoutState: te,
-      updateAgentTimeoutParticipantExists: he
+      updateAgentTimeoutState: Z,
+      updateAgentTimeoutParticipantExists: fe
     }),
     [
       k,
       a,
       i,
-      V,
-      Z,
-      F,
+      H,
+      W,
+      B,
       G,
-      te,
-      he
+      Z,
+      fe
     ]
-  ), oe = R.useMemo(() => {
-    const ce = {
+  ), pe = R.useMemo(() => {
+    const se = {
       room: b,
-      internal: me
+      internal: he
     };
     switch (T) {
-      case Ee.Connecting:
+      case Te.Connecting:
         return {
-          ...ce,
-          connectionState: Ee.Connecting,
-          ...x(Ee.Connecting),
+          ...se,
+          connectionState: Te.Connecting,
+          ...w(Te.Connecting),
           local: {
             cameraTrack: void 0,
             microphoneTrack: void 0,
             screenShareTrack: void 0
           }
         };
-      case Ee.Connected:
-      case Ee.Reconnecting:
-      case Ee.SignalReconnecting:
+      case Te.Connected:
+      case Te.Reconnecting:
+      case Te.SignalReconnecting:
         return {
-          ...ce,
+          ...se,
           connectionState: T,
-          ...x(T),
+          ...w(T),
           local: {
-            cameraTrack: B,
+            cameraTrack: z,
             microphoneTrack: C,
             screenShareTrack: D
           }
         };
-      case Ee.Disconnected:
+      case Te.Disconnected:
         return {
-          ...ce,
-          connectionState: Ee.Disconnected,
-          ...x(Ee.Disconnected),
+          ...se,
+          connectionState: Te.Disconnected,
+          ...w(Te.Disconnected),
           local: {
             cameraTrack: void 0,
             microphoneTrack: void 0,
@@ -35040,52 +35040,52 @@ function NP(i, e = {}) {
         };
     }
   }, [
-    me,
+    he,
     b,
     T,
-    B,
+    z,
     C,
-    x
+    w
   ]);
   R.useEffect(() => {
-    k.emit("connectionStateChanged", oe.connectionState);
-  }, [k, oe.connectionState]);
-  const j = PP(
+    k.emit("connectionStateChanged", pe.connectionState);
+  }, [k, pe.connectionState]);
+  const F = PP(
     k,
-    oe.connectionState
-  ), $ = R.useCallback(
-    async (ce) => j(
-      Ee.Connected,
-      ce
+    pe.connectionState
+  ), ie = R.useCallback(
+    async (se) => F(
+      Te.Connected,
+      se
     ),
-    [j]
-  ), re = R.useCallback(
-    async (ce) => j(Ee.Disconnected, ce),
-    [j]
-  ), be = R.useCallback(
-    async (ce) => b.setE2EEEnabled(ce),
+    [F]
+  ), le = R.useCallback(
+    async (se) => F(Te.Disconnected, se),
+    [F]
+  ), we = R.useCallback(
+    async (se) => b.setE2EEEnabled(se),
     [b]
-  ), Ce = wC(
+  ), xe = wC(
     R.useMemo(
       () => ({
-        connectionState: oe.connectionState,
+        connectionState: pe.connectionState,
         room: b,
-        internal: me
+        internal: he
       }),
-      [oe, b, me]
+      [pe, b, he]
     )
-  ), O = DP(i, c), Q = R.useRef(!1), le = R.useCallback(
-    async (ce = {}) => {
+  ), O = DP(i, c), Q = R.useRef(!1), oe = R.useCallback(
+    async (se = {}) => {
       const {
-        signal: fe,
-        tracks: we = { microphone: { enabled: !0, publishOptions: { preConnectBuffer: !0 } } },
+        signal: de,
+        tracks: Ce = { microphone: { enabled: !0, publishOptions: { preConnectBuffer: !0 } } },
         roomConnectOptions: Be
-      } = ce;
-      await re(fe), Q.current = !1;
+      } = se;
+      await le(de), Q.current = !1;
       const xt = () => {
         b.disconnect();
       };
-      fe?.addEventListener("abort", xt);
+      de?.addEventListener("abort", xt);
       const At = () => {
         Q.current || O(!0);
       };
@@ -35094,34 +35094,34 @@ function NP(i, e = {}) {
       await Promise.all([
         O().then(({ serverUrl: Hn, participantToken: Rt }) => (qn = (IA(Rt).roomConfig?.agents?.length ?? 0) > 0, b.connect(Hn, Rt, Be))),
         // Start microphone (with preconnect buffer) by default
-        we.microphone?.enabled ? b.localParticipant.setMicrophoneEnabled(
+        Ce.microphone?.enabled ? b.localParticipant.setMicrophoneEnabled(
           !0,
           void 0,
-          we.microphone?.publishOptions ?? {}
+          Ce.microphone?.publishOptions ?? {}
         ) : Promise.resolve(),
-        we.camera?.enabled ? b.localParticipant.setCameraEnabled(
+        Ce.camera?.enabled ? b.localParticipant.setCameraEnabled(
           !0,
           void 0,
-          we.camera?.publishOptions ?? {}
+          Ce.camera?.publishOptions ?? {}
         ) : Promise.resolve(),
-        we.screenShare?.enabled ? b.localParticipant.setScreenShareEnabled(
+        Ce.screenShare?.enabled ? b.localParticipant.setScreenShareEnabled(
           !0,
           void 0,
-          we.screenShare?.publishOptions ?? {}
+          Ce.screenShare?.publishOptions ?? {}
         ) : Promise.resolve()
-      ]), await $(fe), qn && await Ce.waitUntilConnected(fe), fe?.removeEventListener("abort", xt);
+      ]), await ie(de), qn && await xe.waitUntilConnected(de), de?.removeEventListener("abort", xt);
     },
-    [b, re, O, $, Ce.waitUntilConnected]
-  ), de = R.useCallback(async () => {
+    [b, le, O, ie, xe.waitUntilConnected]
+  ), ue = R.useCallback(async () => {
     Q.current = !0, O(!0), await b.disconnect();
   }, [b, O]), ge = R.useCallback(async () => {
-    const ce = await O();
-    await b.prepareConnection(ce.serverUrl, ce.participantToken);
+    const se = await O();
+    await b.prepareConnection(se.serverUrl, se.participantToken);
   }, [O, b]);
   return R.useEffect(
     () => {
-      ge().catch((ce) => {
-        console.warn("WARNING: Room.prepareConnection failed:", ce);
+      ge().catch((se) => {
+        console.warn("WARNING: Room.prepareConnection failed:", se);
       });
     },
     [
@@ -35129,37 +35129,37 @@ function NP(i, e = {}) {
     ]
   ), R.useMemo(
     () => ({
-      ...oe,
-      waitUntilConnected: $,
-      waitUntilDisconnected: re,
+      ...pe,
+      waitUntilConnected: ie,
+      waitUntilDisconnected: le,
       prepareConnection: ge,
-      start: le,
-      end: de,
-      setEncryptionEnabled: be
+      start: oe,
+      end: ue,
+      setEncryptionEnabled: we
     }),
     [
-      oe,
-      $,
-      re,
-      ge,
+      pe,
+      ie,
       le,
-      de,
-      be
+      ge,
+      oe,
+      ue,
+      we
     ]
   );
 }
 function LP(i, e = {}) {
-  const [t, a] = R.useState(Sm(i)), [s, c] = R.useState(t?.isMuted), [u, d] = R.useState(t?.isSubscribed), [h, f] = R.useState(t?.track), [p, v] = R.useState("landscape"), b = R.useRef(), { className: k, trackObserver: x } = R.useMemo(() => GO(i), [
+  const [t, a] = R.useState(Sm(i)), [s, c] = R.useState(t?.isMuted), [u, d] = R.useState(t?.isSubscribed), [h, f] = R.useState(t?.track), [p, v] = R.useState("landscape"), b = R.useRef(), { className: k, trackObserver: w } = R.useMemo(() => GO(i), [
     i.participant.sid ?? i.participant.identity,
     i.source,
     mp(i) && i.publication.trackSid
   ]);
   return R.useEffect(() => {
-    const T = x.subscribe((P) => {
+    const T = w.subscribe((P) => {
       oi.debug("update track", P), a(P), c(P?.isMuted), d(P?.isSubscribed), f(P?.track);
     });
     return () => T?.unsubscribe();
-  }, [x]), R.useEffect(() => (h && (b.current && h.detach(b.current), e.element?.current && !(i.participant.isLocal && h?.kind === "audio") && h.attach(e.element.current)), b.current = e.element?.current, () => {
+  }, [w]), R.useEffect(() => (h && (b.current && h.detach(b.current), e.element?.current && !(i.participant.isLocal && h?.kind === "audio") && h.attach(e.element.current)), b.current = e.element?.current, () => {
     b.current && h?.detach(b.current);
   }), [h, e.element]), R.useEffect(() => {
     if (typeof t?.dimensions?.width == "number" && typeof t?.dimensions?.height == "number") {
@@ -35183,55 +35183,55 @@ var Lh, fk;
 function IP() {
   if (fk) return Lh;
   fk = 1;
-  var i = "Expected a function", e = NaN, t = "[object Symbol]", a = /^\s+|\s+$/g, s = /^[-+]0x[0-9a-f]+$/i, c = /^0b[01]+$/i, u = /^0o[0-7]+$/i, d = parseInt, h = typeof Dl == "object" && Dl && Dl.Object === Object && Dl, f = typeof self == "object" && self && self.Object === Object && self, p = h || f || Function("return this")(), v = Object.prototype, b = v.toString, k = Math.max, x = Math.min, T = function() {
+  var i = "Expected a function", e = NaN, t = "[object Symbol]", a = /^\s+|\s+$/g, s = /^[-+]0x[0-9a-f]+$/i, c = /^0b[01]+$/i, u = /^0o[0-7]+$/i, d = parseInt, h = typeof Dl == "object" && Dl && Dl.Object === Object && Dl, f = typeof self == "object" && self && self.Object === Object && self, p = h || f || Function("return this")(), v = Object.prototype, b = v.toString, k = Math.max, w = Math.min, T = function() {
     return p.Date.now();
   };
   function P(C, M, D) {
-    var V, Z, F, G, te, he, me = 0, oe = !1, j = !1, $ = !0;
+    var H, W, B, G, Z, fe, he = 0, pe = !1, F = !1, ie = !0;
     if (typeof C != "function")
       throw new TypeError(i);
-    M = S(M) || 0, _(D) && (oe = !!D.leading, j = "maxWait" in D, F = j ? k(S(D.maxWait) || 0, M) : F, $ = "trailing" in D ? !!D.trailing : $);
-    function re(fe) {
-      var we = V, Be = Z;
-      return V = Z = void 0, me = fe, G = C.apply(Be, we), G;
+    M = S(M) || 0, _(D) && (pe = !!D.leading, F = "maxWait" in D, B = F ? k(S(D.maxWait) || 0, M) : B, ie = "trailing" in D ? !!D.trailing : ie);
+    function le(de) {
+      var Ce = H, Be = W;
+      return H = W = void 0, he = de, G = C.apply(Be, Ce), G;
     }
-    function be(fe) {
-      return me = fe, te = setTimeout(Q, M), oe ? re(fe) : G;
+    function we(de) {
+      return he = de, Z = setTimeout(Q, M), pe ? le(de) : G;
     }
-    function Ce(fe) {
-      var we = fe - he, Be = fe - me, xt = M - we;
-      return j ? x(xt, F - Be) : xt;
+    function xe(de) {
+      var Ce = de - fe, Be = de - he, xt = M - Ce;
+      return F ? w(xt, B - Be) : xt;
     }
-    function O(fe) {
-      var we = fe - he, Be = fe - me;
-      return he === void 0 || we >= M || we < 0 || j && Be >= F;
+    function O(de) {
+      var Ce = de - fe, Be = de - he;
+      return fe === void 0 || Ce >= M || Ce < 0 || F && Be >= B;
     }
     function Q() {
-      var fe = T();
-      if (O(fe))
-        return le(fe);
-      te = setTimeout(Q, Ce(fe));
+      var de = T();
+      if (O(de))
+        return oe(de);
+      Z = setTimeout(Q, xe(de));
     }
-    function le(fe) {
-      return te = void 0, $ && V ? re(fe) : (V = Z = void 0, G);
+    function oe(de) {
+      return Z = void 0, ie && H ? le(de) : (H = W = void 0, G);
     }
-    function de() {
-      te !== void 0 && clearTimeout(te), me = 0, V = he = Z = te = void 0;
+    function ue() {
+      Z !== void 0 && clearTimeout(Z), he = 0, H = fe = W = Z = void 0;
     }
     function ge() {
-      return te === void 0 ? G : le(T());
+      return Z === void 0 ? G : oe(T());
     }
-    function ce() {
-      var fe = T(), we = O(fe);
-      if (V = arguments, Z = this, he = fe, we) {
-        if (te === void 0)
-          return be(he);
-        if (j)
-          return te = setTimeout(Q, M), re(he);
+    function se() {
+      var de = T(), Ce = O(de);
+      if (H = arguments, W = this, fe = de, Ce) {
+        if (Z === void 0)
+          return we(fe);
+        if (F)
+          return Z = setTimeout(Q, M), le(fe);
       }
-      return te === void 0 && (te = setTimeout(Q, M)), G;
+      return Z === void 0 && (Z = setTimeout(Q, M)), G;
     }
-    return ce.cancel = de, ce.flush = ge, ce;
+    return se.cancel = ue, se.flush = ge, se;
   }
   function _(C) {
     var M = typeof C;
@@ -35240,13 +35240,13 @@ function IP() {
   function U(C) {
     return !!C && typeof C == "object";
   }
-  function B(C) {
+  function z(C) {
     return typeof C == "symbol" || U(C) && b.call(C) == t;
   }
   function S(C) {
     if (typeof C == "number")
       return C;
-    if (B(C))
+    if (z(C))
       return e;
     if (_(C)) {
       var M = typeof C.valueOf == "function" ? C.valueOf() : C;
@@ -35350,6 +35350,7 @@ function RC(i) {
 }
 function mk(i) {
   const e = i.execution || {}, t = [];
+  e.notification?.message && t.push(e.notification.message);
   for (const a of e.steps ?? []) {
     const s = a.args && Object.keys(a.args).length ? ` ${JSON.stringify(a.args)}` : "";
     t.push(`${a.tool ?? ""}${s}`);
@@ -35416,11 +35417,11 @@ function ZP(i, e, t) {
     for (const v of a) {
       const b = v.streamInfo?.attributes ?? {}, k = b[XP] || v.streamInfo?.id;
       if (!k || !v.text) continue;
-      const x = b[JP] === "true", T = h.get(k);
-      if (T && T.final && !x) continue;
+      const w = b[JP] === "true", T = h.get(k);
+      if (T && T.final && !w) continue;
       const P = v.participantInfo?.identity && v.participantInfo.identity === i ? "user" : "agent";
       h.set(k, {
-        final: x,
+        final: w,
         msg: { kind: "message", id: k, role: P, text: v.text, ts: v.streamInfo?.timestamp ?? Date.now() }
       });
     }
@@ -35437,7 +35438,7 @@ function ZP(i, e, t) {
   }, [a, s, e, i]), addTyped: u };
 }
 function WP({ text: i }) {
-  return /* @__PURE__ */ w.jsx(w.Fragment, { children: Em(i.replace(/\r\n?/g, `
+  return /* @__PURE__ */ x.jsx(x.Fragment, { children: Em(i.replace(/\r\n?/g, `
 `).split(`
 `)) });
 }
@@ -35453,20 +35454,20 @@ function Em(i) {
       const c = Tm.exec(a)[1], u = [];
       for (t++; t < i.length && !i[t].trimStart().startsWith(c); t++) u.push(i[t]);
       t++, e.push(
-        /* @__PURE__ */ w.jsx("pre", { children: /* @__PURE__ */ w.jsx("code", { children: u.join(`
+        /* @__PURE__ */ x.jsx("pre", { children: /* @__PURE__ */ x.jsx("code", { children: u.join(`
 `) }) }, s)
       );
     } else if (Cm.test(a)) {
       const [, c, u] = Cm.exec(a);
       e.push(
-        /* @__PURE__ */ w.jsx("p", { className: "lk-md-h", role: "heading", "aria-level": c.length, children: _a(u) }, s)
+        /* @__PURE__ */ x.jsx("p", { className: "lk-md-h", role: "heading", "aria-level": c.length, children: _a(u) }, s)
       ), t++;
     } else if (MC.test(a))
-      e.push(/* @__PURE__ */ w.jsx("hr", {}, s)), t++;
+      e.push(/* @__PURE__ */ x.jsx("hr", {}, s)), t++;
     else if (nu.test(a)) {
       const c = [];
       for (; t < i.length && nu.test(i[t]); t++) c.push(i[t].replace(nu, ""));
-      e.push(/* @__PURE__ */ w.jsx("blockquote", { children: Em(c) }, s));
+      e.push(/* @__PURE__ */ x.jsx("blockquote", { children: Em(c) }, s));
     } else if (qo.test(a)) {
       const c = qo.exec(a), u = c[1].length, d = /\d/.test(c[2]), h = [];
       let f = 0;
@@ -35483,17 +35484,17 @@ function Em(i) {
         else
           break;
       }
-      const p = h.map((v, b) => /* @__PURE__ */ w.jsx("li", { children: Em(v) }, b));
+      const p = h.map((v, b) => /* @__PURE__ */ x.jsx("li", { children: Em(v) }, b));
       e.push(
-        d ? /* @__PURE__ */ w.jsx("ol", { start: parseInt(c[2], 10), children: p }, s) : /* @__PURE__ */ w.jsx("ul", { children: p }, s)
+        d ? /* @__PURE__ */ x.jsx("ol", { start: parseInt(c[2], 10), children: p }, s) : /* @__PURE__ */ x.jsx("ul", { children: p }, s)
       );
     } else if (a.includes("|") && t + 1 < i.length && $P.test(i[t + 1])) {
       const c = vk(a), u = [];
       for (t += 2; t < i.length && i[t].includes("|") && !jo(i[t]); t++) u.push(vk(i[t]));
       e.push(
-        /* @__PURE__ */ w.jsx("div", { className: "lk-md-table", children: /* @__PURE__ */ w.jsxs("table", { children: [
-          /* @__PURE__ */ w.jsx("thead", { children: /* @__PURE__ */ w.jsx("tr", { children: c.map((d, h) => /* @__PURE__ */ w.jsx("th", { children: _a(d) }, h)) }) }),
-          /* @__PURE__ */ w.jsx("tbody", { children: u.map((d, h) => /* @__PURE__ */ w.jsx("tr", { children: c.map((f, p) => /* @__PURE__ */ w.jsx("td", { children: _a(d[p] ?? "") }, p)) }, h)) })
+        /* @__PURE__ */ x.jsx("div", { className: "lk-md-table", children: /* @__PURE__ */ x.jsxs("table", { children: [
+          /* @__PURE__ */ x.jsx("thead", { children: /* @__PURE__ */ x.jsx("tr", { children: c.map((d, h) => /* @__PURE__ */ x.jsx("th", { children: _a(d) }, h)) }) }),
+          /* @__PURE__ */ x.jsx("tbody", { children: u.map((d, h) => /* @__PURE__ */ x.jsx("tr", { children: c.map((f, p) => /* @__PURE__ */ x.jsx("td", { children: _a(d[p] ?? "") }, p)) }, h)) })
         ] }) }, s)
       );
     } else {
@@ -35501,8 +35502,8 @@ function Em(i) {
       for (; t < i.length && !jo(i[t]) && (c.length === 0 || !gk(i[t])); t++)
         c.push(i[t].trim());
       e.push(
-        /* @__PURE__ */ w.jsx("p", { children: c.map((u, d) => /* @__PURE__ */ w.jsxs("span", { children: [
-          d > 0 && /* @__PURE__ */ w.jsx("br", {}),
+        /* @__PURE__ */ x.jsx("p", { children: c.map((u, d) => /* @__PURE__ */ x.jsxs("span", { children: [
+          d > 0 && /* @__PURE__ */ x.jsx("br", {}),
           _a(u)
         ] }, d)) }, s)
       );
@@ -35512,7 +35513,7 @@ function Em(i) {
 }
 const eD = /\\([\\`*_~[\]()#+\-.!>|])|`([^`]+)`|\[([^\]]+)\]\(\s*<?((?:[^\s()<>]|\([^\s()<>]*\))+)>?(?:\s+"[^"]*")?\s*\)|(https?:\/\/[^\s<>]*[^\s<>.,;:!?)\]'"，。！？）])|\*\*(?=\S)([\s\S]*?\S)\*\*|~~(?=\S)([\s\S]*?\S)~~|\*(?=[^\s*])([^*]*?[^\s*])\*/g, tD = /^(https?:|mailto:|tel:)/i;
 function bk(i, e, t) {
-  return tD.test(i) ? /* @__PURE__ */ w.jsx("a", { href: i, target: "_blank", rel: "noopener noreferrer", children: e }, t) : /* @__PURE__ */ w.jsx("span", { children: e }, t);
+  return tD.test(i) ? /* @__PURE__ */ x.jsx("a", { href: i, target: "_blank", rel: "noopener noreferrer", children: e }, t) : /* @__PURE__ */ x.jsx("span", { children: e }, t);
 }
 function _a(i) {
   const e = [];
@@ -35521,7 +35522,7 @@ function _a(i) {
     const s = a.index;
     s > t && e.push(i.slice(t, s));
     const c = e.length, [, u, d, h, f, p, v, b, k] = a;
-    u !== void 0 ? e.push(u) : d !== void 0 ? e.push(/* @__PURE__ */ w.jsx("code", { children: d }, c)) : h !== void 0 ? e.push(bk(f, _a(h), c)) : p !== void 0 ? e.push(bk(p, p, c)) : v !== void 0 ? e.push(/* @__PURE__ */ w.jsx("strong", { children: _a(v) }, c)) : b !== void 0 ? e.push(/* @__PURE__ */ w.jsx("del", { children: _a(b) }, c)) : e.push(/* @__PURE__ */ w.jsx("em", { children: _a(k) }, c)), t = s + a[0].length;
+    u !== void 0 ? e.push(u) : d !== void 0 ? e.push(/* @__PURE__ */ x.jsx("code", { children: d }, c)) : h !== void 0 ? e.push(bk(f, _a(h), c)) : p !== void 0 ? e.push(bk(p, p, c)) : v !== void 0 ? e.push(/* @__PURE__ */ x.jsx("strong", { children: _a(v) }, c)) : b !== void 0 ? e.push(/* @__PURE__ */ x.jsx("del", { children: _a(b) }, c)) : e.push(/* @__PURE__ */ x.jsx("em", { children: _a(k) }, c)), t = s + a[0].length;
   }
   return t < i.length && e.push(i.slice(t)), e;
 }
@@ -35557,11 +35558,11 @@ function yp({
     p();
     const v = requestAnimationFrame(p);
     return () => cancelAnimationFrame(v);
-  }, [i, e, a]), /* @__PURE__ */ w.jsx("div", { className: "lk-convo", ref: s, onScroll: d, children: i.length ? i.map(
-    (v) => v.kind === "message" ? /* @__PURE__ */ w.jsx(nD, { item: v }, v.id) : /* @__PURE__ */ w.jsx(aD, { item: v, onToggle: f }, v.id)
-  ) : /* @__PURE__ */ w.jsxs("div", { className: "lk-empty", children: [
-    /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:creation" }),
-    /* @__PURE__ */ w.jsx("span", { children: "Ask about your home — “turn on the study light”, “what's the temperature?”" })
+  }, [i, e, a]), /* @__PURE__ */ x.jsx("div", { className: "lk-convo", ref: s, onScroll: d, children: i.length ? i.map(
+    (v) => v.kind === "message" ? /* @__PURE__ */ x.jsx(nD, { item: v }, v.id) : /* @__PURE__ */ x.jsx(aD, { item: v, onToggle: f }, v.id)
+  ) : /* @__PURE__ */ x.jsxs("div", { className: "lk-empty", children: [
+    /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:creation" }),
+    /* @__PURE__ */ x.jsx("span", { children: "Ask about your home — “turn on the study light”, “what's the temperature?”" })
   ] }) });
 }
 function nD({ item: i }) {
@@ -35570,9 +35571,9 @@ function nD({ item: i }) {
     hour: "numeric",
     minute: "2-digit"
   });
-  return /* @__PURE__ */ w.jsx("div", { className: "lk-msg", "data-role": i.role, children: /* @__PURE__ */ w.jsxs("div", { className: "lk-msg-col", children: [
-    i.role === "agent" ? /* @__PURE__ */ w.jsx("div", { className: "lk-bubble lk-md", children: /* @__PURE__ */ w.jsx(WP, { text: i.text }) }) : /* @__PURE__ */ w.jsx("div", { className: "lk-bubble", children: i.text }),
-    i.ts > 1e12 && /* @__PURE__ */ w.jsx("time", { className: "lk-time", dateTime: e.toISOString(), children: a })
+  return /* @__PURE__ */ x.jsx("div", { className: "lk-msg", "data-role": i.role, children: /* @__PURE__ */ x.jsxs("div", { className: "lk-msg-col", children: [
+    i.role === "agent" ? /* @__PURE__ */ x.jsx("div", { className: "lk-bubble lk-md", children: /* @__PURE__ */ x.jsx(WP, { text: i.text }) }) : /* @__PURE__ */ x.jsx("div", { className: "lk-bubble", children: i.text }),
+    i.ts > 1e12 && /* @__PURE__ */ x.jsx("time", { className: "lk-time", dateTime: e.toISOString(), children: a })
   ] }) });
 }
 const iD = {
@@ -35583,8 +35584,8 @@ const iD = {
 };
 function aD({ item: i, onToggle: e }) {
   const [t, a] = R.useState(!1), s = R.useId(), c = YP(i.name), u = i.name === "update_from", d = QP(i.args), h = i.status === "error", f = i.output, p = f != null && i.outputChars != null && i.outputChars > f.length, v = i.args != null && !(typeof i.args == "object" && !Object.keys(i.args).length);
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-act-row", "data-open": t ? "1" : "0", children: [
-    /* @__PURE__ */ w.jsxs(
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-act-row", "data-open": t ? "1" : "0", children: [
+    /* @__PURE__ */ x.jsxs(
       "button",
       {
         type: "button",
@@ -35597,32 +35598,32 @@ function aD({ item: i, onToggle: e }) {
           e(), a((b) => !b);
         },
         children: [
-          /* @__PURE__ */ w.jsx("span", { className: "lk-act-dot" }),
-          /* @__PURE__ */ w.jsx("ha-icon", { icon: u ? "mdi:bell-outline" : c ? "mdi:flash" : "mdi:radar" }),
-          /* @__PURE__ */ w.jsxs("span", { className: "lk-act-text", children: [
+          /* @__PURE__ */ x.jsx("span", { className: "lk-act-dot" }),
+          /* @__PURE__ */ x.jsx("ha-icon", { icon: u ? "mdi:bell-outline" : c ? "mdi:flash" : "mdi:radar" }),
+          /* @__PURE__ */ x.jsxs("span", { className: "lk-act-text", children: [
             KP(i.name),
-            d && /* @__PURE__ */ w.jsxs("span", { className: "lk-act-target", children: [
+            d && /* @__PURE__ */ x.jsxs("span", { className: "lk-act-target", children: [
               " ",
               d
             ] })
           ] }),
-          /* @__PURE__ */ w.jsx("ha-icon", { className: "lk-act-chev", icon: "mdi:chevron-down" })
+          /* @__PURE__ */ x.jsx("ha-icon", { className: "lk-act-chev", icon: "mdi:chevron-down" })
         ]
       }
     ),
-    t && u && /* @__PURE__ */ w.jsx("div", { className: "lk-act-details", id: s, children: /* @__PURE__ */ w.jsx("div", { className: "lk-act-update", children: f }) }),
-    t && !u && /* @__PURE__ */ w.jsxs("div", { className: "lk-act-details", id: s, children: [
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-act-status", "data-status": i.status, children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-act-dot" }),
+    t && u && /* @__PURE__ */ x.jsx("div", { className: "lk-act-details", id: s, children: /* @__PURE__ */ x.jsx("div", { className: "lk-act-update", children: f }) }),
+    t && !u && /* @__PURE__ */ x.jsxs("div", { className: "lk-act-details", id: s, children: [
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-act-status", "data-status": i.status, children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-act-dot" }),
         iD[i.status],
-        /* @__PURE__ */ w.jsx("span", { className: "lk-act-name", children: i.name })
+        /* @__PURE__ */ x.jsx("span", { className: "lk-act-name", children: i.name })
       ] }),
-      /* @__PURE__ */ w.jsx("div", { className: "lk-act-label", children: "Arguments" }),
-      v ? /* @__PURE__ */ w.jsx("pre", { className: "lk-act-code", children: pk(i.args) }) : /* @__PURE__ */ w.jsx("div", { className: "lk-act-none", children: "None" }),
-      i.status !== "running" && /* @__PURE__ */ w.jsxs(w.Fragment, { children: [
-        /* @__PURE__ */ w.jsxs("div", { className: "lk-act-label", children: [
+      /* @__PURE__ */ x.jsx("div", { className: "lk-act-label", children: "Arguments" }),
+      v ? /* @__PURE__ */ x.jsx("pre", { className: "lk-act-code", children: pk(i.args) }) : /* @__PURE__ */ x.jsx("div", { className: "lk-act-none", children: "None" }),
+      i.status !== "running" && /* @__PURE__ */ x.jsxs(x.Fragment, { children: [
+        /* @__PURE__ */ x.jsxs("div", { className: "lk-act-label", children: [
           h ? "Error" : "Output",
-          p && /* @__PURE__ */ w.jsxs("span", { className: "lk-act-note", children: [
+          p && /* @__PURE__ */ x.jsxs("span", { className: "lk-act-note", children: [
             " ",
             "· first ",
             f.replace(/…$/, "").length.toLocaleString("en-US"),
@@ -35632,7 +35633,7 @@ function aD({ item: i, onToggle: e }) {
             " characters"
           ] })
         ] }),
-        f ? /* @__PURE__ */ w.jsx("pre", { className: "lk-act-code", "data-error": h ? "1" : "0", children: pk(f, p) }) : /* @__PURE__ */ w.jsx("div", { className: "lk-act-none", children: f === "" ? "Empty" : "Not recorded" })
+        f ? /* @__PURE__ */ x.jsx("pre", { className: "lk-act-code", "data-error": h ? "1" : "0", children: pk(f, p) }) : /* @__PURE__ */ x.jsx("div", { className: "lk-act-none", children: f === "" ? "Empty" : "Not recorded" })
       ] })
     ] })
   ] });
@@ -35804,8 +35805,8 @@ function vD(i, e, t) {
   return v.sort((T, P) => {
     const _ = k.get(T) ?? 1 / 0, U = k.get(P) ?? 1 / 0;
     if (_ !== U) return _ - U;
-    const B = kk(i, P, u) - kk(i, T, u);
-    if (B !== 0) return B;
+    const z = kk(i, P, u) - kk(i, T, u);
+    if (z !== 0) return z;
     const S = (Sk[Ps(T)] ?? 15) - (Sk[Ps(P)] ?? 15);
     return S !== 0 ? S : Ds(i, T).localeCompare(Ds(i, P));
   }).map((T) => ({ entityId: T, touched: b.has(T) }));
@@ -35850,11 +35851,6 @@ function kD(i) {
 function SD(i) {
   if (!i || typeof i == "string") return [];
   const e = i, t = [];
-  if (Array.isArray(e.steps))
-    for (const a of e.steps) {
-      const c = a?.args?.name;
-      typeof c == "string" ? t.push(c) : Array.isArray(c) && t.push(...c.map(String));
-    }
   for (const a of ["instruction", "description"]) {
     const s = e[a];
     typeof s == "string" && s.trim() && t.push(s);
@@ -35869,8 +35865,8 @@ function TD(i, e, t, a) {
     if (f.status === "error" || f.status === "cancelled" || PC(f.name)) continue;
     const p = /* @__PURE__ */ new Set(), v = kD(f.args);
     f.name === vp && v.push(...SD(f.args));
-    for (const x of v) {
-      const T = wm(x);
+    for (const w of v) {
+      const T = wm(w);
       if (!T) continue;
       const P = s.get(T);
       if (P) {
@@ -35886,11 +35882,11 @@ function TD(i, e, t, a) {
     const b = wm(f.name);
     b && s.has(b) && p.add(s.get(b));
     const k = a.get(f.callId);
-    if (k) for (const x of k) p.add(x);
+    if (k) for (const w of k) p.add(w);
     if (p.size) {
       d === null && (d = p);
-      for (const x of p)
-        u.has(x) || (u.add(x), c.push(x));
+      for (const w of p)
+        u.has(w) || (u.add(w), c.push(w));
     }
   }
   return { ordered: c, latest: d ?? /* @__PURE__ */ new Set() };
@@ -35937,7 +35933,7 @@ function xD(i, e, t) {
   };
   R.useEffect(() => {
     if (t.length === 0) {
-      c.current = null, f(), s((x) => x.size ? /* @__PURE__ */ new Map() : x);
+      c.current = null, f(), s((w) => w.size ? /* @__PURE__ */ new Map() : w);
       return;
     }
     const v = d.current;
@@ -35957,13 +35953,13 @@ function xD(i, e, t) {
     if (!i || !v || Date.now() >= v.until) return;
     const b = ED(v.baseline, i, xm(i, h.current));
     b.length && s((k) => {
-      const x = new Set(k.get(v.activeCallId) ?? []);
+      const w = new Set(k.get(v.activeCallId) ?? []);
       let T = !1;
       for (const _ of b)
-        x.has(_) || (x.add(_), T = !0);
+        w.has(_) || (w.add(_), T = !0);
       if (!T) return k;
       const P = new Map(k);
-      return P.set(v.activeCallId, x), P;
+      return P.set(v.activeCallId, w), P;
     });
   }, [i]), R.useEffect(() => () => f(), []);
   const p = R.useMemo(
@@ -36026,10 +36022,10 @@ function NC({
   ), b = R.useMemo(
     () => c ? vD(c, u, { agentAreas: e, actedOn: f, exposed: h, query: a, recent: v }) : [],
     [c, u, e, f, h, a, v]
-  ), k = R.useRef(null), x = b.find((T) => T.touched)?.entityId;
+  ), k = R.useRef(null), w = b.find((T) => T.touched)?.entityId;
   return R.useEffect(() => {
-    x && k.current?.scrollTo({ left: 0, behavior: "smooth" });
-  }, [x]), i || !c || b.length === 0 ? null : /* @__PURE__ */ w.jsx("div", { className: "lk-tiles", ref: k, children: b.map((T) => /* @__PURE__ */ w.jsx(AD, { entityId: T.entityId, touched: T.touched, hass: c, host: d }, T.entityId)) });
+    w && k.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [w]), i || !c || b.length === 0 ? null : /* @__PURE__ */ x.jsx("div", { className: "lk-tiles", ref: k, children: b.map((T) => /* @__PURE__ */ x.jsx(AD, { entityId: T.entityId, touched: T.touched, hass: c, host: d }, T.entityId)) });
 }
 function AD({
   entityId: i,
@@ -36051,7 +36047,7 @@ function AD({
       c.current = !0, h();
     }, 500);
   }, v = () => window.clearTimeout(u.current);
-  return /* @__PURE__ */ w.jsxs(
+  return /* @__PURE__ */ x.jsxs(
     "button",
     {
       className: "lk-tile",
@@ -36066,9 +36062,9 @@ function AD({
         b.preventDefault(), h();
       },
       children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-tile-icon", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: dD(t, i) }) }),
-        /* @__PURE__ */ w.jsx("span", { className: "lk-tile-state", children: fD(s) }),
-        /* @__PURE__ */ w.jsx("span", { className: "lk-tile-name", children: Ds(t, i) })
+        /* @__PURE__ */ x.jsx("span", { className: "lk-tile-icon", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: dD(t, i) }) }),
+        /* @__PURE__ */ x.jsx("span", { className: "lk-tile-state", children: fD(s) }),
+        /* @__PURE__ */ x.jsx("span", { className: "lk-tile-name", children: Ds(t, i) })
       ]
     }
   );
@@ -36085,31 +36081,31 @@ function Sp() {
   }, []), i;
 }
 function OD(i) {
-  const { mode: e, turnActive: t, autoPaused: a, micStarting: s, connecting: c, onSend: u } = i, { onTurnStart: d, onTurnEnd: h, onTurnCancel: f, onPause: p, onResume: v } = i, b = i.suggestions ?? [], k = Sp(), [x, T] = R.useState(i.initialText ?? ""), [P, _] = R.useState(!1), U = !P && x.trim().length > 0, B = async (D) => {
-    const V = D.trim();
-    if (!(!V || P)) {
+  const { mode: e, turnActive: t, autoPaused: a, micStarting: s, connecting: c, onSend: u } = i, { onTurnStart: d, onTurnEnd: h, onTurnCancel: f, onPause: p, onResume: v } = i, b = i.suggestions ?? [], k = Sp(), [w, T] = R.useState(i.initialText ?? ""), [P, _] = R.useState(!1), U = !P && w.trim().length > 0, z = async (D) => {
+    const H = D.trim();
+    if (!(!H || P)) {
       _(!0), T("");
       try {
-        await u(V);
+        await u(H);
       } finally {
         _(!1);
       }
     }
-  }, S = () => B(x);
+  }, S = () => z(w);
   if (e === "manual" && t)
-    return /* @__PURE__ */ w.jsx("div", { className: "lk-dock", ref: k, children: /* @__PURE__ */ w.jsxs("div", { className: "lk-listen", "data-starting": s ? "1" : "0", children: [
-      /* @__PURE__ */ w.jsx("button", { className: "lk-listen-cancel", title: "Cancel", onClick: f, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:close" }) }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-listen-mid", children: [
-        s ? /* @__PURE__ */ w.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) : /* @__PURE__ */ w.jsxs("span", { className: "lk-eq", "aria-hidden": "true", children: [
-          /* @__PURE__ */ w.jsx("i", {}),
-          /* @__PURE__ */ w.jsx("i", {}),
-          /* @__PURE__ */ w.jsx("i", {}),
-          /* @__PURE__ */ w.jsx("i", {}),
-          /* @__PURE__ */ w.jsx("i", {})
+    return /* @__PURE__ */ x.jsx("div", { className: "lk-dock", ref: k, children: /* @__PURE__ */ x.jsxs("div", { className: "lk-listen", "data-starting": s ? "1" : "0", children: [
+      /* @__PURE__ */ x.jsx("button", { className: "lk-listen-cancel", title: "Cancel", onClick: f, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:close" }) }),
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-listen-mid", children: [
+        s ? /* @__PURE__ */ x.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) : /* @__PURE__ */ x.jsxs("span", { className: "lk-eq", "aria-hidden": "true", children: [
+          /* @__PURE__ */ x.jsx("i", {}),
+          /* @__PURE__ */ x.jsx("i", {}),
+          /* @__PURE__ */ x.jsx("i", {}),
+          /* @__PURE__ */ x.jsx("i", {}),
+          /* @__PURE__ */ x.jsx("i", {})
         ] }),
-        /* @__PURE__ */ w.jsx("span", { className: "lk-listen-label", children: s ? "Starting…" : "Listening…" })
+        /* @__PURE__ */ x.jsx("span", { className: "lk-listen-label", children: s ? "Starting…" : "Listening…" })
       ] }),
-      /* @__PURE__ */ w.jsxs(
+      /* @__PURE__ */ x.jsxs(
         "button",
         {
           className: "lk-listen-send",
@@ -36117,27 +36113,27 @@ function OD(i) {
           onClick: h,
           disabled: s,
           children: [
-            /* @__PURE__ */ w.jsx("span", { children: "Send" }),
-            /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-up" })
+            /* @__PURE__ */ x.jsx("span", { children: "Send" }),
+            /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:arrow-up" })
           ]
         }
       )
     ] }) });
   const C = e === "auto" && a, M = c ? "Connecting…" : C ? "Message, or tap the mic to talk" : "Message…";
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-dock", ref: k, children: [
-    b.length > 0 && /* @__PURE__ */ w.jsx("div", { className: "lk-suggest", children: b.map((D, V) => /* @__PURE__ */ w.jsx(
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-dock", ref: k, children: [
+    b.length > 0 && /* @__PURE__ */ x.jsx("div", { className: "lk-suggest", children: b.map((D, H) => /* @__PURE__ */ x.jsx(
       "button",
       {
         className: "lk-chip",
-        onClick: () => B(D),
+        onClick: () => z(D),
         disabled: P,
         children: D
       },
-      `${V}-${D}`
+      `${H}-${D}`
     )) }),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-bar", "data-paused": C ? "1" : "0", children: [
-      /* @__PURE__ */ w.jsx(LC, { value: x, placeholder: M, onChange: T, onSubmit: S }),
-      /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-bar", "data-paused": C ? "1" : "0", children: [
+      /* @__PURE__ */ x.jsx(LC, { value: w, placeholder: M, onChange: T, onSubmit: S }),
+      /* @__PURE__ */ x.jsx(
         PD,
         {
           canSend: U,
@@ -36172,7 +36168,7 @@ function LC({
       p.contentRect.width !== h && (h = p.contentRect.width, u());
     });
     return f.observe(d), () => f.disconnect();
-  }, []), /* @__PURE__ */ w.jsx(
+  }, []), /* @__PURE__ */ x.jsx(
     "textarea",
     {
       ref: c,
@@ -36199,7 +36195,7 @@ function PD({
   onPause: u,
   onResume: d
 }) {
-  return i ? /* @__PURE__ */ w.jsx("button", { className: "lk-send lk-send--accent", title: "Send", onClick: s, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-up" }) }) : e ? /* @__PURE__ */ w.jsx("button", { className: "lk-send lk-send--accent", title: "Working…", disabled: !0, children: /* @__PURE__ */ w.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) }) : t === "manual" ? /* @__PURE__ */ w.jsx("button", { className: "lk-send lk-send--accent", title: "Tap to talk", onClick: c, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:microphone" }) }) : a ? /* @__PURE__ */ w.jsx("button", { className: "lk-send lk-send--accent", title: "Start listening", onClick: d, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:microphone" }) }) : /* @__PURE__ */ w.jsx("button", { className: "lk-send", "data-on": "1", title: "Pause listening", onClick: u, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:pause" }) });
+  return i ? /* @__PURE__ */ x.jsx("button", { className: "lk-send lk-send--accent", title: "Send", onClick: s, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:arrow-up" }) }) : e ? /* @__PURE__ */ x.jsx("button", { className: "lk-send lk-send--accent", title: "Working…", disabled: !0, children: /* @__PURE__ */ x.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) }) : t === "manual" ? /* @__PURE__ */ x.jsx("button", { className: "lk-send lk-send--accent", title: "Tap to talk", onClick: c, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:microphone" }) }) : a ? /* @__PURE__ */ x.jsx("button", { className: "lk-send lk-send--accent", title: "Start listening", onClick: d, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:microphone" }) }) : /* @__PURE__ */ x.jsx("button", { className: "lk-send", "data-on": "1", title: "Pause listening", onClick: u, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:pause" }) });
 }
 function DD({
   orbState: i,
@@ -36212,14 +36208,14 @@ function DD({
   onToggleAudioOutput: d,
   onEnd: h
 }) {
-  return /* @__PURE__ */ w.jsxs("header", { className: "lk-top", children: [
-    /* @__PURE__ */ w.jsx("span", { className: "lk-orb", "data-state": i, "aria-hidden": "true", children: /* @__PURE__ */ w.jsx("span", { className: "lk-orb-core" }) }),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-titlewrap", children: [
-      /* @__PURE__ */ w.jsx("span", { className: "lk-title", children: e }),
-      /* @__PURE__ */ w.jsx("span", { className: "lk-state", "data-state": i, children: c })
+  return /* @__PURE__ */ x.jsxs("header", { className: "lk-top", children: [
+    /* @__PURE__ */ x.jsx("span", { className: "lk-orb", "data-state": i, "aria-hidden": "true", children: /* @__PURE__ */ x.jsx("span", { className: "lk-orb-core" }) }),
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-titlewrap", children: [
+      /* @__PURE__ */ x.jsx("span", { className: "lk-title", children: e }),
+      /* @__PURE__ */ x.jsx("span", { className: "lk-state", "data-state": i, children: c })
     ] }),
-    t && /* @__PURE__ */ w.jsx(ND, { mode: a, onChange: s }),
-    t && /* @__PURE__ */ w.jsx(
+    t && /* @__PURE__ */ x.jsx(ND, { mode: a, onChange: s }),
+    t && /* @__PURE__ */ x.jsx(
       "button",
       {
         className: "lk-iconbtn",
@@ -36227,15 +36223,15 @@ function DD({
         title: u ? "Mute agent voice" : "Let the agent speak",
         "aria-pressed": u,
         onClick: d,
-        children: /* @__PURE__ */ w.jsx("ha-icon", { icon: u ? "mdi:volume-high" : "mdi:volume-off" })
+        children: /* @__PURE__ */ x.jsx("ha-icon", { icon: u ? "mdi:volume-high" : "mdi:volume-off" })
       }
     ),
-    t && /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", title: "End conversation", onClick: h, children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:close" }) })
+    t && /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", title: "End conversation", onClick: h, children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:close" }) })
   ] });
 }
 function ND({ mode: i, onChange: e }) {
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-modeswitch", role: "group", "aria-label": "Turn mode", children: [
-    /* @__PURE__ */ w.jsx(
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-modeswitch", role: "group", "aria-label": "Turn mode", children: [
+    /* @__PURE__ */ x.jsx(
       "button",
       {
         type: "button",
@@ -36245,7 +36241,7 @@ function ND({ mode: i, onChange: e }) {
         children: "Continuous"
       }
     ),
-    /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsx(
       "button",
       {
         type: "button",
@@ -36267,32 +36263,32 @@ function IC({
   const s = i.filter((h) => h.status === "scheduled" && h.enabled);
   if (s.length === 0) return null;
   const c = e ? [...s].sort((h, f) => h.id === e ? -1 : f.id === e ? 1 : 0) : s, u = c.slice(0, LD), d = c.length - u.length;
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-sched", children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-sched-head", children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:calendar-clock" }),
-      /* @__PURE__ */ w.jsxs("span", { children: [
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-sched", children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-sched-head", children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:calendar-clock" }),
+      /* @__PURE__ */ x.jsxs("span", { children: [
         "Scheduled · ",
         s.length
       ] })
     ] }),
-    u.map((h) => /* @__PURE__ */ w.jsxs(
+    u.map((h) => /* @__PURE__ */ x.jsxs(
       "button",
       {
         className: "lk-sched-item",
         "data-fresh": h.id === e ? "1" : "0",
         onClick: () => t(h),
         children: [
-          /* @__PURE__ */ w.jsx("span", { className: "lk-sched-icon", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: h.schedule_type === "recurring" ? "mdi:repeat" : "mdi:clock-outline" }) }),
-          /* @__PURE__ */ w.jsxs("span", { className: "lk-sched-body", children: [
-            /* @__PURE__ */ w.jsx("span", { className: "lk-sched-desc", children: h.description }),
-            /* @__PURE__ */ w.jsx("span", { className: "lk-sched-when", children: RC(h) })
+          /* @__PURE__ */ x.jsx("span", { className: "lk-sched-icon", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: h.schedule_type === "recurring" ? "mdi:repeat" : "mdi:clock-outline" }) }),
+          /* @__PURE__ */ x.jsxs("span", { className: "lk-sched-body", children: [
+            /* @__PURE__ */ x.jsx("span", { className: "lk-sched-desc", children: h.description }),
+            /* @__PURE__ */ x.jsx("span", { className: "lk-sched-when", children: RC(h) })
           ] }),
-          h.schedule_type === "recurring" && /* @__PURE__ */ w.jsx("span", { className: "lk-sched-badge", children: "Repeats" })
+          h.schedule_type === "recurring" && /* @__PURE__ */ x.jsx("span", { className: "lk-sched-badge", children: "Repeats" })
         ]
       },
       h.id
     )),
-    d > 0 && /* @__PURE__ */ w.jsxs("button", { className: "lk-sched-more", onClick: a, children: [
+    d > 0 && /* @__PURE__ */ x.jsxs("button", { className: "lk-sched-more", onClick: a, children: [
       "+",
       d,
       " more in Schedules"
@@ -36312,7 +36308,7 @@ function UD(i, e) {
 function jD({ api: i, onOpen: e }) {
   const { tasks: t, loading: a, error: s, freshId: c, refresh: u, save: d, remove: h } = i, [f, p] = R.useState(""), [v, b] = R.useState(null), k = (_) => {
     b(null), e(_);
-  }, x = (_) => {
+  }, w = (_) => {
     b(null), d(_.id, { enabled: !_.enabled });
   }, T = (_) => {
     if (v !== _.id) {
@@ -36323,13 +36319,13 @@ function jD({ api: i, onOpen: e }) {
   }, P = R.useMemo(() => {
     const _ = f.trim().toLowerCase();
     return (_ ? t.filter(
-      (B) => B.description.toLowerCase().includes(_) || mk(B).toLowerCase().includes(_)
+      (z) => z.description.toLowerCase().includes(_) || mk(z).toLowerCase().includes(_)
     ) : t.slice()).sort(UD);
   }, [t, f]);
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-schedtab", children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-search", children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:magnify" }),
-      /* @__PURE__ */ w.jsx(
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-schedtab", children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-search", children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:magnify" }),
+      /* @__PURE__ */ x.jsx(
         "input",
         {
           className: "lk-search-in",
@@ -36338,52 +36334,52 @@ function jD({ api: i, onOpen: e }) {
           onChange: (_) => p(_.target.value)
         }
       ),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: () => void u(), "aria-label": "Refresh", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:refresh" }) })
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: () => void u(), "aria-label": "Refresh", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:refresh" }) })
     ] }),
-    /* @__PURE__ */ w.jsx("div", { className: "lk-tasklist", children: s ? /* @__PURE__ */ w.jsxs("div", { className: "lk-tasks-empty", children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:alert-circle-outline" }),
-      /* @__PURE__ */ w.jsx("span", { children: s })
-    ] }) : P.length === 0 ? /* @__PURE__ */ w.jsxs("div", { className: "lk-tasks-empty", children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:calendar-blank-outline" }),
-      /* @__PURE__ */ w.jsx("span", { children: a ? "Loading…" : f ? "No matches" : "No schedules yet" })
-    ] }) : P.map((_) => /* @__PURE__ */ w.jsxs(
+    /* @__PURE__ */ x.jsx("div", { className: "lk-tasklist", children: s ? /* @__PURE__ */ x.jsxs("div", { className: "lk-tasks-empty", children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:alert-circle-outline" }),
+      /* @__PURE__ */ x.jsx("span", { children: s })
+    ] }) : P.length === 0 ? /* @__PURE__ */ x.jsxs("div", { className: "lk-tasks-empty", children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:calendar-blank-outline" }),
+      /* @__PURE__ */ x.jsx("span", { children: a ? "Loading…" : f ? "No matches" : "No schedules yet" })
+    ] }) : P.map((_) => /* @__PURE__ */ x.jsxs(
       "div",
       {
         className: "lk-taskrow",
         "data-fresh": _.id === c ? "1" : "0",
         "data-status": _.status,
         children: [
-          /* @__PURE__ */ w.jsxs("button", { className: "lk-taskrow-main", onClick: () => k(_), children: [
-            /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-icon", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: ID[_.status] ?? "mdi:clock-outline" }) }),
-            /* @__PURE__ */ w.jsxs("span", { className: "lk-taskrow-body", children: [
-              /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-desc", children: _.description }),
-              /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-when", children: RC(_) }),
-              /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-exec", children: mk(_) })
+          /* @__PURE__ */ x.jsxs("button", { className: "lk-taskrow-main", onClick: () => k(_), children: [
+            /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-icon", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: ID[_.status] ?? "mdi:clock-outline" }) }),
+            /* @__PURE__ */ x.jsxs("span", { className: "lk-taskrow-body", children: [
+              /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-desc", children: _.description }),
+              /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-when", children: RC(_) }),
+              /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-exec", children: mk(_) })
             ] }),
-            /* @__PURE__ */ w.jsxs("span", { className: "lk-taskrow-tags", children: [
-              _.schedule_type === "recurring" && /* @__PURE__ */ w.jsx("span", { className: "lk-tag", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:repeat" }) }),
-              _.status !== "scheduled" && /* @__PURE__ */ w.jsx("span", { className: "lk-tag lk-tag-muted", children: _.status }),
-              _.status === "scheduled" && !_.enabled && /* @__PURE__ */ w.jsx("span", { className: "lk-tag lk-tag-muted", children: "paused" })
+            /* @__PURE__ */ x.jsxs("span", { className: "lk-taskrow-tags", children: [
+              _.schedule_type === "recurring" && /* @__PURE__ */ x.jsx("span", { className: "lk-tag", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:repeat" }) }),
+              _.status !== "scheduled" && /* @__PURE__ */ x.jsx("span", { className: "lk-tag lk-tag-muted", children: _.status }),
+              _.status === "scheduled" && !_.enabled && /* @__PURE__ */ x.jsx("span", { className: "lk-tag lk-tag-muted", children: "paused" })
             ] })
           ] }),
-          /* @__PURE__ */ w.jsxs("div", { className: "lk-taskrow-acts", children: [
-            _.status === "scheduled" && /* @__PURE__ */ w.jsx(
+          /* @__PURE__ */ x.jsxs("div", { className: "lk-taskrow-acts", children: [
+            _.status === "scheduled" && /* @__PURE__ */ x.jsx(
               "button",
               {
                 className: "lk-iconbtn",
-                onClick: () => x(_),
+                onClick: () => w(_),
                 "aria-label": _.enabled ? "Pause schedule" : "Resume schedule",
-                children: /* @__PURE__ */ w.jsx("ha-icon", { icon: _.enabled ? "mdi:pause" : "mdi:play" })
+                children: /* @__PURE__ */ x.jsx("ha-icon", { icon: _.enabled ? "mdi:pause" : "mdi:play" })
               }
             ),
-            /* @__PURE__ */ w.jsx(
+            /* @__PURE__ */ x.jsx(
               "button",
               {
                 className: "lk-iconbtn lk-taskrow-del",
                 "data-armed": _.id === v ? "1" : "0",
                 onClick: () => T(_),
                 "aria-label": _.id === v ? "Confirm delete" : "Delete schedule",
-                children: /* @__PURE__ */ w.jsx("ha-icon", { icon: _.id === v ? "mdi:check" : "mdi:trash-can-outline" })
+                children: /* @__PURE__ */ x.jsx("ha-icon", { icon: _.id === v ? "mdi:check" : "mdi:trash-can-outline" })
               }
             )
           ] })
@@ -36400,60 +36396,62 @@ function zD(i) {
 const jh = (i, e) => i.trim().toLowerCase() === e.trim().toLowerCase();
 function BD(i) {
   return Array.isArray(i) ? i.filter((e) => e && typeof e.name == "string").map((e) => ({
+    // fields this tab does not edit, such as id and servers, are saved back as they came
+    ...e,
     name: e.name,
     ha_user_id: typeof e.ha_user_id == "string" && e.ha_user_id ? e.ha_user_id : null,
     notify_targets: Array.isArray(e.notify_targets) ? e.notify_targets : []
   })) : [];
 }
 function FD() {
-  const i = Ls(), [e, t] = R.useState([]), [a, s] = R.useState(null), [c, u] = R.useState(!1), [d, h] = R.useState(null), f = R.useRef(!1), p = R.useRef(!1), v = R.useRef([]), [b, k] = R.useState({}), x = R.useMemo(() => {
-    const B = i?.services?.notify;
-    if (!B) return [];
+  const i = Ls(), [e, t] = R.useState([]), [a, s] = R.useState(null), [c, u] = R.useState(!1), [d, h] = R.useState(null), f = R.useRef(!1), p = R.useRef(!1), v = R.useRef([]), [b, k] = R.useState({}), w = R.useMemo(() => {
+    const z = i?.services?.notify;
+    if (!z) return [];
     const S = /* @__PURE__ */ new Set(["persistent_notification", "notify", "send_message"]);
-    return Object.keys(B).filter((C) => !S.has(C)).map((C) => ({ service: C, label: b[C] ?? zD(C) })).sort((C, M) => C.label.localeCompare(M.label));
+    return Object.keys(z).filter((C) => !S.has(C)).map((C) => ({ service: C, label: b[C] ?? zD(C) })).sort((C, M) => C.label.localeCompare(M.label));
   }, [i, b]);
   R.useEffect(() => {
     if (!i || f.current) return;
     f.current = !0;
-    let B = !1;
+    let z = !1;
     return h(null), i.callApi("GET", Ck).then((S) => {
-      B || (S?.device_names && typeof S.device_names == "object" && k(S.device_names), v.current = BD(S?.users), t(v.current));
+      z || (S?.device_names && typeof S.device_names == "object" && k(S.device_names), v.current = BD(S?.users), t(v.current));
     }).catch(() => {
-      B || (h("Could not load notification settings."), f.current = !1);
+      z || (h("Could not load notification settings."), f.current = !1);
     }), () => {
-      B = !0;
+      z = !0;
     };
   }, [i]), R.useEffect(() => {
     !i?.user?.is_admin || !i.callWS || p.current || (p.current = !0, i.callWS({ type: "config/auth/list" }).then(
-      (B) => s(
-        (Array.isArray(B) ? B : []).filter((S) => S && !S.system_generated).map((S) => ({ id: S.id, name: S.name || S.username || S.id })).sort((S, C) => S.name.localeCompare(C.name))
+      (z) => s(
+        (Array.isArray(z) ? z : []).filter((S) => S && !S.system_generated).map((S) => ({ id: S.id, name: S.name || S.username || S.id })).sort((S, C) => S.name.localeCompare(C.name))
       )
     ).catch(() => s(null)));
   }, [i]);
   const T = R.useCallback(
-    (B) => {
+    (z) => {
       if (!i) return;
       const S = v.current;
-      v.current = B, t(B), u(!0), h(null), i.callApi("PUT", Ck, { users: B }).catch(() => {
-        h("Could not save. Try again."), v.current === B && (v.current = S, t(S));
+      v.current = z, t(z), u(!0), h(null), i.callApi("PUT", Ck, { users: z }).catch(() => {
+        h("Could not save. Try again."), v.current === z && (v.current = S, t(S));
       }).finally(() => u(!1));
     },
     [i]
   ), P = R.useCallback(
-    (B) => {
-      const S = B.trim();
+    (z) => {
+      const S = z.trim();
       return S ? v.current.some((C) => jh(C.name, S)) ? `${S} is already listed.` : (T([...v.current, { name: S, ha_user_id: null, notify_targets: [] }]), null) : "Enter a name.";
     },
     [T]
   ), _ = R.useCallback(
-    (B) => T(v.current.filter((S) => !jh(S.name, B))),
+    (z) => T(v.current.filter((S) => !jh(S.name, z))),
     [T]
   ), U = R.useCallback(
-    (B, S) => T(v.current.map((C) => jh(C.name, B) ? { ...C, ...S } : C)),
+    (z, S) => T(v.current.map((C) => jh(C.name, z) ? { ...C, ...S } : C)),
     [T]
   );
   return {
-    available: x,
+    available: w,
     users: e,
     accounts: a,
     saving: c,
@@ -36471,9 +36469,9 @@ function qD({
   label: a,
   liveTarget: s
 }) {
-  return /* @__PURE__ */ w.jsx("div", { className: "lk-checklist", role: "group", "aria-label": a, children: i.map((c) => {
+  return /* @__PURE__ */ x.jsx("div", { className: "lk-checklist", role: "group", "aria-label": a, children: i.map((c) => {
     const u = e.includes(c.service);
-    return /* @__PURE__ */ w.jsxs(
+    return /* @__PURE__ */ x.jsxs(
       "button",
       {
         className: "lk-checkrow",
@@ -36482,10 +36480,10 @@ function qD({
         "aria-checked": u,
         onClick: () => t(c.service),
         children: [
-          /* @__PURE__ */ w.jsx("span", { className: "lk-check", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:check" }) }),
-          /* @__PURE__ */ w.jsx("span", { className: "lk-checkrow-ic", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: c.icon }) }),
-          /* @__PURE__ */ w.jsx("span", { className: "lk-checkrow-label", children: c.label }),
-          c.service === s && /* @__PURE__ */ w.jsx("span", { className: "lk-tag", children: "Live" })
+          /* @__PURE__ */ x.jsx("span", { className: "lk-check", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:check" }) }),
+          /* @__PURE__ */ x.jsx("span", { className: "lk-checkrow-ic", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: c.icon }) }),
+          /* @__PURE__ */ x.jsx("span", { className: "lk-checkrow-label", children: c.label }),
+          c.service === s && /* @__PURE__ */ x.jsx("span", { className: "lk-tag", children: "Live" })
         ]
       },
       c.service
@@ -36504,14 +36502,14 @@ function HD({
   onDelete: h,
   onUpdate: f
 }) {
-  const p = Ls(), [v, b] = R.useState("idle"), k = i.ha_user_id, x = s?.find((S) => S.id === k), T = i.notify_targets.find((S) => S.startsWith("mobile_app_")), P = i.notify_targets.map(
+  const p = Ls(), [v, b] = R.useState("idle"), k = i.ha_user_id, w = s?.find((S) => S.id === k), T = i.notify_targets.find((S) => S.startsWith("mobile_app_")), P = i.notify_targets.map(
     (S) => S === Rm ? "Home Assistant" : t.find((C) => C.service === S)?.label ?? S
   ), _ = [
     P.length ? P.join(", ") : "No devices",
-    k ? x ? `@${x.name}` : "linked" : null
+    k ? w ? `@${w.name}` : "linked" : null
   ].filter(Boolean).join(" · "), U = (S) => f({
     notify_targets: i.notify_targets.includes(S) ? i.notify_targets.filter((C) => C !== S) : [...i.notify_targets, S]
-  }), B = async () => {
+  }), z = async () => {
     if (!(!p || i.notify_targets.length === 0 || v === "sending")) {
       b("sending");
       try {
@@ -36526,57 +36524,57 @@ function HD({
       setTimeout(() => b("idle"), 2800);
     }
   };
-  return /* @__PURE__ */ w.jsxs("div", { className: "lk-person", "data-open": c ? "1" : "0", children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-person-head", children: [
-      /* @__PURE__ */ w.jsxs("button", { className: "lk-person-main", onClick: d, "aria-expanded": c, children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-person-av", children: i.name.slice(0, 1).toUpperCase() }),
-        /* @__PURE__ */ w.jsxs("span", { className: "lk-person-body", children: [
-          /* @__PURE__ */ w.jsx("span", { className: "lk-person-name", children: i.name }),
-          /* @__PURE__ */ w.jsx("span", { className: "lk-person-sum", children: _ })
+  return /* @__PURE__ */ x.jsxs("div", { className: "lk-person", "data-open": c ? "1" : "0", children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-person-head", children: [
+      /* @__PURE__ */ x.jsxs("button", { className: "lk-person-main", onClick: d, "aria-expanded": c, children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-person-av", children: i.name.slice(0, 1).toUpperCase() }),
+        /* @__PURE__ */ x.jsxs("span", { className: "lk-person-body", children: [
+          /* @__PURE__ */ x.jsx("span", { className: "lk-person-name", children: i.name }),
+          /* @__PURE__ */ x.jsx("span", { className: "lk-person-sum", children: _ })
         ] }),
-        /* @__PURE__ */ w.jsx("ha-icon", { className: "lk-person-chev", icon: "mdi:chevron-down" })
+        /* @__PURE__ */ x.jsx("ha-icon", { className: "lk-person-chev", icon: "mdi:chevron-down" })
       ] }),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-iconbtn lk-taskrow-del",
           "data-armed": u ? "1" : "0",
           onClick: h,
           "aria-label": u ? `Confirm remove ${i.name}` : `Remove ${i.name}`,
-          children: /* @__PURE__ */ w.jsx("ha-icon", { icon: u ? "mdi:check" : "mdi:trash-can-outline" })
+          children: /* @__PURE__ */ x.jsx("ha-icon", { icon: u ? "mdi:check" : "mdi:trash-can-outline" })
         }
       )
     ] }),
-    c && /* @__PURE__ */ w.jsxs("div", { className: "lk-person-detail", children: [
-      s ? /* @__PURE__ */ w.jsxs("label", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Home Assistant account" }),
-        /* @__PURE__ */ w.jsxs(
+    c && /* @__PURE__ */ x.jsxs("div", { className: "lk-person-detail", children: [
+      s ? /* @__PURE__ */ x.jsxs("label", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Home Assistant account" }),
+        /* @__PURE__ */ x.jsxs(
           "select",
           {
             className: "lk-in lk-person-sel",
             value: k ?? "",
             onChange: (S) => f({ ha_user_id: S.target.value || null }),
             children: [
-              /* @__PURE__ */ w.jsx("option", { value: "", children: "Not linked" }),
-              k && !x && /* @__PURE__ */ w.jsxs("option", { value: k, children: [
+              /* @__PURE__ */ x.jsx("option", { value: "", children: "Not linked" }),
+              k && !w && /* @__PURE__ */ x.jsxs("option", { value: k, children: [
                 "Unknown account (",
                 k.slice(0, 8),
                 ")"
               ] }),
               s.map((S) => {
                 const C = a.find((M) => M.ha_user_id === S.id && M.name !== i.name);
-                return /* @__PURE__ */ w.jsx("option", { value: S.id, disabled: !!C, children: C ? `${S.name} (${C.name})` : S.name }, S.id);
+                return /* @__PURE__ */ x.jsx("option", { value: S.id, disabled: !!C, children: C ? `${S.name} (${C.name})` : S.name }, S.id);
               })
             ]
           }
         )
-      ] }) : k && /* @__PURE__ */ w.jsxs("div", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Home Assistant account" }),
-        /* @__PURE__ */ w.jsx("span", { className: "lk-person-id", children: k })
+      ] }) : k && /* @__PURE__ */ x.jsxs("div", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Home Assistant account" }),
+        /* @__PURE__ */ x.jsx("span", { className: "lk-person-id", children: k })
       ] }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Notify" }),
-        /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Notify" }),
+        /* @__PURE__ */ x.jsx(
           qD,
           {
             rows: e,
@@ -36586,98 +36584,98 @@ function HD({
             liveTarget: T
           }
         ),
-        /* @__PURE__ */ w.jsxs("p", { className: "lk-set-hint lk-person-hint", children: [
+        /* @__PURE__ */ x.jsxs("p", { className: "lk-set-hint lk-person-hint", children: [
           "Live progress (Live Activity) goes to the first phone checked",
           T ? ", tagged Live" : "",
           "."
         ] }),
-        /* @__PURE__ */ w.jsxs(
+        /* @__PURE__ */ x.jsxs(
           "button",
           {
             className: "lk-testbtn",
             "data-sent": v === "sent" ? "1" : "0",
             disabled: i.notify_targets.length === 0 || v === "sending",
-            onClick: B,
+            onClick: z,
             children: [
-              /* @__PURE__ */ w.jsx("ha-icon", { icon: v === "sent" ? "mdi:check" : "mdi:send" }),
+              /* @__PURE__ */ x.jsx("ha-icon", { icon: v === "sent" ? "mdi:check" : "mdi:send" }),
               v === "sending" ? "Sending…" : v === "sent" ? "Sent" : v === "error" ? "Failed" : "Send a test"
             ]
           }
         ),
-        v === "error" && /* @__PURE__ */ w.jsx("p", { className: "lk-set-err", children: "Could not send the test. Check the device." })
+        v === "error" && /* @__PURE__ */ x.jsx("p", { className: "lk-set-err", children: "Could not send the test. Check the device." })
       ] })
     ] })
   ] });
 }
 function VD() {
-  const { available: i, users: e, accounts: t, saving: a, error: s, addUser: c, removeUser: u, updateUser: d } = FD(), [h, f] = R.useState(null), [p, v] = R.useState(null), [b, k] = R.useState(""), [x, T] = R.useState(null), P = [
+  const { available: i, users: e, accounts: t, saving: a, error: s, addUser: c, removeUser: u, updateUser: d } = FD(), [h, f] = R.useState(null), [p, v] = R.useState(null), [b, k] = R.useState(""), [w, T] = R.useState(null), P = [
     { service: Rm, label: "Home Assistant", icon: "mdi:bell-outline" },
-    ...i.map((B) => ({ service: B.service, label: B.label, icon: "mdi:cellphone" }))
+    ...i.map((z) => ({ service: z.service, label: z.label, icon: "mdi:cellphone" }))
   ], _ = () => {
-    const B = c(b);
-    T(B), v(null), B || (f(b.trim()), k(""));
-  }, U = (B) => {
-    if (p !== B) {
-      v(B);
+    const z = c(b);
+    T(z), v(null), z || (f(b.trim()), k(""));
+  }, U = (z) => {
+    if (p !== z) {
+      v(z);
       return;
     }
-    v(null), h === B && f(null), u(B);
+    v(null), h === z && f(null), u(z);
   };
-  return /* @__PURE__ */ w.jsx("div", { className: "lk-settings", children: /* @__PURE__ */ w.jsx("div", { className: "lk-settings-scroll", children: /* @__PURE__ */ w.jsxs("section", { className: "lk-set-sec", children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-set-sechead", children: [
-      /* @__PURE__ */ w.jsx("span", { className: "lk-set-title", children: "People" }),
-      a && /* @__PURE__ */ w.jsx("span", { className: "lk-set-saving", children: "Saving…" })
+  return /* @__PURE__ */ x.jsx("div", { className: "lk-settings", children: /* @__PURE__ */ x.jsx("div", { className: "lk-settings-scroll", children: /* @__PURE__ */ x.jsxs("section", { className: "lk-set-sec", children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-set-sechead", children: [
+      /* @__PURE__ */ x.jsx("span", { className: "lk-set-title", children: "People" }),
+      a && /* @__PURE__ */ x.jsx("span", { className: "lk-set-saving", children: "Saving…" })
     ] }),
-    /* @__PURE__ */ w.jsx("p", { className: "lk-set-desc", children: "Each person gets their own memory, conversation and devices. The name must match what their iPhone Shortcut sends; a linked account identifies them on this card and in voice. Anyone not listed gets only the Home Assistant notification." }),
-    e.length > 0 && /* @__PURE__ */ w.jsx("div", { className: "lk-people", children: e.map((B) => /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsx("p", { className: "lk-set-desc", children: "Each person gets their own memory, conversation and devices. The name must match what their iPhone Shortcut sends; a linked account identifies them on this card and in voice. Anyone not listed gets only the Home Assistant notification." }),
+    e.length > 0 && /* @__PURE__ */ x.jsx("div", { className: "lk-people", children: e.map((z) => /* @__PURE__ */ x.jsx(
       HD,
       {
-        person: B,
+        person: z,
         rows: P,
         targets: i,
         users: e,
         accounts: t,
-        open: h === B.name,
-        armed: p === B.name,
+        open: h === z.name,
+        armed: p === z.name,
         onOpen: () => {
-          v(null), f(h === B.name ? null : B.name);
+          v(null), f(h === z.name ? null : z.name);
         },
-        onDelete: () => U(B.name),
+        onDelete: () => U(z.name),
         onUpdate: (S) => {
-          v(null), d(B.name, S);
+          v(null), d(z.name, S);
         }
       },
-      B.name
+      z.name
     )) }),
-    /* @__PURE__ */ w.jsxs(
+    /* @__PURE__ */ x.jsxs(
       "form",
       {
         className: "lk-person-add",
-        onSubmit: (B) => {
-          B.preventDefault(), _();
+        onSubmit: (z) => {
+          z.preventDefault(), _();
         },
         children: [
-          /* @__PURE__ */ w.jsx(
+          /* @__PURE__ */ x.jsx(
             "input",
             {
               className: "lk-search-in",
               placeholder: "Add a person, e.g. Mia",
               value: b,
-              onChange: (B) => {
-                k(B.target.value), T(null);
+              onChange: (z) => {
+                k(z.target.value), T(null);
               },
               "aria-label": "New person's name"
             }
           ),
-          /* @__PURE__ */ w.jsxs("button", { className: "lk-testbtn lk-person-addbtn", type: "submit", disabled: !b.trim(), children: [
-            /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:plus" }),
+          /* @__PURE__ */ x.jsxs("button", { className: "lk-testbtn lk-person-addbtn", type: "submit", disabled: !b.trim(), children: [
+            /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:plus" }),
             "Add"
           ] })
         ]
       }
     ),
-    x && /* @__PURE__ */ w.jsx("p", { className: "lk-set-err", children: x }),
-    s && /* @__PURE__ */ w.jsx("p", { className: "lk-set-err", children: s })
+    w && /* @__PURE__ */ x.jsx("p", { className: "lk-set-err", children: w }),
+    s && /* @__PURE__ */ x.jsx("p", { className: "lk-set-err", children: s })
   ] }) }) });
 }
 function GD(i) {
@@ -36686,92 +36684,92 @@ function GD(i) {
   return e.toDateString() === (/* @__PURE__ */ new Date()).toDateString() ? `Today ${t}` : `${e.toLocaleDateString([], { month: "short", day: "numeric" })} ${t}`;
 }
 function KD({ api: i, onClose: e }) {
-  const { listConversations: t, readConversation: a, switchConversation: s, deleteConversation: c, busy: u } = i, [d, h] = R.useState([]), [f, p] = R.useState(null), [v, b] = R.useState(!0), [k, x] = R.useState(null), [T, P] = R.useState(null), [_, U] = R.useState(null), [B, S] = R.useState(null), C = Sp(), M = R.useCallback(async () => {
+  const { listConversations: t, readConversation: a, switchConversation: s, deleteConversation: c, busy: u } = i, [d, h] = R.useState([]), [f, p] = R.useState(null), [v, b] = R.useState(!0), [k, w] = R.useState(null), [T, P] = R.useState(null), [_, U] = R.useState(null), [z, S] = R.useState(null), C = Sp(), M = R.useCallback(async () => {
     b(!0);
     try {
-      const F = await t();
-      h(F.conversations), p(F.current), x(null);
+      const B = await t();
+      h(B.conversations), p(B.current), w(null);
     } catch {
-      x("Could not load conversations.");
+      w("Could not load conversations.");
     } finally {
       b(!1);
     }
   }, [t]);
   R.useEffect(() => void M(), [M]);
-  const D = async (F) => {
-    if (P(null), F.id === f) {
+  const D = async (B) => {
+    if (P(null), B.id === f) {
       e();
       return;
     }
-    U(F), S(null);
+    U(B), S(null);
     try {
-      S(await a(F.id));
+      S(await a(B.id));
     } catch {
-      S([]), x("Could not load this conversation.");
+      S([]), w("Could not load this conversation.");
     }
-  }, V = async (F) => {
-    if (T !== F.id) {
-      P(F.id);
+  }, H = async (B) => {
+    if (T !== B.id) {
+      P(B.id);
       return;
     }
     P(null);
     try {
-      await c(F.id) || x("This conversation is in use; try again shortly.");
+      await c(B.id) || w("This conversation is in use; try again shortly.");
     } catch {
-      x("Could not delete the conversation.");
+      w("Could not delete the conversation.");
     }
     await M();
-  }, Z = () => {
-    _ && (s(_.id, B ?? []), e());
+  }, W = () => {
+    _ && (s(_.id, z ?? []), e());
   };
-  return _ ? /* @__PURE__ */ w.jsxs(w.Fragment, { children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-search", children: [
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: () => U(null), "aria-label": "Back to conversations", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-left" }) }),
-      /* @__PURE__ */ w.jsx("span", { className: "lk-texthead", children: k ?? (_.title || "New conversation") })
+  return _ ? /* @__PURE__ */ x.jsxs(x.Fragment, { children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-search", children: [
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: () => U(null), "aria-label": "Back to conversations", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:arrow-left" }) }),
+      /* @__PURE__ */ x.jsx("span", { className: "lk-texthead", children: k ?? (_.title || "New conversation") })
     ] }),
-    B === null ? /* @__PURE__ */ w.jsx("div", { className: "lk-tasks-empty", children: /* @__PURE__ */ w.jsx("span", { children: "Loading…" }) }) : /* @__PURE__ */ w.jsx(yp, { items: B, startAtEnd: !0 }),
-    /* @__PURE__ */ w.jsx("div", { className: "lk-dock", ref: C, children: /* @__PURE__ */ w.jsxs("button", { className: "lk-listen-send lk-resume", onClick: Z, disabled: u || B === null, children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:message-reply-text-outline" }),
+    z === null ? /* @__PURE__ */ x.jsx("div", { className: "lk-tasks-empty", children: /* @__PURE__ */ x.jsx("span", { children: "Loading…" }) }) : /* @__PURE__ */ x.jsx(yp, { items: z, startAtEnd: !0 }),
+    /* @__PURE__ */ x.jsx("div", { className: "lk-dock", ref: C, children: /* @__PURE__ */ x.jsxs("button", { className: "lk-listen-send lk-resume", onClick: W, disabled: u || z === null, children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:message-reply-text-outline" }),
       "Continue this conversation"
     ] }) })
-  ] }) : /* @__PURE__ */ w.jsxs("div", { className: "lk-schedtab", children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-search", children: [
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: e, "aria-label": "Back to the conversation", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-left" }) }),
-      /* @__PURE__ */ w.jsx("span", { className: "lk-texthead", children: k ?? "Conversations" }),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: () => void M(), "aria-label": "Refresh", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:refresh" }) })
+  ] }) : /* @__PURE__ */ x.jsxs("div", { className: "lk-schedtab", children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-search", children: [
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: e, "aria-label": "Back to the conversation", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:arrow-left" }) }),
+      /* @__PURE__ */ x.jsx("span", { className: "lk-texthead", children: k ?? "Conversations" }),
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: () => void M(), "aria-label": "Refresh", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:refresh" }) })
     ] }),
-    /* @__PURE__ */ w.jsx("div", { className: "lk-tasklist", children: d.length === 0 ? /* @__PURE__ */ w.jsxs("div", { className: "lk-tasks-empty", children: [
-      /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:message-text-outline" }),
-      /* @__PURE__ */ w.jsx("span", { children: v ? "Loading…" : "No conversations yet" })
-    ] }) : d.map((F) => {
-      const G = F.id === f;
-      return /* @__PURE__ */ w.jsxs("div", { className: "lk-taskrow", "data-status": G ? "scheduled" : "past", children: [
-        /* @__PURE__ */ w.jsxs("button", { className: "lk-taskrow-main", onClick: () => void D(F), children: [
-          /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-icon", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:message-text-outline" }) }),
-          /* @__PURE__ */ w.jsxs("span", { className: "lk-taskrow-body", children: [
-            /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-desc", children: F.title || "New conversation" }),
-            /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-when", children: GD(F.updated) })
+    /* @__PURE__ */ x.jsx("div", { className: "lk-tasklist", children: d.length === 0 ? /* @__PURE__ */ x.jsxs("div", { className: "lk-tasks-empty", children: [
+      /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:message-text-outline" }),
+      /* @__PURE__ */ x.jsx("span", { children: v ? "Loading…" : "No conversations yet" })
+    ] }) : d.map((B) => {
+      const G = B.id === f;
+      return /* @__PURE__ */ x.jsxs("div", { className: "lk-taskrow", "data-status": G ? "scheduled" : "past", children: [
+        /* @__PURE__ */ x.jsxs("button", { className: "lk-taskrow-main", onClick: () => void D(B), children: [
+          /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-icon", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:message-text-outline" }) }),
+          /* @__PURE__ */ x.jsxs("span", { className: "lk-taskrow-body", children: [
+            /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-desc", children: B.title || "New conversation" }),
+            /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-when", children: GD(B.updated) })
           ] }),
-          G && /* @__PURE__ */ w.jsx("span", { className: "lk-taskrow-tags", children: /* @__PURE__ */ w.jsx("span", { className: "lk-tag", children: "current" }) })
+          G && /* @__PURE__ */ x.jsx("span", { className: "lk-taskrow-tags", children: /* @__PURE__ */ x.jsx("span", { className: "lk-tag", children: "current" }) })
         ] }),
-        !G && /* @__PURE__ */ w.jsx("div", { className: "lk-taskrow-acts", children: /* @__PURE__ */ w.jsx(
+        !G && /* @__PURE__ */ x.jsx("div", { className: "lk-taskrow-acts", children: /* @__PURE__ */ x.jsx(
           "button",
           {
             className: "lk-iconbtn lk-taskrow-del",
-            "data-armed": F.id === T ? "1" : "0",
-            onClick: () => void V(F),
-            "aria-label": F.id === T ? "Confirm delete" : "Delete conversation",
-            children: /* @__PURE__ */ w.jsx("ha-icon", { icon: F.id === T ? "mdi:check" : "mdi:trash-can-outline" })
+            "data-armed": B.id === T ? "1" : "0",
+            onClick: () => void H(B),
+            "aria-label": B.id === T ? "Confirm delete" : "Delete conversation",
+            children: /* @__PURE__ */ x.jsx("ha-icon", { icon: B.id === T ? "mdi:check" : "mdi:trash-can-outline" })
           }
         ) })
-      ] }, F.id);
+      ] }, B.id);
     }) })
   ] });
 }
 const YD = /* @__PURE__ */ new Set([...bp, "suggest_replies"]), zh = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 function QD({ usage: i }) {
   const e = (t) => t.toLocaleString("en");
-  return /* @__PURE__ */ w.jsxs(
+  return /* @__PURE__ */ x.jsxs(
     "span",
     {
       className: "lk-usage",
@@ -36794,33 +36792,33 @@ function JD({
   onOpenTask: a,
   onSeeAllTasks: s
 }) {
-  const { items: c, toolCalls: u, agentAreas: d, suggestions: h, usage: f, busy: p, canStop: v, stopping: b, forceStop: k, error: x, stop: T, send: P, renew: _, refresh: U } = i, B = Sp(), [S, C] = R.useState(""), [M, D] = R.useState(!1), V = !p && S.trim().length > 0, Z = R.useMemo(
+  const { items: c, toolCalls: u, agentAreas: d, suggestions: h, usage: f, busy: p, canStop: v, stopping: b, forceStop: k, error: w, stop: T, send: P, renew: _, refresh: U } = i, z = Sp(), [S, C] = R.useState(""), [M, D] = R.useState(!1), H = !p && S.trim().length > 0, W = R.useMemo(
     () => c.filter((G) => G.kind !== "action" || !YD.has(G.name)),
     [c]
   );
-  if (M) return /* @__PURE__ */ w.jsx(KD, { api: i, onClose: () => D(!1) });
-  const F = (G) => {
-    const te = G.trim();
-    !te || p || (C(""), P(te));
+  if (M) return /* @__PURE__ */ x.jsx(KD, { api: i, onClose: () => D(!1) });
+  const B = (G) => {
+    const Z = G.trim();
+    !Z || p || (C(""), P(Z));
   };
-  return /* @__PURE__ */ w.jsxs(w.Fragment, { children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-search", children: [
-      /* @__PURE__ */ w.jsxs("span", { className: "lk-texthead", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-textstatus", children: x ?? (b ? "Stopping…" : k ? "Still working in the background" : p ? "Working…" : "") }),
-        f && /* @__PURE__ */ w.jsx(QD, { usage: f })
+  return /* @__PURE__ */ x.jsxs(x.Fragment, { children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-search", children: [
+      /* @__PURE__ */ x.jsxs("span", { className: "lk-texthead", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-textstatus", children: w ?? (b ? "Stopping…" : k ? "Still working in the background" : p ? "Working…" : "") }),
+        f && /* @__PURE__ */ x.jsx(QD, { usage: f })
       ] }),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: () => void U(), "aria-label": "Refresh", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:refresh" }) }),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: () => void U(), "aria-label": "Refresh", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:refresh" }) }),
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-iconbtn",
           onClick: () => D(!0),
           "aria-label": "Conversations",
           title: "Conversations",
-          children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:history" })
+          children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:history" })
         }
       ),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-iconbtn",
@@ -36828,11 +36826,11 @@ function JD({
           disabled: p,
           "aria-label": "New conversation",
           title: "New conversation",
-          children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:message-plus-outline" })
+          children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:message-plus-outline" })
         }
       )
     ] }),
-    /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsx(
       NC,
       {
         hidden: !t,
@@ -36842,7 +36840,7 @@ function JD({
         showRecent: !0
       }
     ),
-    /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsx(
       IC,
       {
         tasks: e.tasks,
@@ -36851,21 +36849,21 @@ function JD({
         onSeeAll: s
       }
     ),
-    /* @__PURE__ */ w.jsx(yp, { items: Z, startAtEnd: !0, reflowKey: h.length }),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-dock", ref: B, children: [
-      h.length > 0 && /* @__PURE__ */ w.jsx("div", { className: "lk-suggest", children: h.map((G, te) => /* @__PURE__ */ w.jsx("button", { className: "lk-chip", onClick: () => F(G), children: G }, `${te}-${G}`)) }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-bar", children: [
-        /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsx(yp, { items: W, startAtEnd: !0, reflowKey: h.length }),
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-dock", ref: z, children: [
+      h.length > 0 && /* @__PURE__ */ x.jsx("div", { className: "lk-suggest", children: h.map((G, Z) => /* @__PURE__ */ x.jsx("button", { className: "lk-chip", onClick: () => B(G), children: G }, `${Z}-${G}`)) }),
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-bar", children: [
+        /* @__PURE__ */ x.jsx(
           LC,
           {
             value: S,
             placeholder: "Message…",
             onChange: C,
-            onSubmit: () => F(S),
+            onSubmit: () => B(S),
             onFocus: i.warm
           }
         ),
-        p ? /* @__PURE__ */ w.jsx(
+        p ? /* @__PURE__ */ x.jsx(
           "button",
           {
             className: "lk-send lk-send--accent lk-stop",
@@ -36875,16 +36873,16 @@ function JD({
             "data-force": k ? "1" : "0",
             onClick: () => void T(),
             disabled: !v,
-            children: b ? /* @__PURE__ */ w.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) : /* @__PURE__ */ w.jsx("span", { className: "lk-stop-sq", "aria-hidden": "true" })
+            children: b ? /* @__PURE__ */ x.jsx("span", { className: "lk-spin", "aria-hidden": "true" }) : /* @__PURE__ */ x.jsx("span", { className: "lk-stop-sq", "aria-hidden": "true" })
           }
-        ) : /* @__PURE__ */ w.jsx(
+        ) : /* @__PURE__ */ x.jsx(
           "button",
           {
             className: "lk-send lk-send--accent",
             title: "Send",
-            onClick: () => F(S),
-            disabled: !V,
-            children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-up" })
+            onClick: () => B(S),
+            disabled: !H,
+            children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:arrow-up" })
           }
         )
       ] })
@@ -36892,10 +36890,11 @@ function JD({
   ] });
 }
 function XD(i) {
-  return (i.execution?.steps ?? []).map((e) => ({
-    tool: e.tool ?? "",
-    argsText: e.args && Object.keys(e.args).length ? JSON.stringify(e.args, null, 2) : ""
-  }));
+  const e = i.execution ?? {};
+  if (e.notification) return { kind: "reminder", text: e.notification.message };
+  if (e.instruction) return { kind: "instruction", text: e.instruction };
+  const a = (e.steps ?? []).find((s) => s.tool === "send_notification")?.args?.message;
+  return typeof a == "string" ? { kind: "reminder", text: a } : { kind: "instruction", text: "" };
 }
 function ZD({
   task: i,
@@ -36903,89 +36902,68 @@ function ZD({
   onSave: t,
   onDelete: a
 }) {
-  const [s, c] = R.useState(i.description), [u, d] = R.useState(i.schedule_type), [h, f] = R.useState(GP(i.run_at ?? i.next_run_at)), [p, v] = R.useState(i.cron ?? ""), [b, k] = R.useState(() => XD(i)), [x, T] = R.useState(i.execution?.instruction ?? ""), [P, _] = R.useState(i.enabled), [U, B] = R.useState(!1), [S, C] = R.useState(!1), [M, D] = R.useState(null), V = () => k((oe) => [...oe, { tool: "", argsText: "" }]), Z = (oe) => k((j) => j.filter(($, re) => re !== oe)), F = (oe, j) => k(($) => $.map((re, be) => be === oe ? { ...re, ...j } : re)), G = (oe, j) => k(($) => {
-    const re = oe + j;
-    if (re < 0 || re >= $.length) return $;
-    const be = [...$];
-    return [be[oe], be[re]] = [be[re], be[oe]], be;
-  }), te = () => {
-    const oe = { description: s.trim(), enabled: P };
+  const [s, c] = R.useState(i.description), [u, d] = R.useState(i.schedule_type), [h, f] = R.useState(GP(i.run_at ?? i.next_run_at)), [p, v] = R.useState(i.cron ?? ""), [b] = R.useState(() => XD(i)), [k, w] = R.useState(b.kind), [T, P] = R.useState(b.text), [_, U] = R.useState(i.enabled), [z, S] = R.useState(!1), [C, M] = R.useState(!1), [D, H] = R.useState(null), W = () => {
+    const Z = { description: s.trim(), enabled: _ };
     if (u === "once") {
       if (!h) throw new Error("Pick a date and time.");
-      oe.schedule = { type: "once", run_at: h, timezone: i.timezone };
+      Z.schedule = { type: "once", run_at: h, timezone: i.timezone };
     } else {
       if (!p.trim()) throw new Error("Enter a cron expression.");
-      oe.schedule = { type: "recurring", cron: p.trim(), timezone: i.timezone };
+      Z.schedule = { type: "recurring", cron: p.trim(), timezone: i.timezone };
     }
-    const j = [];
-    b.forEach((re, be) => {
-      const Ce = re.tool.trim();
-      if (!Ce) {
-        if (re.argsText.trim()) throw new Error(`Step ${be + 1}: enter a tool name.`);
-        return;
-      }
-      let O = {};
-      if (re.argsText.trim())
-        try {
-          O = JSON.parse(re.argsText);
-        } catch {
-          throw new Error(`Step ${be + 1}: args must be valid JSON.`);
-        }
-      j.push({ tool: Ce, args: O });
-    });
-    const $ = x.trim();
-    if (!j.length && !$)
-      throw new Error("Add at least one step or an instruction.");
-    return oe.execution = { steps: j, instruction: $ || null }, oe;
-  }, he = async () => {
-    D(null);
-    let oe;
+    const fe = T.trim();
+    if (!fe)
+      throw new Error(k === "reminder" ? "Enter the reminder." : "Enter the instruction.");
+    return Z.execution = k === "reminder" ? { notification: { message: fe } } : { instruction: fe }, Z;
+  }, B = async () => {
+    H(null);
+    let Z;
     try {
-      oe = te();
-    } catch (j) {
-      D(j.message);
+      Z = W();
+    } catch (fe) {
+      H(fe.message);
       return;
     }
-    B(!0);
+    S(!0);
     try {
-      await t(oe), e();
+      await t(Z), e();
     } catch {
-      D("Save failed. Check the scheduler and try again."), B(!1);
+      H("Save failed. Check the scheduler and try again."), S(!1);
     }
-  }, me = async () => {
-    if (!S) {
-      C(!0);
+  }, G = async () => {
+    if (!C) {
+      M(!0);
       return;
     }
-    B(!0);
+    S(!0);
     try {
       await a(), e();
     } catch {
-      D("Delete failed. Try again."), B(!1);
+      H("Delete failed. Try again."), S(!1);
     }
   };
-  return /* @__PURE__ */ w.jsx("div", { className: "lk-editor", onClick: e, children: /* @__PURE__ */ w.jsxs("div", { className: "lk-editor-panel", onClick: (oe) => oe.stopPropagation(), children: [
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-editor-head", children: [
-      /* @__PURE__ */ w.jsx("span", { children: "Edit task" }),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-iconbtn", onClick: e, "aria-label": "Close", children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:close" }) })
+  return /* @__PURE__ */ x.jsx("div", { className: "lk-editor", onClick: e, children: /* @__PURE__ */ x.jsxs("div", { className: "lk-editor-panel", onClick: (Z) => Z.stopPropagation(), children: [
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-editor-head", children: [
+      /* @__PURE__ */ x.jsx("span", { children: "Edit task" }),
+      /* @__PURE__ */ x.jsx("button", { className: "lk-iconbtn", onClick: e, "aria-label": "Close", children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:close" }) })
     ] }),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-editor-body", children: [
-      /* @__PURE__ */ w.jsxs("label", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Description" }),
-        /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-editor-body", children: [
+      /* @__PURE__ */ x.jsxs("label", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Description" }),
+        /* @__PURE__ */ x.jsx(
           "input",
           {
             className: "lk-in",
             value: s,
-            onChange: (oe) => c(oe.target.value)
+            onChange: (Z) => c(Z.target.value)
           }
         )
       ] }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Schedule" }),
-        /* @__PURE__ */ w.jsxs("div", { className: "lk-seg", children: [
-          /* @__PURE__ */ w.jsx("button", { "data-on": u === "once" ? "1" : "0", onClick: () => d("once"), children: "Once" }),
-          /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Schedule" }),
+        /* @__PURE__ */ x.jsxs("div", { className: "lk-seg", children: [
+          /* @__PURE__ */ x.jsx("button", { "data-on": u === "once" ? "1" : "0", onClick: () => d("once"), children: "Once" }),
+          /* @__PURE__ */ x.jsx(
             "button",
             {
               "data-on": u === "recurring" ? "1" : "0",
@@ -36994,129 +36972,70 @@ function ZD({
             }
           )
         ] }),
-        u === "once" ? /* @__PURE__ */ w.jsx(
+        u === "once" ? /* @__PURE__ */ x.jsx(
           "input",
           {
             className: "lk-in",
             type: "datetime-local",
             value: h,
-            onChange: (oe) => f(oe.target.value)
+            onChange: (Z) => f(Z.target.value)
           }
-        ) : /* @__PURE__ */ w.jsxs(w.Fragment, { children: [
-          /* @__PURE__ */ w.jsx(
+        ) : /* @__PURE__ */ x.jsxs(x.Fragment, { children: [
+          /* @__PURE__ */ x.jsx(
             "input",
             {
               className: "lk-in lk-mono",
               placeholder: "0 8 * * 1-5",
               value: p,
-              onChange: (oe) => v(oe.target.value)
+              onChange: (Z) => v(Z.target.value)
             }
           ),
-          /* @__PURE__ */ w.jsx("span", { className: "lk-hint", children: "min hour day-of-month month day-of-week" })
+          /* @__PURE__ */ x.jsx("span", { className: "lk-hint", children: "min hour day-of-month month day-of-week" })
         ] })
       ] }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Steps" }),
-        /* @__PURE__ */ w.jsxs("div", { className: "lk-steps", children: [
-          b.map((oe, j) => (
-            // Positional key: inputs are fully controlled (value from state[i]), so
-            // reconciliation by index is correct here.
-            /* @__PURE__ */ w.jsxs("div", { className: "lk-step", children: [
-              /* @__PURE__ */ w.jsxs("div", { className: "lk-step-head", children: [
-                /* @__PURE__ */ w.jsxs("span", { className: "lk-step-num", children: [
-                  "Step ",
-                  j + 1
-                ] }),
-                /* @__PURE__ */ w.jsx("span", { className: "lk-spacer" }),
-                /* @__PURE__ */ w.jsx(
-                  "button",
-                  {
-                    className: "lk-iconbtn",
-                    onClick: () => G(j, -1),
-                    disabled: j === 0,
-                    "aria-label": "Move step up",
-                    children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-up" })
-                  }
-                ),
-                /* @__PURE__ */ w.jsx(
-                  "button",
-                  {
-                    className: "lk-iconbtn",
-                    onClick: () => G(j, 1),
-                    disabled: j === b.length - 1,
-                    "aria-label": "Move step down",
-                    children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:arrow-down" })
-                  }
-                ),
-                /* @__PURE__ */ w.jsx(
-                  "button",
-                  {
-                    className: "lk-iconbtn",
-                    onClick: () => Z(j),
-                    "aria-label": "Remove step",
-                    children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:close" })
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ w.jsx(
-                "input",
-                {
-                  className: "lk-in lk-mono",
-                  placeholder: "HassTurnOn",
-                  value: oe.tool,
-                  onChange: ($) => F(j, { tool: $.target.value })
-                }
-              ),
-              /* @__PURE__ */ w.jsx(
-                "textarea",
-                {
-                  className: "lk-in lk-ta lk-mono",
-                  rows: 2,
-                  placeholder: '{"name": "主卧 空调"}',
-                  value: oe.argsText,
-                  onChange: ($) => F(j, { argsText: $.target.value })
-                }
-              )
-            ] }, j)
-          )),
-          /* @__PURE__ */ w.jsxs("button", { className: "lk-addstep", onClick: V, children: [
-            /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:plus" }),
-            " Add step"
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ w.jsxs("div", { className: "lk-field", children: [
-        /* @__PURE__ */ w.jsx("span", { className: "lk-field-label", children: "Reply / instruction (optional)" }),
-        /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsxs("div", { className: "lk-field", children: [
+        /* @__PURE__ */ x.jsx("span", { className: "lk-field-label", children: "Action" }),
+        /* @__PURE__ */ x.jsxs("div", { className: "lk-seg", children: [
+          /* @__PURE__ */ x.jsx("button", { "data-on": k === "reminder" ? "1" : "0", onClick: () => w("reminder"), children: "Reminder" }),
+          /* @__PURE__ */ x.jsx(
+            "button",
+            {
+              "data-on": k === "instruction" ? "1" : "0",
+              onClick: () => w("instruction"),
+              children: "Instruction"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ x.jsx(
           "textarea",
           {
             className: "lk-in lk-ta",
             rows: 2,
-            placeholder: "e.g. tell me tomorrow's weather",
-            value: x,
-            onChange: (oe) => T(oe.target.value)
+            placeholder: k === "reminder" ? "e.g. Time to leave" : "e.g. Turn off the bedroom AC",
+            value: T,
+            onChange: (Z) => P(Z.target.value)
           }
         ),
-        /* @__PURE__ */ w.jsx("span", { className: "lk-hint", children: "Runs after the steps; leave empty for a silent batch." })
+        /* @__PURE__ */ x.jsx("span", { className: "lk-hint", children: k === "reminder" ? "Sent as is to your devices." : "Sent to your conversation when it fires, and the agent carries it out." })
       ] }),
-      /* @__PURE__ */ w.jsxs("label", { className: "lk-switch", children: [
-        /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsxs("label", { className: "lk-switch", children: [
+        /* @__PURE__ */ x.jsx(
           "input",
           {
             type: "checkbox",
-            checked: P,
-            onChange: (oe) => _(oe.target.checked)
+            checked: _,
+            onChange: (Z) => U(Z.target.checked)
           }
         ),
-        /* @__PURE__ */ w.jsx("span", { children: "Enabled" })
+        /* @__PURE__ */ x.jsx("span", { children: "Enabled" })
       ] }),
-      M && /* @__PURE__ */ w.jsx("div", { className: "lk-editor-error", children: M })
+      D && /* @__PURE__ */ x.jsx("div", { className: "lk-editor-error", children: D })
     ] }),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-editor-actions", children: [
-      /* @__PURE__ */ w.jsx("button", { className: "lk-btn lk-btn-danger", onClick: me, disabled: U, children: S ? "Confirm delete" : "Delete" }),
-      /* @__PURE__ */ w.jsx("span", { className: "lk-spacer" }),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-btn", onClick: e, disabled: U, children: "Cancel" }),
-      /* @__PURE__ */ w.jsx("button", { className: "lk-btn lk-btn-accent", onClick: he, disabled: U, children: "Save" })
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-editor-actions", children: [
+      /* @__PURE__ */ x.jsx("button", { className: "lk-btn lk-btn-danger", onClick: G, disabled: z, children: C ? "Confirm delete" : "Delete" }),
+      /* @__PURE__ */ x.jsx("span", { className: "lk-spacer" }),
+      /* @__PURE__ */ x.jsx("button", { className: "lk-btn", onClick: e, disabled: z, children: "Cancel" }),
+      /* @__PURE__ */ x.jsx("button", { className: "lk-btn lk-btn-accent", onClick: B, disabled: z, children: "Save" })
     ] })
   ] }) });
 }
@@ -37164,32 +37083,32 @@ function Tp(i, e, t) {
     };
   }, [i, e, t]);
 }
-const eN = "ha.speech_state";
-function tN() {
+const e2 = "ha.speech_state";
+function t2() {
   const i = qu(), [e, t] = R.useState({ sttEnabled: !1, audioOutput: !1 }), a = R.useCallback((s) => {
     t((c) => ({
       sttEnabled: typeof s.stt_enabled == "boolean" ? s.stt_enabled : c.sttEnabled,
       audioOutput: typeof s.audio_output == "boolean" ? s.audio_output : c.audioOutput
     }));
   }, []);
-  return Tp(i.room, eN, a), R.useEffect(() => {
+  return Tp(i.room, e2, a), R.useEffect(() => {
     i.isConnected || t({ sttEnabled: !1, audioOutput: !1 });
   }, [i.isConnected]), e;
 }
-const nN = "ha.suggestions";
-function iN() {
+const n2 = "ha.suggestions";
+function i2() {
   const i = qu(), [e, t] = R.useState([]), a = R.useCallback((c) => {
     const u = Array.isArray(c?.replies) ? c.replies.filter((d) => typeof d == "string") : [];
     t(u);
   }, []);
-  Tp(i.room, nN, a);
+  Tp(i.room, n2, a);
   const s = R.useCallback(() => t([]), []);
   return R.useEffect(() => {
     i.isConnected || t([]);
   }, [i.isConnected]), { suggestions: e, clear: s };
 }
 const wk = "lk-voice-tiles-visible";
-function aN() {
+function a2() {
   const [i, e] = R.useState(() => {
     try {
       return localStorage.getItem(wk) !== "0";
@@ -37207,56 +37126,56 @@ function aN() {
   }, []);
   return [i, t];
 }
-const rN = "livekit_voice/tasks?active_only=false", xk = (i) => `livekit_voice/tasks/${encodeURIComponent(i)}`;
-function sN(i) {
+const r2 = "livekit_voice/tasks?active_only=false", xk = (i) => `livekit_voice/tasks/${encodeURIComponent(i)}`;
+function s2(i) {
   const e = typeof i == "string" ? i : i?.message || String(i);
   return /503/.test(e) || /not configured/i.test(e) ? "Scheduler not configured — set its URL in the integration settings." : "Could not reach the scheduler. Check the integration settings.";
 }
-function oN(i) {
+function o2(i) {
   const e = Ls(), [t, a] = R.useState([]), [s, c] = R.useState(!1), [u, d] = R.useState(null), [h, f] = R.useState(null), p = R.useRef(/* @__PURE__ */ new Set()), v = R.useCallback(async () => {
     if (e) {
       c(!0), d(null);
       try {
-        const x = await e.callApi("GET", rN);
-        a(Array.isArray(x) ? x : []);
-      } catch (x) {
-        d(sN(x));
+        const w = await e.callApi("GET", r2);
+        a(Array.isArray(w) ? w : []);
+      } catch (w) {
+        d(s2(w));
       } finally {
         c(!1);
       }
     }
   }, [e]), b = R.useCallback(
-    async (x, T) => {
-      e && (await e.callApi("PATCH", xk(x), T), await v());
+    async (w, T) => {
+      e && (await e.callApi("PATCH", xk(w), T), await v());
     },
     [e, v]
   ), k = R.useCallback(
-    async (x) => {
-      e && (await e.callApi("DELETE", xk(x)), await v());
+    async (w) => {
+      e && (await e.callApi("DELETE", xk(w)), await v());
     },
     [e, v]
   );
   return R.useEffect(() => {
     v();
   }, [v]), R.useEffect(() => {
-    let x = !1, T = null;
+    let w = !1, T = null;
     for (const P of i)
-      if (!(P.status !== "done" || !bp.has(P.name)) && !p.current.has(P.callId) && (p.current.add(P.callId), x = !0, P.name === vp || P.name === xC))
+      if (!(P.status !== "done" || !bp.has(P.name)) && !p.current.has(P.callId) && (p.current.add(P.callId), w = !0, P.name === vp || P.name === xC))
         try {
           const _ = JSON.parse(P.output ?? "");
           _?.id && (T = _.id);
         } catch {
         }
-    x && (v(), T && f(T));
+    w && (v(), T && f(T));
   }, [i, v]), { tasks: t, loading: s, error: u, freshId: h, refresh: v, save: b, remove: k };
 }
-const cN = "ha.tool_call";
+const c2 = "ha.tool_call";
 function jC(i) {
   if (!i || typeof i == "string") return [];
   const e = i.area;
   return typeof e == "string" ? [e] : Array.isArray(e) ? e.map(String) : [];
 }
-function lN() {
+function l2() {
   const i = qu(), [e, t] = R.useState({}), a = R.useCallback((s) => {
     const c = s.update;
     if (!c) return;
@@ -37296,7 +37215,7 @@ function lN() {
       });
     }
   }, []);
-  return Tp(i.room, cN, a), R.useEffect(() => {
+  return Tp(i.room, c2, a), R.useEffect(() => {
     i.isConnected || t({});
   }, [i.isConnected]), R.useMemo(() => {
     const s = Object.values(e).sort((u, d) => u.startedAt - d.startedAt), c = /* @__PURE__ */ new Set();
@@ -37304,7 +37223,7 @@ function lN() {
     return { toolCalls: s, agentAreas: [...c] };
   }, [e]);
 }
-const Rk = "livekit_voice/chat", _k = "livekit_voice/chat/history", uN = "livekit_voice/chat/cancel", dN = "livekit_voice/chat/warm", fN = "livekit_voice/chat/conversations", hN = "livekit_voice/chat/switch", mN = "livekit_voice/chat/delete";
+const Rk = "livekit_voice/chat", _k = "livekit_voice/chat/history", u2 = "livekit_voice/chat/cancel", d2 = "livekit_voice/chat/warm", f2 = "livekit_voice/chat/conversations", h2 = "livekit_voice/chat/switch", m2 = "livekit_voice/chat/delete";
 function Mk(i) {
   return i.map(
     (e) => e.kind === "action" ? { ...e, id: e.call_id ?? e.id, outputChars: e.output_chars } : e
@@ -37314,23 +37233,23 @@ function zl(i) {
   const e = typeof i == "string" ? i : i?.message || String(i);
   return /503/.test(e) || /not configured/i.test(e) ? "Text chat not configured — set the agent chat URL in the integration settings." : "Could not reach the agent. Check the integration settings.";
 }
-function pN(i) {
-  const e = dc(), t = Ls() !== null, [a, s] = R.useState([]), [c, u] = R.useState([]), [d, h] = R.useState(null), f = R.useRef(""), [p, v] = R.useState(!1), [b, k] = R.useState(null), [x, T] = R.useState(null), [P, _] = R.useState(0), [U, B] = R.useState(null), [S, C] = R.useState(null), [M, D] = R.useState(null), V = R.useRef({ text: "", key: "", from: 0, ts: 0 }), Z = R.useRef(0), [F, G] = R.useState(null), te = R.useRef(Promise.resolve()), he = R.useRef(0), me = R.useRef(0), oe = R.useCallback((xe) => {
-    const Ge = te.current.then(xe, xe);
-    return te.current = Ge.catch(() => {
+function p2(i) {
+  const e = dc(), t = Ls() !== null, [a, s] = R.useState([]), [c, u] = R.useState([]), [d, h] = R.useState(null), f = R.useRef(""), [p, v] = R.useState(!1), [b, k] = R.useState(null), [w, T] = R.useState(null), [P, _] = R.useState(0), [U, z] = R.useState(null), [S, C] = R.useState(null), [M, D] = R.useState(null), H = R.useRef({ text: "", key: "", from: 0, ts: 0 }), W = R.useRef(0), [B, G] = R.useState(null), Z = R.useRef(Promise.resolve()), fe = R.useRef(0), he = R.useRef(0), pe = R.useCallback((Ee) => {
+    const Ge = Z.current.then(Ee, Ee);
+    return Z.current = Ge.catch(() => {
     }), Ge;
-  }, []), j = R.useCallback(async () => {
-    const xe = e.getSnapshot().hass;
-    if (!xe) return;
-    const Ge = me.current;
+  }, []), F = R.useCallback(async () => {
+    const Ee = e.getSnapshot().hass;
+    if (!Ee) return;
+    const Ge = he.current;
     try {
-      const Me = await xe.callApi("GET", _k);
-      if (he.current || Ge !== me.current) return;
+      const Me = await Ee.callApi("GET", _k);
+      if (fe.current || Ge !== he.current) return;
       const Ut = JSON.stringify([Me?.items, Me?.suggestions, Me?.usage]);
       if (Ut !== f.current) {
         f.current = Ut;
         const Rn = Array.isArray(Me?.items) ? Me.items : [];
-        Z.current = Rn.length, s(Rn), u(Array.isArray(Me?.suggestions) ? Me.suggestions : []), h(Me?.usage ?? null);
+        W.current = Rn.length, s(Rn), u(Array.isArray(Me?.suggestions) ? Me.suggestions : []), h(Me?.usage ?? null);
       }
       v(!!Me?.busy), k(Me?.busy && Me.task_id ? Me.task_id : null), C(null);
     } catch (Me) {
@@ -37339,86 +37258,86 @@ function pN(i) {
   }, [e]);
   R.useEffect(() => {
     if (!i || !t) return;
-    j();
-    const xe = setInterval(() => void j(), p || M ? 1e3 : 5e3);
-    return () => clearInterval(xe);
-  }, [i, t, p, M, j]);
-  const $ = R.useCallback(
-    async (xe) => {
-      V.current = { text: xe, key: `sent-${Date.now()}`, from: Z.current, ts: Date.now() }, D(xe);
+    F();
+    const Ee = setInterval(() => void F(), p || M ? 1e3 : 5e3);
+    return () => clearInterval(Ee);
+  }, [i, t, p, M, F]);
+  const ie = R.useCallback(
+    async (Ee) => {
+      H.current = { text: Ee, key: `sent-${Date.now()}`, from: W.current, ts: Date.now() }, D(Ee);
       try {
-        await oe(() => e.getSnapshot().hass.callApi("POST", Rk, { text: xe, steps: !1 }));
+        await pe(() => e.getSnapshot().hass.callApi("POST", Rk, { text: Ee, steps: !1 }));
       } catch (Ge) {
         C(zl(Ge));
       } finally {
-        await j(), D(null);
+        await F(), D(null);
       }
     },
-    [e, oe, j]
-  ), re = R.useCallback(() => {
-    e.getSnapshot().hass?.callApi("POST", dN, {}).catch(() => {
+    [e, pe, F]
+  ), le = R.useCallback(() => {
+    e.getSnapshot().hass?.callApi("POST", d2, {}).catch(() => {
     });
-  }, [e]), be = R.useCallback(
-    async (xe, Ge) => {
-      he.current++, me.current++, Z.current = xe.length, G(xe), v(!1), k(null), C(null);
+  }, [e]), we = R.useCallback(
+    async (Ee, Ge) => {
+      fe.current++, he.current++, W.current = Ee.length, G(Ee), v(!1), k(null), C(null);
       try {
-        return await oe(Ge);
+        return await pe(Ge);
       } catch (Me) {
         C(zl(Me));
         return;
       } finally {
-        he.current--, me.current++, await j(), he.current || G(null), re();
+        fe.current--, he.current++, await F(), fe.current || G(null), le();
       }
     },
-    [oe, j, re]
-  ), Ce = R.useCallback(async () => {
-    await be([], () => e.getSnapshot().hass.callApi("POST", Rk, { new: !0 }));
-  }, [e, be]);
+    [pe, F, le]
+  ), xe = R.useCallback(async () => {
+    await we([], () => e.getSnapshot().hass.callApi("POST", Rk, { new: !0 }));
+  }, [e, we]);
   R.useEffect(() => {
-    !p && M === null && (T(null), B(null));
+    !p && M === null && (T(null), z(null));
   }, [p, M]), R.useEffect(() => {
-    i && t && re();
-  }, [i, t, re]);
-  const O = R.useMemo(() => F ?? Mk(a), [F, a]), Q = O.reduce((xe, Ge, Me) => Ge.kind === "message" && Ge.role === "user" ? Me : xe, -1), le = O.slice(Q + 1).find((xe) => xe.kind === "message" && xe.role === "agent"), de = le !== void 0 && Date.now() - le.ts > 1500, ge = x === b && Date.now() - P > 1500, ce = b !== null && M === null && U !== b && (de || ge), fe = R.useCallback(async () => {
-    const xe = e.getSnapshot().hass;
-    if (!xe || !b) return;
-    const Ge = ce, Me = Ge ? () => B(null) : () => T(null);
-    Ge ? B(b) : (T(b), _(Date.now()));
+    i && t && le();
+  }, [i, t, le]);
+  const O = R.useMemo(() => B ?? Mk(a), [B, a]), Q = O.reduce((Ee, Ge, Me) => Ge.kind === "message" && Ge.role === "user" ? Me : Ee, -1), oe = O.slice(Q + 1).find((Ee) => Ee.kind === "message" && Ee.role === "agent"), ue = oe !== void 0 && Date.now() - oe.ts > 1500, ge = w === b && Date.now() - P > 1500, se = b !== null && M === null && U !== b && (ue || ge), de = R.useCallback(async () => {
+    const Ee = e.getSnapshot().hass;
+    if (!Ee || !b) return;
+    const Ge = se, Me = Ge ? () => z(null) : () => T(null);
+    Ge ? z(b) : (T(b), _(Date.now()));
     try {
-      (await xe.callApi("POST", uN, { task_id: b, force: Ge }))?.cancelled || Me();
+      (await Ee.callApi("POST", u2, { task_id: b, force: Ge }))?.cancelled || Me();
     } catch (Ut) {
       Me(), C(zl(Ut));
     }
-    await j();
-  }, [e, b, ce, j]), we = R.useCallback(async () => {
-    const xe = await e.getSnapshot().hass.callApi("GET", fN);
-    return { current: xe?.current ?? null, conversations: xe?.conversations ?? [] };
+    await F();
+  }, [e, b, se, F]), Ce = R.useCallback(async () => {
+    const Ee = await e.getSnapshot().hass.callApi("GET", f2);
+    return { current: Ee?.current ?? null, conversations: Ee?.conversations ?? [] };
   }, [e]), Be = R.useCallback(
-    async (xe) => {
-      const Ge = `?conversation_id=${encodeURIComponent(xe)}`, Me = await e.getSnapshot().hass.callApi("GET", _k + Ge);
+    async (Ee) => {
+      const Ge = `?conversation_id=${encodeURIComponent(Ee)}`, Me = await e.getSnapshot().hass.callApi("GET", _k + Ge);
       return Mk(Array.isArray(Me?.items) ? Me.items : []);
     },
     [e]
   ), xt = R.useCallback(
-    async (xe, Ge = []) => {
-      const Me = await be(
+    async (Ee, Ge = []) => {
+      const Me = await we(
         Ge,
-        () => e.getSnapshot().hass.callApi("POST", hN, { conversation_id: xe })
+        () => e.getSnapshot().hass.callApi("POST", h2, { conversation_id: Ee })
       ), Ut = !!Me?.switched;
       return Me && !Ut && C("A reply is still running; try again when it ends."), Ut;
     },
-    [e, be]
+    [e, we]
   ), At = R.useCallback(
-    async (xe) => !!(await e.getSnapshot().hass.callApi("POST", mN, { conversation_id: xe }))?.deleted,
+    async (Ee) => !!(await e.getSnapshot().hass.callApi("POST", m2, { conversation_id: Ee }))?.deleted,
     [e]
   ), qn = R.useMemo(() => {
-    const xe = [...O], { text: Ge, key: Me, from: Ut, ts: Rn } = V.current, Ti = xe.findIndex((li, Sr) => Sr >= Ut && li.kind === "message" && li.role === "user" && li.text === Ge);
-    return Ti >= 0 ? xe[Ti] = { ...xe[Ti], id: Me } : M !== null && xe.push({ kind: "message", id: Me, role: "user", text: M, ts: Rn }), xe;
+    const Ee = [...O], { text: Ge, key: Me, from: Ut, ts: Rn } = H.current, Ti = Ee.findIndex((li, Sr) => Sr >= Ut && li.kind === "message" && li.role === "user" && li.text === Ge);
+    return Ti >= 0 ? Ee[Ti] = { ...Ee[Ti], id: Me } : M !== null && Ee.push({ kind: "message", id: Me, role: "user", text: M, ts: Rn }), Ee;
   }, [O, M]), { toolCalls: Hn, agentAreas: Rt } = R.useMemo(() => {
-    const xe = [], Ge = /* @__PURE__ */ new Set();
+    const Ee = [], Ge = /* @__PURE__ */ new Set();
     for (const Me of O)
       if (Me.kind === "action") {
-        xe.push({
+        Ee.push({
           callId: Me.id,
           name: Me.name,
           args: Me.args,
@@ -37428,7 +37347,7 @@ function pN(i) {
         });
         for (const Ut of jC(Me.args)) Ge.add(Ut);
       }
-    return { toolCalls: xe, agentAreas: [...Ge] };
+    return { toolCalls: Ee, agentAreas: [...Ge] };
   }, [O]);
   return {
     items: qn,
@@ -37438,36 +37357,36 @@ function pN(i) {
     suggestions: p || M !== null ? [] : c,
     usage: d,
     busy: p || M !== null,
-    canStop: b !== null && (x !== b || ce),
-    stopping: !ce && x !== null && (x === b || b === null),
-    forceStop: ce,
+    canStop: b !== null && (w !== b || se),
+    stopping: !se && w !== null && (w === b || b === null),
+    forceStop: se,
     error: S,
-    stop: fe,
-    warm: re,
-    send: $,
-    renew: Ce,
-    refresh: j,
-    listConversations: we,
+    stop: de,
+    warm: le,
+    send: ie,
+    renew: xe,
+    refresh: F,
+    listConversations: Ce,
     readConversation: Be,
     switchConversation: xt,
     deleteConversation: At
   };
 }
-function gN({ store: i }) {
-  return /* @__PURE__ */ w.jsx(rD, { value: i, children: /* @__PURE__ */ w.jsx(vN, {}) });
+function g2({ store: i }) {
+  return /* @__PURE__ */ x.jsx(rD, { value: i, children: /* @__PURE__ */ x.jsx(v2, {}) });
 }
-function vN() {
+function v2() {
   const i = dc(), e = R.useMemo(() => new $D(i), [i]), t = R.useMemo(() => new yr({ publishDefaults: { stopMicTrackOnMute: !0 } }), []), a = NP(e, { room: t });
-  return /* @__PURE__ */ w.jsx(zP, { session: a, children: /* @__PURE__ */ w.jsx(TN, {}) });
+  return /* @__PURE__ */ x.jsx(zP, { session: a, children: /* @__PURE__ */ x.jsx(T2, {}) });
 }
 const zC = (i) => i.kind === Da.AGENT || i.isAgent;
-function bN(i) {
+function b2(i) {
   if (!i) return null;
   for (const e of i.remoteParticipants.values())
     if (zC(e)) return e.identity;
   return null;
 }
-const yN = {
+const y2 = {
   listening: { orb: "listening", label: "Listening" },
   thinking: { orb: "thinking", label: "Thinking" },
   speaking: { orb: "speaking", label: "Speaking" },
@@ -37478,19 +37397,19 @@ const yN = {
   disconnected: { orb: "connecting", label: "Connecting" },
   failed: { orb: "idle", label: "Offline" }
 };
-function kN(i, e, t) {
-  return e ? { orb: "connecting", label: "Connecting" } : i ? yN[t ?? ""] ?? { orb: "listening", label: "Connected" } : { orb: "idle", label: "Ready" };
+function k2(i, e, t) {
+  return e ? { orb: "connecting", label: "Connecting" } : i ? y2[t ?? ""] ?? { orb: "listening", label: "Connected" } : { orb: "idle", label: "Ready" };
 }
-const SN = ["chat", "text", "schedules", "settings"];
+const S2 = ["chat", "text", "schedules", "settings"];
 function Ak() {
   const i = new URLSearchParams(window.location.search).get("lk_tab");
-  return SN.includes(i) ? i : null;
+  return S2.includes(i) ? i : null;
 }
-function TN() {
-  const i = Ls(), e = OC(), t = qu(), a = wC(), s = a.state, { sttEnabled: c, audioOutput: u } = tN(), { suggestions: d, clear: h } = iN(), { toolCalls: f, agentAreas: p } = lN(), [v, b] = R.useState(() => Ak() ?? "chat"), [k, x] = aN(), T = pN(v === "text"), P = R.useMemo(
+function T2() {
+  const i = Ls(), e = OC(), t = qu(), a = wC(), s = a.state, { sttEnabled: c, audioOutput: u } = t2(), { suggestions: d, clear: h } = i2(), { toolCalls: f, agentAreas: p } = l2(), [v, b] = R.useState(() => Ak() ?? "chat"), [k, w] = a2(), T = p2(v === "text"), P = R.useMemo(
     () => [...f, ...T.toolCalls],
     [f, T.toolCalls]
-  ), _ = oN(P), [U, B] = R.useState(0);
+  ), _ = o2(P), [U, z] = R.useState(0);
   R.useEffect(() => {
     const Ae = () => {
       const at = Ak();
@@ -37500,10 +37419,10 @@ function TN() {
   }, []);
   const [S, C] = R.useState(null), M = R.useRef(t);
   M.current = t;
-  const D = t.isConnected, V = t.room?.localParticipant?.identity, { items: Z, addTyped: F } = ZP(V, f, U), { send: G } = EP(), te = e.auto_connect === !0, he = e.audio_output === !0, me = e.start_on_connect === !0, [oe, j] = R.useState(() => _m(e)), [$, re] = R.useState(!1), [be, Ce] = R.useState(() => _m(e) === "auto"), [O, Q] = R.useState(!1), [le, de] = R.useState(!1), ge = R.useRef(!1), ce = R.useCallback(
+  const D = t.isConnected, H = t.room?.localParticipant?.identity, { items: W, addTyped: B } = ZP(H, f, U), { send: G } = EP(), Z = e.auto_connect === !0, fe = e.audio_output === !0, he = e.start_on_connect === !0, [pe, F] = R.useState(() => _m(e)), [ie, le] = R.useState(!1), [we, xe] = R.useState(() => _m(e) === "auto"), [O, Q] = R.useState(!1), [oe, ue] = R.useState(!1), ge = R.useRef(!1), se = R.useCallback(
     (Ae) => M.current.room?.localParticipant?.setMicrophoneEnabled(Ae),
     []
-  ), fe = R.useCallback(async () => {
+  ), de = R.useCallback(async () => {
     const Ae = M.current.room?.localParticipant, at = Ae?.getTrackPublication(X.Source.Microphone);
     if (Ae && at?.track)
       try {
@@ -37511,8 +37430,8 @@ function TN() {
       } catch (ui) {
         console.error("releaseMic failed", ui);
       }
-  }, []), we = R.useCallback(async (Ae, at = "") => {
-    const ui = M.current.room, di = bN(ui);
+  }, []), Ce = R.useCallback(async (Ae, at = "") => {
+    const ui = M.current.room, di = b2(ui);
     if (!(!ui || !di))
       try {
         await ui.localParticipant.performRpc({ destinationIdentity: di, method: Ae, payload: at });
@@ -37520,29 +37439,29 @@ function TN() {
         console.error(`${Ae} failed`, Zt);
       }
   }, []), Be = R.useCallback((Ae) => {
-    j((at) => (at !== Ae && WD(Ae), Ae));
+    F((at) => (at !== Ae && WD(Ae), Ae));
   }, []), xt = R.useCallback(() => {
-    we("set_audio_output", u ? "off" : "on");
-  }, [we, u]), At = R.useCallback(async () => {
+    Ce("set_audio_output", u ? "off" : "on");
+  }, [Ce, u]), At = R.useCallback(async () => {
     const Ae = M.current;
     if (!Ae.isConnected) {
-      de(!0), B((at) => at + 1);
+      ue(!0), z((at) => at + 1);
       try {
         await Ae.start?.({
           tracks: { microphone: { enabled: !1 } },
           roomConnectOptions: { autoSubscribe: !1 }
         });
       } catch (at) {
-        console.error("connect failed", at), de(!1);
+        console.error("connect failed", at), ue(!1);
       }
     }
   }, []);
   R.useEffect(() => {
-    D && de(!1);
+    D && ue(!1);
   }, [D]);
   const qn = R.useCallback(async () => {
-    await At(), await ce(!0), await we("start_turn");
-  }, [At, ce, we]), Hn = R.useCallback(
+    await At(), await se(!0), await Ce("start_turn");
+  }, [At, se, Ce]), Hn = R.useCallback(
     (Ae) => {
       h(), Q(!0), qn().catch((at) => {
         console.error("open turn failed", at), Ae();
@@ -37551,43 +37470,43 @@ function TN() {
     [qn, h]
   ), Rt = R.useCallback(
     async (Ae) => {
-      Q(!1), await we(Ae), await fe();
+      Q(!1), await Ce(Ae), await de();
     },
-    [we, fe]
-  ), xe = R.useCallback(() => {
-    re(!0), Hn(() => re(!1));
+    [Ce, de]
+  ), Ee = R.useCallback(() => {
+    le(!0), Hn(() => le(!1));
   }, [Hn]), Ge = R.useCallback(async () => {
-    re(!1), await Rt("end_turn");
+    le(!1), await Rt("end_turn");
   }, [Rt]), Me = R.useCallback(async () => {
-    re(!1), await Rt("cancel_turn");
+    le(!1), await Rt("cancel_turn");
   }, [Rt]), Ut = R.useCallback(async () => {
-    Ce(!0), await Rt("cancel_turn");
+    xe(!0), await Rt("cancel_turn");
   }, [Rt]), Rn = R.useCallback(() => {
-    Ce(!1), Hn(() => Ce(!0));
+    xe(!1), Hn(() => xe(!0));
   }, [Hn]), Ti = R.useCallback(
     async (Ae) => {
-      h(), await At(), F(Ae);
+      h(), await At(), B(Ae);
       try {
         await G(Ae);
       } catch (at) {
         console.error("send failed", at);
       }
     },
-    [At, F, G, h]
+    [At, B, G, h]
   );
   R.useEffect(() => {
-    D || (re(!1), Q(!1), Ce(oe === "auto"));
-  }, [D, oe]), R.useEffect(() => {
-    re(!1), Q(!1), Ce(oe === "auto"), M.current.isConnected && (fe(), we("set_turn_mode", oe));
-  }, [oe, fe, we]);
+    D || (le(!1), Q(!1), xe(pe === "auto"));
+  }, [D, pe]), R.useEffect(() => {
+    le(!1), Q(!1), xe(pe === "auto"), M.current.isConnected && (de(), Ce("set_turn_mode", pe));
+  }, [pe, de, Ce]);
   const li = a.isConnected;
   R.useEffect(() => {
     if (!D || !li) return;
     let Ae = !1;
-    return (async () => (await we("set_turn_mode", oe), await we("set_audio_output", he ? "on" : "off"), !Ae && te && me && !ge.current && (ge.current = !0, oe === "auto" ? Rn() : xe())))(), () => {
+    return (async () => (await Ce("set_turn_mode", pe), await Ce("set_audio_output", fe ? "on" : "off"), !Ae && Z && he && !ge.current && (ge.current = !0, pe === "auto" ? Rn() : Ee())))(), () => {
       Ae = !0;
     };
-  }, [D, li, oe, te, me, he, we, xe, Rn]), R.useEffect(() => {
+  }, [D, li, pe, Z, he, fe, Ce, Ee, Rn]), R.useEffect(() => {
     const Ae = M.current.room;
     if (!D || !Ae) return;
     const at = () => {
@@ -37602,23 +37521,23 @@ function TN() {
   }, [D, u]);
   const [Sr, Hu] = R.useState(!1);
   R.useEffect(() => {
-    !te || Sr || !i || D || document.hidden || (Hu(!0), At());
-  }, [te, Sr, i, D, At]), R.useEffect(() => {
+    !Z || Sr || !i || D || document.hidden || (Hu(!0), At());
+  }, [Z, Sr, i, D, At]), R.useEffect(() => {
     const Ae = () => M.current.end?.();
     return window.addEventListener("pagehide", Ae), () => {
       window.removeEventListener("pagehide", Ae), M.current.end?.();
     };
   }, []);
-  const Xt = _C(Z), Is = kN(D, le, s), Us = D && !c && Is.orb === "listening", fc = Us ? "dozing" : Is.orb, Tr = Us ? "Sleeping" : Is.label, Vu = v !== "chat" || S !== null;
-  return /* @__PURE__ */ w.jsxs("ha-card", { "data-dock": oe, "data-tall": Vu ? "1" : "0", children: [
-    u && /* @__PURE__ */ w.jsx(jP, {}),
-    /* @__PURE__ */ w.jsx(
+  const Xt = _C(W), Is = k2(D, oe, s), Us = D && !c && Is.orb === "listening", fc = Us ? "dozing" : Is.orb, Tr = Us ? "Sleeping" : Is.label, Vu = v !== "chat" || S !== null;
+  return /* @__PURE__ */ x.jsxs("ha-card", { "data-dock": pe, "data-tall": Vu ? "1" : "0", children: [
+    u && /* @__PURE__ */ x.jsx(jP, {}),
+    /* @__PURE__ */ x.jsx(
       DD,
       {
         orbState: fc,
         title: e.title || "Home Voice",
         connected: D,
-        mode: oe,
+        mode: pe,
         onModeChange: Be,
         stateLabel: Tr,
         audioOutput: u,
@@ -37626,8 +37545,8 @@ function TN() {
         onEnd: () => t.end?.()
       }
     ),
-    /* @__PURE__ */ w.jsxs("div", { className: "lk-tabs", role: "tablist", children: [
-      /* @__PURE__ */ w.jsx(
+    /* @__PURE__ */ x.jsxs("div", { className: "lk-tabs", role: "tablist", children: [
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-tab",
@@ -37636,7 +37555,7 @@ function TN() {
           children: "Chat"
         }
       ),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-tab",
@@ -37645,7 +37564,7 @@ function TN() {
           children: "Text"
         }
       ),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-tab",
@@ -37654,7 +37573,7 @@ function TN() {
           children: "Schedules"
         }
       ),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-tab",
@@ -37663,21 +37582,21 @@ function TN() {
           children: "Settings"
         }
       ),
-      (v === "chat" || v === "text") && /* @__PURE__ */ w.jsx(
+      (v === "chat" || v === "text") && /* @__PURE__ */ x.jsx(
         "button",
         {
           className: "lk-iconbtn lk-tabs-end",
           "data-on": k ? "1" : "0",
-          onClick: x,
+          onClick: w,
           "aria-pressed": k,
           "aria-label": k ? "Hide devices" : "Show devices",
           title: k ? "Hide devices" : "Show devices",
-          children: /* @__PURE__ */ w.jsx("ha-icon", { icon: "mdi:view-grid-outline" })
+          children: /* @__PURE__ */ x.jsx("ha-icon", { icon: "mdi:view-grid-outline" })
         }
       )
     ] }),
-    v === "chat" ? /* @__PURE__ */ w.jsxs(w.Fragment, { children: [
-      /* @__PURE__ */ w.jsx(
+    v === "chat" ? /* @__PURE__ */ x.jsxs(x.Fragment, { children: [
+      /* @__PURE__ */ x.jsx(
         NC,
         {
           hidden: !k,
@@ -37687,7 +37606,7 @@ function TN() {
           showRecent: D
         }
       ),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(
         IC,
         {
           tasks: _.tasks,
@@ -37696,18 +37615,18 @@ function TN() {
           onSeeAll: () => b("schedules")
         }
       ),
-      /* @__PURE__ */ w.jsx(yp, { items: D ? Z : [], reflowKey: d.length }),
-      /* @__PURE__ */ w.jsx(
+      /* @__PURE__ */ x.jsx(yp, { items: D ? W : [], reflowKey: d.length }),
+      /* @__PURE__ */ x.jsx(
         OD,
         {
           connected: D,
-          connecting: le,
-          mode: oe,
-          turnActive: $,
-          autoPaused: be,
+          connecting: oe,
+          mode: pe,
+          turnActive: ie,
+          autoPaused: we,
           micStarting: O,
           onSend: Ti,
-          onTurnStart: xe,
+          onTurnStart: Ee,
           onTurnEnd: Ge,
           onTurnCancel: Me,
           onPause: Ut,
@@ -37715,7 +37634,7 @@ function TN() {
           suggestions: d
         }
       )
-    ] }) : v === "text" ? /* @__PURE__ */ w.jsx(
+    ] }) : v === "text" ? /* @__PURE__ */ x.jsx(
       JD,
       {
         api: T,
@@ -37724,8 +37643,8 @@ function TN() {
         onOpenTask: C,
         onSeeAllTasks: () => b("schedules")
       }
-    ) : v === "schedules" ? /* @__PURE__ */ w.jsx(jD, { api: _, onOpen: C }) : /* @__PURE__ */ w.jsx(VD, {}),
-    S && /* @__PURE__ */ w.jsx(
+    ) : v === "schedules" ? /* @__PURE__ */ x.jsx(jD, { api: _, onOpen: C }) : /* @__PURE__ */ x.jsx(VD, {}),
+    S && /* @__PURE__ */ x.jsx(
       ZD,
       {
         task: S,
@@ -37737,7 +37656,7 @@ function TN() {
   ] });
 }
 const Ok = { type: "livekit-voice-card" };
-class CN {
+class C2 {
   constructor() {
     this._snapshot = { hass: null, config: Ok }, this._host = null, this._listeners = /* @__PURE__ */ new Set(), this.subscribe = (e) => (this._listeners.add(e), () => {
       this._listeners.delete(e);
@@ -37759,7 +37678,7 @@ class CN {
     for (const e of this._listeners) e();
   }
 }
-const EN = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(data:font/woff2;base64,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) format("woff2")}', wN = EN + `
+const E2 = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(data:font/woff2;base64,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) format("woff2")}', w2 = E2 + `
   :host {
     --lk-accent: var(--primary-color, #4c8dff);
     --lk-on-accent: var(--text-primary-color, #fff);
@@ -38054,17 +37973,7 @@ const EN = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
   .lk-seg button { border: none; cursor: pointer; background: transparent; color: var(--lk-muted); font-family: var(--lk-sans);
     font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; transition: background-color .15s, color .15s; }
   .lk-seg button[data-on="1"] { background: var(--lk-accent); color: var(--lk-on-accent); }
-  .lk-steps { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-  .lk-step { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 8px;
-    border: 1px solid var(--lk-line); border-radius: 10px; background: var(--lk-elevated); }
-  .lk-step-head { display: flex; align-items: center; gap: 2px; }
-  .lk-step-num { font-family: var(--lk-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--lk-muted); }
   .lk-iconbtn:disabled { opacity: .3; cursor: default; background: transparent; }
-  .lk-addstep { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; --mdc-icon-size: 15px;
-    cursor: pointer; border: 1px dashed var(--lk-line); background: transparent; color: var(--lk-muted);
-    border-radius: 9px; padding: 6px 10px; font-family: var(--lk-sans); font-size: 0.8rem; font-weight: 600; }
-  .lk-addstep:hover { color: var(--lk-fg); border-color: color-mix(in srgb, var(--lk-fg) 22%, var(--lk-line)); }
   .lk-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
   .lk-switch input { width: 18px; height: 18px; accent-color: var(--lk-accent); }
   .lk-editor-error { color: var(--lk-danger); font-size: 0.8rem; font-weight: 600; }
@@ -38263,9 +38172,9 @@ const EN = '@font-face{font-family:"Manrope";font-style:normal;font-weight:200 8
 `;
 let Bl = null, zo = null, Bh = null;
 function Fh() {
-  return Bl || (Bl = new CN()), zo || (zo = document.createElement("div"), zo.className = "lk-root"), Bh || (Bh = d1.createRoot(zo), Bh.render(/* @__PURE__ */ w.jsx(gN, { store: Bl })), console.debug("[livekit-voice-card] created persistent tree")), { store: Bl, mount: zo };
+  return Bl || (Bl = new C2()), zo || (zo = document.createElement("div"), zo.className = "lk-root"), Bh || (Bh = dw.createRoot(zo), Bh.render(/* @__PURE__ */ x.jsx(g2, { store: Bl })), console.debug("[livekit-voice-card] created persistent tree")), { store: Bl, mount: zo };
 }
-class xN extends HTMLElement {
+class x2 extends HTMLElement {
   setConfig(e) {
     Fh().store.setConfig(e), e?.height && this.style.setProperty("--lk-h", `${e.height}px`), this._attach();
   }
@@ -38288,13 +38197,13 @@ class xN extends HTMLElement {
     const e = this.shadowRoot ?? this.attachShadow({ mode: "open" });
     if (!e.querySelector("style[data-lk]")) {
       const s = document.createElement("style");
-      s.setAttribute("data-lk", ""), s.textContent = wN, e.appendChild(s);
+      s.setAttribute("data-lk", ""), s.textContent = w2, e.appendChild(s);
     }
     const { store: t, mount: a } = Fh();
     t.setHost(this), a.parentNode !== e && (e.appendChild(a), console.debug("[livekit-voice-card] re-attached persistent tree (session preserved)"));
   }
 }
-customElements.define("livekit-voice-card", xN);
+customElements.define("livekit-voice-card", x2);
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "livekit-voice-card",

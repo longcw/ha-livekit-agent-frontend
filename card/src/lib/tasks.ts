@@ -21,11 +21,14 @@ export interface Step {
   args?: Record<string, unknown>;
 }
 
+/** What a task does at run time: exactly one of a reminder or an instruction. */
 export interface Execution {
-  // Deterministic tool calls, replayed in order at run time (stop at first failure).
-  steps: Step[];
-  // Optional natural-language instruction run by the LLM after the steps.
+  // A reminder, sent as is to the person's devices; the title defaults to the description.
+  notification?: { message: string; title?: string | null } | null;
+  // Sent as a message in the person's text conversation, where the agent carries it out.
   instruction?: string | null;
+  // Tool calls replayed exactly, which only tasks from before reminders and instructions hold.
+  steps?: Step[];
 }
 
 export interface Task {
@@ -98,10 +101,11 @@ export function whenLabel(task: Task): string {
   return fmtDateTime(task.next_run_at ?? task.run_at) || 'Scheduled';
 }
 
-/** A one-line summary of what a task does: its steps, then its instruction. */
+/** A one-line summary of what a task does: its reminder or its instruction. */
 export function executionSummary(task: Task): string {
   const e = task.execution || ({} as Execution);
   const parts: string[] = [];
+  if (e.notification?.message) parts.push(e.notification.message);
   for (const s of e.steps ?? []) {
     const args = s.args && Object.keys(s.args).length ? ` ${JSON.stringify(s.args)}` : '';
     parts.push(`${s.tool ?? ''}${args}`);

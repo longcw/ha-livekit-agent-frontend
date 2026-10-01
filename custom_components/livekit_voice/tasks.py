@@ -87,26 +87,44 @@ async def _json_body(request: web.Request) -> object | None:
         return None
 
 
-def _ha_user_id(request: web.Request) -> str | None:
-    """The logged-in Home Assistant user, which is the chat identity on this path."""
+async def user_id(hass: HomeAssistant, request: web.Request) -> str | None:
+    """The id of the person the scheduler links to the logged-in HA user; None for no one.
+
+    The agent and the scheduler know a person only by that id."""
     user = request.get("hass_user")
-    return user.id if user else None
+    config = hass.data.get(DOMAIN, {}).get(DATA_CONFIG) or {}
+    base = config.get(CONF_SCHEDULER_URL)
+    if user is None or not base:
+        return None
+    token = config.get(CONF_SCHEDULER_TOKEN)
+    headers = {"Authorization": f"Bearer {token}"} if token else None
+    try:
+        async with async_get_clientsession(hass).get(
+            f"{base.rstrip('/')}/users/resolve",
+            params={"ha_user_id": user.id},
+            headers=headers,
+        ) as resp:
+            resp.raise_for_status()
+            return (await resp.json()).get("id")
+    except (ClientError, ValueError) as err:
+        _LOGGER.warning("could not resolve the person of HA user %s: %s", user.id, err)
+        return None
 
 
-def _as_user(request: web.Request) -> dict[str, str]:
-    """The request's query, speaking for the logged-in HA user and no one else."""
+async def _as_user(hass: HomeAssistant, request: web.Request) -> dict[str, str]:
+    """The request's query, speaking for the logged-in HA user's person and no one else."""
     query = {k: v for k, v in request.query.items() if k not in ("user", "ha_user_id")}
-    if (user_id := _ha_user_id(request)) is not None:
-        query["ha_user_id"] = user_id
+    if (person := await user_id(hass, request)) is not None:
+        query["user"] = person
     return query
 
 
-async def _chat_body(request: web.Request) -> dict:
-    """A chat request's body, speaking for the logged-in HA user and no one else."""
+async def _chat_body(hass: HomeAssistant, request: web.Request) -> dict:
+    """A chat request's body, speaking for the logged-in HA user's person and no one else."""
     body = await _json_body(request)
     body = dict(body) if isinstance(body, dict) else {}
-    body.pop("user", None)
-    body["ha_user_id"] = _ha_user_id(request)
+    body.pop("ha_user_id", None)
+    body["user"] = await user_id(hass, request)
     return body
 
 
@@ -129,14 +147,16 @@ class LiveKitTasksView(HomeAssistantView):
         self._hass = hass
 
     async def get(self, request: web.Request) -> web.Response:
-        return await _forward(self._hass, "GET", "/tasks", query=_as_user(request))
+        return await _forward(
+            self._hass, "GET", "/tasks", query=await _as_user(self._hass, request)
+        )
 
     async def post(self, request: web.Request) -> web.Response:
         return await _forward(
             self._hass,
             "POST",
             "/tasks",
-            query=_as_user(request),
+            query=await _as_user(self._hass, request),
             json_body=await _task_body(request),
         )
 
@@ -153,21 +173,24 @@ class LiveKitTaskView(HomeAssistantView):
 
     async def get(self, request: web.Request, task_id: str) -> web.Response:
         path = f"/tasks/{task_id}"
-        return await _forward(self._hass, "GET", path, query=_as_user(request))
+        return await _forward(
+            self._hass, "GET", path, query=await _as_user(self._hass, request)
+        )
 
     async def patch(self, request: web.Request, task_id: str) -> web.Response:
         return await _forward(
             self._hass,
             "PATCH",
             f"/tasks/{task_id}",
-            query=_as_user(request),
+            query=await _as_user(self._hass, request),
             json_body=await _task_body(request),
         )
 
     async def delete(self, request: web.Request, task_id: str) -> web.Response:
         path = f"/tasks/{task_id}"
-        return await _forward(self._hass, "DELETE", path, query=_as_user(request))
-
+        return await _forward(
+            self._hass, "DELETE", path, query=await _as_user(self._hass, request)
+        )
 
 
 def _device_names(hass: HomeAssistant) -> dict[str, str]:
@@ -209,7 +232,6 @@ class LiveKitSettingsView(HomeAssistantView):
         data["device_names"] = _device_names(self._hass)
         return web.json_response(data)
 
-
     async def put(self, request: web.Request) -> web.Response:
         return await _forward(
             self._hass, "PUT", "/settings", json_body=await _json_body(request)
@@ -230,8 +252,10 @@ class LiveKitChatView(HomeAssistantView):
         self._hass = hass
 
     async def post(self, request: web.Request) -> web.Response:
-        body = await _chat_body(request)
-        return await _forward(self._hass, "POST", "/chat", json_body=body, service=_WORKER)
+        body = await _chat_body(self._hass, request)
+        return await _forward(
+            self._hass, "POST", "/chat", json_body=body, service=_WORKER
+        )
 
 
 class LiveKitChatHistoryView(HomeAssistantView):
@@ -247,7 +271,11 @@ class LiveKitChatHistoryView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         return await _forward(
-            self._hass, "GET", "/chat/history", query=_as_user(request), service=_WORKER
+            self._hass,
+            "GET",
+            "/chat/history",
+            query=await _as_user(self._hass, request),
+            service=_WORKER,
         )
 
 
@@ -262,7 +290,7 @@ class LiveKitChatCancelView(HomeAssistantView):
         self._hass = hass
 
     async def post(self, request: web.Request) -> web.Response:
-        body = await _chat_body(request)
+        body = await _chat_body(self._hass, request)
         return await _forward(
             self._hass, "POST", "/chat/cancel", json_body=body, service=_WORKER
         )
@@ -279,7 +307,7 @@ class LiveKitChatWarmView(HomeAssistantView):
         self._hass = hass
 
     async def post(self, request: web.Request) -> web.Response:
-        body = await _chat_body(request)
+        body = await _chat_body(self._hass, request)
         return await _forward(
             self._hass, "POST", "/chat/warm", json_body=body, service=_WORKER
         )
@@ -297,7 +325,11 @@ class LiveKitChatConversationsView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         return await _forward(
-            self._hass, "GET", "/chat/conversations", query=_as_user(request), service=_WORKER
+            self._hass,
+            "GET",
+            "/chat/conversations",
+            query=await _as_user(self._hass, request),
+            service=_WORKER,
         )
 
 
@@ -313,7 +345,11 @@ class LiveKitChatSwitchView(HomeAssistantView):
 
     async def post(self, request: web.Request) -> web.Response:
         return await _forward(
-            self._hass, "POST", "/chat/switch", json_body=await _chat_body(request), service=_WORKER
+            self._hass,
+            "POST",
+            "/chat/switch",
+            json_body=await _chat_body(self._hass, request),
+            service=_WORKER,
         )
 
 
@@ -329,5 +365,9 @@ class LiveKitChatDeleteView(HomeAssistantView):
 
     async def post(self, request: web.Request) -> web.Response:
         return await _forward(
-            self._hass, "POST", "/chat/delete", json_body=await _chat_body(request), service=_WORKER
+            self._hass,
+            "POST",
+            "/chat/delete",
+            json_body=await _chat_body(self._hass, request),
+            service=_WORKER,
         )

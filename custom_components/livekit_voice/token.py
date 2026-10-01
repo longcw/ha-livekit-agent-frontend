@@ -29,6 +29,7 @@ from .const import (
     DOMAIN,
     TOKEN_URL,
 )
+from .tasks import user_id
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -68,9 +69,9 @@ class LiveKitTokenView(HomeAssistantView):
         agent_name = config.get(CONF_AGENT_NAME) or DEFAULT_AGENT_NAME
         identity = f"ha-user-{secrets.token_hex(4)}"
         room_name = f"ha-voice-{secrets.token_hex(4)}"
-        user = request.get("hass_user")
+        # the agent knows the person only by their id
         metadata = json.dumps(
-            {"input_mode": input_mode, "ha_user_id": user.id if user else None}
+            {"input_mode": input_mode, "user_id": await user_id(self._hass, request)}
         )
 
         # Connect media-free (can_subscribe=False): an idle/text connection then has no

@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import { type Task, toLocalInput } from '../lib/tasks';
 
-/** A step being edited: the args are kept as raw JSON text so partial edits don't reset. */
-interface StepDraft {
-  tool: string;
-  argsText: string;
-}
+type Kind = 'reminder' | 'instruction';
 
-function initialSteps(task: Task): StepDraft[] {
-  return (task.execution?.steps ?? []).map((s) => ({
-    tool: s.tool ?? '',
-    argsText: s.args && Object.keys(s.args).length ? JSON.stringify(s.args, null, 2) : '',
-  }));
+/** The task's action as the editor shows it; an older task's replayed reminder reads as one. */
+function initialAction(task: Task): { kind: Kind; text: string } {
+  const e = task.execution ?? {};
+  if (e.notification) return { kind: 'reminder', text: e.notification.message };
+  if (e.instruction) return { kind: 'instruction', text: e.instruction };
+  const reminder = (e.steps ?? []).find((st) => st.tool === 'send_notification');
+  const message = reminder?.args?.message;
+  return typeof message === 'string'
+    ? { kind: 'reminder', text: message }
+    : { kind: 'instruction', text: '' };
 }
 
 /**
  * Modal editor for a single task. Edits everything — description, schedule (once time or
- * recurring cron), the action (an ordered list of tool-call steps and/or a natural-language
- * instruction), and enabled — plus delete. Times are entered/shown in the browser's local
+ * recurring cron), the action (a reminder sent as is, or an instruction the agent carries
+ * out in the person's conversation), and enabled — plus delete. Times are entered/shown in the browser's local
  * zone and saved against the task's timezone (a single-home assumption: the browser and the
  * home share a zone).
  */
@@ -36,25 +37,13 @@ export function TaskEditor({
   const [schedType, setSchedType] = useState<'once' | 'recurring'>(task.schedule_type);
   const [runAt, setRunAt] = useState(toLocalInput(task.run_at ?? task.next_run_at));
   const [cron, setCron] = useState(task.cron ?? '');
-  const [steps, setSteps] = useState<StepDraft[]>(() => initialSteps(task));
-  const [instruction, setInstruction] = useState(task.execution?.instruction ?? '');
+  const [action] = useState(() => initialAction(task));
+  const [kind, setKind] = useState<Kind>(action.kind);
+  const [actionText, setActionText] = useState(action.text);
   const [enabled, setEnabled] = useState(task.enabled);
   const [busy, setBusy] = useState(false);
   const [confirmDel, setConfirmDel] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const addStep = () => setSteps((s) => [...s, { tool: '', argsText: '' }]);
-  const removeStep = (i: number) => setSteps((s) => s.filter((_, idx) => idx !== i));
-  const updateStep = (i: number, patch: Partial<StepDraft>) =>
-    setSteps((s) => s.map((st, idx) => (idx === i ? { ...st, ...patch } : st)));
-  const moveStep = (i: number, dir: -1 | 1) =>
-    setSteps((s) => {
-      const j = i + dir;
-      if (j < 0 || j >= s.length) return s;
-      const next = [...s];
-      [next[i], next[j]] = [next[j], next[i]];
-      return next;
-    });
 
   const buildPatch = (): Record<string, unknown> => {
     const patch: Record<string, unknown> = { description: description.trim(), enabled };
@@ -66,29 +55,11 @@ export function TaskEditor({
       patch.schedule = { type: 'recurring', cron: cron.trim(), timezone: task.timezone };
     }
 
-    // Build steps, skipping fully-empty rows; a row with args but no tool is an error.
-    const builtSteps: { tool: string; args: Record<string, unknown> }[] = [];
-    steps.forEach((st, i) => {
-      const tool = st.tool.trim();
-      if (!tool) {
-        if (st.argsText.trim()) throw new Error(`Step ${i + 1}: enter a tool name.`);
-        return;
-      }
-      let args: Record<string, unknown> = {};
-      if (st.argsText.trim()) {
-        try {
-          args = JSON.parse(st.argsText);
-        } catch {
-          throw new Error(`Step ${i + 1}: args must be valid JSON.`);
-        }
-      }
-      builtSteps.push({ tool, args });
-    });
-    const instr = instruction.trim();
-    if (!builtSteps.length && !instr) {
-      throw new Error('Add at least one step or an instruction.');
+    const text = actionText.trim();
+    if (!text) {
+      throw new Error(kind === 'reminder' ? 'Enter the reminder.' : 'Enter the instruction.');
     }
-    patch.execution = { steps: builtSteps, instruction: instr || null };
+    patch.execution = kind === 'reminder' ? { notification: { message: text } } : { instruction: text };
     return patch;
   };
 
@@ -180,70 +151,30 @@ export function TaskEditor({
           </div>
 
           <div className="lk-field">
-            <span className="lk-field-label">Steps</span>
-            <div className="lk-steps">
-              {steps.map((st, i) => (
-                // Positional key: inputs are fully controlled (value from state[i]), so
-                // reconciliation by index is correct here.
-                <div className="lk-step" key={i}>
-                  <div className="lk-step-head">
-                    <span className="lk-step-num">Step {i + 1}</span>
-                    <span className="lk-spacer" />
-                    <button
-                      className="lk-iconbtn"
-                      onClick={() => moveStep(i, -1)}
-                      disabled={i === 0}
-                      aria-label="Move step up"
-                    >
-                      <ha-icon icon="mdi:arrow-up" />
-                    </button>
-                    <button
-                      className="lk-iconbtn"
-                      onClick={() => moveStep(i, 1)}
-                      disabled={i === steps.length - 1}
-                      aria-label="Move step down"
-                    >
-                      <ha-icon icon="mdi:arrow-down" />
-                    </button>
-                    <button
-                      className="lk-iconbtn"
-                      onClick={() => removeStep(i)}
-                      aria-label="Remove step"
-                    >
-                      <ha-icon icon="mdi:close" />
-                    </button>
-                  </div>
-                  <input
-                    className="lk-in lk-mono"
-                    placeholder="HassTurnOn"
-                    value={st.tool}
-                    onChange={(e) => updateStep(i, { tool: e.target.value })}
-                  />
-                  <textarea
-                    className="lk-in lk-ta lk-mono"
-                    rows={2}
-                    placeholder='{"name": "主卧 空调"}'
-                    value={st.argsText}
-                    onChange={(e) => updateStep(i, { argsText: e.target.value })}
-                  />
-                </div>
-              ))}
-              <button className="lk-addstep" onClick={addStep}>
-                <ha-icon icon="mdi:plus" /> Add step
+            <span className="lk-field-label">Action</span>
+            <div className="lk-seg">
+              <button data-on={kind === 'reminder' ? '1' : '0'} onClick={() => setKind('reminder')}>
+                Reminder
+              </button>
+              <button
+                data-on={kind === 'instruction' ? '1' : '0'}
+                onClick={() => setKind('instruction')}
+              >
+                Instruction
               </button>
             </div>
-          </div>
-
-          <div className="lk-field">
-            <span className="lk-field-label">Reply / instruction (optional)</span>
             <textarea
               className="lk-in lk-ta"
               rows={2}
-              placeholder="e.g. tell me tomorrow's weather"
-              value={instruction}
-              onChange={(e) => setInstruction(e.target.value)}
+              placeholder={kind === 'reminder' ? 'e.g. Time to leave' : 'e.g. Turn off the bedroom AC'}
+              value={actionText}
+              onChange={(e) => setActionText(e.target.value)}
             />
-            <span className="lk-hint">Runs after the steps; leave empty for a silent batch.</span>
+            <span className="lk-hint">
+              {kind === 'reminder'
+                ? 'Sent as is to your devices.'
+                : 'Sent to your conversation when it fires, and the agent carries it out.'}
+            </span>
           </div>
 
           <label className="lk-switch">
