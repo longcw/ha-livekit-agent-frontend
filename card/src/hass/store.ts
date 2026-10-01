@@ -50,6 +50,8 @@ export interface CardConfig {
   /** Pin devices whose state changed within this many minutes, whatever changed them.
    *  Default 60; 0 turns it off. */
   recent_minutes?: number;
+  /** The media player the now-playing bar shows. Default: the integration's music player. */
+  music_entity?: string;
   /** How many tiles to show before "Show more". Default 8. */
   max_tiles?: number;
   /** Fixed card height in px. Default 720; always capped to the viewport height. */

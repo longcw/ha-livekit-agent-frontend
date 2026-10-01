@@ -21,6 +21,7 @@ from .const import (
     CONF_API_KEY,
     CONF_API_SECRET,
     CONF_LIVEKIT_URL,
+    CONF_MUSIC_URL,
     CONF_SCHEDULER_TOKEN,
     CONF_SCHEDULER_URL,
     DEFAULT_AGENT_NAME,
@@ -54,6 +55,8 @@ class LiveKitVoiceConfigFlow(ConfigFlow, domain=DOMAIN):
                 # Optional: enables the card's Text tab.
                 vol.Optional(CONF_CHAT_URL, default=""): str,
                 vol.Optional(CONF_CHAT_TOKEN, default=""): str,
+                # Optional: adds a media_player for the music server.
+                vol.Optional(CONF_MUSIC_URL, default=""): str,
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema)
@@ -103,6 +106,9 @@ class LiveKitVoiceOptionsFlow(OptionsFlow):
                 vol.Optional(CONF_CHAT_URL, default=current.get(CONF_CHAT_URL, "")): str,
                 vol.Optional(
                     CONF_CHAT_TOKEN, default=current.get(CONF_CHAT_TOKEN, "")
+                ): str,
+                vol.Optional(
+                    CONF_MUSIC_URL, default=current.get(CONF_MUSIC_URL, "")
                 ): str,
             }
         )

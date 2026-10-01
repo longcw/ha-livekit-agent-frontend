@@ -83,6 +83,7 @@ entities:                     # optional: always show these specific entities
   - climate.bedroom_ac
 follow_agent: true            # default true: also surface tiles for areas the agent looks at
 recent_minutes: 60            # default 60: pin devices changed in the last N minutes, whatever changed them (0 = off)
+music_entity: media_player.x  # optional: the player the now-playing bar shows (default: this integration's)
 ```
 
 All fields are optional. **By default the card is text-only and dormant**: it stays static
@@ -91,6 +92,8 @@ dashboard. Tap the mic to talk — which spins STT up just for that turn and tea
 the header speaker to hear replies. Set `audio_output: true` and/or `start_on_connect: true`
 to speak and start listening the moment it connects; `input_mode: auto` makes it hands-free.
 `areas`/`entities` pin a fixed set of tiles that are always visible (like any native HA card).
+
+With a **Music server URL** set in the integration's options (a [music-mcp-server](https://github.com/longcw/music-mcp-server), which plays Apple Music on a Mac and its AirPlay speakers), the integration adds a `media_player` for it, and the card shows a now-playing bar with play/pause, previous/next, stop and volume while it plays or is paused.
 
 ## Why tiles render by `entity_id`/area, not by device name
 

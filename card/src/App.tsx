@@ -12,6 +12,7 @@ import { Conversation } from './components/Conversation';
 import { DeviceTiles } from './components/DeviceTiles';
 import { Dock } from './components/Dock';
 import { Header } from './components/Header';
+import { NowPlaying } from './components/NowPlaying';
 import { ScheduledTasks } from './components/ScheduledTasks';
 import { SchedulesTab } from './components/SchedulesTab';
 import { SettingsTab } from './components/SettingsTab';
@@ -465,6 +466,7 @@ function CardShell() {
           </button>
         )}
       </div>
+      {(tab === 'chat' || tab === 'text') && <NowPlaying />}
 
       {tab === 'chat' ? (
         <>
