@@ -29,6 +29,7 @@ const ICONS: Record<string, string> = {
   'mdi:plus': 'M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z',
   'mdi:close': 'M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z',
   'mdi:check': 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z',
+  'mdi:console': 'M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z',
   'mdi:pause': 'M14,19H18V5H14M6,19H10V5H6V19Z',
   'mdi:play': 'M8,5.14V19.14L19,12.14L8,5.14Z',
   'mdi:trash-can-outline': 'M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z',
@@ -177,9 +178,16 @@ const mockHass: any = {
         ? params
         : {
             users: [
-              { name: 'Long', ha_user_id: 'u-long', notify_targets: ['mobile_app_ipad', 'mobile_app_longs_iphone'] },
-              { name: 'Mia', ha_user_id: null, notify_targets: [] },
+              {
+                id: 'long',
+                name: 'Long',
+                ha_user_id: 'u-long',
+                notify_targets: ['mobile_app_ipad', 'mobile_app_longs_iphone'],
+                servers: ['herdr'],
+              },
+              { id: 'mia', name: 'Mia', ha_user_id: null, notify_targets: [] },
             ],
+            servers: [{ id: 'herdr', title: 'Coding agents (herdr)' }],
           };
     }
     return {};

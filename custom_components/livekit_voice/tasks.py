@@ -214,6 +214,9 @@ def _device_names(hass: HomeAssistant) -> dict[str, str]:
     return {service: " / ".join(sorted(n)) for service, n in names.items()}
 
 
+_WORKER = ("worker", CONF_CHAT_URL, CONF_CHAT_TOKEN)
+
+
 class LiveKitSettingsView(HomeAssistantView):
     """Get / update shared settings (e.g. notify.* push targets)."""
 
@@ -230,15 +233,16 @@ class LiveKitSettingsView(HomeAssistantView):
             return resp
         data = json.loads(resp.body)
         data["device_names"] = _device_names(self._hass)
+        # the MCP servers a person can be given, which only the worker knows
+        servers = await _forward(self._hass, "GET", "/servers", service=_WORKER)
+        if servers.status == 200 and isinstance(servers.body, bytes):
+            data["servers"] = json.loads(servers.body).get("servers") or []
         return web.json_response(data)
 
     async def put(self, request: web.Request) -> web.Response:
         return await _forward(
             self._hass, "PUT", "/settings", json_body=await _json_body(request)
         )
-
-
-_WORKER = ("worker", CONF_CHAT_URL, CONF_CHAT_TOKEN)
 
 
 class LiveKitChatView(HomeAssistantView):

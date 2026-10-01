@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useHass } from '../hass/context';
-import { useNotifySettings, type HaAccount, type NotifyTarget, type Person } from '../lib/settings-api';
+import {
+  useNotifySettings,
+  type HaAccount,
+  type NotifyTarget,
+  type Person,
+  type RestrictedServer,
+} from '../lib/settings-api';
 
 // The in-HA persistent notification, presented as the first (default-on) channel.
 const PERSISTENT = 'persistent_notification';
@@ -59,6 +65,7 @@ function PersonRow({
   person,
   rows,
   targets,
+  servers,
   users,
   accounts,
   open,
@@ -70,6 +77,7 @@ function PersonRow({
   person: Person;
   rows: Row[];
   targets: NotifyTarget[];
+  servers: RestrictedServer[];
   users: Person[];
   accounts: HaAccount[] | null;
   open: boolean;
@@ -93,6 +101,10 @@ function PersonRow({
   ]
     .filter(Boolean)
     .join(' · ');
+
+  const granted = person.servers ?? [];
+  const toggleServer = (id: string) =>
+    onUpdate({ servers: granted.includes(id) ? granted.filter((s) => s !== id) : [...granted, id] });
 
   const toggle = (service: string) =>
     onUpdate({
@@ -194,6 +206,21 @@ function PersonRow({
             </button>
             {test === 'error' && <p className="lk-set-err">Could not send the test. Check the device.</p>}
           </div>
+
+          {servers.length > 0 && (
+            <div className="lk-field">
+              <span className="lk-field-label">Tools</span>
+              <Checklist
+                rows={servers.map((s) => ({ service: s.id, label: s.title, icon: 'mdi:console' }))}
+                selected={granted}
+                onToggle={toggleServer}
+                label={`Tools ${person.name} may use`}
+              />
+              <p className="lk-set-hint lk-person-hint">
+                The agent offers these only to people they are checked for, from their next conversation.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -205,7 +232,8 @@ function PersonRow({
  * identifies them on the card. Anyone not listed gets only the HA persistent notification.
  */
 export function SettingsTab() {
-  const { available, users, accounts, saving, error, addUser, removeUser, updateUser } = useNotifySettings();
+  const { available, users, servers, accounts, saving, error, addUser, removeUser, updateUser } =
+    useNotifySettings();
   const [openName, setOpenName] = useState<string | null>(null);
   // the one person whose remove is armed (two-tap confirm); any other interaction clears it
   const [confirmName, setConfirmName] = useState<string | null>(null);
@@ -258,6 +286,7 @@ export function SettingsTab() {
                   key={u.name}
                   person={u}
                   rows={rows}
+                  servers={servers}
                   targets={available}
                   users={users}
                   accounts={accounts}

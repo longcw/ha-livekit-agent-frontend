@@ -25,6 +25,12 @@ export interface Person {
   servers?: string[];
 }
 
+/** An MCP server the agent offers a person only when their entry lists it. */
+export interface RestrictedServer {
+  id: string;
+  title: string;
+}
+
 /** An HA login that can be linked to a person. */
 export interface HaAccount {
   id: string;
@@ -34,6 +40,8 @@ export interface HaAccount {
 export interface NotifySettingsApi {
   available: NotifyTarget[];
   users: Person[];
+  /** The servers a person can be given, from the worker's mcp.yaml. */
+  servers: RestrictedServer[];
   /** HA logins for the account picker; null when the viewer cannot list them. */
   accounts: HaAccount[] | null;
   saving: boolean;
@@ -74,6 +82,7 @@ function toPeople(raw: unknown): Person[] {
 export function useNotifySettings(): NotifySettingsApi {
   const hass = useHass();
   const [users, setUsers] = useState<Person[]>([]);
+  const [servers, setServers] = useState<RestrictedServer[]>([]);
   const [accounts, setAccounts] = useState<HaAccount[] | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,11 +120,19 @@ export function useNotifySettings(): NotifySettingsApi {
       .callApi<{
         users?: unknown;
         device_names?: Record<string, string>;
+        servers?: unknown;
       }>('GET', PATH)
       .then((d) => {
         if (cancelled) return;
         if (d?.device_names && typeof d.device_names === 'object') {
           setDeviceNames(d.device_names);
+        }
+        if (Array.isArray(d?.servers)) {
+          setServers(
+            d.servers
+              .filter((s) => s && typeof s.id === 'string')
+              .map((s) => ({ id: s.id, title: typeof s.title === 'string' ? s.title : s.id })),
+          );
         }
         usersRef.current = toPeople(d?.users);
         setUsers(usersRef.current);
@@ -196,6 +213,7 @@ export function useNotifySettings(): NotifySettingsApi {
   return {
     available,
     users,
+    servers,
     accounts,
     saving,
     error,
