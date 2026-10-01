@@ -21,9 +21,17 @@ from aiohttp import web
 from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
-from .const import CARD_FILENAME, CARD_URL, DATA_CONFIG, DATA_REGISTERED, DOMAIN
+from .const import (
+    CARD_FILENAME,
+    CARD_URL,
+    CONF_MUSIC_URL,
+    DATA_CONFIG,
+    DATA_REGISTERED,
+    DOMAIN,
+)
 from .progress import LiveKitProgressView
 from .tasks import (
     LiveKitChatCancelView,
@@ -42,6 +50,9 @@ from .token import LiveKitTokenView
 _LOGGER = logging.getLogger(__name__)
 
 _CARD_PATH = Path(__file__).parent / "frontend" / CARD_FILENAME
+
+# the media player adds itself only when a music server is configured
+_PLATFORMS = [Platform.MEDIA_PLAYER]
 
 
 class LiveKitCardView(HomeAssistantView):
@@ -91,13 +102,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         store[DATA_REGISTERED] = True
         _LOGGER.debug("registered token, tasks, settings, chat and progress views + card at %s", CARD_URL)
 
+    await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True
 
 
 async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Keep the views reading the latest config after a data/options update."""
-    hass.data[DOMAIN][DATA_CONFIG] = _merged_config(entry)
+    config = _merged_config(entry)
+    previous = hass.data[DOMAIN].get(DATA_CONFIG, {})
+    hass.data[DOMAIN][DATA_CONFIG] = config
+    # the media player is built from the music URL, so a new one needs a reload
+    if config.get(CONF_MUSIC_URL, "") != previous.get(CONF_MUSIC_URL, ""):
+        await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -107,5 +124,6 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     (Home Assistant offers no runtime unregister for them); we only drop the config so
     the token endpoint reports "not configured" until set up again.
     """
+    unloaded = await hass.config_entries.async_unload_platforms(entry, _PLATFORMS)
     hass.data.get(DOMAIN, {}).pop(DATA_CONFIG, None)
-    return True
+    return unloaded

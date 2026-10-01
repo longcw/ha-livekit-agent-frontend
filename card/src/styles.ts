@@ -95,6 +95,39 @@ export const CARD_STYLES =
 
   /* ---- device tiles (horizontal rail) ---- */
   .lk-devices { flex: none; }
+  /* ---- now playing ---- */
+  .lk-music { flex: none; position: relative; margin: 2px 14px 8px; padding: 8px 8px 6px 10px;
+    border-radius: 13px; overflow: hidden; border: 1px solid var(--lk-line);
+    background: var(--lk-surface); display: flex; flex-direction: column; gap: 2px; }
+  .lk-music[data-playing="1"] { border-color: transparent;
+    background: color-mix(in srgb, var(--lk-accent) 10%, var(--lk-surface));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lk-accent) 32%, transparent); }
+  .lk-music-row { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .lk-music-icon { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid;
+    place-items: center; --mdc-icon-size: 19px; background: var(--lk-elevated); color: var(--lk-muted); }
+  .lk-music[data-playing="1"] .lk-music-icon { color: var(--lk-accent);
+    background: color-mix(in srgb, var(--lk-accent) 16%, transparent); }
+  .lk-music-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;
+    padding: 0 6px; border: none; background: none; text-align: left; cursor: pointer; }
+  .lk-music-title { font-size: 14px; font-weight: 650; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }
+  .lk-music-sub { font-size: 12px; color: var(--lk-muted); white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }
+  .lk-music-play { color: var(--lk-fg); --mdc-icon-size: 23px; }
+  .lk-music-vol { gap: 8px; padding: 0 2px 2px 8px; color: var(--lk-muted); --mdc-icon-size: 16px; }
+  .lk-music-vol input { flex: 1; min-width: 0; height: 4px; margin: 0; appearance: none;
+    -webkit-appearance: none; border-radius: 2px; cursor: pointer; background: linear-gradient(
+      to right, var(--lk-accent) var(--lk-fill), color-mix(in srgb, var(--lk-fg) 16%, transparent) var(--lk-fill)); }
+  .lk-music-vol input::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--lk-fg); border: none; }
+  .lk-music-vol input::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%;
+    background: var(--lk-fg); border: none; }
+  .lk-music-num { flex: none; width: 26px; text-align: right; font: 500 11px var(--lk-mono); }
+  .lk-music-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+    background: color-mix(in srgb, var(--lk-fg) 8%, transparent); }
+  .lk-music-progress span { display: block; height: 100%; background: var(--lk-accent);
+    transition: width 1s linear; }
+
   .lk-tiles { flex: none; display: flex; gap: 8px; overflow-x: auto; padding: 5px 14px 9px;
     scroll-snap-type: x proximity; scrollbar-width: none; }
   .lk-tiles::-webkit-scrollbar { display: none; }

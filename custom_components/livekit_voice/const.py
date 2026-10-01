@@ -15,6 +15,9 @@ CONF_SCHEDULER_TOKEN = "scheduler_token"
 # When set, the card's Text tab shows and continues the worker's persisted text conversation.
 CONF_CHAT_URL = "chat_url"
 CONF_CHAT_TOKEN = "chat_token"
+# Base URL of a music server (e.g. http://192.168.1.50:8961) the voice agent plays music
+# with. When set, a media_player entity shows and controls what it plays.
+CONF_MUSIC_URL = "music_url"
 
 # Matches AGENT_NAME in agent/agent.py (the worker's explicit-dispatch name).
 DEFAULT_AGENT_NAME = "ha-agent"

@@ -12,7 +12,8 @@
           "scheduler_url": "Scheduler URL (optional)",
           "scheduler_token": "Scheduler token (optional)",
           "chat_url": "Agent chat URL (optional)",
-          "chat_token": "Agent chat token (optional)"
+          "chat_token": "Agent chat token (optional)",
+          "music_url": "Music server URL (optional)"
         },
         "data_description": {
           "livekit_url": "e.g. wss://your-project.livekit.cloud",
@@ -20,7 +21,8 @@
           "scheduler_url": "Base URL of the scheduler service, e.g. http://192.168.1.50:8080. Enables the Schedules tab.",
           "scheduler_token": "Must match SCHEDULER_TOKEN in the scheduler's .env",
           "chat_url": "Base URL of the worker's HTTP app, e.g. http://192.168.1.50:8952. Enables the Text tab.",
-          "chat_token": "Must match TEXT_API_TOKEN in the worker's .env"
+          "chat_token": "Must match TEXT_API_TOKEN in the worker's .env",
+          "music_url": "Base URL of the music server, e.g. http://192.168.1.50:8961. Adds a media player for the music it plays."
         }
       }
     },
@@ -41,7 +43,8 @@
           "scheduler_url": "Scheduler URL (optional)",
           "scheduler_token": "Scheduler token (optional)",
           "chat_url": "Agent chat URL (optional)",
-          "chat_token": "Agent chat token (optional)"
+          "chat_token": "Agent chat token (optional)",
+          "music_url": "Music server URL (optional)"
         },
         "data_description": {
           "livekit_url": "e.g. wss://your-project.livekit.cloud",
@@ -49,7 +52,8 @@
           "scheduler_url": "Base URL of the scheduler service, e.g. http://192.168.1.50:8080. Enables the Schedules tab.",
           "scheduler_token": "Must match SCHEDULER_TOKEN in the scheduler's .env",
           "chat_url": "Base URL of the worker's HTTP app, e.g. http://192.168.1.50:8952. Enables the Text tab.",
-          "chat_token": "Must match TEXT_API_TOKEN in the worker's .env"
+          "chat_token": "Must match TEXT_API_TOKEN in the worker's .env",
+          "music_url": "Base URL of the music server, e.g. http://192.168.1.50:8961. Adds a media player for the music it plays."
         }
       }
     }
