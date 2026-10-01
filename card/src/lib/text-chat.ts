@@ -16,6 +16,9 @@ type HistoryItem = ConvItem & { call_id?: string; output_chars?: number };
 interface History {
   conversation_id: string | null;
   busy: boolean;
+  /** Names what the rest holds; sent back, it answers `unchanged` with only the running state. */
+  version?: string;
+  unchanged?: boolean;
   /** The running turn's task, once it has started. */
   task_id?: string | null;
   items: HistoryItem[];
@@ -109,7 +112,8 @@ export function useTextChat(active: boolean): TextChatApi {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [usage, setUsage] = useState<TokenUsage | null>(null);
-  const lastBody = useRef('');
+  // the version of the history held here, which a poll sends so an unchanged one carries nothing
+  const version = useRef('');
   const [busy, setBusy] = useState(false);
   const [taskId, setTaskId] = useState<string | null>(null);
   // the task a stop was sent for; a newer turn has another id, so it is never shown as stopping
@@ -143,13 +147,13 @@ export function useTextChat(active: boolean): TextChatApi {
     if (!hass) return;
     const at = epoch.current;
     try {
-      const data = await hass.callApi<History>('GET', HISTORY_PATH);
+      const query = version.current ? `?version=${encodeURIComponent(version.current)}` : '';
+      const data = await hass.callApi<History>('GET', HISTORY_PATH + query);
       if (changing.current || at !== epoch.current) return;
       // a poll that brings nothing new keeps the same arrays: the device tiles read a
       // changed tool-call list as new agent activity and keep watching for state changes
-      const body = JSON.stringify([data?.items, data?.suggestions, data?.usage]);
-      if (body !== lastBody.current) {
-        lastBody.current = body;
+      if (!data?.unchanged) {
+        version.current = data?.version ?? '';
         const next = Array.isArray(data?.items) ? data.items : [];
         historyLen.current = next.length;
         setHistory(next);

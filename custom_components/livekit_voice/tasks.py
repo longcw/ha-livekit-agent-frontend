@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 
 from aiohttp import ClientError, web
 
@@ -87,15 +88,23 @@ async def _json_body(request: web.Request) -> object | None:
         return None
 
 
+# each HA login's person, as last resolved, and when; a settings save clears it
+_RESOLVED: dict[str, tuple[float, str | None]] = {}
+_RESOLVED_TTL = 60.0
+
+
 async def user_id(hass: HomeAssistant, request: web.Request) -> str | None:
     """The id of the person the scheduler links to the logged-in HA user; None for no one.
 
-    The agent and the scheduler know a person only by that id."""
+    The agent and the scheduler know a person only by that id. The Text tab polls every
+    second, so each login's answer is reused for a minute."""
     user = request.get("hass_user")
     config = hass.data.get(DOMAIN, {}).get(DATA_CONFIG) or {}
     base = config.get(CONF_SCHEDULER_URL)
     if user is None or not base:
         return None
+    if (cached := _RESOLVED.get(user.id)) and time.monotonic() - cached[0] < _RESOLVED_TTL:
+        return cached[1]
     token = config.get(CONF_SCHEDULER_TOKEN)
     headers = {"Authorization": f"Bearer {token}"} if token else None
     try:
@@ -105,10 +114,12 @@ async def user_id(hass: HomeAssistant, request: web.Request) -> str | None:
             headers=headers,
         ) as resp:
             resp.raise_for_status()
-            return (await resp.json()).get("id")
+            resolved = (await resp.json()).get("id")
     except (ClientError, ValueError) as err:
         _LOGGER.warning("could not resolve the person of HA user %s: %s", user.id, err)
         return None
+    _RESOLVED[user.id] = (time.monotonic(), resolved)
+    return resolved
 
 
 async def _as_user(hass: HomeAssistant, request: web.Request) -> dict[str, str]:
@@ -240,6 +251,8 @@ class LiveKitSettingsView(HomeAssistantView):
         return web.json_response(data)
 
     async def put(self, request: web.Request) -> web.Response:
+        # a person's HA login may have changed
+        _RESOLVED.clear()
         return await _forward(
             self._hass, "PUT", "/settings", json_body=await _json_body(request)
         )
