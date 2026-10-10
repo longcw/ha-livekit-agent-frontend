@@ -359,6 +359,10 @@ export const CARD_STYLES =
   .lk-msg[data-role="user"] { justify-content: flex-end; }
   .lk-msg-col { display: flex; flex-direction: column; align-items: flex-start; max-width: 84%; min-width: 0; }
   .lk-msg[data-role="user"] .lk-msg-col { align-items: flex-end; }
+  .lk-msg-meta { display: flex; align-items: center; gap: 2px; }
+  .lk-copy { border: 0; background: none; padding: 2px 4px; margin-top: 2px; cursor: pointer; color: var(--lk-muted); line-height: 0; }
+  .lk-copy ha-icon { --mdc-icon-size: 14px; }
+  .lk-copy:hover { color: var(--lk-fg); }
   .lk-time { margin: 3px 7px 0; font-size: 0.66rem; line-height: 1; color: var(--lk-muted); font-variant-numeric: tabular-nums; }
   .lk-bubble { max-width: 100%; padding: 8px 13px; border-radius: 16px; font-size: 0.92rem; line-height: 1.4;
     white-space: pre-wrap; word-break: break-word; }
@@ -440,6 +444,16 @@ export const CARD_STYLES =
     display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none;
     background: linear-gradient(to top, var(--lk-surface) 46%, color-mix(in srgb, var(--lk-surface) 82%, transparent) 74%, transparent); }
   .lk-dock > * { pointer-events: auto; }
+
+  /* ---- the slash commands a leading "/" offers, above the composer ---- */
+  .lk-slash { width: 100%; display: flex; flex-direction: column; gap: 2px; padding: 4px; border-radius: 14px;
+    background: var(--lk-surface); border: 1px solid var(--lk-line); box-shadow: 0 4px 16px rgb(0 0 0 / .12); }
+  .lk-slash-item { display: flex; align-items: baseline; gap: 8px; min-width: 0; padding: 7px 10px; border: 0; border-radius: 10px;
+    background: none; cursor: pointer; font: inherit; font-size: 0.86rem; color: var(--lk-fg); text-align: left; }
+  .lk-slash-item:hover, .lk-slash-item:first-child { background: color-mix(in srgb, var(--lk-accent) 10%, var(--lk-surface)); }
+  .lk-slash-name { font-weight: 600; flex: 0 0 auto; }
+  .lk-slash-hint { flex: 0 0 auto; color: var(--lk-muted); font-family: ui-monospace, monospace; font-size: 0.78rem; }
+  .lk-slash-desc { flex: 1 1 auto; min-width: 0; color: var(--lk-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* ---- one-tap quick replies the agent offers, above the composer ---- */
   .lk-suggest { width: 100%; display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }

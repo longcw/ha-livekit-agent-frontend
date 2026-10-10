@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { type KeyboardEvent, type ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { TurnMode } from '../lib/turn-mode';
 
 /** Publishes the dock's height as `--lk-dock-h` on the card so the chat can pad past it. */
@@ -149,12 +149,15 @@ export function Composer({
   onChange,
   onSubmit,
   onFocus,
+  onKey,
 }: {
   value: string;
   placeholder: string;
   onChange: (text: string) => void;
   onSubmit: () => void;
   onFocus?: () => void;
+  /** Sees each key first; returning true means it was handled. */
+  onKey?: (e: KeyboardEvent<HTMLTextAreaElement>) => boolean;
 }) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const fit = () => {
@@ -189,6 +192,7 @@ export function Composer({
       onChange={(e) => onChange(e.target.value)}
       onFocus={onFocus}
       onKeyDown={(e) => {
+        if (onKey?.(e)) return;
         // Safari ends the composition before this keydown, so only keyCode 229 marks it there
         if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing || e.keyCode === 229) return;
         e.preventDefault();

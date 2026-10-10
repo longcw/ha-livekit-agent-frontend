@@ -13,6 +13,8 @@ export interface ConvMessage {
   role: Role;
   text: string;
   ts: number;
+  /** The slash command that typed or answered it, outside the agent's turns. */
+  command?: string;
 }
 
 export interface ConvAction {

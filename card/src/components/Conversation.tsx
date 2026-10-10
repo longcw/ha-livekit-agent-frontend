@@ -136,14 +136,44 @@ function MessageRow({ item }: { item: ConvMessage }) {
         ) : (
           <div className="lk-bubble">{item.text}</div>
         )}
-        {/* a missing timestamp reads as 1970, which is no time at all */}
-        {item.ts > 1e12 && (
-          <time className="lk-time" dateTime={sent.toISOString()}>
-            {time}
-          </time>
-        )}
+        <div className="lk-msg-meta">
+          {/* a missing timestamp reads as 1970, which is no time at all */}
+          {item.ts > 1e12 && (
+            <time className="lk-time" dateTime={sent.toISOString()}>
+              {time}
+            </time>
+          )}
+          {item.command && item.role === 'agent' && <CopyButton text={item.text.split(/\n\s*notes:/)[0].trim()} />}
+        </div>
       </div>
     </div>
+  );
+}
+
+/** Copies a command's answer without its notes; the clipboard API needs a secure page,
+ *  which HA's plain-http internal URL is not, so a selection copy stands in there. */
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <button type="button" className="lk-copy" onClick={() => void copy()} aria-label="Copy" title="Copy">
+      <ha-icon icon={copied ? 'mdi:check' : 'mdi:content-copy'} />
+    </button>
   );
 }
 

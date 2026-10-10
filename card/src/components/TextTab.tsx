@@ -43,11 +43,15 @@ export function TextTab({
   onOpenTask: (t: Task) => void;
   onSeeAllTasks: () => void;
 }) {
-  const { items, toolCalls, agentAreas, suggestions, usage, busy, canStop, stopping, forceStop, error, stop, send, renew, refresh } = api;
+  const { items, toolCalls, agentAreas, suggestions, commands, usage, busy, canStop, stopping, forceStop, error, stop, send, renew, refresh } = api;
   const dockRef = useDockHeight();
   const [text, setText] = useState('');
   const [history, setHistory] = useState(false);
   const canSend = !busy && text.trim().length > 0;
+  // a leading `/name` with no space yet offers the commands it could start
+  const slash = /^\/([\w-]*)$/.exec(text);
+  const offered = slash ? commands.filter((c) => c.name.startsWith(slash[1])) : [];
+  const complete = (name: string) => setText(`/${name} `);
   const shown = useMemo(
     () => items.filter((i) => i.kind !== 'action' || !HIDDEN_TOOLS.has(i.name)),
     [items],
@@ -107,7 +111,18 @@ export function TextTab({
       />
       <Conversation items={shown} startAtEnd reflowKey={suggestions.length} />
       <div className="lk-dock" ref={dockRef}>
-        {suggestions.length > 0 && (
+        {offered.length > 0 && (
+          <div className="lk-slash" role="listbox" aria-label="Commands">
+            {offered.map((c) => (
+              <button key={c.name} className="lk-slash-item" role="option" onClick={() => complete(c.name)}>
+                <span className="lk-slash-name">/{c.name}</span>
+                {c.argument_hint && <span className="lk-slash-hint">{c.argument_hint}</span>}
+                <span className="lk-slash-desc">{c.description.split(/(?<=\.)\s/)[0]}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        {offered.length === 0 && suggestions.length > 0 && (
           <div className="lk-suggest">
             {suggestions.map((reply, i) => (
               <button key={`${i}-${reply}`} className="lk-chip" onClick={() => submit(reply)}>
@@ -119,10 +134,16 @@ export function TextTab({
         <div className="lk-bar">
           <Composer
             value={text}
-            placeholder="Message…"
+            placeholder={commands.length ? 'Message, or / for commands…' : 'Message…'}
             onChange={setText}
             onSubmit={() => submit(text)}
             onFocus={api.warm}
+            onKey={(e) => {
+              if (!offered.length || (e.key !== 'Tab' && e.key !== 'Enter') || e.shiftKey) return false;
+              e.preventDefault();
+              complete(offered[0].name);
+              return true;
+            }}
           />
           {busy ? (
             <button

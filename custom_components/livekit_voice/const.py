@@ -43,6 +43,7 @@ CHAT_WARM_URL = "/api/livekit_voice/chat/warm"
 CHAT_CONVERSATIONS_URL = "/api/livekit_voice/chat/conversations"
 CHAT_SWITCH_URL = "/api/livekit_voice/chat/switch"
 CHAT_DELETE_URL = "/api/livekit_voice/chat/delete"
+CHAT_COMMANDS_URL = "/api/livekit_voice/chat/commands"
 # Turn progress on a phone (start / progress / final); the worker posts here with an HA token.
 PROGRESS_URL = "/api/livekit_voice/progress"
 

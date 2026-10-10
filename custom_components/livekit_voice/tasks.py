@@ -23,6 +23,7 @@ from homeassistant.util import slugify
 from .const import (
     CHAT_CANCEL_URL,
     CHAT_WARM_URL,
+    CHAT_COMMANDS_URL,
     CHAT_CONVERSATIONS_URL,
     CHAT_DELETE_URL,
     CHAT_HISTORY_URL,
@@ -328,6 +329,20 @@ class LiveKitChatWarmView(HomeAssistantView):
         return await _forward(
             self._hass, "POST", "/chat/warm", json_body=body, service=_WORKER
         )
+
+
+class LiveKitChatCommandsView(HomeAssistantView):
+    """List the slash commands a text message can start with."""
+
+    url = CHAT_COMMANDS_URL
+    name = "api:livekit_voice:chat_commands"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def get(self, request: web.Request) -> web.Response:
+        return await _forward(self._hass, "GET", "/chat/commands", service=_WORKER)
 
 
 class LiveKitChatConversationsView(HomeAssistantView):
