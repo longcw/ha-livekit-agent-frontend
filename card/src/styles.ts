@@ -294,6 +294,14 @@ export const CARD_STYLES =
   .lk-person-hint { margin-top: 2px; }
   .lk-person-detail .lk-testbtn { margin-top: 10px; }
   .lk-person-add { display: flex; align-items: center; gap: 6px; }
+  .lk-mem-sec + .lk-mem-sec { margin-top: 20px; }
+  .lk-memlist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+  .lk-memlist:empty { display: none; }
+  .lk-memrow { align-items: flex-start; }
+  .lk-memrow .lk-taskrow-main { padding: 9px 4px 9px 12px; }
+  .lk-memrow .lk-taskrow-acts { padding-top: 4px; }
+  .lk-memrow-text { font-size: 0.85rem; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .lk-memrow-edit { flex: 1; margin: 4px 0 4px 4px; resize: vertical; font: inherit; font-size: 0.85rem; }
   .lk-person-add .lk-search-in { height: 34px; }
   .lk-person-addbtn { margin-top: 0; height: 34px; padding: 0 12px; }
 

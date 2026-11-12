@@ -8,6 +8,7 @@ import { Dock } from '../src/components/Dock';
 import { Header } from '../src/components/Header';
 import { NowPlaying } from '../src/components/NowPlaying';
 import { ScheduledTasks } from '../src/components/ScheduledTasks';
+import { MemoryTab } from '../src/components/MemoryTab';
 import { SchedulesTab } from '../src/components/SchedulesTab';
 import { SettingsTab } from '../src/components/SettingsTab';
 import { TextTab } from '../src/components/TextTab';
@@ -23,6 +24,8 @@ import { CARD_STYLES } from '../src/styles';
 
 // ---- stub ha-icon (mdi paths) so icons render outside Home Assistant ----
 const ICONS: Record<string, string> = {
+  'mdi:account-outline': 'M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z',
+  'mdi:home-outline': 'M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22L12 3Z',
   'mdi:microphone': 'M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z',
   'mdi:microphone-off': 'M19,11C19,12.19 18.66,13.3 18.1,14.28L16.87,13.05C17.14,12.43 17.3,11.74 17.3,11H19M15,11.16L9,5.18V5A3,3 0 0,1 12,2A3,3 0 0,1 15,5V11L15,11.16M4.27,3L21,19.73L19.73,21L15.54,16.81C14.77,17.27 13.91,17.58 13,17.72V21H11V17.72C7.72,17.23 5,14.41 5,11H6.7C6.7,14 9.24,16.1 12,16.1C12.81,16.1 13.6,15.91 14.31,15.58L12.65,13.92L12,14A3,3 0 0,1 9,11V10.28L3,4.27L4.27,3Z',
   'mdi:arrow-up': 'M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z',
@@ -200,6 +203,14 @@ const mockHass: any = {
       return 'ok';
     }
     if (path.startsWith('livekit_voice/chat')) return 'ok';
+    if (path.startsWith('livekit_voice/memories')) {
+      const id = Number(path.split('/')[2]);
+      const now = new Date().toISOString();
+      if (method === 'POST') MEMORIES.push({ id: MEMORIES.length ? Math.max(...MEMORIES.map((m) => m.id)) + 1 : 1, text: params.text, shared: !!params.shared, created_at: now, updated_at: now });
+      if (method === 'PATCH') Object.assign(MEMORIES.find((m) => m.id === id) ?? {}, params, { updated_at: now });
+      if (method === 'DELETE') MEMORIES.splice(MEMORIES.findIndex((m) => m.id === id), 1);
+      return method === 'GET' ? MEMORIES.map((m) => ({ ...m })) : {};
+    }
     if (path.startsWith('livekit_voice/settings')) {
       return method === 'PUT'
         ? params
@@ -370,8 +381,10 @@ function Preview() {
   const [autoPaused, setAutoPaused] = useState(P.includes('paused'));
   const [micStarting, setMicStarting] = useState(P.includes('starting'));
   const [audioOutput, setAudioOutput] = useState(P.includes('audio'));
-  const [tab, setTab] = useState<'chat' | 'text' | 'schedules' | 'settings'>(
-    P.includes('tab=settings')
+  const [tab, setTab] = useState<'chat' | 'text' | 'schedules' | 'memory' | 'settings'>(
+    P.includes('tab=memory')
+      ? 'memory'
+      : P.includes('tab=settings')
       ? 'settings'
       : P.includes('tab=schedules')
         ? 'schedules'
@@ -413,6 +426,9 @@ function Preview() {
             onClick={() => setTab('schedules')}
           >
             Schedules
+          </button>
+          <button className="lk-tab" data-on={tab === 'memory' ? '1' : '0'} onClick={() => setTab('memory')}>
+            Memory
           </button>
           <button
             className="lk-tab"
@@ -481,6 +497,8 @@ function Preview() {
           <PreviewTextTab showTiles={tilesVisible} />
         ) : tab === 'schedules' ? (
           <SchedulesTab api={mockApi} onOpen={setEditing} />
+        ) : tab === 'memory' ? (
+          <MemoryTab />
         ) : (
           <SettingsTab />
         )}
@@ -597,6 +615,14 @@ if (SCENARIO === 'script') {
     });
   }, 500);
 }
+
+// the Memory tab's store, so edits in the preview persist until reload
+const MEMORIES = [
+  { id: 3, text: '我喜欢卧室空调 24 度，晚上开睡眠模式', shared: false, created_at: '', updated_at: '' },
+  { id: 7, text: 'Wake me with the bedroom curtains, not an alarm', shared: false, created_at: '', updated_at: '' },
+  { id: 1, text: '大灯 = 客厅吸顶灯; 小灯 = 客厅落地灯', shared: true, created_at: '', updated_at: '' },
+  { id: 4, text: '书房的灯指书房射灯和台灯，不包括灯带', shared: true, created_at: '', updated_at: '' },
+];
 
 const SENT: { busy: boolean; fresh: boolean; items: any[] } = { busy: false, fresh: false, items: [] };
 

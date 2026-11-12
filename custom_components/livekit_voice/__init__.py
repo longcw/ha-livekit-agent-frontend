@@ -41,6 +41,8 @@ from .tasks import (
     LiveKitChatHistoryView,
     LiveKitChatSwitchView,
     LiveKitChatView,
+    LiveKitMemoriesView,
+    LiveKitMemoryView,
     LiveKitSettingsView,
     LiveKitTaskView,
     LiveKitTasksView,
@@ -91,6 +93,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitTasksView(hass))
         hass.http.register_view(LiveKitTaskView(hass))
         hass.http.register_view(LiveKitSettingsView(hass))
+        hass.http.register_view(LiveKitMemoriesView(hass))
+        hass.http.register_view(LiveKitMemoryView(hass))
         hass.http.register_view(LiveKitChatView(hass))
         hass.http.register_view(LiveKitChatHistoryView(hass))
         hass.http.register_view(LiveKitChatCancelView(hass))

@@ -1,4 +1,4 @@
-"""Proxy endpoints for the dashboard card's Schedules, Settings and Text tabs.
+"""Proxy endpoints for the dashboard card's Schedules, Memory, Settings and Text tabs.
 
 The card calls these (via ``hass.callApi``, so Home Assistant auth applies) and they forward
 to the scheduler service or the worker, attaching the shared secret. This keeps both
@@ -34,6 +34,8 @@ from .const import (
     CONF_SCHEDULER_URL,
     DATA_CONFIG,
     DOMAIN,
+    MEMORIES_URL,
+    MEMORY_URL,
     SETTINGS_URL,
     TASK_URL,
     TASKS_URL,
@@ -199,6 +201,57 @@ class LiveKitTaskView(HomeAssistantView):
 
     async def delete(self, request: web.Request, task_id: str) -> web.Response:
         path = f"/tasks/{task_id}"
+        return await _forward(
+            self._hass, "DELETE", path, query=await _as_user(self._hass, request)
+        )
+
+
+class LiveKitMemoriesView(HomeAssistantView):
+    """List the household's memories and the user's own, or add one (`{"text", "shared"}`)."""
+
+    url = MEMORIES_URL
+    name = "api:livekit_voice:memories"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def get(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass, "GET", "/memories", query=await _as_user(self._hass, request)
+        )
+
+    async def post(self, request: web.Request) -> web.Response:
+        return await _forward(
+            self._hass,
+            "POST",
+            "/memories",
+            query=await _as_user(self._hass, request),
+            json_body=await _json_body(request),
+        )
+
+
+class LiveKitMemoryView(HomeAssistantView):
+    """Edit or delete one memory the user can see."""
+
+    url = MEMORY_URL
+    name = "api:livekit_voice:memory"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        self._hass = hass
+
+    async def patch(self, request: web.Request, memory_id: str) -> web.Response:
+        return await _forward(
+            self._hass,
+            "PATCH",
+            f"/memories/{memory_id}",
+            query=await _as_user(self._hass, request),
+            json_body=await _json_body(request),
+        )
+
+    async def delete(self, request: web.Request, memory_id: str) -> web.Response:
+        path = f"/memories/{memory_id}"
         return await _forward(
             self._hass, "DELETE", path, query=await _as_user(self._hass, request)
         )
