@@ -10,6 +10,7 @@ const WARM_PATH = 'livekit_voice/chat/warm';
 const CONVERSATIONS_PATH = 'livekit_voice/chat/conversations';
 const SWITCH_PATH = 'livekit_voice/chat/switch';
 const DELETE_PATH = 'livekit_voice/chat/delete';
+const COMMANDS_PATH = 'livekit_voice/chat/commands';
 
 type HistoryItem = ConvItem & { call_id?: string; output_chars?: number };
 
@@ -42,6 +43,13 @@ export interface ConversationSummary {
   updated: number;
 }
 
+/** A slash command a message can start with, run by the worker outside the agent's turns. */
+export interface ChatCommand {
+  name: string;
+  description: string;
+  argument_hint: string;
+}
+
 export interface ConversationList {
   current: string | null;
   conversations: ConversationSummary[];
@@ -55,6 +63,8 @@ export interface TextChatApi {
   agentAreas: string[];
   /** Quick replies for the agent's last question. */
   suggestions: string[];
+  /** The slash commands the composer offers. */
+  commands: ChatCommand[];
   /** The conversation's LLM token totals, once it has used any. */
   usage: TokenUsage | null;
   /** A turn is running — this card's, or one sent from elsewhere (e.g. an iPhone Shortcut). */
@@ -112,6 +122,7 @@ export function useTextChat(active: boolean): TextChatApi {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [usage, setUsage] = useState<TokenUsage | null>(null);
+  const [commands, setCommands] = useState<ChatCommand[]>([]);
   // the version of the history held here, which a poll sends so an unchanged one carries nothing
   const version = useRef('');
   const [busy, setBusy] = useState(false);
@@ -242,6 +253,15 @@ export function useTextChat(active: boolean): TextChatApi {
     if (active && ready) warm();
   }, [active, ready, warm]);
 
+  useEffect(() => {
+    if (!active || !ready) return;
+    store
+      .getSnapshot()
+      .hass?.callApi<{ commands?: ChatCommand[] }>('GET', COMMANDS_PATH)
+      .then((data) => setCommands(Array.isArray(data?.commands) ? data.commands : []))
+      .catch(() => setCommands([]));
+  }, [active, ready, store]);
+
   const base = useMemo(() => shown ?? toConvItems(history), [shown, history]);
 
   // the agent has answered since the person last spoke, so a busy turn has only its
@@ -343,6 +363,7 @@ export function useTextChat(active: boolean): TextChatApi {
     agentAreas,
     // an answer in flight makes the last question's replies stale
     suggestions: busy || pending !== null ? [] : suggestions,
+    commands,
     usage,
     busy: busy || pending !== null,
     canStop: taskId !== null && (stoppingId !== taskId || forceStop),

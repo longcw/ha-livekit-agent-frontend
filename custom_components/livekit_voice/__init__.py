@@ -35,6 +35,7 @@ from .const import (
 from .progress import LiveKitProgressView
 from .tasks import (
     LiveKitChatCancelView,
+    LiveKitChatCommandsView,
     LiveKitChatWarmView,
     LiveKitChatConversationsView,
     LiveKitChatDeleteView,
@@ -102,6 +103,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.http.register_view(LiveKitChatConversationsView(hass))
         hass.http.register_view(LiveKitChatSwitchView(hass))
         hass.http.register_view(LiveKitChatDeleteView(hass))
+        hass.http.register_view(LiveKitChatCommandsView(hass))
         hass.http.register_view(LiveKitProgressView(hass))
         store[DATA_REGISTERED] = True
         _LOGGER.debug("registered token, tasks, settings, chat and progress views + card at %s", CARD_URL)
