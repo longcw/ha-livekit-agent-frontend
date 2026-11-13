@@ -33,6 +33,8 @@ TOKEN_URL = "/api/livekit_voice/token"
 # so the Schedules tab can list/get/edit/delete tasks without a LiveKit connection.
 TASKS_URL = "/api/livekit_voice/tasks"
 TASK_URL = "/api/livekit_voice/tasks/{task_id}"
+MEMORIES_URL = "/api/livekit_voice/memories"
+MEMORY_URL = "/api/livekit_voice/memories/{memory_id}"
 # Settings proxy (e.g. notify.* push targets); forwards to the scheduler's /settings.
 SETTINGS_URL = "/api/livekit_voice/settings"
 # Text chat proxy for the Text tab; forwards to the worker's /chat and /chat/*.

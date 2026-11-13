@@ -14,6 +14,7 @@ import { Dock } from './components/Dock';
 import { Header } from './components/Header';
 import { NowPlaying } from './components/NowPlaying';
 import { ScheduledTasks } from './components/ScheduledTasks';
+import { MemoryTab } from './components/MemoryTab';
 import { SchedulesTab } from './components/SchedulesTab';
 import { SettingsTab } from './components/SettingsTab';
 import { TextTab } from './components/TextTab';
@@ -87,8 +88,8 @@ function agentPhase(connected: boolean, connecting: boolean, agentState: string 
   return AGENT_PHASES[agentState ?? ''] ?? { orb: 'listening', label: 'Connected' };
 }
 
-type Tab = 'chat' | 'text' | 'schedules' | 'settings';
-const TABS: readonly Tab[] = ['chat', 'text', 'schedules', 'settings'];
+type Tab = 'chat' | 'text' | 'schedules' | 'memory' | 'settings';
+const TABS: readonly Tab[] = ['chat', 'text', 'schedules', 'memory', 'settings'];
 
 function linkedTab(): Tab | null {
   const value = new URLSearchParams(window.location.search).get('lk_tab');
@@ -448,6 +449,13 @@ function CardShell() {
         </button>
         <button
           className="lk-tab"
+          data-on={tab === 'memory' ? '1' : '0'}
+          onClick={() => setTab('memory')}
+        >
+          Memory
+        </button>
+        <button
+          className="lk-tab"
           data-on={tab === 'settings' ? '1' : '0'}
           onClick={() => setTab('settings')}
         >
@@ -513,6 +521,8 @@ function CardShell() {
         />
       ) : tab === 'schedules' ? (
         <SchedulesTab api={tasksApi} onOpen={setEditing} />
+      ) : tab === 'memory' ? (
+        <MemoryTab />
       ) : (
         <SettingsTab />
       )}
